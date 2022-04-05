@@ -1,0 +1,93 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build_and_test_client"
+  build_and_test_client:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Ensure node version is great enough
+      - name: Use Node.js v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      # Install client dependencies
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      # Run lint task
+      - name: Run lint
+        working-directory: ./client
+        run: npm run lint
+
+      # Build client
+      - name: Build client
+        working-directory: ./client
+        run: npm run build:client --if-present
+
+      # Test client
+      - name: Test client
+        working-directory: ./client
+        run: npm run test --watchAll=false
+  # This workflow contains a single job called "build_and_test_server"
+  build_and_test_server:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Ensure node version is great enough
+      - name: Use Node.js v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      # Install server dependencies
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      # Run lint task
+      - name: Run lint
+        working-directory: ./server
+        run: npm run lint
+
+      # Build server
+      - name: Build server
+        working-directory: ./server
+        run: npm run build:server
+
+      # Test server
+      - name: Test server
+        working-directory: ./server
+        run: npm run test

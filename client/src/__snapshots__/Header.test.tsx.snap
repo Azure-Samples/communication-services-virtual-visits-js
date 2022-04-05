@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header panel should have links to the book and visit page 1`] = `
+<div
+  className="ms-FocusZone css-151"
+  data-focuszone-id="FocusZone8"
+  onFocus={[Function]}
+  onKeyDown={[Function]}
+  onMouseDownCapture={[Function]}
+>
+  <nav
+    aria-label="Navigate to expected page"
+    className="ms-Nav root-136"
+    role="navigation"
+  >
+    <div
+      className="ms-Nav-group is-expanded"
+    >
+      <div
+        className="ms-Nav-groupContent groupContent-144"
+      >
+        <ul
+          className="ms-Nav-navItems navItems-143"
+          role="list"
+        >
+          <li
+            className="ms-Nav-navItem navItem-142"
+            role="listitem"
+          >
+            <div
+              className="ms-Nav-compositeLink compositeLink-138"
+              name="Book"
+            >
+              <a
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-152"
+                data-is-focusable={true}
+                href="./book"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                onKeyPress={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseUp={[Function]}
+                title="Book"
+              >
+                <span
+                  className="ms-Button-flexContainer flexContainer-153"
+                  data-automationid="splitbuttonprimary"
+                >
+                  <div
+                    className="ms-Nav-linkText linkText-137"
+                  >
+                    Book
+                  </div>
+                </span>
+              </a>
+            </div>
+          </li>
+          <li
+            className="ms-Nav-navItem navItem-142"
+            role="listitem"
+          >
+            <div
+              className="ms-Nav-compositeLink compositeLink-138"
+              name="Visit"
+            >
+              <a
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-152"
+                data-is-focusable={true}
+                href="./visit"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                onKeyPress={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseUp={[Function]}
+                title="Visit"
+              >
+                <span
+                  className="ms-Button-flexContainer flexContainer-153"
+                  data-automationid="splitbuttonprimary"
+                >
+                  <div
+                    className="ms-Nav-linkText linkText-137"
+                  >
+                    Visit
+                  </div>
+                </span>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+`;

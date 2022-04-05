@@ -1,0 +1,91 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "appServiceName": {
+        "type": "string"
+      },
+      "sku": {
+        "type": "string",
+        "defaultValue": "F1",
+        "metadata": {
+          "description": "The SKU of App Service Plan."
+        }
+      }
+    },
+    "variables": {
+      "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
+      "packageUrl": "https://vvartifactstoragedev.blob.core.windows.net/latest/sample.zip",
+      "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings",
+      "chatEnabled": "true",
+      "screenShareEnabled": "true",
+      "companyName": "Lamna Healthcare",
+      "colorPalette": "#0078d4",
+      "waitingTitle": "Thank you for choosing Lamna Healthcare",
+      "waitingSubtitle": "Your clinician is joining the meeting",
+      "logoUrl": "",
+      "resourceId": ""
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2020-06-01",
+        "name": "[variables('appServicePlanPortalName')]",
+        "location": "[resourceGroup().location]",
+        "sku": {
+          "name": "[parameters('sku')]"
+        }
+      },
+      {
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('appServiceName')]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]"
+        ],
+        "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
+          "httpsOnly": "true"
+        },
+        "resources": [
+          {
+            "name": "appsettings",
+            "type": "config",
+            "apiVersion": "2018-11-01",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+            ],
+            "tags": {
+              "displayName": "appsettings"
+            },
+            "properties": {
+              "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(variables('resourceId'), '2020-08-20-preview' ).primaryConnectionString]",
+              "WEBSITE_NODE_DEFAULT_VERSION": "12.21.0",
+              "VV_MICROSOFT_BOOKINGS_URL": "[variables('microsoftBookingsUrl')]",
+              "VV_CHAT_ENABLED": "[variables('chatEnabled')]",
+              "VV_SCREENSHARE_ENABLED": "[variables('screenShareEnabled')]",
+              "VV_COMPANY_NAME": "[variables('companyName')]",
+              "VV_COLOR_PALETTE": "[variables('colorPalette')]",
+              "VV_WAITING_TITLE": "[variables('waitingTitle')]",
+              "VV_WAITING_SUBTITLE": "[variables('waitingSubtitle')]",
+              "VV_LOGO_URL": "[variables('logoUrl')]"
+            }
+          },
+          {
+            "name": "MSDeploy",
+            "type": "extensions",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]",
+              "[resourceId('Microsoft.Web/sites/config', parameters('appServiceName'), 'appsettings')]"
+            ],
+            "properties": {
+              "packageUri": "[variables('packageUrl')]"
+            }
+          }
+        ]
+      }
+    ]
+  }

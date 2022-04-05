@@ -1,0 +1,153 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceName": {
+      "type": "string"
+    },
+    "communicationServiceName": {
+      "type": "string"
+    },
+    "communicationServiceDataLocation": {
+      "type": "string",
+      "allowedValues": [
+        "Africa",
+        "Asia Pacific",
+        "Australia",
+        "Brazil",
+        "Canada",
+        "Europe",
+        "France",
+        "Germany",
+        "India",
+        "Japan",
+        "Korea",
+        "United Kingdom",
+        "United States"
+      ],
+      "defaultValue": "United States",
+      "metadata": {
+        "description": "The location where the communication service stores its data at rest."
+      }
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "F1",
+      "metadata": {
+        "description": "The SKU of App Service Plan."
+      }
+    },
+    "packageUrl": {
+      "type": "string",
+      "defaultValue": "https://vvartifactstoragedev.blob.core.windows.net/latest/sample.zip"
+    },
+    "microsoftBookingsUrl": {
+      "type": "string",
+      "defaultValue": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings"
+    },
+    "chatEnabled": {
+      "type": "bool",
+      "defaultValue": "true"
+    },
+    "screenShareEnabled": {
+      "type": "bool",
+      "defaultValue": "true"
+    },
+    "companyName": {
+      "type": "string",
+      "defaultValue": "Lamna Healthcare"
+    },
+    "colorPalette": {
+      "type": "string",
+      "defaultValue": "#0078d4"
+    },
+    "waitingTitle": {
+      "type": "string",
+      "defaultValue": "Thank you for choosing Lamna Healthcare"
+    },
+    "waitingSubtitle": {
+      "type": "string",
+      "defaultValue": "Your clinician is joining the meeting"
+    },
+    "logoUrl": {
+      "type": "string",
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+    "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('communicationServiceName')]",
+      "type": "Microsoft.Communication/communicationServices",
+      "apiVersion": "2020-08-20-preview",
+      "location": "global",
+      "tags": {},
+      "properties": {
+        "dataLocation": "[parameters('communicationServiceDataLocation')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('appServicePlanPortalName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('sku')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('appServiceName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
+        "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
+        "httpsOnly": "true"
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2018-11-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+          ],
+          "tags": {
+            "displayName": "appsettings"
+          },
+          "properties": {
+            "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(parameters('communicationServiceName'), '2020-08-20-preview' ).primaryConnectionString]",
+            "WEBSITE_NODE_DEFAULT_VERSION": "12.21.0",
+            "VV_MICROSOFT_BOOKINGS_URL": "[parameters('microsoftBookingsUrl')]",
+            "VV_CHAT_ENABLED": "[parameters('chatEnabled')]",
+            "VV_SCREENSHARE_ENABLED": "[parameters('screenShareEnabled')]",
+            "VV_COMPANY_NAME": "[parameters('companyName')]",
+            "VV_COLOR_PALETTE": "[parameters('colorPalette')]",
+            "VV_WAITING_TITLE": "[parameters('waitingTitle')]",
+            "VV_WAITING_SUBTITLE": "[parameters('waitingSubtitle')]",
+            "VV_LOGO_URL": "[parameters('logoUrl')]"
+          }
+        },
+        {
+          "name": "MSDeploy",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]",
+            "[resourceId('Microsoft.Web/sites/config', parameters('appServiceName'), 'appsettings')]"
+          ],
+          "properties": {
+            "packageUri": "[parameters('packageUrl')]"
+          }
+        }
+      ]
+    }
+  ]
+}

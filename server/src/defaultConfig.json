@@ -1,0 +1,11 @@
+{
+  "communicationServicesConnectionString": "endpoint=your_endpoint;accesskey=secret",
+  "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings",
+  "chatEnabled": true,
+  "screenShareEnabled": true,
+  "companyName": "Lamna Healthcare",
+  "colorPalette": "#0078d4",
+  "waitingTitle": "Thank you for choosing Lamna Healthcare",
+  "waitingSubtitle": "Your clinician is joining the meeting",
+  "logoUrl": ""
+}

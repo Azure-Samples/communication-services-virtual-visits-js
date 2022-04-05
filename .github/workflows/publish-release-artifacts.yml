@@ -1,0 +1,82 @@
+# Prepares the Release artifacts, creates a new GitHub Release, and publishes the artifacts to the Release
+name: Release - Publish Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-flavor:
+        description: 'Beta release or stable release.'
+        required: true
+        type: choice
+        options:
+          - stable
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Release
+    steps:
+      - name: Install Node.js v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Retrieve version to tag and publish release with
+      - name: Retrieve version from package.json
+        id: version
+        run: |
+          clientVer=$(jq -r .version client/package.json)
+          echo clientversion: $clientVer
+          serverVer=$(jq -r .version server/package.json)
+          echo serverversion: $serverVer
+          if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
+          echo "::set-output name=newProjectVersion::$clientVer"
+
+      # Create zipped version of the repository
+      - name: Create source archive
+        run: zip -r sample-source.zip . -x *.git*
+
+      # Install dependencies
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      # Create production package
+      - name: Package project
+        working-directory: ./client
+        run: npm run package
+
+      # Zip output files
+      - name: Zip distribution
+        working-directory: ./dist
+        run: zip -r sample.zip .
+
+      # Push git tags
+      - name: Create and push git tags
+        run: |
+          git tag ${{ steps.version.outputs.newProjectVersion }}
+          git push --tags
+
+      # Create a new Release and publish artifacts
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ steps.version.outputs.newProjectVersion }}
+          tag_name: Release/${{ steps.version.outputs.newProjectVersion }}
+          files: |
+            ./dist/sample.zip
+            ./deploy/azuredeploy.json
+            ./deploy/editableazuredeploy.json
+            ./deploy/azuredeployexistingresource.json
+            ./sample-source.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

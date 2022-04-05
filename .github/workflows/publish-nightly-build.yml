@@ -1,0 +1,132 @@
+# This workflow builds the project, packages it up, and then copies it to Azure Blob Storage. It also copies the deploy
+# template to Azure Blob Storage. It runs on push to main and also can be run manually. This is meant for development
+# purposes only and exists due to our GitHub repository being private making our artifacts in-accessible from Azure
+# Portal. This should be deleted or replaced with GitHub artifact releases once we make the repository public. We are
+# using SAS token (shared access signature) to access to blob storage. The SAS token will expire 2022-12-31. You can
+# generate a new one in Azure Portal.
+
+name: Publish Nightly Build
+
+on:
+  schedule:
+    # minute 0, hour 0 UTC (which is 6pm PST/5pm PDT), any day of month, any month, any day of the week
+    # if we want to support only Mon - Fri we need to change the check how we look for new changes. Currently we
+    # check for any new changes in the last 24 hours regardless of day)
+    - cron: '0 0 * * *'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  checkForChanges:
+    name: Check for new changes
+    outputs:
+      hasChanged: ${{ steps.checkChange.outputs.hasChanged }}
+    runs-on: ubuntu-latest
+    steps:
+      # Check-out repo
+      - uses: actions/checkout@v2
+
+      # Check if any changes have been pushed to main since last release
+      - name: Check latest commit age
+        id: checkChange
+        # Here we query the github rest api for the commits, use jq (json parser) to grab the first commit and put contents into $HOME/commit.json
+        # Note: we ignore commits made by the bot account that commits the auto version bump changes.
+        # Then get the timestamp date for the first commit and check if it was over a day old.
+        run: |
+          curl -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -sL https://api.github.com/repos/${{ github.repository }}/commits | jq -r '[.[] | select(.author.login != "github-action-bot")][0]' > $HOME/commit.json
+          commitdate=$(jq -r '.commit.author.date' $HOME/commit.json)
+          commiturl=$(jq -r '.url' $HOME/commit.json)
+          echo Last commit: $commiturl
+          echo Last commit date \(UTC\): $commitdate
+          timestamp=$(date --utc -d "$commitdate" +%s)
+          echo Commit timestamp: $timestamp
+          currentTimestamp=$(date --utc +%s)
+          echo Current timestamp: $currentTimestamp
+          days=$(( ($currentTimestamp - $timestamp ) / 86400 ))
+          echo Days since last commit: $days
+          if [ $days = "0" ]; then
+            echo "::set-output name=hasChanged::true"
+          else
+            echo "::set-output name=hasChanged::false"
+          fi
+
+  release:
+    name: Publish Nightly Release
+    needs: checkForChanges
+    if: needs.checkForChanges.outputs.hasChanged == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Node.js v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Get datetime
+      - name: Get datetime for nightly release name
+        id: datetime
+        run: |
+          echo "::set-output name=datetime::$(date +'%Y%m%d%H%M')"
+
+      # Retrieve version to tag and publish release with
+      - name: Retrieve version
+        id: version
+        run: |
+          clientVer=$(jq -r .version client/package.json)
+          echo currentversion: $clientVer
+          newVersion=$(echo $clientVer | grep -oP "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)")-nightly-${{ steps.datetime.outputs.datetime }}.0
+          echo newversion: $newVersion
+          echo "::set-output name=newProjectVersion::$newVersion"
+      
+      # Increment versions in package.json
+      - name: Increment versions
+        run: node scripts/increment-version.js ${{ steps.version.outputs.newProjectVersion }}
+
+      # Update telemetry version
+      - name: Synchronize package version reported to telemetry
+        run: node scripts/sync-telemetry-package-version.js
+
+      - name: Create source archive
+        run: zip -r sample-source.zip . -x *.git*
+
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: Package project
+        working-directory: ./client
+        run: npm run package
+
+      - name: Zip distribution
+        working-directory: ./dist
+        run: zip -r sample.zip .
+
+      # Push git tags
+      - name: Create and push git tags
+        run: |
+          git tag ${{ steps.version.outputs.newProjectVersion }}
+          git push --tags
+
+      # Upload artifacts
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Nightly ${{ steps.datetime.outputs.datetime }}
+          tag_name: Nightly/${{ steps.datetime.outputs.datetime }}
+          files: |
+            ./dist/sample.zip
+            ./deploy/azuredeploy.json
+            ./deploy/editableazuredeploy.json
+            ./deploy/azuredeployexistingresource.json
+            ./sample-source.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
