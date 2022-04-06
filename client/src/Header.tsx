@@ -55,7 +55,17 @@ export class WaffleNavigation extends React.Component {
         ]
       }
     ];
-    return <Nav ariaLabel="Navigate to expected page" styles={wafflePanelNavigationStyles} groups={navLinkGroups} />;
+
+    const selectedKey = window.location.pathname.replace('/', '');
+
+    return (
+      <Nav
+        ariaLabel="Navigate to expected page"
+        styles={wafflePanelNavigationStyles}
+        groups={navLinkGroups}
+        selectedKey={!selectedKey ? 'book' : selectedKey}
+      />
+    );
   }
 }
 
