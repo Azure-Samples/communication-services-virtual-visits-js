@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import express from 'express';
+import RateLimit from 'express-rate-limit';
 import path from 'path';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { getServerConfig } from './utils/getConfig';
@@ -11,6 +12,15 @@ import { tokenController } from './controllers/tokenController';
 import { ERROR_PAYLOAD_404, ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
+
+// set up rate limiter: maximum of ten requests per minute
+var limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 app.use(express.static('public'));
 app.disable('x-powered-by');
