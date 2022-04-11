@@ -17,7 +17,10 @@ export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkModel 
   // The MEETING_LINK also has additional params appended to it which are not essential for joining the meeting. We have
   // to remove these, the unified and webjoin params, because including it causes the MeetingComposite to throw an error
   // about invalid link.
-  if (meetingUrl.includes(VISIT_HOSTNAME)) {
+  const allowedHosts = [VISIT_HOSTNAME];
+  const host = new URL(meetingUrl).host;
+
+  if (allowedHosts.includes(host)) {
     meetingUrl = new URLSearchParams(meetingUrl).get(JOIN_WEB_URL_PARAMNAME);
     if (!meetingUrl) throw 'Unable to get meetingURL from the alternative style url string';
 
