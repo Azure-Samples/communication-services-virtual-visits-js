@@ -85,5 +85,5 @@ jobs:
             -X POST \
             -H 'Accept: application/vnd.github.v3+json' \
             -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-            https://api.github.com/Azure-Samples/communication-services-virtual-visits-js/pulls \
+            https://api.github.com/repos/Azure-Samples/communication-services-virtual-visits-js/pulls \
             -d '{ "title":"${{ steps.version.outputs.newProjectVersion }} release branch", "head":"release/${{ steps.version.outputs.newProjectVersion }}", "base":"main", "body":"Release branch for ${{ steps.version.outputs.newProjectVersion }}. Created by the `Release - Create Branch` GitHub action. Please review." }'
