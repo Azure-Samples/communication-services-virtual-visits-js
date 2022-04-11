@@ -12,11 +12,12 @@ import {
   createStatefulChatClient
 } from '@azure/communication-react';
 import { Theme, PartialTheme, Spinner } from '@fluentui/react';
-import React from 'react';
-import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import MobileDetect from 'mobile-detect';
-import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
+import React from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
+import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
+import { fullSizeStyles } from '../styles/Common.styles';
+import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 
 export type MeetingExperienceProps = {
   userId: CommunicationUserIdentifier;
@@ -143,6 +144,6 @@ export class MeetingExperience extends React.Component<MeetingExperienceProps, M
       return <>Failed to construct credential. Provided token is malformed.</>;
     }
 
-    return <Spinner />;
+    return <Spinner styles={fullSizeStyles} />;
   }
 }

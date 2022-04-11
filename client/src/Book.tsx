@@ -51,7 +51,8 @@ export class Book extends React.Component<BookProps, BookState> {
               id={parentID}
               style={{
                 position: 'relative',
-                height: '100%'
+                height: '100%',
+                overflow: 'hidden'
               }}
             >
               <iframe src={this.state.config.microsoftBookingsUrl} scrolling="yes" style={embededIframeStyles}></iframe>
