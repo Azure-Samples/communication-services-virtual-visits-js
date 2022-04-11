@@ -14,7 +14,7 @@ import { ERROR_PAYLOAD_404, ERROR_PAYLOAD_500 } from './errors';
 const app = express();
 
 // set up rate limiter: maximum of ten requests per minute
-var limiter = RateLimit({
+const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 10
 });
