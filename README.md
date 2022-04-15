@@ -118,6 +118,8 @@ npm run start:client
 
 ### Environment Variables
 
+Where do I set this?
+
 - The server retrieves the config to use from the environment variables. On local machines you'll have to set this up
   manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
