@@ -9,17 +9,17 @@ provide your customers with a branded virtual consultation experience.
 
 ## Features
 
-- Lobby, calling, and chat experiences for your clients. Browser-based and
-  mobile-friendly, clients won't need to install any apps.
-- Quick customization options for colors, themes, and features via a .json
+- **Rich communications experience**. Includes lobby, calling, and chat experiences for your users. Browser-based and
+  mobile-friendly, users won't need to install any apps.
+- **Quick customization** options for colors, themes, and features via a .json
   config file.
-- Integration with Microsoft Teams. Let your staff host and join meetings using
+- **Integration with Microsoft Teams**. Let your staff host and join meetings using
   familiar Teams UI, while the clients join the same call via your custom
-  branded web app.
-- Integration with Microsoft Bookings. Configure Bookings to allow your clients
+  branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
+- **Scheduling powered by Microsoft Bookings**. Configure Bookings to allow your clients
   to schedule appointments and receive join links to your own hosted app.
-- Open source and customizable meeting UI controls. The app is built using
-  [ACS UI Library](https://github.com/Azure/communication-ui-library) which has
+- **Open source** and customizable meeting UI controls. The app is built using
+  [ACS UI Library](https://azure.github.io/communication-ui-library/) which has
   many options for customizing layouts, rendering, and behaviors.
 
 ## Getting Started
@@ -51,12 +51,12 @@ There are two ways to start using this app:
 
 - Create an Azure account with an active subscription. For details, see
   [Create an account for free](https://azure.microsoft.com/free/).
-- [Node.js (12.18.4 and above)](https://nodejs.org/en/download/)
 - An active Communication Services resource. [Create a Communication Services resource](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
+- [Node.js (12.18.4 and above)](https://nodejs.org/en/download/)
 
 ### Install Dependencies
 
-- Run `npm i` from both the client and server folders to install the dependencies for each project.
+- Run `npm i` from both the `/client` and `/server` folders to install the dependencies for each project.
 
 ### Build and Run
 
