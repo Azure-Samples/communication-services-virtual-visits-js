@@ -2,6 +2,7 @@
   "name": "client",
   "version": "1.0.0",
   "private": true,
+  "proxy": "https://microsoftbookings.azurewebsites.net",
   "scripts": {
     "test": "node scripts/test.js",
     "start:client": "node scripts/start.js",

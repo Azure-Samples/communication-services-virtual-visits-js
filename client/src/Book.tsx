@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 import React from 'react';
-import { LayerHost, Spinner, Stack, ThemeProvider, Link, Text } from '@fluentui/react';
+import { Spinner, Stack, ThemeProvider, Link, Text } from '@fluentui/react';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
-import { embededIframeStyles } from './styles/Book.styles';
+// import { embededIframeStyles } from './styles/Book.styles';
 import { Header } from './Header';
 import './styles/Common.css';
 import { fetchConfig } from './utils/FetchConfig';
@@ -44,39 +44,53 @@ export class Book extends React.Component<BookProps, BookState> {
     const httpRequest = new XMLHttpRequest();
     const text =
       'The bookings page you are trying to reach is unavailable. The page may have been removed, deleted or the URL incorrectly entered';
+    const errorMsg = (
+      <Text block={true}>
+        {text}
+        <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank" href={iframeContentUrl}>
+          {'Learn More'}
+        </Link>
+      </Text>
+    );
     httpRequest.onreadystatechange = function () {
       if (httpRequest.readyState === 4) {
         if (httpRequest.status === 200) {
           // success
-          conditionalElement;
+          console.log('In success');
+          return conditionalElement;
         } else {
           // failure. Act as you want
-          <Text block={true}>
-            {text}
-            <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank" href={iframeContentUrl}>
-              {'Learn More'}
-            </Link>
-          </Text>;
+          console.log('In error');
+          return errorMsg;
         }
+      } else {
+        console.log('Not ready');
+        return errorMsg;
       }
     };
     httpRequest.open('GET', iframeContentUrl);
+    //Using cors-anywhere for CORS issue
+    // httpRequest.open('GET', 'https://cors-anywhere.herokuapp.com' + iframeContentUrl);
     httpRequest.send();
   }
 
   render(): JSX.Element {
     const parentID = 'BookMeetingSection';
     if (this.state.config) {
-      const conditionalElement = (
-        <LayerHost id={parentID} style={{ position: 'relative', height: '100%' }}>
-          <iframe src={this.state.config.microsoftBookingsUrl} scrolling="yes" style={embededIframeStyles}></iframe>
-        </LayerHost>
-      );
+      // const conditionalElement = (
+      //   <LayerHost id={parentID} style={{ position: 'relative', height: '100%' }}>
+      //     <iframe src={this.state.config.microsoftBookingsUrl} scrolling="yes" style={embededIframeStyles}></iframe>
+      //   </LayerHost>
+      // );
+
+      //For testing if the element is being rendered
+      //Even after passing the CORS issue, this element is not being shown, need help here as well.
+      const sample = <div>Hello</div>;
       return (
         <ThemeProvider theme={this.state.config.theme} style={{ height: '100%' }}>
           <Stack styles={backgroundStyles(this.state.config.theme)}>
             <Header companyName={this.state.config.companyName} parentid={parentID} />
-            {this.iframeGenerator(conditionalElement, this.state.config.microsoftBookingsUrl)}
+            {this.iframeGenerator(sample, this.state.config.microsoftBookingsUrl)}
           </Stack>
         </ThemeProvider>
       );
