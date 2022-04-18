@@ -57,7 +57,7 @@ export class Visit extends React.Component<VisitProps, VisitState> {
 
     //handle going to previous/next page of window history
     window.onpopstate = () => {
-      this.setState({ meetingLinkModel: this._getMeetingLinkModel(window.location.search) });
+      window.location.assign(window.location.href);
     };
 
     this.state = {
