@@ -2,12 +2,11 @@
 // Licensed under the MIT license.
 
 import { setIconOptions, Panel } from '@fluentui/react';
-import { mount } from 'enzyme';
-import { WaffleMenu, WaffleNavigation } from './WaffleMenu';
-import { configure } from 'enzyme';
+import { act } from '@testing-library/react';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as renderer from 'react-test-renderer';
-import { act } from '@testing-library/react';
+import { WaffleMenu, WaffleNavigation } from './WaffleMenu';
 
 configure({ adapter: new Adapter() });
 
