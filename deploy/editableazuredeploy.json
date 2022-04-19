@@ -3,7 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appServiceName": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "The name of your resource. This must be a new unique name. This will also be your custom domain name in your endpoint. Your resource name can only include alphanumeric characters and hyphens, and can't start or end with a hyphen or contain spaces."
+      }
     },
     "communicationServiceName": {
       "type": "string"
@@ -34,7 +37,7 @@
       "type": "string",
       "defaultValue": "F1",
       "metadata": {
-        "description": "The SKU of App Service Plan."
+        "description": "The resource offers different pricing SKUs to fit your needs. The SKU you select determines how much you will be billed each month."
       }
     },
     "microsoftBookingsUrl": {
