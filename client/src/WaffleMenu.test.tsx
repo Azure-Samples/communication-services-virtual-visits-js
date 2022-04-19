@@ -21,7 +21,7 @@ describe('WaffleMenu', () => {
     const waffleMenu = mount(<WaffleMenu parentid="test" />);
 
     const menuIcon = waffleMenu.find({ iconName: 'Waffle' });
-    let panel = waffleMenu.find(Panel);
+    const panel = waffleMenu.find(Panel);
 
     expect(menuIcon.length).toBe(1);
     expect(panel.length).toBe(1);
