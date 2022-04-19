@@ -1,20 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { setIconOptions, Spinner } from '@fluentui/react';
 import { CommunicationUserToken } from '@azure/communication-identity';
-import { mount } from 'enzyme';
-import { generateTheme } from './utils/ThemeGenerator';
-import { configure } from 'enzyme';
+import { setIconOptions, Spinner } from '@fluentui/react';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { Header } from './Header';
 import { Visit } from './Visit';
 import { AppConfigModel } from './models/ConfigModel';
-import { Header } from './Header';
-import { act } from '@testing-library/react';
-import { fetchConfig } from './utils/FetchConfig';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { MeetingExperience } from './components/MeetingExperience';
+import { fetchConfig } from './utils/FetchConfig';
 import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
+import { fakeTimers } from './utils/TestUtils';
+import { generateTheme } from './utils/ThemeGenerator';
 
 const MOCK_VALID_TEAMSMEETINGLINKMODEL = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
@@ -63,10 +62,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await fakeTimers();
 
     visit.update();
 
@@ -86,10 +82,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await fakeTimers();
 
     visit.update();
 
@@ -117,10 +110,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await fakeTimers();
 
     await visit.update();
 
@@ -154,10 +144,7 @@ describe('Visit', () => {
 
     visit.setState({ meetingLinkModel: MOCK_VALID_TEAMSMEETINGLINKMODEL });
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await fakeTimers();
 
     await visit.update();
 
