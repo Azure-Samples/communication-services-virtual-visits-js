@@ -16,6 +16,8 @@ interface HeaderProps {
 }
 
 export const Header = (props: HeaderProps): JSX.Element => {
+  const { companyName, parentid } = props;
+
   return (
     <ThemeContext.Consumer>
       {(theme: Theme | undefined) => {
@@ -24,8 +26,8 @@ export const Header = (props: HeaderProps): JSX.Element => {
         }
         return (
           <Stack styles={headerContainerStyles(theme)} verticalAlign="center" horizontal>
-            <WaffleMenu parentId={props.parentid} />
-            <Text styles={headerTextStyles(theme)}>{props.companyName}</Text>
+            <WaffleMenu parentid={parentid} />
+            <Text styles={headerTextStyles(theme)}>{companyName}</Text>
           </Stack>
         );
       }}

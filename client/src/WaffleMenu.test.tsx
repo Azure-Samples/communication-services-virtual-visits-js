@@ -18,7 +18,7 @@ setIconOptions({
 
 describe('WaffleMenu', () => {
   it('should have a Waffle icon and a closed Panel', async () => {
-    const waffleMenu = mount(<WaffleMenu parentId="test" />);
+    const waffleMenu = mount(<WaffleMenu parentid="test" />);
 
     const menuIcon = waffleMenu.find({ iconName: 'Waffle' });
     let panel = waffleMenu.find(Panel);
@@ -29,7 +29,7 @@ describe('WaffleMenu', () => {
   });
 
   it('should open its Panel when Waffle icon is clicked on', async () => {
-    const waffleMenu = mount(<WaffleMenu parentId="test" />);
+    const waffleMenu = mount(<WaffleMenu parentid="test" />);
 
     const menuIcon = waffleMenu.find({ iconName: 'Waffle' });
 

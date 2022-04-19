@@ -21,10 +21,12 @@ import {
 } from './styles/Header.styles';
 
 interface WaffleMenuProps {
-  parentId: string;
+  parentid: string;
 }
 
 export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
+  const { parentid } = props;
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const _openPanel = (): void => {
@@ -71,7 +73,7 @@ export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
               hasCloseButton={false}
               onDismiss={() => _dismissPanel()}
               type={PanelType.smallFixedNear}
-              layerProps={{ hostId: props.parentId }}
+              layerProps={{ hostId: parentid }}
               onRenderNavigationContent={(props) => _onRenderPanelMenu(props, theme)}
             >
               <WaffleNavigation />
