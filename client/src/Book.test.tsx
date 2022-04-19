@@ -6,6 +6,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Book } from './Book';
 import { Header } from './Header';
+import { GenericError } from './components/GenericError';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
@@ -26,6 +27,10 @@ jest.mock('./utils/FetchConfig', () => {
 });
 
 describe('Book', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation();
+  });
+
   it('should render loading spinner when config is not loaded', async () => {
     (fetchConfig as jest.Mock).mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
@@ -46,7 +51,7 @@ describe('Book', () => {
     expect(headers.length).toBe(0);
   });
 
-  it('renders an generic error UI when config throws an error', async () => {
+  it('renders a generic error UI when config throws an error', async () => {
     (fetchConfig as jest.Mock).mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
         throw new Error('test error');
@@ -59,8 +64,10 @@ describe('Book', () => {
 
     book.update();
 
-    const genericErrorUI = book.find('#generic-error');
+    const spinners = book.find(Spinner);
+    const genericErrorUI = book.find(GenericError);
 
+    expect(spinners.length).toBe(0);
     expect(genericErrorUI.length).toBe(1);
   });
 
