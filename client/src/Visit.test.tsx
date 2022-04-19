@@ -7,6 +7,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Header } from './Header';
 import { Visit } from './Visit';
+import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { MeetingExperience } from './components/MeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
@@ -73,7 +74,7 @@ describe('Visit', () => {
     expect(headers.length).toBe(0);
   });
 
-  it('renders an generic error UI when config throws an error', async () => {
+  it('renders a generic error UI when config throws an error', async () => {
     (fetchConfig as jest.Mock).mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
         throw new Error('test error');
@@ -85,10 +86,11 @@ describe('Visit', () => {
     await runFakeTimers();
 
     visit.update();
+    const spinners = visit.find(Spinner);
+    const genericErrors = visit.find(GenericError);
 
-    const genericErrorUI = visit.find('#generic-error');
-
-    expect(genericErrorUI.length).toBe(1);
+    expect(spinners.length).toBe(0);
+    expect(genericErrors.length).toBe(1);
   });
 
   it('should render JoinTeamsMeeting when config is loaded but the meeting link is not set', async () => {
@@ -115,11 +117,11 @@ describe('Visit', () => {
     await visit.update();
 
     const spinners = visit.find(Spinner);
-    const genericErrorUI = visit.find('#generic-error');
+    const genericErrors = visit.find(GenericError);
     const joinMeetings = visit.find(JoinTeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrorUI.length).toBe(0);
+    expect(genericErrors.length).toBe(0);
     expect(joinMeetings.length).toBe(1);
   });
 
