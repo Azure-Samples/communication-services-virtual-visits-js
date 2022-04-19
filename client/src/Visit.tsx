@@ -111,6 +111,7 @@ export class Visit extends React.Component<VisitProps, VisitState> {
                   waitingTitle={this.state.config.waitingTitle}
                   waitingSubtitle={this.state.config.waitingSubtitle}
                   chatEnabled={this.state.config.chatEnabled}
+                  onDisplayError={(error) => this.setState({ error })}
                 />
               </LayerHost>
             </Stack>
