@@ -47,6 +47,7 @@ describe('JoinTeamsMeeting', () => {
           waitingSubtitle: '',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 
@@ -69,6 +70,7 @@ describe('JoinTeamsMeeting', () => {
           waitingSubtitle: '',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 
@@ -92,6 +94,7 @@ describe('JoinTeamsMeeting', () => {
           waitingSubtitle: '',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 
@@ -126,6 +129,7 @@ describe('JoinTeamsMeeting', () => {
           waitingSubtitle: 'World',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 
@@ -133,6 +137,32 @@ describe('JoinTeamsMeeting', () => {
     const styles = container.prop('styles');
 
     expect(styles).toEqual(expectedStyles);
+  });
+
+  it('should call onJoinMeeting prop when join button is clicked', async () => {
+    const meeting = mount(
+      <JoinTeamsMeeting
+        config={{
+          communicationEndpoint: 'enpoint=test_endpoint;',
+          microsoftBookingsUrl: '',
+          chatEnabled: true,
+          screenShareEnabled: true,
+          companyName: '',
+          theme: generateTheme('#FFFFFF'),
+          waitingTitle: '',
+          waitingSubtitle: '',
+          logoUrl: ''
+        }}
+        onJoinMeeting={jest.fn()}
+      />
+    );
+
+    meeting.setState({ teamsMeetingLink: validTeamsMeetingLink });
+    const joinButton = meeting.find(PrimaryButton);
+
+    joinButton.simulate('click');
+
+    expect(meeting.props().onJoinMeeting).toBeCalled();
   });
 });
 
@@ -168,6 +198,7 @@ describe('Error handling', () => {
           waitingSubtitle: '',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 
@@ -192,6 +223,7 @@ describe('Error handling', () => {
           waitingSubtitle: '',
           logoUrl: ''
         }}
+        onJoinMeeting={jest.fn()}
       />
     );
 

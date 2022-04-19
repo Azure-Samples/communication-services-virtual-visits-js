@@ -20,6 +20,7 @@ interface VisitState {
   config: AppConfigModel | undefined;
   token: CommunicationUserToken | undefined;
   error: any | undefined;
+  meetingLinkModel: TeamsMeetingLinkModel | undefined;
 }
 
 interface VisitProps {
@@ -27,13 +28,43 @@ interface VisitProps {
 }
 
 export class Visit extends React.Component<VisitProps, VisitState> {
+  private _getMeetingLinkModel(meetingLink: string): TeamsMeetingLinkModel | undefined {
+    let meetingLinkModel: TeamsMeetingLinkModel | undefined = undefined;
+
+    if (meetingLink) {
+      // try extracting Teams link from the url
+      try {
+        meetingLinkModel = getTeamsMeetingLink(meetingLink);
+      } catch (error) {
+        meetingLinkModel = undefined;
+      }
+    }
+
+    return meetingLinkModel;
+  }
+
+  private _onJoinMeeting(link: string): void {
+    // add link to page URL without re-rendering Visit component
+    window.history.pushState({}, document.title, window.location.href + link);
+
+    this.setState({ meetingLinkModel: this._getMeetingLinkModel(link) });
+  }
+
   public constructor(props: VisitProps) {
     super(props);
+
+    this._onJoinMeeting.bind(this);
+
+    //handle going to previous/next page of window history
+    window.onpopstate = () => {
+      window.location.assign(window.location.href);
+    };
 
     this.state = {
       config: undefined,
       token: undefined,
-      error: undefined
+      error: undefined,
+      meetingLinkModel: this._getMeetingLinkModel(window.location.search) // case of direct link to visit with meeting link in URL
     };
   }
 
@@ -52,19 +83,10 @@ export class Visit extends React.Component<VisitProps, VisitState> {
     if (this.state.error) {
       return <GenericError statusCode={this.state.error.statusCode} />;
     } else {
-      let meetingLinkModel: TeamsMeetingLinkModel | undefined;
-
-      // try extracting Teams link from the url
-      try {
-        meetingLinkModel = getTeamsMeetingLink(window.location.search);
-      } catch (error) {
-        meetingLinkModel = undefined;
-      }
-
       // if the state is loaded and we got a valid teams link - try to start
       // the meeting experience
-      if (this.state.config && this.state.token && meetingLinkModel) {
-        const locator = { meetingLink: meetingLinkModel.meetingUrl };
+      if (this.state.config && this.state.token && this.state.meetingLinkModel) {
+        const locator = { meetingLink: this.state.meetingLinkModel.meetingUrl };
         const parentID = 'VisitSection';
 
         return (
@@ -94,12 +116,12 @@ export class Visit extends React.Component<VisitProps, VisitState> {
             </Stack>
           </ThemeProvider>
         );
-      } else if (this.state.config && !meetingLinkModel) {
+      } else if (this.state.config && !this.state.meetingLinkModel) {
         // If we have correct state but don't have a meeting link,
         // show a separate screen with "enter meeting link" textbox
         return (
           <ThemeProvider theme={this.state.config.theme} style={{ height: '100%' }}>
-            <JoinTeamsMeeting config={this.state.config} />
+            <JoinTeamsMeeting config={this.state.config} onJoinMeeting={(link) => this._onJoinMeeting(link)} />
           </ThemeProvider>
         );
       } else {
