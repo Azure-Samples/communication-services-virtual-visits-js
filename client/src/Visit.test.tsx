@@ -16,10 +16,6 @@ import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 
-const MOCK_VALID_TEAMSMEETINGLINKMODEL = getTeamsMeetingLink(
-  '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
-);
-
 configure({ adapter: new Adapter() });
 
 // Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
@@ -43,6 +39,12 @@ jest.mock('./utils/FetchToken', () => {
         expiresOn: new Date()
       });
     }
+  };
+});
+
+jest.mock('./utils/GetTeamsMeetingLink', () => {
+  return {
+    getTeamsMeetingLink: jest.fn()
   };
 });
 
@@ -142,9 +144,13 @@ describe('Visit', () => {
       }
     );
 
-    const visit = await mount(<Visit />);
+    (getTeamsMeetingLink as jest.Mock).mockImplementation(
+      (): string => {
+        return '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
+      }
+    );
 
-    visit.setState({ meetingLinkModel: MOCK_VALID_TEAMSMEETINGLINKMODEL });
+    const visit = await mount(<Visit />);
 
     await runFakeTimers();
 
