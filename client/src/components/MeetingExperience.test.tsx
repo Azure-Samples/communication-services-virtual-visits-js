@@ -11,6 +11,7 @@ import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { MeetingExperience } from './MeetingExperience';
+import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
 import { fakeTimers } from '../utils/TestUtils';
 
 configure({ adapter: new Adapter() });
@@ -90,6 +91,8 @@ describe('MeetingExperience', () => {
   beforeEach(() => {
     userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
     jest.spyOn(console, 'log').mockImplementation();
+    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
+    getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
