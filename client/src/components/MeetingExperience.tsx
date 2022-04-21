@@ -19,7 +19,7 @@ import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 
-interface MeetingExperienceProps {
+export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
   displayName: string;
