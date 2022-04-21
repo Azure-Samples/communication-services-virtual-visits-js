@@ -9,8 +9,9 @@ const HEADER_HEIGHT = '3rem';
 export function wafflePanelStyles(theme: Theme): Partial<IPanelStyles> {
   return {
     root: {
-      top: `-${HEADER_HEIGHT}`,
-      zIndex: 100
+      top: 0,
+      zIndex: 100,
+      position: 'fixed'
     },
     navigation: {
       height: HEADER_HEIGHT,

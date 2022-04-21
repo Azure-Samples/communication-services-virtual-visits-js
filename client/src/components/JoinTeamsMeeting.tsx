@@ -17,6 +17,7 @@ import MobileDetect from 'mobile-detect';
 
 interface JoinTeamsMeetingProps {
   config: AppConfigModel;
+  onJoinMeeting(urlToJoin: string): void;
 }
 
 interface JoinTeamsMeetingState {
@@ -81,9 +82,12 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
                     onGetErrorMessage={this.onGetErrorMessage.bind(this)}
                     defaultValue={this.state.teamsMeetingLink}
                   />
-                  <PrimaryButton href={link} disabled={!enableButton} styles={formStyles}>
-                    Join call
-                  </PrimaryButton>
+                  <PrimaryButton
+                    disabled={!enableButton}
+                    styles={formStyles}
+                    text={'Join call'}
+                    onClick={() => this.props.onJoinMeeting(link)}
+                  />
                 </Stack>
               </LayerHost>
             </Stack>
