@@ -8,7 +8,7 @@ import { Book } from './Book';
 import { Header } from './Header';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
-import { fakeTimers } from './utils/TestUtils';
+import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
@@ -35,7 +35,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     book.update();
 
@@ -55,7 +55,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     book.update();
 
@@ -83,7 +83,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     book.update();
 

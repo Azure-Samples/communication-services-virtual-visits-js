@@ -6,7 +6,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as renderer from 'react-test-renderer';
 import { WaffleMenu, WaffleNavigation } from './WaffleMenu';
-import { fakeTimers } from './utils/TestUtils';
+import { runFakeTimers } from './utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -35,7 +35,7 @@ describe('WaffleMenu', () => {
 
     menuIcon.simulate('click');
 
-    await fakeTimers();
+    await runFakeTimers();
 
     waffleMenu.update();
 

@@ -12,7 +12,7 @@ import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { MeetingExperience } from './components/MeetingExperience';
 import { fetchConfig } from './utils/FetchConfig';
 import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
-import { fakeTimers } from './utils/TestUtils';
+import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 
 const MOCK_VALID_TEAMSMEETINGLINKMODEL = getTeamsMeetingLink(
@@ -62,7 +62,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     visit.update();
 
@@ -82,7 +82,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     visit.update();
 
@@ -110,7 +110,7 @@ describe('Visit', () => {
 
     const visit = await mount(<Visit />);
 
-    await fakeTimers();
+    await runFakeTimers();
 
     await visit.update();
 
@@ -144,7 +144,7 @@ describe('Visit', () => {
 
     visit.setState({ meetingLinkModel: MOCK_VALID_TEAMSMEETINGLINKMODEL });
 
-    await fakeTimers();
+    await runFakeTimers();
 
     await visit.update();
 
