@@ -3,9 +3,9 @@
 
 import { act } from '@testing-library/react';
 
-export async function fakeTimers() {
+export const fakeTimers = async (): Promise<void> => {
   await act(async () => {
     jest.useFakeTimers();
     jest.runAllTimers();
   });
-}
+};
