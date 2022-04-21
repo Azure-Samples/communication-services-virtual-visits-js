@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 import { setIconOptions, Panel } from '@fluentui/react';
-import { act } from '@testing-library/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as renderer from 'react-test-renderer';
 import { WaffleMenu, WaffleNavigation } from './WaffleMenu';
+import { runFakeTimers } from './utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -35,10 +35,7 @@ describe('WaffleMenu', () => {
 
     menuIcon.simulate('click');
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     waffleMenu.update();
 
