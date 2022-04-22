@@ -137,7 +137,7 @@ with the latest package using [Azure CLI](https://docs.microsoft.com/cli/azure/w
 
 For example:
 
-- Download new `release.zip`
+- Download new `sample.zip`
 - Deploy using Azure CLI:
 
   ```shell
