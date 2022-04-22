@@ -12,7 +12,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { MeetingExperience } from './MeetingExperience';
 import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
-import { fakeTimers } from '../utils/TestUtils';
+import { runFakeTimers } from '../utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -112,7 +112,7 @@ describe('MeetingExperience', () => {
       />
     );
 
-    await fakeTimers();
+    await runFakeTimers();
     meetingExperience.update();
 
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
@@ -150,7 +150,7 @@ describe('MeetingExperience', () => {
       />
     );
 
-    await fakeTimers();
+    await runFakeTimers();
     meetingExperience.update();
 
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
