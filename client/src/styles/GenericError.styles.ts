@@ -5,4 +5,4 @@ import { mergeStyles } from '@fluentui/react';
 
 export const errorIconStackStyle: string = mergeStyles({ fontSize: '1.25rem', fontWeight: 'bold' });
 
-export const errorTitleStyle: string = mergeStyles({ fontSize: '1.125rem', fontWeight: 'bold' });
+export const errorTitleStyle: string = mergeStyles({ fontSize: '1.25rem', fontWeight: 'bold' });
