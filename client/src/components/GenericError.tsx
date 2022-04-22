@@ -1,8 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import React from 'react';
-import { Icon } from '@fluentui/react';
+import { Icon, Stack, Text } from '@fluentui/react';
+import { errorIconStackStyle, errorTitleStyle } from '../styles/GenericError.styles';
+
+interface GenericErrorProps {
+  statusCode: any | undefined;
+}
+
+export const GenericError = (props: GenericErrorProps): JSX.Element => {
+  const { statusCode } = props;
+  const error = genericErrors[statusCode] || genericErrors['default'];
+
+  return (
+    <Stack id="generic-error">
+      <Text as={'h2'} className={errorIconStackStyle}>
+        <Icon iconName="error" />
+      </Text>
+      <Text as={'h3'} className={errorTitleStyle}>
+        {error.title}
+      </Text>
+      <Text>{error.description}</Text>
+    </Stack>
+  );
+};
 
 const genericErrors = {
   default: {
@@ -18,27 +39,3 @@ const genericErrors = {
     description: 'The server has encountered an error. Refresh the page to try again.'
   }
 };
-
-interface GenericErrorProps {
-  statusCode: any | undefined;
-}
-
-export class GenericError extends React.Component<GenericErrorProps> {
-  public constructor(props: GenericErrorProps) {
-    super(props);
-  }
-
-  render(): JSX.Element {
-    const error = genericErrors[this.props.statusCode] || genericErrors['default'];
-
-    return (
-      <div id="generic-error">
-        <h2>
-          <Icon iconName="error" />
-        </h2>
-        <h3>{error.title}</h3>
-        <p>{error.description}</p>
-      </div>
-    );
-  }
-}
