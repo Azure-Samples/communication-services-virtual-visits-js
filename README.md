@@ -68,11 +68,20 @@ npm i
 
 Development mode:
 
-- This runs the client and server separately with hot reload enabled (webpackdevserver for client and ts-node-dev for server).
+- You can run the server and client separately, or run the whole project together in development mode.
+- Hot reload is enabled for both methods (webpackdevserver for client and ts-node-dev for server).
 - The client will be running on port 3000 and the server will be running on port 8080.
 - Use the client port 3000 to access the different routes. For example, `localhost:3000/book` and `localhost:3000/visit`
 - Use the server port 8080 to access server APIs.
-- You can `build` and `start` the server and client components separately by running the `build` and `start` commands appended with `client` and `server`.
+- To run the entire project together, use the following commands.
+
+```
+cd client
+npm run build:project
+npm run start:project
+```
+
+- You can also `build` and `start` the server and client components separately by running the `build` and `start` commands appended with `client` and `server`.
 - For server individual launch, there won't be access to client routes, but you can still access the server APIs like /config. To build and start the server individually, use the following commands.
 
 ```
