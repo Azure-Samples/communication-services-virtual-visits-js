@@ -19,7 +19,7 @@ provide your customers with a branded virtual consultation experience.
 - **Scheduling powered by Microsoft Bookings**. Configure Bookings to allow your clients
   to schedule appointments and receive join links to your own hosted app.
 - **Open source** and customizable meeting UI controls. The app is built using
-  [ACS UI Library](https://azure.github.io/communication-ui-library/) which has
+  [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has
   many options for customizing layouts, rendering, and behaviors.
 
 ## Getting Started
@@ -123,7 +123,7 @@ Where do I set this?
 - The server retrieves the config to use from the environment variables. On local machines you'll have to set this up
   manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
-- `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your ACS connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
+- `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
 - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
 - `VV_CHAT_ENABLED`. Example value: "true".
 - `VV_SCREENSHARE_ENABLED`. Example value: "true".
