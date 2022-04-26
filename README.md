@@ -113,19 +113,7 @@ npm run start:prod
 
 Where do I set this?
 
-- The environment variables can be set in the defaultConfig.json file in the `/server/src` folder.
-- The environment variables currently used in the defaultConfig.json are:
-  - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
-  - `chatEnabled`. Example value: "true".
-  - `screenShareEnabled`. Example value: "true".
-  - `companyName`. Example value: "Lamna Healthcare".
-  - `colorPalette`. Example value: "#0078d4".
-  - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
-  - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
-  - `logoUrl`. Example value: "https://your_cdn/logo.png".
-- In addition to setting these values via the defaultConfig.json file, you can set them as environment variables in your system.
-In this case the environment value will take precedence.
+- The variables used in the config can be set as environment variables in your system.
 - The server retrieves the config to use from the system environment variables. On local machines you'll have to set this up
   manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
@@ -138,6 +126,17 @@ In this case the environment value will take precedence.
   - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
+- In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
+- The environment variables currently used in the defaultConfig.json are:
+  - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
+  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
+  - `chatEnabled`. Example value: "true".
+  - `screenShareEnabled`. Example value: "true".
+  - `companyName`. Example value: "Lamna Healthcare".
+  - `colorPalette`. Example value: "#0078d4".
+  - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
+  - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
+  - `logoUrl`. Example value: "https://your_cdn/logo.png".
 
 ## Updating Your Sample
 
