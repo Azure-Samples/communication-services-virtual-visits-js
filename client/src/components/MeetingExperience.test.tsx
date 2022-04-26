@@ -90,6 +90,7 @@ describe('MeetingExperience', () => {
 
   beforeEach(() => {
     userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
+    jest.spyOn(console, 'log').mockImplementation();
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
