@@ -2,15 +2,14 @@
 // Licensed under the MIT license.
 
 import { setIconOptions, Spinner } from '@fluentui/react';
-import { mount } from 'enzyme';
-import { generateTheme } from './utils/ThemeGenerator';
-import { configure } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Book } from './Book';
-import { AppConfigModel } from './models/ConfigModel';
 import { Header } from './Header';
-import { act } from '@testing-library/react';
+import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
+import { runFakeTimers } from './utils/TestUtils';
+import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
 
@@ -36,10 +35,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
@@ -59,10 +55,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
@@ -90,10 +83,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
