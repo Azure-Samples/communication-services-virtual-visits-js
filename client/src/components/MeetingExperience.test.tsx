@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { setIconOptions } from '@fluentui/react';
-import { mount } from 'enzyme';
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { MeetingExperience, MeetingExperienceProps, MeetingExperienceState } from './MeetingExperience';
 import {
   AdapterError,
   CallWithChatAdapter,
   CallWithChatAdapterState,
   CallWithChatComposite
 } from '@azure/communication-react';
+import { setIconOptions } from '@fluentui/react';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import { MeetingExperience } from './MeetingExperience';
+import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
+import { runFakeTimers } from '../utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -59,7 +60,7 @@ jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallWithChatAdapterFromClients: () => {
-      return {};
+      return createMockCallWithChatAdapter();
     },
     createStatefulCallClient: () => {
       return { createCallAgent: () => '' };
@@ -86,15 +87,16 @@ describe('MeetingExperience', () => {
   const waitingSubtitle = 'waiting subtitle';
   const logoUrl = 'logoUrl';
   let userAgentGetter: any = undefined;
-  const mockedCallWithChatAdapter = createMockCallWithChatAdapter();
 
   beforeEach(() => {
     userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
     jest.spyOn(console, 'log').mockImplementation();
+    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
+    getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
-    const meetingExperience = await mount<MeetingExperienceProps, MeetingExperienceState>(
+    const meetingExperience = await mount(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -106,11 +108,12 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        onDisplayError={jest.fn()}
       />
     );
 
-    meetingExperience.setState({ callWithChatAdapter: mockedCallWithChatAdapter });
-    await meetingExperience.update();
+    await runFakeTimers();
+    meetingExperience.update();
 
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
 
@@ -131,7 +134,7 @@ describe('MeetingExperience', () => {
       'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
     userAgentGetter.mockReturnValue(mobileSafariUserAgent);
 
-    const meetingExperience = await mount<MeetingExperienceProps, MeetingExperienceState>(
+    const meetingExperience = await mount(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -143,10 +146,12 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        onDisplayError={jest.fn()}
       />
     );
-    meetingExperience.setState({ callWithChatAdapter: mockedCallWithChatAdapter });
-    await meetingExperience.update();
+
+    await runFakeTimers();
+    meetingExperience.update();
 
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
 
