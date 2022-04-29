@@ -10,23 +10,23 @@ import { ERROR_PAYLOAD_500 } from './errors';
 import fs from 'fs';
 import path from 'path';
 
-function createFile(filePath) {
+const createFile = (filePath: string): void => {
   fs.writeFile(filePath, '<!DOCTYPE html><html></html>', function (err) {
     if (err) throw err;
   });
-}
+};
 
-function createDir() {
+const createDir = (): void => {
   fs.mkdir(path.join(__dirname, 'public'), (err) => {
     if (err) throw err;
   });
-}
+};
 
-function deleteDir() {
+const deleteDir = (): void => {
   fs.rmdir(path.join(__dirname, 'public'), (err) => {
     if (err) throw err;
   });
-}
+};
 
 describe('app route tests', () => {
   test('/ should redirect to /book', async () => {
