@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 
 describe('app route tests', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     fs.mkdir(path.join(__dirname, 'public'), (err) => {
       if (err) throw err;
     });
@@ -24,7 +24,7 @@ describe('app route tests', () => {
       if (err) throw err;
     });
   });
-  afterEach(() => {
+  afterAll(() => {
     const bookFilePath = path.join(__dirname, 'public/book.html');
     const visitFilePath = path.join(__dirname, 'public/visit.html');
     fs.unlinkSync(bookFilePath);
@@ -54,7 +54,7 @@ describe('app route tests', () => {
 });
 
 describe('errors', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     fs.mkdir(path.join(__dirname, 'public'), (err) => {
       if (err) throw err;
     });
@@ -64,7 +64,7 @@ describe('errors', () => {
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
     const filePath = path.join(__dirname, 'public/pageNotFound.html');
     fs.unlinkSync(filePath);
     fs.rmdir(path.join(__dirname, 'public'), (err) => {
