@@ -10,6 +10,24 @@ import { ERROR_PAYLOAD_500 } from './errors';
 import fs from 'fs';
 import path from 'path';
 
+function createFile(filePath) {
+  fs.writeFile(filePath, '<!DOCTYPE html><html></html>', function (err) {
+    if (err) throw err;
+  });
+}
+
+function createDir() {
+  fs.mkdir(path.join(__dirname, 'public'), (err) => {
+    if (err) throw err;
+  });
+}
+
+function deleteDir() {
+  fs.rmdir(path.join(__dirname, 'public'), (err) => {
+    if (err) throw err;
+  });
+}
+
 describe('app route tests', () => {
   test('/ should redirect to /book', async () => {
     const getResponse = await request(app).get('/');
@@ -19,27 +37,17 @@ describe('app route tests', () => {
 });
 
 describe('route tests', () => {
+  const bookFilePath = path.join(__dirname, 'public/book.html');
+  const visitFilePath = path.join(__dirname, 'public/visit.html');
   beforeAll(() => {
-    fs.mkdir(path.join(__dirname, 'public'), (err) => {
-      if (err) throw err;
-    });
-    const bookFilePath = path.join(__dirname, 'public/book.html');
-    const visitFilePath = path.join(__dirname, 'public/visit.html');
-    fs.writeFile(bookFilePath, '<!DOCTYPE html><html></html>', function (err) {
-      if (err) throw err;
-    });
-    fs.writeFile(visitFilePath, '<!DOCTYPE html><html></html>', function (err) {
-      if (err) throw err;
-    });
+    createDir();
+    createFile(bookFilePath);
+    createFile(visitFilePath);
   });
   afterAll(() => {
-    const bookFilePath = path.join(__dirname, 'public/book.html');
-    const visitFilePath = path.join(__dirname, 'public/visit.html');
     fs.unlinkSync(bookFilePath);
     fs.unlinkSync(visitFilePath);
-    fs.rmdir(path.join(__dirname, 'public'), (err) => {
-      if (err) throw err;
-    });
+    deleteDir();
   });
   test('/book should return 200 response with book html page', async () => {
     const getResponse = await request(app).get('/book');
@@ -55,22 +63,15 @@ describe('route tests', () => {
 });
 
 describe('errors', () => {
+  const filePath = path.join(__dirname, 'public/pageNotFound.html');
   beforeAll(() => {
-    fs.mkdir(path.join(__dirname, 'public'), (err) => {
-      if (err) throw err;
-    });
-    const filePath = path.join(__dirname, 'public/pageNotFound.html');
-    fs.writeFile(filePath, '<!DOCTYPE html><html></html>', function (err) {
-      if (err) throw err;
-    });
+    createDir();
+    createFile(filePath);
   });
 
   afterAll(() => {
-    const filePath = path.join(__dirname, 'public/pageNotFound.html');
     fs.unlinkSync(filePath);
-    fs.rmdir(path.join(__dirname, 'public'), (err) => {
-      if (err) throw err;
-    });
+    deleteDir();
   });
 
   test('returns 404 response with generic pageNotFound html', async () => {
