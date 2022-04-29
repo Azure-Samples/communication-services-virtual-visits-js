@@ -11,6 +11,14 @@ import fs from 'fs';
 import path from 'path';
 
 describe('app route tests', () => {
+  test('/ should redirect to /book', async () => {
+    const getResponse = await request(app).get('/');
+    expect(getResponse.status).toEqual(302);
+    expect(getResponse.headers.location).toEqual('book');
+  });
+});
+
+describe('route tests', () => {
   beforeAll(() => {
     fs.mkdir(path.join(__dirname, 'public'), (err) => {
       if (err) throw err;
@@ -33,13 +41,6 @@ describe('app route tests', () => {
       if (err) throw err;
     });
   });
-
-  test('/ should redirect to /book', async () => {
-    const getResponse = await request(app).get('/');
-    expect(getResponse.status).toEqual(302);
-    expect(getResponse.headers.location).toEqual('book');
-  });
-
   test('/book should return 200 response with book html page', async () => {
     const getResponse = await request(app).get('/book');
     expect(getResponse.headers['content-type']).toEqual('text/html; charset=UTF-8');
