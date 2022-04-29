@@ -104,7 +104,8 @@ module.exports = function (proxy, allowedHost) {
       rewrites: [
         { from: /^\/$/, to: '/book.html' },
         { from: /^\/book/, to: '/book.html' },
-        { from: /^\/visit/, to: '/visit.html' }
+        { from: /^\/visit/, to: '/visit.html' },
+        { from: /^\/pageNotFound/, to: '/pageNotFound.html' }
       ]
     },
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks

@@ -8,7 +8,7 @@ import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
-import { ERROR_PAYLOAD_404, ERROR_PAYLOAD_500 } from './errors';
+import { ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
 
@@ -48,7 +48,7 @@ app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
 app.use((req, res, next) => {
-  res.status(404).json(ERROR_PAYLOAD_404);
+  res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
 });
 
 app.use((err, req, res, next) => {
