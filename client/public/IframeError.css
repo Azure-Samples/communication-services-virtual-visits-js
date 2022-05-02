@@ -2,7 +2,7 @@
     margin: auto;
 }
 
-#rectangle {
+.rectangle {
     width: 500px;
     height: 500px;
     background: #FFFFFF;
@@ -16,7 +16,7 @@
     justify-content: center;
 }
 
-#errorMsg {
+.errorMsg {
     width: 320px;
     height: 60px;
     font-family: 'Segoe UI';
@@ -33,7 +33,7 @@
     vertical-align:middle;
 }
 
-#errorCode {
+.errorCode {
     width: 35px;
     height: 28px;
     font-family: 'Segoe UI';

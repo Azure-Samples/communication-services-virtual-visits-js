@@ -39,11 +39,14 @@ describe('app route tests', () => {
 describe('route tests', () => {
   const bookFilePath = path.join(__dirname, 'public/book.html');
   const visitFilePath = path.join(__dirname, 'public/visit.html');
+  /* Creating static files as they are not available during the local develepoment
+  In prod these are compiled from client and copied into the public folder */
   beforeAll(() => {
     createDir();
     createFile(bookFilePath);
     createFile(visitFilePath);
   });
+  /* Deleting the previously created files and directory */
   afterAll(() => {
     fs.unlinkSync(bookFilePath);
     fs.unlinkSync(visitFilePath);
