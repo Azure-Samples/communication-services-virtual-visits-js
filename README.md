@@ -9,17 +9,16 @@ provide your customers with a branded virtual consultation experience.
 
 ## Features
 
-- Lobby, calling, and chat experiences for your clients. Browser-based and
-  mobile-friendly, clients won't need to install any apps.
-- Quick customization options for colors, themes, and features via a .json
+- **Rich communications experience**. Includes lobby, calling, and chat experiences for your users. Browser-based and
+  mobile-friendly, users won't need to install any apps.
+- **Quick customization** options for colors, themes, and features via a .json
   config file.
-- Integration with Microsoft Teams. Let your staff host and join meetings using
+- **Integration with Microsoft Teams**. Let your staff host and join meetings using
   familiar Teams UI, while the clients join the same call via your custom
-  branded web app.
-- Integration with Microsoft Bookings. Configure Bookings to allow your clients
-  to schedule appointments and receive join links to your own hosted app.
-- Open source and customizable meeting UI controls. The app is built using
-  [ACS UI Library](https://github.com/Azure/communication-ui-library) which has
+  branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
+- **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
+- **Open source** and customizable meeting UI controls. The app is built using
+  [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has
   many options for customizing layouts, rendering, and behaviors.
 
 ## Getting Started
@@ -37,13 +36,12 @@ There are two ways to start using this app:
 
 ## Code Structure
 
-- /client: frontend client.
-- /server: server app.
+- /client: Frontend client.
+- /server: Server app.
 - /deploy: ARM templates and scripts for quick Azure deployment.
-- /config: sample configuration file and schema description. The config file
+- /server/src/defaultConfig.json : Sample configuration file and schema description. The config file
   contains customization settings that can be done without changing the app:
   themes and colors, text captions, and feature toggles.
-- /docs: TBD
 
 ## Local Setup
 
@@ -51,85 +49,94 @@ There are two ways to start using this app:
 
 - Create an Azure account with an active subscription. For details, see
   [Create an account for free](https://azure.microsoft.com/free/).
-- [Node.js (12.18.4 and above)](https://nodejs.org/en/download/)
 - An active Communication Services resource. [Create a Communication Services resource](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
+- [Node.js (12.18.4 and above)](https://nodejs.org/en/download/)
 
 ### Install Dependencies
 
-- Run `npm i` from both the client and server folders to install the dependencies for each project.
+- Run `npm i` from both the `/client` and `/server` folders to install the dependencies for each project.
+
+```
+cd client
+npm i
+
+cd server
+npm i
+```
 
 ### Build and Run
 
 Development mode:
 
-- This runs the client and server with hot reload enabled (webpackdevserver for client and ts-node-dev for server).
-- Run these commands from either the server folder or client folder.
+- You can run the server and client separately, or run the whole project together in development mode.
+- Hot reload is enabled for both methods (webpackdevserver for client and ts-node-dev for server).
 - The client will be running on port 3000 and the server will be running on port 8080.
-- Use the client port 3000 to access the different routes for example localhost:3000/book and localhost:3000/visit
+- Use the client port 3000 to access the different routes. For example, `localhost:3000/book` and `localhost:3000/visit`
 - Use the server port 8080 to access server APIs.
+- To run the entire project together, use the following commands.
 
 ```
+cd client
 npm run build:project
 npm run start:project
+```
+
+- You can also `build` and `start` the server and client components separately by running the `build` and `start` commands appended with `client` and `server`.
+- For server individual launch, there won't be access to client routes, but you can still access the server APIs like /config. To build and start the server individually, use the following commands.
+
+```
+cd server
+npm run build:server
+npm run start:server
+```
+
+- For client individual launch, if the server is not running, access to client routes is limited. To build and start the client individually, use the following commands.
+```
+cd client
+npm run build:client
+npm run start:client
 ```
 
 Production mode:
 
 - This runs the client and server as a single application.
 - Unlike development mode, the server will serve both the routes and the server APIs.
-- The server will be running on port 8080. For example localhost:8080/book and localhost:8080/visit.
-- The built files will be put in the location YOUR_REPO_ROOT/dist and the server will be started from this location.
+- The server will be running on port 8080. For example, localhost:8080/book and localhost:8080/visit.
+- The built files will be put in the location `YOUR_REPO_ROOT/dist` and the server will be started from this location.
 
 ```
 npm run package
 npm run start:prod
 ```
 
-Individual builds:
-
-- You can also build the client or server individually.
-- For the server run this inside the server folder:
-
-```
-npm run build:server
-```
-
-- For the client run this inside the client folder.
-
-```
-npm run build:client
-```
-
-Individual launch:
-
-- You can also launch the client or server in development mode individually.
-- For the server, run this inside the server folder. For server individual launch, there won't be access to client routes
-  but you can still access the server APIs like /config.
-
-```
-npm run start:server
-```
-
-- For the client, run this inside the client folder. For client individual launch, if the server is not running, access to client routes is limited.
-
-```
-npm run start:client
-```
-
 ### Environment Variables
 
-- The server retrieves the config to use from the environment variables. On local machines you'll have to set this up
+Where do I set this?
+
+- The variables used in the config can be set as environment variables in your system.
+- The server retrieves the config to use from the system environment variables. On local machines you'll have to set this up
   manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
-- `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your ACS connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-- `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
-- `VV_CHAT_ENABLED`. Example value: "true".
-- `VV_SCREENSHARE_ENABLED`. Example value: "true".
-- `VV_COMPANY_NAME`. Example value: "Lamna Healthcare".
-- `VV_COLOR_PALETTE`. Example value: "#0078d4".
-- `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
-- `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
-- `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
+  - `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
+  - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
+  - `VV_CHAT_ENABLED`. Example value: "true".
+  - `VV_SCREENSHARE_ENABLED`. Example value: "true".
+  - `VV_COMPANY_NAME`. Example value: "Lamna Healthcare".
+  - `VV_COLOR_PALETTE`. Example value: "#0078d4".
+  - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
+  - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
+  - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
+- In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
+- The environment variables currently used in the defaultConfig.json are:
+  - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
+  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
+  - `chatEnabled`. Example value: "true".
+  - `screenShareEnabled`. Example value: "true".
+  - `companyName`. Example value: "Lamna Healthcare".
+  - `colorPalette`. Example value: "#0078d4".
+  - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
+  - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
+  - `logoUrl`. Example value: "https://your_cdn/logo.png".
 
 ## Updating Your Sample
 
@@ -138,7 +145,7 @@ with the latest package using [Azure CLI](https://docs.microsoft.com/cli/azure/w
 
 For example:
 
-- Download new `release.zip`
+- Download new `sample.zip`
 - Deploy using Azure CLI:
 
   ```shell

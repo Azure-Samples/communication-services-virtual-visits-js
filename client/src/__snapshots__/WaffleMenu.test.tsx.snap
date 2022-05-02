@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header panel should have links to the book and visit page 1`] = `
+exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
 <div
-  className="ms-FocusZone css-151"
+  className="ms-FocusZone css-149"
   data-focuszone-id="FocusZone8"
   onFocus={[Function]}
   onKeyDown={[Function]}
@@ -10,29 +10,29 @@ exports[`Header panel should have links to the book and visit page 1`] = `
 >
   <nav
     aria-label="Navigate to expected page"
-    className="ms-Nav root-136"
+    className="ms-Nav root-134"
     role="navigation"
   >
     <div
       className="ms-Nav-group is-expanded"
     >
       <div
-        className="ms-Nav-groupContent groupContent-144"
+        className="ms-Nav-groupContent groupContent-142"
       >
         <ul
-          className="ms-Nav-navItems navItems-143"
+          className="ms-Nav-navItems navItems-141"
           role="list"
         >
           <li
-            className="ms-Nav-navItem navItem-142"
+            className="ms-Nav-navItem navItem-140"
             role="listitem"
           >
             <div
-              className="ms-Nav-compositeLink compositeLink-138"
+              className="ms-Nav-compositeLink compositeLink-136"
               name="Book"
             >
               <a
-                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-152"
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-150"
                 data-is-focusable={true}
                 href="./book"
                 onClick={[Function]}
@@ -44,11 +44,11 @@ exports[`Header panel should have links to the book and visit page 1`] = `
                 title="Book"
               >
                 <span
-                  className="ms-Button-flexContainer flexContainer-153"
+                  className="ms-Button-flexContainer flexContainer-151"
                   data-automationid="splitbuttonprimary"
                 >
                   <div
-                    className="ms-Nav-linkText linkText-137"
+                    className="ms-Nav-linkText linkText-135"
                   >
                     Book
                   </div>
@@ -57,15 +57,15 @@ exports[`Header panel should have links to the book and visit page 1`] = `
             </div>
           </li>
           <li
-            className="ms-Nav-navItem navItem-142"
+            className="ms-Nav-navItem navItem-140"
             role="listitem"
           >
             <div
-              className="ms-Nav-compositeLink compositeLink-138"
+              className="ms-Nav-compositeLink compositeLink-136"
               name="Visit"
             >
               <a
-                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-152"
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-150"
                 data-is-focusable={true}
                 href="./visit"
                 onClick={[Function]}
@@ -77,11 +77,11 @@ exports[`Header panel should have links to the book and visit page 1`] = `
                 title="Visit"
               >
                 <span
-                  className="ms-Button-flexContainer flexContainer-153"
+                  className="ms-Button-flexContainer flexContainer-151"
                   data-automationid="splitbuttonprimary"
                 >
                   <div
-                    className="ms-Nav-linkText linkText-137"
+                    className="ms-Nav-linkText linkText-135"
                   >
                     Visit
                   </div>

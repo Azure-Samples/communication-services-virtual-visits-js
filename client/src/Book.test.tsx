@@ -2,15 +2,15 @@
 // Licensed under the MIT license.
 
 import { setIconOptions, Spinner } from '@fluentui/react';
-import { mount } from 'enzyme';
-import { generateTheme } from './utils/ThemeGenerator';
-import { configure } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Book } from './Book';
-import { AppConfigModel } from './models/ConfigModel';
 import { Header } from './Header';
-import { act } from '@testing-library/react';
+import { GenericError } from './components/GenericError';
+import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
+import { runFakeTimers } from './utils/TestUtils';
+import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
 
@@ -27,6 +27,10 @@ jest.mock('./utils/FetchConfig', () => {
 });
 
 describe('Book', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation();
+  });
+
   it('should render loading spinner when config is not loaded', async () => {
     (fetchConfig as jest.Mock).mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
@@ -36,10 +40,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
@@ -50,7 +51,7 @@ describe('Book', () => {
     expect(headers.length).toBe(0);
   });
 
-  it('renders an generic error UI when config throws an error', async () => {
+  it('renders a generic error UI when config throws an error', async () => {
     (fetchConfig as jest.Mock).mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
         throw new Error('test error');
@@ -59,16 +60,15 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
-    const genericErrorUI = book.find('#generic-error');
+    const spinners = book.find(Spinner);
+    const genericErrors = book.find(GenericError);
 
-    expect(genericErrorUI.length).toBe(1);
+    expect(spinners.length).toBe(0);
+    expect(genericErrors.length).toBe(1);
   });
 
   it('should render header and bookings iframe when config is loaded', async () => {
@@ -90,10 +90,7 @@ describe('Book', () => {
 
     const book = await mount(<Book />);
 
-    await act(async () => {
-      jest.useFakeTimers();
-      jest.runAllTimers();
-    });
+    await runFakeTimers();
 
     book.update();
 
