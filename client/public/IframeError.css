@@ -1,0 +1,52 @@
+.container {
+    margin: auto;
+}
+
+.rectangle {
+    width: 500px;
+    height: 500px;
+    background: #FFFFFF;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.errorMsg {
+    width: 320px;
+    height: 60px;
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: justify;
+    color: #323130;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    vertical-align:middle;
+}
+
+.errorCode {
+    width: 35px;
+    height: 28px;
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #323130;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    vertical-align:middle;
+}
