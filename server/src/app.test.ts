@@ -22,6 +22,10 @@ const deleteDir = (): void => {
   fs.rmdirSync(path.join(__dirname, 'public'));
 };
 
+const deleteFile = (filePath: string): void => {
+  fs.unlinkSync(path.join(__dirname, filePath));
+};
+
 describe('app route tests', () => {
   test('/ should redirect to /book', async () => {
     const getResponse = await request(app).get('/');
@@ -45,8 +49,8 @@ describe('route tests', () => {
   /**
    * Delete the previously created files and directory */
   afterAll(() => {
-    fs.unlinkSync(bookFilePath);
-    fs.unlinkSync(visitFilePath);
+    deleteFile(bookFilePath);
+    deleteFile(visitFilePath);
     deleteDir();
   });
   test('/book should return 200 response with book html page', async () => {
@@ -70,7 +74,7 @@ describe('errors', () => {
   });
 
   afterAll(() => {
-    fs.unlinkSync(filePath);
+    deleteFile(filePath);
     deleteDir();
   });
 
