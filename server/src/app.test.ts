@@ -11,21 +11,15 @@ import fs from 'fs';
 import path from 'path';
 
 const createFile = (filePath: string): void => {
-  fs.writeFile(filePath, '<!DOCTYPE html><html></html>', function (err) {
-    if (err) throw err;
-  });
+  fs.writeFileSync(path.join(__dirname, filePath), '<!DOCTYPE html><html></html>');
 };
 
 const createDir = (): void => {
-  fs.mkdir(path.join(__dirname, 'public'), (err) => {
-    if (err) throw err;
-  });
+  fs.mkdirSync(path.join(__dirname, 'public'));
 };
 
 const deleteDir = (): void => {
-  fs.rmdir(path.join(__dirname, 'public'), (err) => {
-    if (err) throw err;
-  });
+  fs.rmdirSync(path.join(__dirname, 'public'));
 };
 
 describe('app route tests', () => {
@@ -37,16 +31,19 @@ describe('app route tests', () => {
 });
 
 describe('route tests', () => {
-  const bookFilePath = path.join(__dirname, 'public/book.html');
-  const visitFilePath = path.join(__dirname, 'public/visit.html');
-  /* Creating static files as they are not available during the local develepoment
-  In prod these are compiled from client and copied into the public folder */
+  const bookFilePath = 'public/book.html';
+  const visitFilePath = 'public/visit.html';
+  /**
+   * Create static files as they are not available during the local development
+   * In prod these are compiled from client and copied into the public folder
+   */
   beforeAll(() => {
     createDir();
     createFile(bookFilePath);
     createFile(visitFilePath);
   });
-  /* Deleting the previously created files and directory */
+  /**
+   * Delete the previously created files and directory */
   afterAll(() => {
     fs.unlinkSync(bookFilePath);
     fs.unlinkSync(visitFilePath);
@@ -66,7 +63,7 @@ describe('route tests', () => {
 });
 
 describe('errors', () => {
-  const filePath = path.join(__dirname, 'public/pageNotFound.html');
+  const filePath = 'public/pageNotFound.html';
   beforeAll(() => {
     createDir();
     createFile(filePath);
