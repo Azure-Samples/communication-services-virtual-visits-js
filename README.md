@@ -9,46 +9,31 @@ provide your customers with a branded virtual consultation experience.
 
 ## Features
 
-- **Rich communications experience**. Includes lobby, calling, and chat experiences for your users. Browser-based and
-  mobile-friendly, users won't need to install any apps.
-- **Quick customization** options for colors, themes, and features via a .json
-  config file.
-- **Integration with Microsoft Teams**. Let your staff host and join meetings using
-  familiar Teams UI, while the clients join the same call via your custom
-  branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
+- **Rich communications experience**. Includes lobby, calling, and chat experiences for your users. Browser-based and mobile-friendly, users won't need to install any apps.
+- **Quick customization** options for colors, themes, and features via a .json config file.
+- **Integration with Microsoft Teams**. Let your staff host and join meetings using familiar Teams UI, while the clients join the same call via your custom branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
 - **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
-- **Open source** and customizable meeting UI controls. The app is built using
-  [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has
-  many options for customizing layouts, rendering, and behaviors.
+- **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
 
 ## Getting Started
 
 There are two ways to start using this app:
 
-- Use the Azure Communication Services Sample Builder. The Sample Builder
-  is a wizard that lets you quickly make common customization choices, set up
-  Microsoft Bookings integration, and deploy the app to your Azure
-  subscription. See [here](https://aka.ms/virtual-visits) for more information about
-  the Builder.
-- Configure and deploy manually. Follow the rest of this readme to learn how
-  to get up and running locally, create a new Azure deployment, or update an
-  existing one.
+- Use the Azure Communication Services Sample Builder. The Sample Builder is a wizard that lets you quickly make common customization choices, set up Microsoft Bookings integration, and deploy the app to your Azure subscription. See [here](https://aka.ms/virtual-visits) for more information about the Builder.
+- Configure and deploy manually. Follow the rest of this readme to learn how to get up and running locally, create a new Azure deployment, or update an existing one.
 
 ## Code Structure
 
 - /client: Frontend client.
 - /server: Server app.
 - /deploy: ARM templates and scripts for quick Azure deployment.
-- /server/src/defaultConfig.json : Sample configuration file and schema description. The config file
-  contains customization settings that can be done without changing the app:
-  themes and colors, text captions, and feature toggles.
+- /server/src/defaultConfig.json : Sample configuration file and schema description. The config file contains customization settings that can be done without changing the app: themes and colors, text captions, and feature toggles.
 
 ## Local Setup
 
 ### Prerequisites
 
-- Create an Azure account with an active subscription. For details, see
-  [Create an account for free](https://azure.microsoft.com/free/).
+- Create an Azure account with an active subscription. For details, see [Create an account for free](https://azure.microsoft.com/free/).
 - An active Communication Services resource. [Create a Communication Services resource](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
 - [Node.js (12.18.4 and above)](https://nodejs.org/en/download/)
 
@@ -91,6 +76,7 @@ npm run start:server
 ```
 
 - For client individual launch, if the server is not running, access to client routes is limited. To build and start the client individually, use the following commands.
+
 ```
 cd client
 npm run build:client
@@ -114,8 +100,7 @@ npm run start:prod
 Where do I set this?
 
 - The variables used in the config can be set as environment variables in your system.
-- The server retrieves the config to use from the system environment variables. On local machines you'll have to set this up
-  manually. For deploy to Azure button, the ARM template will set this up for you.
+- The server retrieves the config to use from the system environment variables. On local machines you'll have to set this up manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
   - `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
   - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
@@ -152,9 +137,7 @@ For example:
   az webapp deployment source config-zip --resource-group <group-name> --name <app-name> --src <path-to-release.zip>
   ```
 
-You can also deploy the same release package using the [Kudu service](https://github.com/projectkudu/kudu/wiki)
-UI or REST API, see [Deploy ZIP or WAR](https://docs.microsoft.com/azure/app-service/deploy-zip)
-for details.
+You can also deploy the same release package using the [Kudu service](https://github.com/projectkudu/kudu/wiki) UI or REST API, see [Deploy ZIP or WAR](https://docs.microsoft.com/azure/app-service/deploy-zip) for details.
 
 ## Trademark
 
