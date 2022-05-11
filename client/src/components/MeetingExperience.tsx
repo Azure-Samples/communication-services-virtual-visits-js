@@ -18,6 +18,7 @@ import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
+import { createStubChatClient } from '../utils/stubs/chat';
 
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
@@ -60,7 +61,8 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           credential,
           displayName,
           locator,
-          endpointUrl
+          endpointUrl,
+          chatEnabled
         );
 
         setCallWithChatAdapter(adapter);
@@ -121,7 +123,8 @@ const _createCustomAdapter = async (
   credential,
   displayName,
   locator,
-  endpoint
+  endpoint,
+  chatEnabled
 ): Promise<CallWithChatAdapter> => {
   const appName = getApplicationName();
   const appVersion = getApplicationVersion();
@@ -137,15 +140,19 @@ const _createCustomAdapter = async (
     }
   );
 
-  const chatClient = createStatefulChatClient({
-    userId,
-    displayName,
-    endpoint,
-    credential
-  });
+  const threadId = getChatThreadIdFromTeamsLink(locator.meetingLink);
+
+  const chatClient = chatEnabled
+    ? createStatefulChatClient({
+        userId,
+        displayName,
+        endpoint,
+        credential
+      })
+    : createStubChatClient(userId, threadId);
 
   const callAgent = await callClient.createCallAgent(credential, { displayName });
-  const chatThreadClient = await chatClient.getChatThreadClient(getChatThreadIdFromTeamsLink(locator.meetingLink));
+  const chatThreadClient = await chatClient.getChatThreadClient(threadId);
 
   await chatClient.startRealtimeNotifications();
 

@@ -44,7 +44,7 @@ export const getChatThreadIdFromTeamsLink = (teamsMeetingLink: string): string =
   // Decode characters that outlook links encode
   threadId = threadId.replace(/%3a/g, ':').replace(/%40/g, '@');
   // Extract just the chat guid from the link, stripping away the call locator ID
-  threadId = threadId.split(/^(.*?@thread\.v2)/gm)[1];
+  threadId = threadId.split(/^(.*?@thread\.(?:v2|skype))/gm)[1];
 
   if (!threadId || threadId.length === 0) {
     throw new Error('Could not get chat thread from teams link');
