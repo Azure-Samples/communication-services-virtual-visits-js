@@ -57,10 +57,10 @@ describe('Book', () => {
     book.update();
 
     const spinners = book.find(Spinner);
-    const genericErrorUI = book.find(GenericError);
+    const genericError = book.find(GenericError);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrorUI.length).toBe(1);
+    expect(genericError.length).toBe(1);
   });
 
   it('should render header and bookings iframe when config is loaded', async () => {

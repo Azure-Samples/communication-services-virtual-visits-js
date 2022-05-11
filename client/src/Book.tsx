@@ -2,14 +2,14 @@
 // Licensed under the MIT license.
 
 import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
-import { useEffect, useState } from 'react';
-import { Header } from './Header';
-import { GenericError } from './components/GenericError';
-import { AppConfigModel } from './models/ConfigModel';
-import { embededIframeStyles } from './styles/Book.styles';
-import './styles/Common.css';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
+import { embededIframeStyles } from './styles/Book.styles';
+import { Header } from './Header';
+import './styles/Common.css';
 import { fetchConfig } from './utils/FetchConfig';
+import { AppConfigModel } from './models/ConfigModel';
+import { GenericError } from './components/GenericError';
+import { useEffect, useState } from 'react';
 
 const PARENT_ID = 'BookMeetingSection';
 
