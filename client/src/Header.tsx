@@ -3,8 +3,8 @@
 
 import { Stack, Text, ThemeContext, createTheme } from '@fluentui/react';
 import { Theme } from '@fluentui/theme';
-import { WaffleMenu } from './WaffleMenu';
 import { headerContainerStyles, headerTextStyles } from './styles/Header.styles';
+import { WaffleMenu } from './WaffleMenu';
 
 /**
  * @interface HeaderProps The properties that Header uses.

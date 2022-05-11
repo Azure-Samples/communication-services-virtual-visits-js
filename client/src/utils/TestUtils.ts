@@ -3,9 +3,13 @@
 
 import { act } from '@testing-library/react';
 
-export const runFakeTimers = async (): Promise<void> => {
+export async function flushPromises() {
+  return new Promise((resolve) => setImmediate(resolve));
+}
+
+export async function runFakeTimers() {
   await act(async () => {
     jest.useFakeTimers();
     jest.runAllTimers();
   });
-};
+}
