@@ -65,6 +65,15 @@ jobs:
           if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
           echo "::set-output name=newProjectVersion::$clientVer"
 
+      # Update package-lock.json
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
       # Commit changes
       - name: Hop into new branch
         run: git checkout -b release/${{ steps.version.outputs.newProjectVersion }}
