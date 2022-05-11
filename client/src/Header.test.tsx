@@ -5,6 +5,7 @@ import { IconButton, Text, setIconOptions, Panel } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Header } from './Header';
+import { WaffleMenu } from './WaffleMenu';
 
 configure({ adapter: new Adapter() });
 
@@ -20,7 +21,7 @@ describe('Header', () => {
 
     const waffleButton = header.find(IconButton);
     const companyText = header.find(Text);
-    const waffleMenu = header.find('WaffleMenu');
+    const waffleMenu = header.find(WaffleMenu);
     const panel = header.find(Panel);
 
     expect(waffleButton.length).toBe(1);
