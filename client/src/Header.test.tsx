@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Text, setIconOptions } from '@fluentui/react';
+import { IconButton, Text, setIconOptions, Panel } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Header } from './Header';
@@ -16,13 +16,17 @@ setIconOptions({
 });
 
 describe('Header', () => {
-  it('should render WaffleMenu, and company name', () => {
+  it('should render icon, waffle menu with panel, and company name', () => {
     const header = mount(<Header companyName="test" parentid="test" />);
 
+    const waffleButton = header.find(IconButton);
     const companyText = header.find(Text);
     const waffleMenu = header.find(WaffleMenu);
+    const panel = header.find(Panel);
 
+    expect(waffleButton.length).toBe(1);
     expect(companyText.length).toBe(1);
     expect(waffleMenu.length).toBe(1);
+    expect(panel.length).toBe(1);
   });
 });
