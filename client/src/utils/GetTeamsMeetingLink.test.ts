@@ -71,6 +71,14 @@ describe('getTeamsMeetingLink', () => {
     expect(result).toBe('19:meeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA@thread.v2');
   })
 
+  test('should get threadId for channel meetings', () => {
+    const meetingUrl = 'https://teams.microsoft.com/l/meetup-join/19%3a345a57dbe24740eaaf554236a5926109%40thread.skype/1649187156450?context=%7b%22Tid%22%3a%2272f988bf-86f1-41af-91ab-2d7cd011db47%22%2c%22Oid%22%3a%22dbb145ba-04a1-4f52-8008-acf251710e75%22%7d';
+    
+    const result = getChatThreadIdFromTeamsLink(meetingUrl);
+
+    expect(result).toBe('19:345a57dbe24740eaaf554236a5926109@thread.skype');
+  })
+
   test('should throw exception when parse invalid threadId', () => {
     const meetingUrl = 'https://teams.microsoft.com/l/meetup-join/19%3a123%40threa123d.v2/0?context=%7b%22Tid%22%3a%2200000000-0000-0000-0000-000000000000%22%2c%22Oid%22%3a%2200000000-0000-0000-0000-000000000000%22%7d';
     
