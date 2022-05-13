@@ -8,7 +8,7 @@ import { Book } from './Book';
 import { Header } from './Header';
 import { GenericError } from './components/GenericError';
 import { AppConfigModel } from './models/ConfigModel';
-import { fetchConfig } from './utils/FetchConfig';
+import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 
@@ -20,23 +20,14 @@ setIconOptions({
   disableWarnings: true
 });
 
-jest.mock('./utils/FetchConfig', () => {
-  return {
-    fetchConfig: jest.fn()
-  };
-});
-
 describe('Book', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation();
   });
 
   it('should render loading spinner when config is not loaded', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
-      async (): Promise<AppConfigModel | undefined> => {
-        return Promise.resolve(undefined);
-      }
-    );
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(Promise.resolve(undefined));
 
     const book = await mount(<Book />);
 
@@ -51,8 +42,9 @@ describe('Book', () => {
     expect(headers.length).toBe(0);
   });
 
-  it('renders a generic error UI when config throws an error', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
+  it('renders an generic error UI when config throws an error', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
         throw new Error('test error');
       }
@@ -65,27 +57,26 @@ describe('Book', () => {
     book.update();
 
     const spinners = book.find(Spinner);
-    const genericErrors = book.find(GenericError);
+    const genericError = book.find(GenericError);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrors.length).toBe(1);
+    expect(genericError.length).toBe(1);
   });
 
   it('should render header and bookings iframe when config is loaded', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
-      async (): Promise<AppConfigModel | undefined> => {
-        return Promise.resolve({
-          communicationEndpoint: 'endpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        });
-      }
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
     );
 
     const book = await mount(<Book />);
