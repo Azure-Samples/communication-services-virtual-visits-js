@@ -2,10 +2,9 @@
 
 # Azure Communication Services Virtual Visits
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fvvartifactstoragedev.blob.core.windows.net%2Flatest%2Feditableazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2FAzure-Samples%2Fcommunication-services-virtual-visits-js%2Freleases%2Fdownload%2FNightly%252F202205132302%2Feditableazuredeploy.json)
 
-Azure Communication Services Virtual Visits is a web app you can host to
-provide your customers with a branded virtual consultation experience.
+Azure Communication Services Virtual Visits is a web app you can host to provide your customers with a branded virtual consultation experience.
 
 ## Features
 
