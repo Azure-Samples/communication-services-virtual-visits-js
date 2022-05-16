@@ -8,11 +8,11 @@ import {
   CallWithChatComposite
 } from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
-import { configure, mount } from 'enzyme';
+import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { MeetingExperience } from './MeetingExperience';
+import { MeetingExperience, MeetingExperienceProps } from './MeetingExperience';
 import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
-import { runFakeTimers } from '../utils/TestUtils';
+import { fakeTimers } from '../utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -90,13 +90,13 @@ describe('MeetingExperience', () => {
 
   beforeEach(() => {
     userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
-    jest.spyOn(console, 'log').mockImplementation();
+    jest.spyOn(console, 'error').mockImplementation();
     const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
-    const meetingExperience = await mount(
+    const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -112,9 +112,8 @@ describe('MeetingExperience', () => {
       />
     );
 
-    await runFakeTimers();
+    await fakeTimers();
     meetingExperience.update();
-
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
 
     expect(callWithChatComposites.length).toBe(1);
@@ -134,7 +133,7 @@ describe('MeetingExperience', () => {
       'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
     userAgentGetter.mockReturnValue(mobileSafariUserAgent);
 
-    const meetingExperience = await mount(
+    const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -150,7 +149,7 @@ describe('MeetingExperience', () => {
       />
     );
 
-    await runFakeTimers();
+    await fakeTimers();
     meetingExperience.update();
 
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);

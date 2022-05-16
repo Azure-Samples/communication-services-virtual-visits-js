@@ -4,27 +4,6 @@
 import { Icon, Stack, Text } from '@fluentui/react';
 import { errorIconStackStyle, errorTitleStyle } from '../styles/GenericError.styles';
 
-interface GenericErrorProps {
-  statusCode: any | undefined;
-}
-
-export const GenericError = (props: GenericErrorProps): JSX.Element => {
-  const { statusCode } = props;
-  const error = genericErrors[statusCode] || genericErrors['default'];
-
-  return (
-    <Stack id="generic-error">
-      <Text as={'h2'} className={errorIconStackStyle}>
-        <Icon iconName="error" />
-      </Text>
-      <Text as={'h3'} className={errorTitleStyle}>
-        {error.title}
-      </Text>
-      <Text>{error.description}</Text>
-    </Stack>
-  );
-};
-
 const genericErrors = {
   default: {
     title: 'Unknown error',
@@ -38,4 +17,26 @@ const genericErrors = {
     title: '500: Internal server error',
     description: 'The server has encountered an error. Refresh the page to try again.'
   }
+};
+
+interface GenericErrorProps {
+  statusCode: any | undefined;
+}
+
+export const GenericError = (props: GenericErrorProps): JSX.Element => {
+  const { statusCode } = props;
+
+  const error = genericErrors[statusCode] || genericErrors['default'];
+
+  return (
+    <Stack id="generic-error" tokens={{ childrenGap: 10 }}>
+      <Text role={'heading'} aria-level={2} className={errorIconStackStyle}>
+        <Icon iconName="error" />
+      </Text>
+      <Text role={'heading'} aria-level={3} className={errorTitleStyle}>
+        {error.title}
+      </Text>
+      <Text>{error.description}</Text>
+    </Stack>
+  );
 };
