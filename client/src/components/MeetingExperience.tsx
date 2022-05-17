@@ -12,12 +12,12 @@ import {
   createStatefulChatClient
 } from '@azure/communication-react';
 import { Theme, PartialTheme, Spinner } from '@fluentui/react';
-import { useEffect, useState } from 'react';
-import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import MobileDetect from 'mobile-detect';
-import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
+import { useEffect, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
+import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
+import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;

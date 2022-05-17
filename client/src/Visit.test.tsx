@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { setIconOptions, Spinner } from '@fluentui/react';
 import { CommunicationUserToken } from '@azure/communication-identity';
+import { setIconOptions, Spinner } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
-import { generateTheme } from './utils/ThemeGenerator';
 import Adapter from 'enzyme-adapter-react-16';
-import { Visit } from './Visit';
-import { AppConfigModel } from './models/ConfigModel';
 import { Header } from './Header';
+import { Visit } from './Visit';
+import { GenericError } from './components/GenericError';
+import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
+import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import * as FetchToken from './utils/FetchToken';
 import * as GetTeamsMeetingLink from './utils/GetTeamsMeetingLink';
 import { runFakeTimers } from './utils/TestUtils';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
-import { GenericError } from './components/GenericError';
-import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
+import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
 
@@ -71,10 +71,10 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const genericErrorUI = visit.find(GenericError);
+    const genericErrors = visit.find(GenericError);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrorUI.length).toBe(1);
+    expect(genericErrors.length).toBe(1);
   });
 
   it('should render JoinTeamsMeeting when config and token are loaded', async () => {
