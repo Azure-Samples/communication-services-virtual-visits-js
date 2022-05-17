@@ -60,7 +60,7 @@
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
-      "apiVersion": "2020-08-20-preview",
+      "apiVersion": "2020-08-20",
       "location": "global",
       "tags": {},
       "properties": {
@@ -93,7 +93,7 @@
         {
           "name": "appsettings",
           "type": "config",
-          "apiVersion": "2018-11-01",
+          "apiVersion": "2021-03-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
           ],
@@ -101,7 +101,7 @@
             "displayName": "appsettings"
           },
           "properties": {
-            "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2020-08-20-preview' ).primaryConnectionString]",
+            "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2020-08-20').primaryConnectionString]",
             "WEBSITE_NODE_DEFAULT_VERSION": "12.21.0",
             "VV_MICROSOFT_BOOKINGS_URL": "[variables('microsoftBookingsUrl')]",
             "VV_CHAT_ENABLED": "[variables('chatEnabled')]",
@@ -117,7 +117,7 @@
           "name": "MSDeploy",
           "type": "extensions",
           "location": "[resourceGroup().location]",
-          "apiVersion": "2015-08-01",
+          "apiVersion": "2021-03-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]",
             "[resourceId('Microsoft.Web/sites/config', parameters('appServiceName'), 'appsettings')]"
