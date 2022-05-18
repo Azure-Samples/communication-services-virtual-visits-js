@@ -40,7 +40,7 @@ export const Visit = (): JSX.Element => {
     fetchData();
   }, []);
 
-  const _getMeetingLinkModel = useCallback((url) => {
+  const _getMeetingLinkLocator = useCallback((url) => {
     // try extracting Teams link from the url
     try {
       const meetingLink = getTeamsMeetingLink(url);
@@ -64,7 +64,7 @@ export const Visit = (): JSX.Element => {
     // show a separate screen with "enter meeting link" textbox
     return (
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-        <JoinTeamsMeeting config={config} onJoinMeeting={(url) => _getMeetingLinkModel(url)} />
+        <JoinTeamsMeeting config={config} onJoinMeeting={(url) => _getMeetingLinkLocator(url)} />
       </ThemeProvider>
     );
   }
