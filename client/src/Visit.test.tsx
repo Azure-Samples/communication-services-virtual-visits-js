@@ -14,8 +14,8 @@ import * as FetchConfig from './utils/FetchConfig';
 import * as FetchToken from './utils/FetchToken';
 import * as GetTeamsMeetingLink from './utils/GetTeamsMeetingLink';
 import { runFakeTimers } from './utils/TestUtils';
-import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 import { generateTheme } from './utils/ThemeGenerator';
+import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 
 configure({ adapter: new Adapter() });
 
