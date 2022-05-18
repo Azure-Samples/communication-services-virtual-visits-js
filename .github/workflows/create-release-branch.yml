@@ -41,10 +41,10 @@ jobs:
         run: git checkout ${{ github.event.inputs.branch }}
 
       # Ensure node version is great enough
-      - name: Use Node.js v14.x
-        uses: actions/setup-node@v1
+      - name: Use Node.js v14.19.x
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: "14.19.x"
 
       # Increment versions
       - name: Increment versions
