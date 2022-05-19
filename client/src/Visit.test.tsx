@@ -128,7 +128,7 @@ describe('Visit', () => {
     expect(joinMeetings.length).toBe(1);
   });
 
-  /* it('should render JoinTeamsMeeting when config and token are loaded and meeting link is set', async () => {
+  /* it('should render MeetingExperience when config and token are loaded and meeting link is set', async () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(
       Promise.resolve({
