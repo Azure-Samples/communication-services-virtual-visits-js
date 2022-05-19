@@ -60,7 +60,8 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           credential,
           displayName,
           locator,
-          endpointUrl
+          endpointUrl,
+          chatEnabled
         );
 
         setCallWithChatAdapter(adapter);
@@ -121,7 +122,8 @@ const _createCustomAdapter = async (
   credential,
   displayName,
   locator,
-  endpoint
+  endpoint,
+  chatEnabled
 ): Promise<CallWithChatAdapter> => {
   const appName = getApplicationName();
   const appVersion = getApplicationVersion();
