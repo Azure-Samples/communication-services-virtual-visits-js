@@ -105,7 +105,8 @@ describe('Visit', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         });
       }
     );
@@ -137,7 +138,8 @@ describe('Visit', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         });
       }
     );

@@ -45,7 +45,8 @@ describe('JoinTeamsMeeting', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -68,7 +69,8 @@ describe('JoinTeamsMeeting', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -92,7 +94,8 @@ describe('JoinTeamsMeeting', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -127,7 +130,8 @@ describe('JoinTeamsMeeting', () => {
           theme: theme,
           waitingTitle: 'Hello',
           waitingSubtitle: 'World',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -151,7 +155,8 @@ describe('JoinTeamsMeeting', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -196,7 +201,8 @@ describe('Error handling', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />
@@ -221,7 +227,8 @@ describe('Error handling', () => {
           theme: generateTheme('#FFFFFF'),
           waitingTitle: '',
           waitingSubtitle: '',
-          logoUrl: ''
+          logoUrl: '',
+          userDisplayName: ''
         }}
         onJoinMeeting={jest.fn()}
       />

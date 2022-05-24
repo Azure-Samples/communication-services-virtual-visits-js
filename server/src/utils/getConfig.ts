@@ -12,7 +12,8 @@ import {
   VV_SCREENSHARE_ENABLED_ENV_NAME,
   VV_WAITING_SUBTITLE_ENV_NAME,
   VV_WAITING_TITLE_ENV_NAME,
-  VV_LOGO_URL_ENV_NAME
+  VV_LOGO_URL_ENV_NAME,
+  VV_USER_DISPLAY_NAME
 } from '../constants';
 
 import { ServerConfigModel, ClientConfigModel } from '../models/configModel';
@@ -35,7 +36,8 @@ export const getServerConfig = (): ServerConfigModel => {
     colorPalette: process.env[VV_COLOR_PALETTE_ENV_NAME] ?? DefaultConfig.colorPalette,
     waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? DefaultConfig.waitingTitle,
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? DefaultConfig.waitingSubtitle,
-    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? DefaultConfig.logoUrl
+    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? DefaultConfig.logoUrl,
+    userDisplayName: process.env[VV_USER_DISPLAY_NAME] ?? DefaultConfig.userDisplayName
   };
 };
 
@@ -50,6 +52,7 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
     colorPalette: serverConfig.colorPalette,
     waitingTitle: serverConfig.waitingTitle,
     waitingSubtitle: serverConfig.waitingSubtitle,
-    logoUrl: serverConfig.logoUrl
+    logoUrl: serverConfig.logoUrl,
+    userDisplayName: serverConfig.userDisplayName
   };
 };

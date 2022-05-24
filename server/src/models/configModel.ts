@@ -11,6 +11,7 @@ export interface ServerConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
+  userDisplayName: string;
 }
 
 export interface ClientConfigModel {
@@ -23,4 +24,5 @@ export interface ClientConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
+  userDisplayName: string;
 }

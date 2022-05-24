@@ -13,4 +13,5 @@ export interface AppConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
+  userDisplayName: string;
 }

@@ -31,7 +31,8 @@ describe('configController', () => {
       colorPalette: 'str4',
       waitingTitle: 'str5',
       waitingSubtitle: 'str6',
-      logoUrl: 'str7'
+      logoUrl: 'str7',
+      userDisplayName: 'str8'
     };
     const controller = configController(cfg);
     const resp = createMockedResponseObject();
@@ -48,6 +49,7 @@ describe('configController', () => {
     expect(resp.lastJson.waitingTitle).toBe('str5');
     expect(resp.lastJson.waitingSubtitle).toBe('str6');
     expect(resp.lastJson.logoUrl).toBe('str7');
+    expect(resp.lastJson.userDisplayName).toBe('str8');
   });
 
   test('delegates errors to other handlers with next()', () => {
@@ -60,7 +62,8 @@ describe('configController', () => {
       colorPalette: '',
       waitingTitle: '',
       waitingSubtitle: '',
-      logoUrl: ''
+      logoUrl: '',
+      userDisplayName: ''
     };
     const controller = configController(invalidConfig);
     const resp = createMockedResponseObject();

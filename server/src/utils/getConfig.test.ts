@@ -14,6 +14,7 @@ describe('config', () => {
     delete process.env.VV_COLOR_PALETTE;
     delete process.env.VV_WAITING_TITLE;
     delete process.env.VV_WAITING_SUBTITLE;
+    delete process.env.VV_USER_DISPLAY_NAME;
 
     const config = getServerConfig();
 
@@ -25,6 +26,7 @@ describe('config', () => {
     expect(config.colorPalette).toBe(DefaultConfig.colorPalette);
     expect(config.waitingTitle).toBe(DefaultConfig.waitingTitle);
     expect(config.waitingSubtitle).toBe(DefaultConfig.waitingSubtitle);
+    expect(config.userDisplayName).toBe(DefaultConfig.userDisplayName);
   });
 
   test('should use environment variables when available', () => {
@@ -36,6 +38,7 @@ describe('config', () => {
     process.env.VV_COLOR_PALETTE = '#FFFFFF';
     process.env.VV_WAITING_TITLE = 'title';
     process.env.VV_WAITING_SUBTITLE = 'subtitle';
+    process.env.VV_USER_DISPLAY_NAME = 'Virtual Visits User';
 
     const config = getServerConfig();
 
@@ -47,6 +50,7 @@ describe('config', () => {
     expect(config.colorPalette).toBe(process.env.VV_COLOR_PALETTE);
     expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
     expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
+    expect(config.userDisplayName).toBe(process.env.VV_USER_DISPLAY_NAME);
   });
 
   test('client config should not contain the connection string', () => {

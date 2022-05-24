@@ -103,7 +103,7 @@ export class Visit extends React.Component<VisitProps, VisitState> {
                 <MeetingExperience
                   userId={this.state.token.user}
                   token={this.state.token.token}
-                  displayName="Virtual Visits User"
+                  displayName={this.state.config.userDisplayName ?? 'Virtual Visits User'}
                   endpointUrl={this.state.config.communicationEndpoint}
                   locator={locator}
                   fluentTheme={this.state.config.theme}
