@@ -13,11 +13,12 @@ import {
 } from '@azure/communication-react';
 import { Theme, PartialTheme, Spinner } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
+import { createStubChatClient } from '../utils/stubs/chat';
 
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
@@ -50,11 +51,11 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
 
-  useEffect(() => {
-    const createAdapters = async (): Promise<void> => {
-      try {
-        const credential = _getCredential(token);
+  const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
+  useEffect(() => {
+    const _createAdapters = async (): Promise<void> => {
+      try {
         const adapter = await _createCustomAdapter(
           { communicationUserId: userId.communicationUserId },
           credential,
@@ -72,49 +73,49 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
       }
     };
 
-    createAdapters();
-  }, [displayName, endpointUrl, locator, token, userId, onDisplayError]);
+    _createAdapters();
+  }, [credential, displayName, endpointUrl, locator, userId, onDisplayError]);
 
-  if (!callWithChatAdapter) {
-    return <Spinner styles={fullSizeStyles} />;
+  if (callWithChatAdapter) {
+    const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
+    const locale = COMPOSITE_LOCALE_EN_US;
+    const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+
+    return (
+      <CallWithChatComposite
+        adapter={callWithChatAdapter}
+        fluentTheme={fluentTheme}
+        options={{
+          callControls: {
+            chatButton: chatEnabled
+          }
+        }}
+        locale={{
+          component: locale.component,
+          strings: {
+            chat: locale.strings.chat,
+            call: {
+              ...locale.strings.call,
+              lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
+              lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
+            },
+            callWithChat: locale.strings.callWithChat
+          }
+        }}
+        icons={{
+          LobbyScreenWaitingToBeAdmitted: logo,
+          LobbyScreenConnectingToCall: logo
+        }}
+        formFactor={formFactorValue}
+      />
+    );
   }
 
-  const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
-  const locale = COMPOSITE_LOCALE_EN_US;
-  const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+  if (credential === undefined) {
+    return <>Failed to construct credential. Provided token is malformed.</>;
+  }
 
-  return (
-    <CallWithChatComposite
-      adapter={callWithChatAdapter}
-      fluentTheme={fluentTheme}
-      options={{
-        callControls: {
-          chatButton: chatEnabled
-        }
-      }}
-      locale={{
-        component: locale.component,
-        strings: {
-          chat: locale.strings.chat,
-          call: {
-            ...locale.strings.call,
-            lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
-            lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
-          },
-          callWithChat: locale.strings.callWithChat
-        }
-      }}
-      icons={{
-        LobbyScreenWaitingToBeAdmitted: logo,
-        LobbyScreenConnectingToCall: logo
-      }}
-      formFactor={formFactorValue}
-    />
-  );
-};
-
-const _getCredential = (token: string): AzureCommunicationTokenCredential => {
-  return new AzureCommunicationTokenCredential(token);
+  return <Spinner styles={fullSizeStyles} />;
 };
 
 const _createCustomAdapter = async (
@@ -139,15 +140,19 @@ const _createCustomAdapter = async (
     }
   );
 
-  const chatClient = createStatefulChatClient({
-    userId,
-    displayName,
-    endpoint,
-    credential
-  });
+  const threadId = getChatThreadIdFromTeamsLink(locator.meetingLink);
+
+  const chatClient = chatEnabled
+    ? createStatefulChatClient({
+        userId,
+        displayName,
+        endpoint,
+        credential
+      })
+    : createStubChatClient(userId, threadId);
 
   const callAgent = await callClient.createCallAgent(credential, { displayName });
-  const chatThreadClient = await chatClient.getChatThreadClient(getChatThreadIdFromTeamsLink(locator.meetingLink));
+  const chatThreadClient = await chatClient.getChatThreadClient(threadId);
 
   await chatClient.startRealtimeNotifications();
 
