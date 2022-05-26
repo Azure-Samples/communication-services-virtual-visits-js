@@ -13,16 +13,47 @@ import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import './styles/Common.css';
 import { GenericError } from './components/GenericError';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 
 const PARENT_ID = 'VisitSection';
 
 export const Visit = (): JSX.Element => {
+  const _getMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
+    let meetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
+
+    // try extracting Teams link from the url
+    try {
+      meetingLinkModel = getTeamsMeetingLink(meetingLink);
+    } catch (error) {
+      meetingLinkModel = undefined;
+    }
+
+    return meetingLinkModel;
+  };
+
+  // handle going to previous/next page of window history
+  window.onpopstate = () => {
+    window.location.assign(window.location.href);
+  };
+
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
   const [token, setToken] = useState<CommunicationUserToken | undefined>(undefined);
   const [error, setError] = useState<any | undefined>(undefined);
-  const [meetingLinkLocator, setMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(undefined);
+  const [meetingLinkLocator, setMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
+    _getMeetingLinkLocator(window.location.search) // case of direct link to visit with meeting link in URL
+  );
+
+  const _onJoinMeeting = (link: string): void => {
+    const appendMeetingLinkToUrl = (): void => {
+      window.history.pushState({}, document.title, window.location.href + link);
+    };
+
+    appendMeetingLinkToUrl();
+
+    const meetingLinkLocator = _getMeetingLinkLocator(link);
+    setMeetingLinkLocator(meetingLinkLocator);
+  };
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -40,16 +71,6 @@ export const Visit = (): JSX.Element => {
     fetchData();
   }, []);
 
-  const _getMeetingLinkLocator = useCallback((url) => {
-    // try extracting Teams link from the url
-    try {
-      const meetingLink = getTeamsMeetingLink(url);
-      setMeetingLinkLocator(meetingLink);
-    } catch (error) {
-      setMeetingLinkLocator(undefined);
-    }
-  }, []);
-
   if (error) {
     return <GenericError statusCode={error.statusCode} />;
   }
@@ -64,7 +85,7 @@ export const Visit = (): JSX.Element => {
     // show a separate screen with "enter meeting link" textbox
     return (
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-        <JoinTeamsMeeting config={config} onJoinMeeting={(url) => _getMeetingLinkLocator(url)} />
+        <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
       </ThemeProvider>
     );
   }
