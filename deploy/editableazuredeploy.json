@@ -78,7 +78,7 @@
   },
   "variables": {
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
-    "packageUrl": "https://vvartifactstoragedev.blob.core.windows.net/latest/sample.zip"
+    "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip"
   },
   "resources": [
     {
