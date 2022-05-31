@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.0.0-test",
+  "version": "1.0.1-test",
   "private": true,
   "scripts": {
     "test": "jest",
