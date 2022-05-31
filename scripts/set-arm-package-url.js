@@ -22,6 +22,10 @@ function setPackageUrl(armTemplate) {
   const parsed = JSON.parse(fs.readFileSync(armTemplate));
   console.log(parsed.variables.packageUrl);
   parsed.variables.packageUrl = updatedPackageUrl;
+
+  const newPackageJSON = JSON.stringify(parsed, null, 2);
+  fs.writeFileSync(armTemplate, newPackageJSON);
+ 
 }
 
 function main() {
