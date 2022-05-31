@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       release-flavor:
-        description: 'Beta release or stable release.'
+        description: "Beta release or stable release."
         required: true
         type: choice
         options:
@@ -36,6 +36,9 @@ jobs:
           echo serverversion: $serverVer
           if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
           echo "::set-output name=newProjectVersion::$clientVer"
+
+      - name: Update packageUrl in ARM templates
+        run: node scripts/set-arm-package-url.js ${{ github.event.inputs.branch }}
 
       # Create zipped version of the repository
       - name: Create source archive
