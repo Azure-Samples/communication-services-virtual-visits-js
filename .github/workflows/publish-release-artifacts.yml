@@ -37,6 +37,9 @@ jobs:
           if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
           echo "::set-output name=newProjectVersion::$clientVer"
 
+      - name: Update packageUrl in ARM templates
+        run: node scripts/set-arm-package-url.js ${{ github.event.inputs.branch }}
+
       # Create zipped version of the repository
       - name: Create source archive
         run: zip -r sample-source.zip . -x *.git*

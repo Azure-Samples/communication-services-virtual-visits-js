@@ -91,6 +91,9 @@ jobs:
       - name: Synchronize package version reported to telemetry
         run: node scripts/sync-telemetry-package-version.js
 
+      - name: Update packageUrl in ARM templates
+        run: node scripts/set-arm-package-url.js ${{ github.event.inputs.branch }}
+
       - name: Create source archive
         run: zip -r sample-source.zip . -x *.git*
 
