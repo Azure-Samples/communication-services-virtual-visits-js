@@ -14,11 +14,10 @@ const AZURE_DEPLOY_EXISTING = path.join(
   "azuredeployexistingresource.json"
 );
 const AZURE_DEPLOY_EDITABLE = path.join(DEPLOY_DIR, "editableazuredeploy.json");
-const gitTag = process.argv[1];
+const gitTag = process.argv[2];
 
 function setPackageUrl(armTemplate) {
   console.log(`received git tag is ${gitTag}`);
-  console.log(`2nd arg is ${process.argv[2]}`);
   const updatedPackageUrl = `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${gitTag}/sample.zip`;
   const parsed = JSON.parse(fs.readFileSync(armTemplate));
   parsed.variables.packageurl = updatedPackageUrl;
