@@ -17,7 +17,9 @@ const AZURE_DEPLOY_EDITABLE = path.join(DEPLOY_DIR, "editableazuredeploy.json");
 const gitTag = process.argv[2];
 
 function setPackageUrl(armTemplate) {
-  const updatedPackageUrl = `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${gitTag}/sample.zip`;
+  const updatedPackageUrl = encodeURIComponent(
+    `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${gitTag}/sample.zip`
+  );
   const parsed = JSON.parse(fs.readFileSync(armTemplate));
   parsed.variables.packageUrl = updatedPackageUrl;
 
