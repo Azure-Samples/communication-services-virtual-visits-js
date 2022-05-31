@@ -38,7 +38,7 @@ jobs:
           echo "::set-output name=newProjectVersion::$clientVer"
 
       - name: Update packageUrl in ARM templates
-        run: node scripts/set-arm-package-url.js ${{ github.event.inputs.branch }}
+        run: node scripts/set-arm-package-url.js Release/${{ steps.version.outputs.newProjectVersion }}
 
       # Create zipped version of the repository
       - name: Create source archive

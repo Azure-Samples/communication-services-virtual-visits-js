@@ -92,7 +92,7 @@ jobs:
         run: node scripts/sync-telemetry-package-version.js
 
       - name: Update packageUrl in ARM templates
-        run: node scripts/set-arm-package-url.js ${{ github.event.inputs.branch }}
+        run: node scripts/set-arm-package-url.js Nightly/${{ steps.datetime.outputs.datetime }}
 
       - name: Create source archive
         run: zip -r sample-source.zip . -x *.git*

@@ -19,7 +19,10 @@ const gitTag = process.argv[0];
 function setPackageUrl(armTemplate) {
   const updatedPackageUrl = `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${gitTag}/sample.zip`;
   const parsed = JSON.parse(fs.readFileSync(armTemplate));
-  parsed.variables.packageurl = updatedPackageUrl;
+  parsed.variables.packageUrl = updatedPackageUrl;
+
+  const newPackageJSON = JSON.stringify(parsed, null, 2);
+  fs.writeFileSync(armTemplate, newPackageJSON);
 }
 
 function main() {
