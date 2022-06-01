@@ -12,7 +12,7 @@ on:
     # minute 0, hour 23 UTC (which is 3pm PST/4pm PDT), any day of month, any month, any day of the week
     # if we want to support only Mon - Fri we need to change the check how we look for new changes. Currently we
     # check for any new changes in the last 24 hours regardless of day)
-    - cron: '0 23 * * *'
+    - cron: "0 23 * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -82,7 +82,7 @@ jobs:
           newVersion=$(echo $clientVer | grep -oP "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)")-nightly-${{ steps.datetime.outputs.datetime }}.0
           echo newversion: $newVersion
           echo "::set-output name=newProjectVersion::$newVersion"
-      
+
       # Increment versions in package.json
       - name: Increment versions
         run: node scripts/increment-version.js ${{ steps.version.outputs.newProjectVersion }}
@@ -90,6 +90,9 @@ jobs:
       # Update telemetry version
       - name: Synchronize package version reported to telemetry
         run: node scripts/sync-telemetry-package-version.js
+
+      - name: Update packageUrl in ARM templates
+        run: node scripts/set-arm-package-url.js Nightly/${{ steps.datetime.outputs.datetime }}
 
       - name: Create source archive
         run: zip -r sample-source.zip . -x *.git*
