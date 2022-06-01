@@ -1,18 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import {
-  AdapterError,
-  CallWithChatAdapter,
-  CallWithChatAdapterState,
-  CallWithChatComposite
-} from '@azure/communication-react';
+import { CallWithChatComposite } from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { MeetingExperience } from './MeetingExperience';
+import { MeetingExperience, MeetingExperienceProps } from './MeetingExperience';
 import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
-import { runFakeTimers } from '../utils/TestUtils';
+import {
+  createMockCallWithChatAdapter,
+  createMockCallWithChatComposite,
+  createMockStatefulCallClient,
+  createMockStatefulChatClient,
+  runFakeTimers
+} from '../utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -22,55 +23,13 @@ setIconOptions({
   disableWarnings: true
 });
 
-// Inspired by ui-library unit test: https://aka.ms/AAfyg3m
-function createMockCallWithChatAdapter(): CallWithChatAdapter {
-  const callWithChatAdapter = {} as CallWithChatAdapter;
-  callWithChatAdapter.onStateChange = jest.fn();
-  callWithChatAdapter.offStateChange = jest.fn();
-  callWithChatAdapter.askDevicePermission = jest.fn();
-  callWithChatAdapter.queryCameras = jest.fn();
-  callWithChatAdapter.queryMicrophones = jest.fn();
-  callWithChatAdapter.querySpeakers = jest.fn();
-  callWithChatAdapter.on = jest.fn(); // allow for direct subscription to the state of the call-with-chat adapter
-  callWithChatAdapter.off = jest.fn(); // Allow for direct un-subscription to the state of the call-with-chat adapter
-  callWithChatAdapter.getState = jest.fn(
-    (): CallWithChatAdapterState => ({
-      page: 'lobby',
-      isLocalPreviewMicrophoneEnabled: false,
-      userId: { kind: 'communicationUser', communicationUserId: 'test' },
-      displayName: 'test',
-      devices: {
-        isSpeakerSelectionAvailable: false,
-        cameras: [],
-        microphones: [],
-        speakers: [],
-        unparentedViews: []
-      },
-      isTeamsCall: true,
-      call: undefined,
-      chat: undefined,
-      latestCallErrors: { test: new Error() as AdapterError },
-      latestChatErrors: { test: new Error() as AdapterError }
-    })
-  );
-  return callWithChatAdapter;
-}
-
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
-    createAzureCommunicationCallWithChatAdapterFromClients: () => {
-      return createMockCallWithChatAdapter();
-    },
-    createStatefulCallClient: () => {
-      return { createCallAgent: () => '' };
-    },
-    createStatefulChatClient: () => {
-      return { startRealtimeNotifications: () => '', getChatThreadClient: () => '' };
-    },
-    CallWithChatComposite: () => {
-      return <span>hello</span>;
-    }
+    createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
+    createStatefulCallClient: () => createMockStatefulCallClient(),
+    createStatefulChatClient: () => createMockStatefulChatClient(),
+    CallWithChatComposite: () => createMockCallWithChatComposite()
   };
 });
 
@@ -90,13 +49,13 @@ describe('MeetingExperience', () => {
 
   beforeEach(() => {
     userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
-    jest.spyOn(console, 'log').mockImplementation();
+    jest.spyOn(console, 'error').mockImplementation();
     const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
-    const meetingExperience = await mount(
+    const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -114,7 +73,6 @@ describe('MeetingExperience', () => {
 
     await runFakeTimers();
     meetingExperience.update();
-
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
 
     expect(callWithChatComposites.length).toBe(1);
@@ -134,7 +92,7 @@ describe('MeetingExperience', () => {
       'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
     userAgentGetter.mockReturnValue(mobileSafariUserAgent);
 
-    const meetingExperience = await mount(
+    const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}

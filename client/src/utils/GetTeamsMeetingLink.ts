@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { TeamsMeetingLinkModel } from '../models/TeamsMeetingLinkModel';
+import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 
 const MEETING_URL_PARAMNAME = 'meetingURL';
 const JOIN_WEB_URL_PARAMNAME = 'JoinWebUrl';
@@ -9,7 +9,7 @@ const VISIT_HOSTNAME = 'visit.teams.microsoft.com';
 const WEB_JOIN_PARAMNAME = 'webjoin';
 const UNIFIED_PARAMNAME = 'unified';
 
-export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkModel => {
+export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkLocator => {
   let meetingUrl = new URLSearchParams(queryString).get(MEETING_URL_PARAMNAME);
   if (!meetingUrl) throw 'Unable to get meetingURL from the url string';
 
@@ -27,7 +27,7 @@ export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkModel 
     meetingUrl = url.toString();
   }
 
-  return { meetingUrl: meetingUrl };
+  return { meetingLink: meetingUrl };
 };
 
 export const getCurrentMeetingURL = (queryString: string): string => {
