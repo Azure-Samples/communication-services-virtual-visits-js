@@ -8,8 +8,7 @@
   },
   "scripts": {
     "build:e2e" : "cd server && npm run package",
-    "start:server": "cd server && npm run start:prod",
-    "test:book": "npx playwright test book.spec.ts"
+    "test": "npx playwright test"
   },
   "repository": {
     "type": "git",
