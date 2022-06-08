@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { expect, test } from "@playwright/test";
+//This is the test case if we follow UI way of doing E2E's
+import { expect } from "@playwright/test";
 import { buildUrl } from "./utils";
+import { test } from "./fixture";
 
 const SERVER_URL = "http://localhost:8080";
 

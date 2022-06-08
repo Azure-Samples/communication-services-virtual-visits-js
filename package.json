@@ -7,7 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "build:e2e" : "cd server && npm run package"
+    "build:e2e" : "cd server && npm run package",
+    "start:server": "cd server && npm run start:prod",
+    "test:book": "npx playwright test book.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
   "homepage": "https://github.com/Azure-Samples/communication-services-virtual-visits-js#readme",
   "devDependencies": {
     "@playwright/test": "^1.22.2",
-    "express": "~4.16.1"
+    "express": "~4.16.1",
+    "uuid": "^8.1.0"
   }
 }
