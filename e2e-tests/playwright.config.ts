@@ -56,13 +56,6 @@ const config: PlaywrightTestConfig = {
     },
 
     {
-      name: "firefox",
-      use: {
-        ...devices["Desktop Firefox"],
-      },
-    },
-
-    {
       name: "webkit",
       use: {
         ...devices["Desktop Safari"],
@@ -103,7 +96,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "cd server && npm run start:prod",
+    command: "cd ../server && npm run start:prod",
     port: 8080,
   },
 };

@@ -1,13 +1,12 @@
 {
   "name": "sample",
   "version": "1.0.0",
-  "description": "![vv-banner.png](./docs/images/vv-call-desktop.png)",
-  "main": "index.js",
+  "description": "",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "build:e2e" : "cd server && npm run package",
+    "build:e2e" : "cd ../server && npm run package",
     "test": "npx playwright test"
   },
   "repository": {
@@ -21,9 +20,12 @@
     "url": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/issues"
   },
   "homepage": "https://github.com/Azure-Samples/communication-services-virtual-visits-js#readme",
+  "dependencies": {
+    "@playwright/test": "^1.22.2",
+    "express": "~4.16.1"
+  },
   "devDependencies": {
     "@playwright/test": "^1.22.2",
-    "express": "~4.16.1",
-    "uuid": "^8.1.0"
+    "express": "~4.16.1"
   }
 }
