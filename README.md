@@ -106,8 +106,15 @@ npx playwright install
 - To build and run the tests, use the following commands:
 
 ```
+cd e2e-tests
 npm run build:e2e
 npm run test
+```
+
+- To check the test reports, use the following commands:
+
+```
+npx playwright show-report
 ```
 
 ### Environment Variables

@@ -88,6 +88,6 @@ docGen/
 
 # Release outputs
 release/
-/test-results/
-/playwright-report/
-/playwright/.cache/
+e2e-tests/test-results/
+e2e-tests/playwright-report/
+e2e-tests/playwright/.cache/
