@@ -17,15 +17,13 @@ const AZURE_DEPLOY_EDITABLE = path.join(DEPLOY_DIR, "editableazuredeploy.json");
 const gitTag = process.argv[2];
 
 function setPackageUrl(armTemplate) {
-  console.log(`received git tag is ${gitTag}`);
-  const updatedPackageUrl = `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${gitTag}/sample.zip`;
+  const encodedGitTag = encodeURIComponent(gitTag);
+  const updatedPackageUrl = `https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/download/${encodedGitTag}/sample.zip`;
   const parsed = JSON.parse(fs.readFileSync(armTemplate));
-  console.log(parsed.variables.packageUrl);
   parsed.variables.packageUrl = updatedPackageUrl;
 
   const newPackageJSON = JSON.stringify(parsed, null, 2);
   fs.writeFileSync(armTemplate, newPackageJSON);
- 
 }
 
 function main() {

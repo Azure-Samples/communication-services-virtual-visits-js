@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { CommunicationUserToken } from '@azure/communication-identity';
+import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 import { setIconOptions, Spinner } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -11,14 +12,17 @@ import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { MeetingExperience } from './components/MeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
-import { fetchConfig } from './utils/FetchConfig';
-import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
-import { runFakeTimers } from './utils/TestUtils';
+import * as FetchConfig from './utils/FetchConfig';
+import * as FetchToken from './utils/FetchToken';
+import * as GetTeamsMeetingLink from './utils/GetTeamsMeetingLink';
 import { generateTheme } from './utils/ThemeGenerator';
-
-const MOCK_VALID_TEAMSMEETINGLINKMODEL = getTeamsMeetingLink(
-  '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
-);
+import {
+  createMockCallWithChatAdapter,
+  createMockCallWithChatComposite,
+  createMockStatefulCallClient,
+  createMockStatefulChatClient,
+  runFakeTimers
+} from './utils/TestUtils';
 
 configure({ adapter: new Adapter() });
 
@@ -28,40 +32,43 @@ setIconOptions({
   disableWarnings: true
 });
 
-jest.mock('./utils/FetchConfig', () => {
+jest.mock('@azure/communication-react', () => {
   return {
-    fetchConfig: jest.fn()
+    ...jest.requireActual('@azure/communication-react'),
+    createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
+    createStatefulCallClient: () => createMockStatefulCallClient(),
+    createStatefulChatClient: () => createMockStatefulChatClient(),
+    CallWithChatComposite: () => createMockCallWithChatComposite()
   };
 });
 
-jest.mock('./utils/FetchToken', () => {
+jest.mock('@azure/communication-common', () => {
   return {
-    fetchToken: (): Promise<CommunicationUserToken> => {
-      return Promise.resolve({
-        user: { communicationUserId: 'userId' },
-        token: 'token',
-        expiresOn: new Date()
-      });
+    AzureCommunicationTokenCredential: function () {
+      return { token: '', getToken: () => '' };
     }
   };
 });
 
-jest.mock('./components/MeetingExperience');
-
 describe('Visit', () => {
   beforeEach(() => {
-    //remove console.error logs in tests
     jest.spyOn(console, 'error').mockImplementation();
+
+    const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
+    fetchTokenSpy.mockReturnValue(
+      Promise.resolve({
+        user: { communicationUserId: 'userId' },
+        token: 'token',
+        expiresOn: new Date()
+      } as CommunicationUserToken)
+    );
   });
 
   it('should render loading spinner when config is not loaded', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
-      async (): Promise<AppConfigModel | undefined> => {
-        return Promise.resolve(undefined);
-      }
-    );
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(Promise.resolve(undefined));
 
-    const visit = await mount(<Visit />);
+    const visit = mount(<Visit />);
 
     await runFakeTimers();
 
@@ -74,18 +81,20 @@ describe('Visit', () => {
     expect(headers.length).toBe(0);
   });
 
-  it('renders a generic error UI when config throws an error', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
+  it('renders a generic error when config throws an error', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockImplementation(
       async (): Promise<AppConfigModel | undefined> => {
         throw new Error('test error');
       }
     );
 
-    const visit = await mount(<Visit />);
+    const visit = mount(<Visit />);
 
     await runFakeTimers();
 
     visit.update();
+
     const spinners = visit.find(Spinner);
     const genericErrors = visit.find(GenericError);
 
@@ -93,67 +102,93 @@ describe('Visit', () => {
     expect(genericErrors.length).toBe(1);
   });
 
-  it('should render JoinTeamsMeeting when config is loaded but the meeting link is not set', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
-      async (): Promise<AppConfigModel | undefined> => {
-        return Promise.resolve({
-          communicationEndpoint: 'enpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        });
+  it('renders a generic error when token throws an error', async () => {
+    const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
+    fetchTokenSpy.mockImplementation(
+      async (): Promise<CommunicationUserToken> => {
+        throw new Error('test error');
       }
     );
 
-    const visit = await mount(<Visit />);
+    const visit = mount(<Visit />);
 
     await runFakeTimers();
 
-    await visit.update();
+    visit.update();
 
     const spinners = visit.find(Spinner);
     const genericErrors = visit.find(GenericError);
+
+    expect(spinners.length).toBe(0);
+    expect(genericErrors.length).toBe(1);
+  });
+
+  it('should render JoinTeamsMeeting when config and token are loaded and meeting link is not set', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+
+    const visit = mount(<Visit />);
+
+    await runFakeTimers();
+
+    visit.update();
+
+    const spinners = visit.find(Spinner);
     const joinMeetings = visit.find(JoinTeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrors.length).toBe(0);
     expect(joinMeetings.length).toBe(1);
   });
 
   it('should render MeetingExperience when config and token are loaded and meeting link is set', async () => {
-    (fetchConfig as jest.Mock).mockImplementation(
-      async (): Promise<AppConfigModel | undefined> => {
-        return Promise.resolve({
-          communicationEndpoint: 'enpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        });
-      }
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
     );
 
-    const visit = await mount(<Visit />);
+    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
+    getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
 
-    visit.setState({ meetingLinkModel: MOCK_VALID_TEAMSMEETINGLINKMODEL });
+    const getTeamsMeetingLink = jest.spyOn(GetTeamsMeetingLink, 'getTeamsMeetingLink');
+    getTeamsMeetingLink.mockImplementation(() => {
+      return {
+        meetingLink:
+          '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
+      } as TeamsMeetingLinkLocator;
+    });
+
+    const visit = mount(<Visit />);
 
     await runFakeTimers();
 
-    await visit.update();
+    visit.update();
 
     const spinners = visit.find(Spinner);
-    const meetingExperiences = visit.find(MeetingExperience);
+    const meetingExperience = visit.find(MeetingExperience);
 
     expect(spinners.length).toBe(0);
-    expect(meetingExperiences.length).toBe(1);
+    expect(meetingExperience.length).toBe(1);
   });
 });

@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       release-flavor:
-        description: 'Beta release or stable release.'
+        description: "Beta release or stable release."
         required: true
         type: choice
         options:
