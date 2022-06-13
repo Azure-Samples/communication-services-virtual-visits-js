@@ -1,4 +1,4 @@
-# Run E2E tests 
+# Run E2E tests
 
 name: E2E tests for Sample
 
@@ -6,10 +6,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      branch: 
-        description: 'Branch to run E2E from'
+      branch:
+        description: "Branch to run E2E from"
         required: false
-        default: 'main'
+        default: "main"
 
 jobs:
   e2e-tests:
@@ -23,7 +23,20 @@ jobs:
       - name: Checkout branch
         run: git checkout ${{ github.event.inputs.branch }}
 
-      # Build and run e2e  
+      # Install dependencies
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: Install e2e test dependencies
+        working-directory: ./e2e-tests
+        run: npm install
+
+      # Build and run e2e
       - name: Build and run e2e tests
         working-directory: ./e2e-tests
         run: |
