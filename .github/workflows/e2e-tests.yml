@@ -37,7 +37,9 @@ jobs:
 
       - name: Install e2e test dependencies
         working-directory: ./e2e-tests
-        run: npm install
+        run: |
+          npm install
+          npx playwright install
 
       # Build and run e2e
       - name: Build and run e2e tests
