@@ -11,6 +11,9 @@ on:
         required: false
         default: "main"
 
+env: 
+  VV_COMMUNICATION_SERVICES_CONNECTION_STRING : ${{ secrets.COMMUNICATION_SERVICES_CONNECTION_STRING_E2E }}
+
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
