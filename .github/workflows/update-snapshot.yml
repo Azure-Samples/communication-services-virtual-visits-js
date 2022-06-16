@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: snapshots
-          path: samples/tests/test-results
+          path: e2e-tests/tests/test-results
           
       - name: Check for snapshot changes
         id: changescheck
