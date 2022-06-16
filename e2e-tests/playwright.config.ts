@@ -55,14 +55,6 @@ const config: PlaywrightTestConfig = {
         ...devices["Desktop Safari"],
       },
     },
-
-    /* Test against branded browsers. */
-    {
-      name: "Microsoft Edge",
-      use: {
-        channel: "msedge",
-      },
-    },
   ],
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
