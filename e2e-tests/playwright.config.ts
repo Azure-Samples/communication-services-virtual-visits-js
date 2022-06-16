@@ -48,13 +48,6 @@ const config: PlaywrightTestConfig = {
         ...devices["Desktop Chrome"],
       },
     },
-
-    {
-      name: "webkit",
-      use: {
-        ...devices["Desktop Safari"],
-      },
-    },
   ],
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
