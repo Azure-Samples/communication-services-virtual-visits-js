@@ -1,6 +1,6 @@
 ![vv-banner.png](./docs/images/vv-call-desktop.png)
 
-# Azure Communication Services Virtual Visits
+# Azure Communication Services Virtual
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fcommunication-services-virtual-visits-js%2Fmain%2Fdeploy%2Feditableazuredeploy.json)
 
