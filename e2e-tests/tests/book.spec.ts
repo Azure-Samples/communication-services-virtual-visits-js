@@ -13,6 +13,7 @@ test.describe("tests:", () => {
 
   test("navigating to book", async ({ page }) => {
     await page.isVisible(".BookMeetingSection");
+    await page.isVisible(".waffle-menu");
     expect(await page.screenshot()).toMatchSnapshot("bookScreenshot.png");
   });
 });
