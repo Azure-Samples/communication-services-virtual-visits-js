@@ -14,7 +14,7 @@ npx playwright install
 - To build and run the tests, use the following commands:
 
 ```
-npm run build:e2e
+npm run build
 npm run test
 ```
 
