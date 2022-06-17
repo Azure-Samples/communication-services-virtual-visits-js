@@ -60,7 +60,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' && always() && steps.e2eTests.outcome == 'failure' && !contains( github.event.pull_request.labels.*.name, 'ui change') }}
         uses: actions/github-script@v3
         with:
-          github-token: ${{secrets.SERVICE_ACCOUNT_PAT}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.issues.createComment({
               issue_number: context.issue.number,
