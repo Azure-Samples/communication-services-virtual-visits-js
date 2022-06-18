@@ -94,5 +94,5 @@ jobs:
         if: ${{ steps.changescheck.outputs.hasChanged == 'true' }}
         run: |
           git add e2e-tests/tests/*.png
-          git commit -m 'Update js bundle automation snapshots'
+          git commit -m 'Update snapshots'
           git push
