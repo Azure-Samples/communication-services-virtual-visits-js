@@ -94,6 +94,10 @@ npm run package
 npm run start:prod
 ```
 
+### End to End tests
+
+[Learn more about Azure Communication Services Virtual Visits End to End tests and how to run them](https://github.com/Azure-Samples/communication-services-virtual-visits-js/tree/main/e2e-tests#automation-tests-for-azure-communication-services-virtual-visits)
+
 ### Environment Variables
 
 Where do I set this?
