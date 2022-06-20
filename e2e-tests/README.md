@@ -31,4 +31,4 @@ If you are adding new tests for samples, please follow this folder structure:
 ├── tests # Tests for the sample folder
 ├── playwright.config.ts # playwright config file
 ├── package.json  
- └── README.md
+└── README.md
