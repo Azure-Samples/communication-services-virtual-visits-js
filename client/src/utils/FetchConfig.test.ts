@@ -26,7 +26,7 @@ describe('FetchConfig', () => {
     };
 
     global.fetch = jest.fn(
-      (_: RequestInfo, __?: RequestInit | undefined): Promise<Response> => {
+      (_: RequestInfo | URL, __?: RequestInit | undefined): Promise<Response> => {
         return Promise.resolve<Response>({
           status: 200,
           text: () => Promise.resolve(JSON.stringify(mockConfig))
@@ -58,7 +58,7 @@ describe('FetchConfig', () => {
     };
 
     global.fetch = jest.fn(
-      (_: RequestInfo, __?: RequestInit | undefined): Promise<Response> => {
+      (_: RequestInfo | URL, __?: RequestInit | undefined): Promise<Response> => {
         return Promise.resolve<Response>({
           status: 500,
           json: () => Promise.resolve(mockConfig)
@@ -78,7 +78,7 @@ describe('FetchConfig', () => {
 
   test('Should return undefined if there is no valid json response', async () => {
     global.fetch = jest.fn(
-      (_: RequestInfo, __?: RequestInit | undefined): Promise<Response> => {
+      (_: RequestInfo | URL, __?: RequestInit | undefined): Promise<Response> => {
         return Promise.resolve<Response>({
           status: 200,
           json: () => Promise.resolve(undefined)
