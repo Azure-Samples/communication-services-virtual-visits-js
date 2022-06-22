@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { expect, test } from "@playwright/test";
-import { buildUrl } from "./utils";
+import { buildUrl } from "./common/utils";
 
 const SERVER_URL = "http://localhost:8080";
 
@@ -12,8 +12,12 @@ test.describe("tests:", () => {
   });
 
   test("navigating to book", async ({ page }) => {
-    await page.isVisible(".BookMeetingSection");
-    await page.isVisible(".waffle-menu");
+    await expect(
+      page.locator('[id="BookMeetingSection"]').first()
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-icon-name="Waffle"]').first()
+    ).toBeVisible();
     expect(await page.screenshot()).toMatchSnapshot("bookScreenshot.png");
   });
 });
