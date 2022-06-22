@@ -6,13 +6,13 @@ export const buildUrl = (serverUrl: string, page: string): string =>
 
 export const DELAY_MS = 1200;
 
-function getGUID() {
+let getGUID = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     let randomNumber = (Math.random() * 16) | 0;
     let randomValue = c == "x" ? randomNumber : (randomNumber & 0x3) | 0x8;
     return randomValue.toString(16);
   });
-}
+};
 
 export const testMeetingUrl = `https://teams.microsoft.com/l/meetup-join/19%3ameeting_MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM%40thread.v2/0?context=%7b%22Tid%22%3a%22${getGUID()}%22%2c%22Oid%22%3a%22${getGUID()}%22%7d`;
 

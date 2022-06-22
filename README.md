@@ -124,7 +124,7 @@ Where do I set this?
 
 ### End to End tests
 
-[Learn more about Azure Communication Services Virtual Visits End to End tests and how to run them](https://github.com/Azure-Samples/communication-services-virtual-visits-js/tree/main/e2e-tests#automation-tests-for-azure-communication-services-virtual-visits)
+[Learn more about how to run end to end tests](https://github.com/Azure-Samples/communication-services-virtual-visits-js/tree/main/e2e-tests#automation-tests-for-azure-communication-services-virtual-visits)
 
 ## Updating Your Sample
 
