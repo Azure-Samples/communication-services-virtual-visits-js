@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { expect, test } from "@playwright/test";
-import { buildUrl, testMeetingUrl } from "./common/utils";
+import { buildUrl, delay, DELAY_MS, testMeetingUrl } from "./common/utils";
 import DefaultConfig from "../../server/src/defaultConfig.json";
 
 const SERVER_URL = "http://localhost:8080";
@@ -19,6 +19,7 @@ test.describe("tests for visit:", () => {
     ).toBeVisible();
     await expect(page.locator('text="Join a call"').first()).toBeVisible();
     await expect(page.locator('text="Join call"').first()).toBeVisible();
+    await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("visitScreenshot.png");
 
     // Click [placeholder="Enter a meeting link"]
@@ -42,6 +43,7 @@ test.describe("tests for visit:", () => {
     await expect(page.locator('text="Start a call"').first()).toBeVisible();
     await expect(page.locator('text="Start call"').first()).toBeVisible();
     await page.locator('button:has-text("Start call")').isEnabled;
+    await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("startCallScreenshot.png");
 
     //Start the call
@@ -55,6 +57,7 @@ test.describe("tests for visit:", () => {
     ).toBeVisible();
     await expect(page.locator(`text='${title}'`).first()).toBeVisible();
     await expect(page.locator(`text='${subtitle}'`).first()).toBeVisible();
+    await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("lobbyScreenshot.png");
 
     //Leave Call
@@ -70,6 +73,7 @@ test.describe("tests for visit:", () => {
     await expect(
       page.locator('text="You left the call"').first()
     ).toBeVisible();
+    await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("endCallScreenshot.png");
   });
 });
