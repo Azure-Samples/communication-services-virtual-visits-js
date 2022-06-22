@@ -6,10 +6,10 @@ export const buildUrl = (serverUrl: string, page: string): string =>
 
 export const DELAY_MS = 1200;
 
-let getGUID = () => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    let randomNumber = (Math.random() * 16) | 0;
-    let randomValue = c == "x" ? randomNumber : (randomNumber & 0x3) | 0x8;
+const getGUID = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const randomNumber = (Math.random() * 16) | 0;
+    const randomValue = c == "x" ? randomNumber : (randomNumber & 0x3) | 0x8;
     return randomValue.toString(16);
   });
 };
