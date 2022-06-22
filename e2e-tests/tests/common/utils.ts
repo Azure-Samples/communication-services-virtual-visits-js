@@ -16,6 +16,6 @@ const getGUID = () => {
 
 export const testMeetingUrl = `https://teams.microsoft.com/l/meetup-join/19%3ameeting_MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM%40thread.v2/0?context=%7b%22Tid%22%3a%22${getGUID()}%22%2c%22Oid%22%3a%22${getGUID()}%22%7d`;
 
-export function delay(ms) {
+export const delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
