@@ -35,7 +35,7 @@ export const Book = (): JSX.Element => {
     return (
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
         <Stack styles={backgroundStyles(config.theme)}>
-          <Header companyName={config.companyName} parentid={PARENT_ID} />
+          <Header companyName="Testing" parentid={PARENT_ID} />
           <LayerHost
             id={PARENT_ID}
             style={{
