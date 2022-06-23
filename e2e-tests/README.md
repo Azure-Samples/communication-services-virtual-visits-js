@@ -34,13 +34,13 @@ npx playwright show-report
 ```
 npm run update-snapshots
 ```
+For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
 
 ## End to End tests in the pipeline
 
 - Every change to a PR will trigger e2e tests workflow
 
 - If the PR has any UI changes, adding a 'ui change' label is necessary to make sure that the tests are run against the updated UI screenshots
-  For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
 
 - Once the 'ui change' label is added, the update snapshot workflow will be triggerd. If any UI changes are found and if the snapshots has to be updated, the workflow will push a commit to your PR with the updated snapshots.
 
