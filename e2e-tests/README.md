@@ -47,8 +47,10 @@ npm run update-snapshots
 ## Folder structure
 
 If you are adding new tests for samples, please follow this folder structure:
-.
-├── tests # Tests for the sample folder
-├── playwright.config.ts # playwright config file
-├── package.json  
-└── README.md
+
+    .
+    ├── tests                                  # End to end tests
+    ├── common                                 # utils and common code for testing
+    ├── playwright.config.ts                   # playwright config file
+    ├── package.json                   
+    └── README.md
