@@ -6,8 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "build" : "cd ../server && npm run package",
-    "test": "npx playwright test"
+    "build" : "cd ../client && npm install && cd ../server && npm install && npm run package",
+    "test": "npx playwright test",
+    "update-snapshots": "npx playwright test --update-snapshots"
   },
   "repository": {
     "type": "git",

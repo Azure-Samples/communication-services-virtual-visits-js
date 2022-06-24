@@ -122,6 +122,10 @@ Where do I set this?
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
 
+### End to End tests
+
+[Learn more about how to run end to end tests](https://github.com/Azure-Samples/communication-services-virtual-visits-js/tree/main/e2e-tests#automation-tests-for-azure-communication-services-virtual-visits)
+
 ## Updating Your Sample
 
 Once a new release is published in this repo, you can update your deployed app

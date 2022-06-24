@@ -69,6 +69,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 - Commit your changes using a descriptive commit message
 - Push your fork to GitHub:
 - In GitHub, create a pull request
+- If your PR has any UI changes, please make sure to add the "ui change" label to your PR before or after creating the PR. This will trigger the workflow to update the snapshots and makes sure that end to end tests are validated with the updated screenshots.
 - If we suggest changes then:
 
   - Make the required updates.
