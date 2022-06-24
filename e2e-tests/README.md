@@ -11,15 +11,25 @@ This is an automation tests folder for Virtual Visits sample, which contains all
 ```
 npm install
 npx playwright install
-
 ```
 
 For more information about browsers, check the [Official Playwright Documentation for Browsers](https://playwright.dev/docs/browsers)
 
-- To build and run the tests, use the following commands:
+- To build the tests, use the following commands:
 
 ```
 npm run build
+```
+- Run the following command before running the tests for the first time to get the local copy of the snapshots.
+
+```
+npm run update-snapshot
+```
+For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
+
+- To run the tests, use the following command:
+
+```
 npm run test
 ```
 
@@ -34,7 +44,6 @@ npx playwright show-report
 ```
 npm run update-snapshots
 ```
-For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
 
 ## End to End tests in the pipeline
 
