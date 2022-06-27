@@ -1,8 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export const buildUrl = (serverUrl: string, page: string): string =>
-  `${serverUrl}/${page}`;
+export const buildUrl = (
+  serverUrl: string,
+  page: string,
+  meetingLink?: string
+): string => {
+  if (meetingLink === undefined) {
+    return `${serverUrl}/${page}`;
+  } else {
+    return `${serverUrl}/${page}/?meetingURL=${encodeURIComponent(
+      meetingLink
+    )}`;
+  }
+};
 
 export const DELAY_MS = 1200;
 
