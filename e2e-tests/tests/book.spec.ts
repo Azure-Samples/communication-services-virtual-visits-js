@@ -18,7 +18,7 @@ test.describe("tests:", () => {
     await expect(
       page.locator('[id="BookMeetingSection"]').first()
     ).toBeVisible();
-    await delay(2000);
+    await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("bookScreenshot.png");
   });
 });
