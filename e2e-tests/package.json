@@ -23,10 +23,12 @@
   "homepage": "https://github.com/Azure-Samples/communication-services-virtual-visits-js#readme",
   "dependencies": {
     "@playwright/test": "^1.22.2",
-    "express": "~4.16.1"
+    "express": "~4.16.1",
+    "dotenv": "~10.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",
-    "express": "~4.16.1"
+    "express": "~4.16.1",
+    "dotenv": "~10.0.0"
   }
 }

@@ -4,8 +4,12 @@
 import { expect, test } from "@playwright/test";
 import { buildUrl, delay, DELAY_MS, testMeetingUrl } from "./common/utils";
 import DefaultConfig from "../../server/src/defaultConfig.json";
+import dotenv from "dotenv";
+import * as path from "path";
 
 const SERVER_URL = "http://localhost:8080";
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 test.describe("tests for visit:", () => {
   test.beforeEach(async ({ page }) => {

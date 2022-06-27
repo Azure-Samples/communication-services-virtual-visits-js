@@ -3,8 +3,12 @@
 
 import { expect, test } from "@playwright/test";
 import { buildUrl, delay, DELAY_MS } from "./common/utils";
+import dotenv from "dotenv";
+import * as path from "path";
 
 const SERVER_URL = "http://localhost:8080";
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 test.describe("tests:", () => {
   test.beforeEach(async ({ page }) => {
@@ -18,7 +22,7 @@ test.describe("tests:", () => {
     await expect(
       page.locator('[id="BookMeetingSection"]').first()
     ).toBeVisible();
-    await delay(DELAY_MS);
+    await delay(2000);
     expect(await page.screenshot()).toMatchSnapshot("bookScreenshot.png");
   });
 });

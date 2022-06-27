@@ -4,7 +4,7 @@ This is an automation tests folder for Virtual Visits sample, which contains all
 
 ## Build and Run End to End tests locally
 
-- Before running the tests make sure that the environment variable for connection string is set. [Learn more about environment variables and how to set them.](https://github.com/Azure-Samples/communication-services-virtual-visits-js#environment-variables)
+- Before running the tests make sure that the environment variable for connection string is set. Set it in ./.env file (replace [REPLACE_WITH_CONNECTION_STRING]).
 
 - To install dependencies, use the following command:
 
@@ -20,11 +20,13 @@ For more information about browsers, check the [Official Playwright Documentatio
 ```
 npm run build
 ```
+
 - Run the following command before running the tests for the first time to get the local copy of the snapshots.
 
 ```
 npm run update-snapshot
 ```
+
 For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
 
 - To run the tests, use the following command:
@@ -60,6 +62,7 @@ If you are adding new tests for samples, please follow this folder structure:
     .
     ├── tests                                  # End to end tests
     ├── common                                 # utils and common code for testing
+    |── .env                                   # Environment file which setup a connection string for local tests
     ├── playwright.config.ts                   # playwright config file
-    ├── package.json                   
+    ├── package.json
     └── README.md
