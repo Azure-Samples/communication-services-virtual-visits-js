@@ -7,7 +7,7 @@ import DefaultConfig from "../../server/src/defaultConfig.json";
 
 const SERVER_URL = "http://localhost:8080";
 
-let testVisitWithMeetingUrl = async (page) => {
+const testVisitWithMeetingUrl = async (page) => {
   //Wait for page to load
   await expect(page.locator('[data-icon-name="Waffle"]').first()).toBeVisible();
   await expect(page.locator('text="Start a call"').first()).toBeVisible();
