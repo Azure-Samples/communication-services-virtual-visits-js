@@ -20,11 +20,13 @@ For more information about browsers, check the [Official Playwright Documentatio
 ```
 npm run build
 ```
+
 - Run the following command before running the tests for the first time to get the local copy of the snapshots.
 
 ```
 npm run update-snapshot
 ```
+
 For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
 
 - To run the tests, use the following command:
@@ -61,5 +63,5 @@ If you are adding new tests for samples, please follow this folder structure:
     ├── tests                                  # End to end tests
     ├── common                                 # utils and common code for testing
     ├── playwright.config.ts                   # playwright config file
-    ├── package.json                   
+    ├── package.json
     └── README.md
