@@ -17,8 +17,7 @@ const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
 const sockPort = process.env.WDS_SOCKET_PORT;
 
 module.exports = function (proxy, allowedHost) {
-  const disableFirewall =
-    !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
+  const disableFirewall = !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
@@ -42,7 +41,7 @@ module.exports = function (proxy, allowedHost) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': '*',
-      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Headers': '*'
     },
     // Enable gzip compression of generated files.
     compress: true,
@@ -69,9 +68,8 @@ module.exports = function (proxy, allowedHost) {
         // https://github.com/facebook/create-react-app/issues/293
         // src/node_modules is not ignored to support absolute imports
         // https://github.com/facebook/create-react-app/issues/1065
-        ignored: ignoredFiles(paths.appSrc),
-        watchContentBase: true
-      },
+        ignored: ignoredFiles(paths.appSrc)
+      }
     },
     client: {
       webSocketURL: {
@@ -80,19 +78,19 @@ module.exports = function (proxy, allowedHost) {
         // to hot reloading server.
         hostname: sockHost,
         pathname: sockPath,
-        port: sockPort,
+        port: sockPort
       },
       overlay: {
         errors: false,
-        warnings: false,
-      },
+        warnings: false
+      }
     },
     devMiddleware: {
       // It is important to tell WebpackDevServer to use the same "publicPath" path as
       // we specified in the webpack config. When homepage is '.', default to serving
       // from the root.
       // remove last slash so user can land on `/test` instead of `/test/`
-      publicPath: paths.publicUrlOrPath.slice(0, -1),
+      publicPath: paths.publicUrlOrPath.slice(0, -1)
     },
 
     https: getHttpsConfig(),
@@ -133,6 +131,6 @@ module.exports = function (proxy, allowedHost) {
       // it used the same host and port.
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
       devServer.app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
-    },
+    }
   };
 };

@@ -23,7 +23,7 @@ describe('FetchToken', () => {
     };
 
     global.fetch = jest.fn(
-      (_: RequestInfo, __?: RequestInit | undefined): Promise<Response> => {
+      (_: RequestInfo | URL, __?: RequestInit | undefined): Promise<Response> => {
         return Promise.resolve<Response>({
           status: 200,
           text: () => Promise.resolve(JSON.stringify(mockToken))
