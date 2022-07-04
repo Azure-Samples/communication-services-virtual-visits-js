@@ -691,13 +691,10 @@ module.exports = function (webpackEnv) {
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
-          console.log('entrypoints', entrypoints);
           const entrypointFiles = {};
           Object.keys(entrypoints).forEach((entrypoint) => {
-            console.log('each entrypoint: ', entrypoint);
             entrypointFiles[entrypoint] = entrypoints[entrypoint].filter((fileName) => !fileName.endsWith('.map'));
           });
-          console.log('entrypointFiles', entrypointFiles);
           return {
             files: manifestFiles,
             entrypoints: entrypointFiles
