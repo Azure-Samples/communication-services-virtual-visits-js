@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import type { PlaywrightTestConfig } from "@playwright/test";
-import { devices } from "@playwright/test";
+import path from "path";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -45,22 +45,26 @@ const config: PlaywrightTestConfig = {
     {
       name: "chromium",
       use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
-
-    {
-      name: "webkit",
-      use: {
-        ...devices["Desktop Safari"],
-      },
-    },
-
-    /* Test against branded browsers. */
-    {
-      name: "Microsoft Edge",
-      use: {
-        channel: "msedge",
+        browserName: "chromium",
+        permissions: ["notifications", "camera", "microphone"],
+        viewport: { width: 900, height: 900 },
+        launchOptions: {
+          args: [
+            "--font-render-hinting=none", // Ensures that fonts are rendered consistently.
+            "--enable-font-antialiasing", // Ensures that fonts are rendered consistently.
+            "--disable-gpu", // Ensures that fonts are rendered consistently.
+            "--allow-file-access",
+            "--use-fake-ui-for-media-stream",
+            "--use-fake-device-for-media-stream",
+            `--use-file-for-fake-video-capture=${path.join(
+              __dirname,
+              "common",
+              "test.y4m"
+            )}`,
+            "--lang=en-US",
+            "--mute-audio",
+          ],
+        },
       },
     },
   ],
