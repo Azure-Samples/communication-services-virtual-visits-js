@@ -68,3 +68,11 @@ jobs:
               repo: context.repo.repo,
               body: 'Failed to pass the UI Test. If this PR is for UI change and the error is snapshot mismatch, please add "ui change" label to the PR for updating the snapshot.'
             })
+
+      - name: Upload snapshots if failed
+        if: ${{ always() && steps.e2eTests.outcome == 'failure' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshots
+          path: e2e-tests/test-results/
+          if-no-files-found: warn # warn, error, or ignore
