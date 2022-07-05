@@ -70,10 +70,9 @@ jobs:
             })
 
       - name: Upload snapshots if failed
-        working-directory: ./e2e-tests
         if: ${{ steps.e2eTests.outcome == 'failure' }}
         uses: actions/upload-artifact@v3
         with:
           name: snapshots
-          path: test-results/
+          path: e2e-tests/test-results/
           if-no-files-found: warn # warn, error, or ignore
