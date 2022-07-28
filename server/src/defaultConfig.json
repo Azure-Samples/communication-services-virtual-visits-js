@@ -1,5 +1,5 @@
 {
-  "communicationServicesConnectionString": "endpoint=your_endpoint;accesskey=secret",
+  "communicationServicesConnectionString": "endpoint=https://commserv2.communication.azure.com/;accesskey=Q0EcUCBmQcdcyt2ehKiVN3ZfH5T0DadAt0T76LTwybCVN1emFfqdKJrDr7twQlo6fPaMVlADOM/WdjtYRBjvDw==",
   "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings",
   "chatEnabled": true,
   "screenShareEnabled": true,
@@ -7,5 +7,13 @@
   "colorPalette": "#0078d4",
   "waitingTitle": "Thank you for choosing Lamna Healthcare",
   "waitingSubtitle": "Your clinician is joining the meeting",
-  "logoUrl": ""
+  "logoUrl": "",
+  "postCall": {
+    "survey": {
+      "type": "",
+      "options": {
+        "surveyUrl": ""
+      }
+    }
+  }
 }

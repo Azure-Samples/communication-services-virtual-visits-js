@@ -15,11 +15,11 @@ import {
   VV_LOGO_URL_ENV_NAME
 } from '../constants';
 
-import { ServerConfigModel, ClientConfigModel } from '../models/configModel';
+import { ServerConfigModel, ClientConfigModel, PostCallSurveyType } from '../models/configModel';
 import DefaultConfig from '../defaultConfig.json';
 
 export const getServerConfig = (): ServerConfigModel => {
-  return {
+  const config = {
     communicationServicesConnectionString:
       process.env[VV_COMMUNICATION_SERVICES_CONNECTION_STRING] ?? DefaultConfig.communicationServicesConnectionString,
     microsoftBookingsUrl: process.env[VV_MICROSOFT_BOOKINGS_URL_ENV_NAME] ?? DefaultConfig.microsoftBookingsUrl,
@@ -36,12 +36,24 @@ export const getServerConfig = (): ServerConfigModel => {
     waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? DefaultConfig.waitingTitle,
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? DefaultConfig.waitingSubtitle,
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? DefaultConfig.logoUrl
-  };
+  } as ServerConfigModel;
+  if (DefaultConfig.postCall?.survey?.type) {
+    config.postCall = {
+      survey: {
+        type: DefaultConfig.postCall?.survey?.type as PostCallSurveyType,
+        options: {
+          surveyUrl: DefaultConfig.postCall?.survey?.options?.surveyUrl
+        }
+      }
+    };
+  }
+  return config;
 };
 
 export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigModel => {
   const endpointCredential = parseConnectionString(serverConfig.communicationServicesConnectionString);
-  return {
+
+  const config = {
     communicationEndpoint: endpointCredential.endpoint,
     microsoftBookingsUrl: serverConfig.microsoftBookingsUrl,
     chatEnabled: serverConfig.chatEnabled,
@@ -51,5 +63,17 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
     waitingTitle: serverConfig.waitingTitle,
     waitingSubtitle: serverConfig.waitingSubtitle,
     logoUrl: serverConfig.logoUrl
-  };
+  } as ClientConfigModel;
+
+  if (serverConfig.postCall?.survey?.type) {
+    config.postCall = {
+      survey: {
+        type: serverConfig.postCall?.survey?.type as PostCallSurveyType,
+        options: {
+          surveyUrl: serverConfig.postCall?.survey?.options?.surveyUrl
+        }
+      }
+    };
+  }
+  return config;
 };
