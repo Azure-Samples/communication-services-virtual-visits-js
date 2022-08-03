@@ -13,6 +13,7 @@ Azure Communication Services Virtual Visits is a web app you can host to provide
 - **Integration with Microsoft Teams**. Let your staff host and join meetings using familiar Teams UI, while the clients join the same call via your custom branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
 - **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
+- **Industry.** A virtual appointment template with pre-selected theme color schemes.
 
 ## Getting Started
 
