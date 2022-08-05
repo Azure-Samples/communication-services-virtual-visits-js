@@ -2,9 +2,11 @@
 // Licensed under the MIT license.
 
 import { CommunicationIdentityClient } from '@azure/communication-identity';
-import DefaultConfig from '../defaultConfig.json';
+//import DefaultConfig from '../defaultConfig.json';
+import { getDefaultConfig } from '../utils/getConfig';
 import { tokenController } from './tokenController';
 import { NextFunction } from 'express';
+import { ServerConfigModel } from '../models/configModel';
 
 function createMockedResponseObject(): any {
   const res: any = {};
@@ -20,7 +22,7 @@ function createMockedResponseObject(): any {
 }
 
 describe('tokenController', () => {
-  const cfg = DefaultConfig;
+  const cfg = getDefaultConfig() as ServerConfigModel;
   const mockClient = {
     createUserAndToken: async (scopes) => {
       requestedScopes = scopes;
