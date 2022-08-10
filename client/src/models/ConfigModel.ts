@@ -3,7 +3,7 @@
 
 import { Theme } from '@fluentui/theme';
 
-type PostCallSurveyType = 'none' | 'msforms' | 'onepage' | 'thirdparty';
+type PostCallSurveyType = 'msforms' | 'onequestionpoll' | 'thirdparty';
 interface MSFormsSurveryOptions {
   surveyUrl: string;
 }

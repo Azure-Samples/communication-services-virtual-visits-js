@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-export type PostCallSurveyType = 'none' | 'msforms' | 'onequestion' | 'thirdparty';
+export type PostCallSurveyType = 'msforms' | 'onequestionpoll' | 'thirdparty';
 interface MSFormsSurveryOptions {
   surveyUrl: string;
 }

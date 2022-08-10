@@ -2,13 +2,10 @@
 // Licensed under the MIT license.
 
 import * as getConfig from './getConfig';
-
-beforeEach(() => {
-  jest.resetAllMocks();
-});
+import * as getDefaultConfig from './getDefaultConfig';
 
 describe('config', () => {
-  test('should use defaultConfig.json values if environment variables are not defined', () => {
+  beforeEach(() => {
     delete process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING;
     delete process.env.VV_MICROSOFT_BOOKINGS_URL;
     delete process.env.VV_CHAT_ENABLED;
@@ -17,22 +14,40 @@ describe('config', () => {
     delete process.env.VV_COLOR_PALETTE;
     delete process.env.VV_WAITING_TITLE;
     delete process.env.VV_WAITING_SUBTITLE;
+    delete process.env.VV_POSTCALL_SURVEY_TYPE;
+    delete process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL;
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  test('should use defaultConfig.json values if environment variables are not defined', () => {
+    const mockDefaultConfig = {
+      communicationServicesConnectionString: 'test endpoint',
+      microsoftBookingsUrl: 'testBookingsUrl',
+      chatEnabled: true,
+      screenShareEnabled: true,
+      companyName: 'test Healthcare',
+      colorPalette: '#0078d4',
+      waitingTitle: 'Thank you for choosing Lamna Healthcare',
+      waitingSubtitle: 'Your clinician is joining the meeting',
+      logoUrl: ''
+    };
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
 
     const config = getConfig.getServerConfig();
-    const defaultConfigObj: any = getConfig.getDefaultConfig();
 
-    expect(config.communicationServicesConnectionString).toBe(defaultConfigObj.communicationServicesConnectionString);
-    expect(config.microsoftBookingsUrl).toBe(defaultConfigObj.microsoftBookingsUrl);
-    expect(config.chatEnabled).toBe(defaultConfigObj.chatEnabled);
-    expect(config.screenShareEnabled).toBe(defaultConfigObj.screenShareEnabled);
-    expect(config.companyName).toBe(defaultConfigObj.companyName);
-    expect(config.colorPalette).toBe(defaultConfigObj.colorPalette);
-    expect(config.waitingTitle).toBe(defaultConfigObj.waitingTitle);
-    expect(config.waitingSubtitle).toBe(defaultConfigObj.waitingSubtitle);
-    if (config.postCall?.survey?.type !== undefined) {
-      expect(config.postCall?.survey?.type).toBe(defaultConfigObj.postCall?.survey.type);
-      expect(config.postCall?.survey?.options?.surveyUrl).toBe(defaultConfigObj.postCall?.survey.options.surveyUrl);
-    }
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
+    expect(config.communicationServicesConnectionString).toBe(mockDefaultConfig.communicationServicesConnectionString);
+    expect(config.microsoftBookingsUrl).toBe(mockDefaultConfig.microsoftBookingsUrl);
+    expect(config.chatEnabled).toBe(mockDefaultConfig.chatEnabled);
+    expect(config.screenShareEnabled).toBe(mockDefaultConfig.screenShareEnabled);
+    expect(config.companyName).toBe(mockDefaultConfig.companyName);
+    expect(config.colorPalette).toBe(mockDefaultConfig.colorPalette);
+    expect(config.waitingTitle).toBe(mockDefaultConfig.waitingTitle);
+    expect(config.waitingSubtitle).toBe(mockDefaultConfig.waitingSubtitle);
+    expect(config.postCall).not.toBeDefined();
   });
 
   test('should use environment variables when available', () => {
@@ -44,6 +59,9 @@ describe('config', () => {
     process.env.VV_COLOR_PALETTE = '#FFFFFF';
     process.env.VV_WAITING_TITLE = 'title';
     process.env.VV_WAITING_SUBTITLE = 'subtitle';
+    process.env.VV_LOGO_URL = 'logoUrl';
+    process.env.VV_POSTCALL_SURVEY_TYPE = 'msforms';
+    process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = 'msformstesturl';
 
     const config = getConfig.getServerConfig();
 
@@ -55,6 +73,9 @@ describe('config', () => {
     expect(config.colorPalette).toBe(process.env.VV_COLOR_PALETTE);
     expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
     expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
+    expect(config.logoUrl).toBe(process.env.VV_LOGO_URL);
+    expect(config.postCall?.survey?.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
+    expect(config.postCall?.survey?.options?.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
   });
 
   test('client config should not contain the connection string', () => {
@@ -66,9 +87,8 @@ describe('config', () => {
     expect(clientConfig.communicationEndpoint).toBe('test_endpoint_value');
   });
 
-  test('client config returns correctly mapped values for "msforms" option', () => {
-    const spy = jest.spyOn(getConfig, 'getDefaultConfig');
-    const mockValue = {
+  test('client config returns correctly mapped values for a specific postCall option', () => {
+    const mockDefaultConfig = {
       communicationServicesConnectionString: 'dummy endpoint',
       microsoftBookingsUrl: 'dummyBookingsUrl',
       chatEnabled: true,
@@ -82,31 +102,25 @@ describe('config', () => {
         survey: { type: 'msforms', options: { surveyUrl: 'msFormsSurveyURL' } }
       }
     };
-    spy.mockReturnValue(mockValue);
-
-    delete process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING;
-    delete process.env.VV_MICROSOFT_BOOKINGS_URL;
-    delete process.env.VV_CHAT_ENABLED;
-    delete process.env.VV_SCREENSHARE_ENABLED;
-    delete process.env.VV_COMPANY_NAME;
-    delete process.env.VV_COLOR_PALETTE;
-    delete process.env.VV_WAITING_TITLE;
-    delete process.env.VV_WAITING_SUBTITLE;
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
 
     const serverConfig = getConfig.getServerConfig();
     serverConfig.communicationServicesConnectionString = 'endpoint=test_endpoint_value;accesskey=secret';
     const clientConfig = getConfig.getClientConfig(serverConfig);
+
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(clientConfig.companyName).toBe('test Healthcare');
     expect(clientConfig.postCall).toBeDefined();
     expect(clientConfig.postCall?.survey).toBeDefined();
-    expect(clientConfig.postCall?.survey?.type).toBe('msforms');
+    expect(clientConfig.postCall?.survey?.type).toBe(mockDefaultConfig.postCall.survey.type);
     expect(clientConfig.postCall?.survey?.options).toBeDefined();
-    expect(clientConfig.postCall?.survey?.options?.surveyUrl).toBe('msFormsSurveyURL');
+    expect(clientConfig.postCall?.survey?.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 
-  test('getServerConfig returns postCall object with survey type "none" if "none" is selected', () => {
-    const spy = jest.spyOn(getConfig, 'getDefaultConfig');
-    const mockValue = {
+  test('getServerConfig returns correctly mapped values for a specific postcall option', () => {
+    const mockDefaultConfig = {
       communicationServicesConnectionString: 'dummy endpoint',
       microsoftBookingsUrl: 'dummyBookingsUrl',
       chatEnabled: true,
@@ -117,43 +131,19 @@ describe('config', () => {
       waitingSubtitle: 'Your clinician is joining the meeting',
       logoUrl: '',
       postCall: {
-        survey: { type: 'none', options: { surveyUrl: '' } }
+        survey: { type: 'thirdparty', options: { surveyUrl: 'thirdpartySurveyURL' } }
       }
     };
-    spy.mockReturnValue(mockValue);
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
 
     const config = getConfig.getServerConfig();
-    expect(config.companyName).toBe('test Healthcare');
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(config.postCall).toBeDefined();
     expect(config.postCall?.survey).toBeDefined();
-    expect(config.postCall?.survey?.type).toBe('none');
+    expect(config.postCall?.survey?.type).toBe(mockDefaultConfig.postCall.survey.type);
     expect(config.postCall?.survey?.options).toBeDefined();
-    expect(config.postCall?.survey?.options?.surveyUrl).toBe('');
-  });
-
-  test('getServerConfig returns correctly mapped values for "msforms" option', () => {
-    const spy = jest.spyOn(getConfig, 'getDefaultConfig');
-    const mockValue = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      postCall: {
-        survey: { type: 'msforms', options: { surveyUrl: 'msFormsSurveyURL' } }
-      }
-    };
-    spy.mockReturnValue(mockValue);
-
-    const config = getConfig.getServerConfig();
-    expect(config.postCall).toBeDefined();
-    expect(config.postCall?.survey).toBeDefined();
-    expect(config.postCall?.survey?.type).toBe('msforms');
-    expect(config.postCall?.survey?.options).toBeDefined();
-    expect(config.postCall?.survey?.options?.surveyUrl).toBe('msFormsSurveyURL');
+    expect(config.postCall?.survey?.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 });

@@ -12,46 +12,60 @@ import {
   VV_SCREENSHARE_ENABLED_ENV_NAME,
   VV_WAITING_SUBTITLE_ENV_NAME,
   VV_WAITING_TITLE_ENV_NAME,
-  VV_LOGO_URL_ENV_NAME
+  VV_LOGO_URL_ENV_NAME,
+  VV_POSTCALL_SURVEY_TYPE_ENV_NAME,
+  VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME
 } from '../constants';
 
 import { ServerConfigModel, ClientConfigModel, PostCallSurveyType } from '../models/configModel';
-import DefaultConfig from '../defaultConfig.json';
-
-export const getDefaultConfig = (): typeof DefaultConfig => {
-  return DefaultConfig;
-};
+import { getDefaultConfig } from './getDefaultConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
-  const defaultConfigObj = getDefaultConfig();
+  const defaultConfig = getDefaultConfig();
 
   const config = {
     communicationServicesConnectionString:
-      process.env[VV_COMMUNICATION_SERVICES_CONNECTION_STRING] ??
-      defaultConfigObj.communicationServicesConnectionString,
-    microsoftBookingsUrl: process.env[VV_MICROSOFT_BOOKINGS_URL_ENV_NAME] ?? defaultConfigObj.microsoftBookingsUrl,
+      process.env[VV_COMMUNICATION_SERVICES_CONNECTION_STRING] ?? defaultConfig.communicationServicesConnectionString,
+    microsoftBookingsUrl: process.env[VV_MICROSOFT_BOOKINGS_URL_ENV_NAME] ?? defaultConfig.microsoftBookingsUrl,
     chatEnabled:
       typeof process.env[VV_CHAT_ENABLED_ENV_NAME] === 'string'
         ? process.env[VV_CHAT_ENABLED_ENV_NAME]?.toLowerCase() === 'true'
-        : defaultConfigObj.chatEnabled,
+        : defaultConfig.chatEnabled,
     screenShareEnabled:
       typeof process.env[VV_SCREENSHARE_ENABLED_ENV_NAME] === 'string'
         ? process.env[VV_SCREENSHARE_ENABLED_ENV_NAME]?.toLowerCase() === 'true'
-        : defaultConfigObj.screenShareEnabled,
-    companyName: process.env[VV_COMPANY_NAME_ENV_NAME] ?? defaultConfigObj.companyName,
-    colorPalette: process.env[VV_COLOR_PALETTE_ENV_NAME] ?? defaultConfigObj.colorPalette,
-    waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? defaultConfigObj.waitingTitle,
-    waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfigObj.waitingSubtitle,
-    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfigObj.logoUrl
+        : defaultConfig.screenShareEnabled,
+    companyName: process.env[VV_COMPANY_NAME_ENV_NAME] ?? defaultConfig.companyName,
+    colorPalette: process.env[VV_COLOR_PALETTE_ENV_NAME] ?? defaultConfig.colorPalette,
+    waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? defaultConfig.waitingTitle,
+    waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
+    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl
   } as ServerConfigModel;
-  if (defaultConfigObj.postCall?.survey?.type) {
+
+  //Check environment variables for values for postCall and set them if present
+  //else check defaultConfig.json for postCall config values and use them
+  let postCallType: PostCallSurveyType;
+  let postCallSurveyUrl;
+  if (
+    typeof process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] !== undefined &&
+    process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined &&
+    (process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'msforms' ||
+      process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'thirdparty')
+  ) {
+    postCallType = <PostCallSurveyType>process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME]?.toLowerCase();
+    postCallSurveyUrl =
+      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined
+        ? process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME]
+        : '';
+
     config.postCall = {
-      survey: {
-        type: defaultConfigObj.postCall.survey.type as PostCallSurveyType,
-        options: {
-          surveyUrl: defaultConfigObj.postCall.survey.options?.surveyUrl
-        }
-      }
+      survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
+    };
+  } else if (defaultConfig.postCall?.survey?.type) {
+    postCallType = <PostCallSurveyType>defaultConfig.postCall?.survey?.type;
+    postCallSurveyUrl = defaultConfig.postCall?.survey?.options?.surveyUrl;
+    config.postCall = {
+      survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
     };
   }
   return config;
@@ -75,7 +89,7 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
   if (serverConfig.postCall?.survey?.type) {
     config.postCall = {
       survey: {
-        type: serverConfig.postCall?.survey?.type as PostCallSurveyType,
+        type: <PostCallSurveyType>serverConfig.postCall?.survey?.type,
         options: {
           surveyUrl: serverConfig.postCall?.survey?.options?.surveyUrl
         }

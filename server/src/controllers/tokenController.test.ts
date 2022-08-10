@@ -3,7 +3,7 @@
 
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 //import DefaultConfig from '../defaultConfig.json';
-import { getDefaultConfig } from '../utils/getConfig';
+import { getDefaultConfig } from '../utils/getDefaultConfig';
 import { tokenController } from './tokenController';
 import { NextFunction } from 'express';
 import { ServerConfigModel } from '../models/configModel';
