@@ -15,6 +15,5 @@ describe('getDefaultConfig', () => {
     expect(config.colorPalette).toBe(DefaultConfig.colorPalette);
     expect(config.waitingTitle).toBe(DefaultConfig.waitingTitle);
     expect(config.waitingSubtitle).toBe(DefaultConfig.waitingSubtitle);
-    expect(config.postCall).toBe(DefaultConfig.postCall);
   });
 });
