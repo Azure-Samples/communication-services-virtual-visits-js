@@ -42,32 +42,6 @@ export const getServerConfig = (): ServerConfigModel => {
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl
   } as ServerConfigModel;
 
-  //Check environment variables for values for postCall and set them if present
-  //else check defaultConfig.json for postCall config values and use them
-  // let postCallType: PostCallSurveyType;
-  // let postCallSurveyUrl;
-  // if (
-  //   typeof process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] !== undefined &&
-  //   process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined &&
-  //   (process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'msforms' ||
-  //     process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'thirdparty')
-  // ) {
-  //   postCallType = <PostCallSurveyType>process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME]?.toLowerCase();
-  //   postCallSurveyUrl =
-  //     process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined
-  //       ? process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME]
-  //       : '';
-
-  //   config.postCall = {
-  //     survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
-  //   };
-  // } else if (defaultConfig.postCall?.survey?.type && isValidPostCallSurveyType(defaultConfig.postCall?.survey?.type)) {
-  //   postCallType = <PostCallSurveyType>defaultConfig.postCall?.survey?.type;
-  //   postCallSurveyUrl = defaultConfig.postCall?.survey?.options?.surveyUrl;
-  //   config.postCall = {
-  //     survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
-  //   };
-  // }
   if (getPostCallConfig(defaultConfig)) {
     config.postCall = getPostCallConfig(defaultConfig);
   }
