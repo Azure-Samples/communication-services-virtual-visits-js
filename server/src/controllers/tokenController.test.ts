@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { CommunicationIdentityClient } from '@azure/communication-identity';
-//import DefaultConfig from '../defaultConfig.json';
 import { getDefaultConfig } from '../utils/getDefaultConfig';
 import { tokenController } from './tokenController';
 import { NextFunction } from 'express';

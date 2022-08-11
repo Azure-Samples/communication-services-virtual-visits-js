@@ -1,13 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-export type PostCallSurveyType = 'msforms' | 'onequestionpoll' | 'thirdparty';
+export type PostCallSurveyType = 'msforms' | 'thirdparty';
 interface MSFormsSurveryOptions {
   surveyUrl: string;
 }
 interface ThirdPartySurveyOptions {
   surveyUrl: string;
 }
-
+export interface PostCallConfig {
+  survey?: {
+    type: PostCallSurveyType;
+    options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
+  };
+}
 export interface ServerConfigModel {
   communicationServicesConnectionString: string;
   microsoftBookingsUrl: string;
@@ -18,12 +23,7 @@ export interface ServerConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
-  postCall?: {
-    survey?: {
-      type: PostCallSurveyType;
-      options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
-    };
-  };
+  postCall?: PostCallConfig;
 }
 
 export interface ClientConfigModel {
@@ -36,10 +36,5 @@ export interface ClientConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
-  postCall?: {
-    survey?: {
-      type: PostCallSurveyType;
-      options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
-    };
-  };
+  postCall?: PostCallConfig;
 }

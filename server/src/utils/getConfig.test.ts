@@ -146,4 +146,28 @@ describe('config', () => {
     expect(config.postCall?.survey?.options).toBeDefined();
     expect(config.postCall?.survey?.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
+
+  test('getServerConfig returns empty postcall object when postCallSurveyType is invalid', () => {
+    const mockDefaultConfig = {
+      communicationServicesConnectionString: 'dummy endpoint',
+      microsoftBookingsUrl: 'dummyBookingsUrl',
+      chatEnabled: true,
+      screenShareEnabled: true,
+      companyName: 'test Healthcare',
+      colorPalette: '#0078d4',
+      waitingTitle: 'Thank you for choosing Lamna Healthcare',
+      waitingSubtitle: 'Your clinician is joining the meeting',
+      logoUrl: '',
+      postCall: {
+        survey: { type: 'randomtype', options: { surveyUrl: 'thirdpartySurveyURL' } }
+      }
+    };
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
+
+    const config = getConfig.getServerConfig();
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
+    expect(config.postCall).not.toBeDefined();
+  });
 });

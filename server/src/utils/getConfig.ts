@@ -17,7 +17,7 @@ import {
   VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME
 } from '../constants';
 
-import { ServerConfigModel, ClientConfigModel, PostCallSurveyType } from '../models/configModel';
+import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
@@ -44,31 +44,73 @@ export const getServerConfig = (): ServerConfigModel => {
 
   //Check environment variables for values for postCall and set them if present
   //else check defaultConfig.json for postCall config values and use them
-  let postCallType: PostCallSurveyType;
-  let postCallSurveyUrl;
-  if (
-    typeof process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] !== undefined &&
-    process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined &&
-    (process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'msforms' ||
-      process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'thirdparty')
-  ) {
-    postCallType = <PostCallSurveyType>process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME]?.toLowerCase();
-    postCallSurveyUrl =
-      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined
-        ? process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME]
-        : '';
+  // let postCallType: PostCallSurveyType;
+  // let postCallSurveyUrl;
+  // if (
+  //   typeof process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] !== undefined &&
+  //   process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined &&
+  //   (process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'msforms' ||
+  //     process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] === 'thirdparty')
+  // ) {
+  //   postCallType = <PostCallSurveyType>process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME]?.toLowerCase();
+  //   postCallSurveyUrl =
+  //     process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] !== undefined
+  //       ? process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME]
+  //       : '';
 
-    config.postCall = {
-      survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
-    };
-  } else if (defaultConfig.postCall?.survey?.type) {
-    postCallType = <PostCallSurveyType>defaultConfig.postCall?.survey?.type;
-    postCallSurveyUrl = defaultConfig.postCall?.survey?.options?.surveyUrl;
-    config.postCall = {
-      survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
-    };
+  //   config.postCall = {
+  //     survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
+  //   };
+  // } else if (defaultConfig.postCall?.survey?.type && isValidPostCallSurveyType(defaultConfig.postCall?.survey?.type)) {
+  //   postCallType = <PostCallSurveyType>defaultConfig.postCall?.survey?.type;
+  //   postCallSurveyUrl = defaultConfig.postCall?.survey?.options?.surveyUrl;
+  //   config.postCall = {
+  //     survey: { type: postCallType, options: { surveyUrl: postCallSurveyUrl } }
+  //   };
+  // }
+  if (getPostCallConfig(defaultConfig)) {
+    config.postCall = getPostCallConfig(defaultConfig);
   }
   return config;
+};
+
+const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
+  return ['msforms', 'thirdparty'].indexOf(postcallSurveyType) !== -1;
+};
+
+const getPostCallConfig = (defaultConfig: any): PostCallConfig | undefined => {
+  let postcallConfig: PostCallConfig | undefined;
+  //Setting values for postcallconfig from defaultconfig values first (if valid)
+  if (
+    defaultConfig.postCall?.survey?.type &&
+    isValidPostCallSurveyType(defaultConfig.postCall?.survey?.type) &&
+    defaultConfig.postCall?.survey?.options?.surveyUrl
+  ) {
+    postcallConfig = {
+      survey: {
+        type: defaultConfig.postCall?.survey?.type,
+        options: { surveyUrl: defaultConfig.postCall?.survey?.options?.surveyUrl }
+      }
+    };
+  }
+
+  try {
+    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME];
+    const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME];
+
+    if (
+      postcallSurveyType &&
+      (postcallSurveyType === 'msforms' || postcallSurveyType === 'thirdparty') &&
+      postcallSurveyUrl
+    ) {
+      postcallConfig = {
+        survey: { type: postcallSurveyType, options: { surveyUrl: postcallSurveyUrl } }
+      };
+    }
+  } catch (e) {
+    console.error('Unable to parse post call values from environment variables');
+  }
+  return postcallConfig;
 };
 
 export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigModel => {
