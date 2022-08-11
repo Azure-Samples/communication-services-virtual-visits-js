@@ -51,7 +51,7 @@ const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyTy
   return ['msforms', 'thirdparty'].indexOf(postcallSurveyType) !== -1;
 };
 
-const getPostCallConfig = (defaultConfig: any): PostCallConfig | undefined => {
+const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | undefined => {
   let postcallConfig: PostCallConfig | undefined;
   //Setting values for postcallconfig from defaultconfig values first (if valid)
   if (
