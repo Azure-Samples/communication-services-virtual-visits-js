@@ -39,10 +39,9 @@ export const getServerConfig = (): ServerConfigModel => {
     colorPalette: process.env[VV_COLOR_PALETTE_ENV_NAME] ?? defaultConfig.colorPalette,
     waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? defaultConfig.waitingTitle,
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
-    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl
+    logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl,
+    postCall: getPostCallConfig(defaultConfig)
   } as ServerConfigModel;
-
-  config.postCall = getPostCallConfig(defaultConfig);
 
   return config;
 };
@@ -54,28 +53,13 @@ const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyTy
 const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | undefined => {
   let postcallConfig: PostCallConfig | undefined;
   //Setting values for postcallconfig from defaultconfig values first (if valid)
-  if (
-    defaultConfig.postCall?.survey?.type &&
-    isValidPostCallSurveyType(defaultConfig.postCall?.survey?.type) &&
-    defaultConfig.postCall?.survey?.options?.surveyUrl
-  ) {
-    postcallConfig = {
-      survey: {
-        type: defaultConfig.postCall?.survey?.type,
-        options: { surveyUrl: defaultConfig.postCall?.survey?.options?.surveyUrl }
-      }
-    };
-  }
 
   try {
-    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME];
-    const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME];
+    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey?.type;
+    const postcallSurveyUrl =
+      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? defaultConfig.postCall?.survey?.options?.surveyUrl;
 
-    if (
-      postcallSurveyType &&
-      (postcallSurveyType === 'msforms' || postcallSurveyType === 'thirdparty') &&
-      postcallSurveyUrl
-    ) {
+    if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType) && postcallSurveyUrl) {
       postcallConfig = {
         survey: { type: postcallSurveyType, options: { surveyUrl: postcallSurveyUrl } }
       };
@@ -98,18 +82,9 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
     colorPalette: serverConfig.colorPalette,
     waitingTitle: serverConfig.waitingTitle,
     waitingSubtitle: serverConfig.waitingSubtitle,
-    logoUrl: serverConfig.logoUrl
+    logoUrl: serverConfig.logoUrl,
+    postCall: serverConfig.postCall
   } as ClientConfigModel;
 
-  if (serverConfig.postCall?.survey?.type) {
-    config.postCall = {
-      survey: {
-        type: <PostCallSurveyType>serverConfig.postCall?.survey?.type,
-        options: {
-          surveyUrl: serverConfig.postCall?.survey?.options?.surveyUrl
-        }
-      }
-    };
-  }
   return config;
 };
