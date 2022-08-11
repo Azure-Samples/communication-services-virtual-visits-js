@@ -42,9 +42,8 @@ export const getServerConfig = (): ServerConfigModel => {
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl
   } as ServerConfigModel;
 
-  if (getPostCallConfig(defaultConfig)) {
-    config.postCall = getPostCallConfig(defaultConfig);
-  }
+  config.postCall = getPostCallConfig(defaultConfig);
+
   return config;
 };
 
