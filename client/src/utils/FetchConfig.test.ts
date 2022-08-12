@@ -22,7 +22,10 @@ describe('FetchConfig', () => {
       companyName: 'Company',
       colorPalette: '#FFFFFF',
       waitingTitle: 'title',
-      waitingSubtitle: 'subtitle'
+      waitingSubtitle: 'subtitle',
+      postCall: {
+        survey: { type: 'msforms', options: { surveyUrl: 'msFormsSurveyURL' } }
+      }
     };
 
     global.fetch = jest.fn(
@@ -44,6 +47,11 @@ describe('FetchConfig', () => {
     expect(fetchedConfig?.waitingTitle).toBe(mockConfig.waitingTitle);
     expect(fetchedConfig?.theme).toBeDefined();
     expect(fetchedConfig?.waitingSubtitle).toBe(mockConfig.waitingSubtitle);
+    expect(fetchedConfig?.postCall).toBeDefined();
+    expect(fetchedConfig?.postCall?.survey).toBeDefined();
+    expect(fetchedConfig?.postCall?.survey?.type).toBe('msforms');
+    expect(fetchedConfig?.postCall?.survey?.options).toBeDefined();
+    expect(fetchedConfig?.postCall?.survey?.options?.surveyUrl).toBe('msFormsSurveyURL');
   });
 
   test('Should return undefined if status code is not 200', async () => {
