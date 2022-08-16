@@ -74,11 +74,23 @@
     "logoUrl": {
       "type": "string",
       "defaultValue": ""
+    },
+    "postCall": {
+      "type": "object",
+      "defaultValue": {
+		  "survey": {
+			  "type": "none",
+			  "options": {
+				  "surveyUrl": ""
+			  }
+		  }
+	  }
     }
   },
   "variables": {
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
-    "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip"
+    "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip",
+    "postCalltype": "parameters('postCall').survey.type"
   },
   "resources": [
     {
@@ -135,7 +147,9 @@
             "VV_COLOR_PALETTE": "[parameters('colorPalette')]",
             "VV_WAITING_TITLE": "[parameters('waitingTitle')]",
             "VV_WAITING_SUBTITLE": "[parameters('waitingSubtitle')]",
-            "VV_LOGO_URL": "[parameters('logoUrl')]"
+            "VV_LOGO_URL": "[parameters('logoUrl')]",
+            "VV_POSTCALL_SURVEY_TYPE": "[variables('postCalltype')]",
+			      "VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL": "[parameters('postCall').survey.options.surveyUrl]"
           }
         },
         {
