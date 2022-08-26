@@ -11,14 +11,16 @@ import {
   createAzureCommunicationCallWithChatAdapterFromClients,
   createStatefulChatClient
 } from '@azure/communication-react';
-import { Theme, PartialTheme, Spinner } from '@fluentui/react';
+import { Theme, PartialTheme, Spinner, Link } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
+import { Survey } from '../components/Survey';
+import ReactDOM from 'react-dom';
 
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
@@ -64,7 +66,15 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           endpointUrl,
           chatEnabled
         );
-
+        adapter.on('callEnded', async () => {
+          ReactDOM.render(
+            <React.StrictMode>
+              <Survey />
+              <Link onClick={() => adapter.joinCall()}>{'or re-join the call'}</Link>
+            </React.StrictMode>,
+            document.getElementById('root')
+          );
+        });
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging

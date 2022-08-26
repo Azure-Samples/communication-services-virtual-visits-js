@@ -7,5 +7,13 @@
   "colorPalette": "#0078d4",
   "waitingTitle": "Thank you for choosing Lamna Healthcare",
   "waitingSubtitle": "Your clinician is joining the meeting",
-  "logoUrl": ""
+  "logoUrl": "",
+  "postCall": {
+    "survey": {
+      "type": "msforms",
+      "options": {
+        "surveyUrl": "https://forms.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR0bub2Uua3hJoCvbHUQHrfJUOUJSRjhKWEFUVlFDVFZZMUcyVUFEMklGVy4u"
+      }
+    }
+  }
 }
