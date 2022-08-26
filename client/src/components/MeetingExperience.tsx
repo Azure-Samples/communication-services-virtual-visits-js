@@ -21,6 +21,7 @@ import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles'
 import { createStubChatClient } from '../utils/stubs/chat';
 import { Survey } from '../components/Survey';
 import ReactDOM from 'react-dom';
+import { PostCallConfig } from '../models/ConfigModel';
 
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
@@ -33,6 +34,7 @@ export interface MeetingExperienceProps {
   waitingSubtitle: string;
   logoUrl: string;
   chatEnabled: boolean;
+  postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
 
@@ -48,10 +50,12 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     userId,
     waitingSubtitle,
     waitingTitle,
+    postCall,
     onDisplayError
   } = props;
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
+  const [renderPostCall, setRenderPostCall] = useState(false);
 
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
@@ -67,13 +71,9 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           chatEnabled
         );
         adapter.on('callEnded', async () => {
-          ReactDOM.render(
-            <React.StrictMode>
-              <Survey />
-              <Link onClick={() => adapter.joinCall()}>{'or re-join the call'}</Link>
-            </React.StrictMode>,
-            document.getElementById('root')
-          );
+          if (postCall?.survey?.type && postCall?.survey?.type === 'msforms') {
+            setRenderPostCall(true);
+          }
         });
         setCallWithChatAdapter(adapter);
       } catch (err) {
@@ -120,7 +120,6 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
       />
     );
   }
-
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
   }
