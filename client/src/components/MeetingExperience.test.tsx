@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import React from 'react';
 import { CallWithChatComposite } from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
@@ -86,7 +87,7 @@ describe('MeetingExperience', () => {
     await runFakeTimers();
     meetingExperience.update();
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-
+    console.log(callWithChatComposites);
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().locale?.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(
       waitingTitle
@@ -131,6 +132,10 @@ describe('MeetingExperience', () => {
   });
 
   it('should render Survey component', async () => {
+    const setRenderPostCallMock = jest.fn();
+    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
+    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+
     const meetingExperience = await mount(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -149,10 +154,12 @@ describe('MeetingExperience', () => {
     );
 
     await runFakeTimers();
+
     meetingExperience.update();
-    meetingExperience.instance().setState({ renderPostCall: true });
     const survey = meetingExperience.find(Survey);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
 
     expect(survey.length).toBe(1);
+    expect(callWithChatComposites.length).toBe(0);
   });
 });
