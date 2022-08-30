@@ -14,6 +14,8 @@ import {
   createMockStatefulChatClient,
   runFakeTimers
 } from '../utils/TestUtils';
+import { PostCallConfig } from '../models/ConfigModel';
+import { Survey } from '../components/Survey';
 
 configure({ adapter: new Adapter() });
 
@@ -41,6 +43,15 @@ jest.mock('@azure/communication-common', () => {
   };
 });
 
+const mockPostCall: PostCallConfig = {
+  survey: {
+    type: 'msforms',
+    options: {
+      surveyUrl: 'dummySurveyUrl'
+    }
+  }
+};
+
 describe('MeetingExperience', () => {
   const waitingTitle = 'waiting title';
   const waitingSubtitle = 'waiting subtitle';
@@ -67,6 +78,7 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
     );
@@ -104,6 +116,7 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
     );
@@ -115,5 +128,31 @@ describe('MeetingExperience', () => {
 
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
+  });
+
+  it('should render Survey component', async () => {
+    const meetingExperience = await mount(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={mockPostCall}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    meetingExperience.update();
+    meetingExperience.instance().setState({ renderPostCall: true });
+    const survey = meetingExperience.find(Survey);
+
+    expect(survey.length).toBe(1);
   });
 });

@@ -11,18 +11,17 @@ import {
   createAzureCommunicationCallWithChatAdapterFromClients,
   createStatefulChatClient
 } from '@azure/communication-react';
-import { Theme, PartialTheme, Spinner, Link } from '@fluentui/react';
+import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
 import { Survey } from '../components/Survey';
-import ReactDOM from 'react-dom';
-import { PostCallConfig } from '../models/ConfigModel';
 
+import { PostCallConfig, PostCallSurveyType } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -37,6 +36,10 @@ export interface MeetingExperienceProps {
   postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
+
+const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
+  return ['msforms', 'thirdparty'].indexOf(postcallSurveyType) !== -1;
+};
 
 export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element => {
   const {
@@ -56,7 +59,6 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
   const [renderPostCall, setRenderPostCall] = useState(false);
-
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           chatEnabled
         );
         adapter.on('callEnded', async () => {
-          if (postCall?.survey?.type && postCall?.survey?.type === 'msforms') {
+          if (postCall?.survey?.type && isValidPostCallSurveyType(postCall?.survey?.type)) {
             setRenderPostCall(true);
           }
         });
@@ -85,11 +87,22 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
     _createAdapters();
   }, [credential, displayName, endpointUrl, locator, userId, onDisplayError]);
-
   if (callWithChatAdapter) {
     const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+
+    if (renderPostCall) {
+      return (
+        <Survey
+          postCall={postCall}
+          onRejoinCall={() => {
+            setRenderPostCall(false);
+            callWithChatAdapter.joinCall();
+          }}
+        />
+      );
+    }
 
     return (
       <CallWithChatComposite
