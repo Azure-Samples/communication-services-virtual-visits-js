@@ -16,6 +16,7 @@ import {
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
 import { Survey } from '../components/Survey';
+import React from 'react';
 
 configure({ adapter: new Adapter() });
 
@@ -51,6 +52,10 @@ const mockPostCall: PostCallConfig = {
     }
   }
 };
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('MeetingExperience', () => {
   const waitingTitle = 'waiting title';
@@ -130,8 +135,8 @@ describe('MeetingExperience', () => {
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
   });
 
-  it('should render Survey component', async () => {
-    const meetingExperience = await mount(
+  it('should render CallWithChatComposite when renderPostCall is false', async () => {
+    const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
@@ -150,9 +155,42 @@ describe('MeetingExperience', () => {
 
     await runFakeTimers();
     meetingExperience.update();
-    meetingExperience.instance().setState({ renderPostCall: true });
-    const survey = meetingExperience.find(Survey);
 
+    const survey = meetingExperience.find(Survey);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+
+    expect(survey.length).toBe(0);
+    expect(callWithChatComposites.length).toBe(1);
+  });
+
+  it('should render Survey component', async () => {
+    const setRenderPostCallMock = jest.fn();
+    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
+    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+
+    const meetingExperience = await mount<MeetingExperienceProps>(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={mockPostCall}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    meetingExperience.update();
+
+    const survey = meetingExperience.find(Survey);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+    expect(callWithChatComposites.length).toBe(0);
     expect(survey.length).toBe(1);
   });
 });

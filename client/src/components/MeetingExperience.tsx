@@ -9,7 +9,8 @@ import {
   COMPOSITE_LOCALE_EN_US,
   createStatefulCallClient,
   createAzureCommunicationCallWithChatAdapterFromClients,
-  createStatefulChatClient
+  createStatefulChatClient,
+  CallWithChatAdapterState
 } from '@azure/communication-react';
 import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
@@ -77,6 +78,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
             setRenderPostCall(true);
           }
         });
+
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -97,8 +99,11 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
         <Survey
           postCall={postCall}
           onRejoinCall={() => {
-            setRenderPostCall(false);
             callWithChatAdapter.joinCall();
+            callWithChatAdapter.onStateChange((state: CallWithChatAdapterState) => {
+              if (state.page === 'configuration') state.page = 'lobby';
+              setRenderPostCall(false);
+            });
           }}
         />
       );
