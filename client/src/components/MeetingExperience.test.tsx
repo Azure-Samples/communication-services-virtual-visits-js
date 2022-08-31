@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import React from 'react';
 import { CallWithChatComposite } from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
@@ -91,7 +92,6 @@ describe('MeetingExperience', () => {
     await runFakeTimers();
     meetingExperience.update();
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().locale?.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(
       waitingTitle
@@ -186,11 +186,13 @@ describe('MeetingExperience', () => {
     );
 
     await runFakeTimers();
+
     meetingExperience.update();
 
     const survey = meetingExperience.find(Survey);
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
     expect(callWithChatComposites.length).toBe(0);
     expect(survey.length).toBe(1);
+    expect(callWithChatComposites.length).toBe(0);
   });
 });
