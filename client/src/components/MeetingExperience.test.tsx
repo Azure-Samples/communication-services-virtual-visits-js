@@ -17,8 +17,6 @@ import {
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
 import { Survey } from '../components/Survey';
-import React from 'react';
-
 configure({ adapter: new Adapter() });
 
 // Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
