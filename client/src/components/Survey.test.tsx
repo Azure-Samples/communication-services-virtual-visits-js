@@ -18,10 +18,10 @@ const mockPostCall: PostCallConfig = {
 };
 
 describe('Survey', () => {
-  it('should render', async () => {
+  it('should render iframe with correct url', async () => {
     const survey = await mount<SurveyProps>(<Survey postCall={mockPostCall} onRejoinCall={jest.fn()} />);
-    expect(survey.find('iframe').length).toBe(1);
-    expect(survey.props().postCall?.survey?.type).toBe(mockPostCall.survey?.type);
-    expect(survey.props().postCall?.survey?.options.surveyUrl).toBe(mockPostCall.survey?.options.surveyUrl);
+    const iframe = survey.find('iframe');
+    expect(iframe.length).toBe(1);
+    expect(iframe.props().src).toEqual(mockPostCall.survey?.options.surveyUrl);
   });
 });
