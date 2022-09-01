@@ -22,7 +22,7 @@ import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles'
 import { createStubChatClient } from '../utils/stubs/chat';
 import { Survey } from '../components/Survey';
 
-import { PostCallConfig, PostCallSurveyType } from '../models/ConfigModel';
+import { PostCallConfig } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -37,10 +37,6 @@ export interface MeetingExperienceProps {
   postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
-
-const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
-  return ['msforms', 'thirdparty'].indexOf(postcallSurveyType) !== -1;
-};
 
 export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element => {
   const {
@@ -59,7 +55,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
   } = props;
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
-  const [renderPostCall, setRenderPostCall] = useState(false);
+  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -73,7 +69,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           endpointUrl,
           chatEnabled
         );
-        if (postCall?.survey?.type && isValidPostCallSurveyType(postCall?.survey?.type)) {
+        if (postCall?.survey?.type) {
           adapter.on('callEnded', () => {
             setRenderPostCall(true);
           });
@@ -94,7 +90,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-    if (renderPostCall) {
+    if (renderPostCall && postCall) {
       return (
         <Survey
           postCall={postCall}

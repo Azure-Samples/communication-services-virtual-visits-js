@@ -5,3 +5,5 @@ export const surveyStyle = {
 };
 
 export const rejoinLinkStyle = { root: { height: '5rem' } };
+
+export const surveyIframeStyle = { height: '100%', width: '100%', border: 0 };
