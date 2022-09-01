@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 export type PostCallSurveyType = 'msforms' | 'thirdparty';
-interface MSFormsSurveryOptions {
+interface MSFormsSurveyOptions {
   surveyUrl: string;
 }
 interface ThirdPartySurveyOptions {
@@ -10,7 +10,7 @@ interface ThirdPartySurveyOptions {
 export interface PostCallConfig {
   survey?: {
     type: PostCallSurveyType;
-    options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
+    options: MSFormsSurveyOptions | ThirdPartySurveyOptions;
   };
 }
 export interface ServerConfigModel {
