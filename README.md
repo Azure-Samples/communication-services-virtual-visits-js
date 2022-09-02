@@ -14,6 +14,7 @@ Azure Communication Services Virtual Visits is a web app you can host to provide
 - **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
 - **Industry.** A virtual appointment template with pre-selected theme color schemes.
+- **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends.
 
 ## Getting Started
 
@@ -102,6 +103,7 @@ Where do I set this?
 - The variables used in the config can be set as environment variables in your system.
 - The server retrieves the config to use from the system environment variables. On local machines you'll have to set this up manually. For deploy to Azure button, the ARM template will set this up for you.
 - The environment variables currently used in the config are:
+
   - `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
   - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
   - `VV_CHAT_ENABLED`. Example value: "true".
@@ -111,6 +113,9 @@ Where do I set this?
   - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
+  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "thirdpartysurvey".
+  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/suvey
+
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
   - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
@@ -122,6 +127,17 @@ Where do I set this?
   - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
+  - `postCall`. Example value:
+  ```
+   "postCall": {
+      "survey": {
+         "type": "msforms",
+          "options": {
+             "surveyUrl": "https://forms.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR0bub2Uua3hJoCvb"
+                      }
+                }
+            }
+  ```
 
 ### End to End tests
 

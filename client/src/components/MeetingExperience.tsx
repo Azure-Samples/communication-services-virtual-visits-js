@@ -74,7 +74,6 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
             setRenderPostCall(true);
           });
         }
-
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -95,10 +94,10 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
         <Survey
           postCall={postCall}
           onRejoinCall={() => {
+            setRenderPostCall(false);
             callWithChatAdapter.onStateChange((state: CallWithChatAdapterState) => {
-              //page is set to lobby to avoid flicker of Devices page when "rejoin call is clicked"
+              //page is set to lobby to avoid flicker of Devices page when "rejoin call" is clicked
               if (state.page === 'configuration') state.page = 'lobby';
-              setRenderPostCall(false);
             });
             callWithChatAdapter.joinCall();
           }}
