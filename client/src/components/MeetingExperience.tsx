@@ -9,9 +9,10 @@ import {
   COMPOSITE_LOCALE_EN_US,
   createStatefulCallClient,
   createAzureCommunicationCallWithChatAdapterFromClients,
-  createStatefulChatClient
+  createStatefulChatClient,
+  CallWithChatAdapterState
 } from '@azure/communication-react';
-import { Theme, PartialTheme, Spinner } from '@fluentui/react';
+import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
 import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
@@ -19,7 +20,9 @@ import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
+import { Survey } from '../components/Survey';
 
+import { PostCallConfig } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -31,6 +34,7 @@ export interface MeetingExperienceProps {
   waitingSubtitle: string;
   logoUrl: string;
   chatEnabled: boolean;
+  postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
 
@@ -46,11 +50,12 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     userId,
     waitingSubtitle,
     waitingTitle,
+    postCall,
     onDisplayError
   } = props;
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
-
+  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -64,7 +69,11 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           endpointUrl,
           chatEnabled
         );
-
+        if (postCall?.survey?.type) {
+          adapter.on('callEnded', () => {
+            setRenderPostCall(true);
+          });
+        }
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -75,11 +84,26 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
     _createAdapters();
   }, [credential, displayName, endpointUrl, locator, userId, onDisplayError]);
-
   if (callWithChatAdapter) {
     const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+
+    if (renderPostCall && postCall) {
+      return (
+        <Survey
+          postCall={postCall}
+          onRejoinCall={() => {
+            setRenderPostCall(false);
+            callWithChatAdapter.onStateChange((state: CallWithChatAdapterState) => {
+              //page is set to lobby to avoid flicker of Devices page when "rejoin call" is clicked
+              if (state.page === 'configuration') state.page = 'lobby';
+            });
+            callWithChatAdapter.joinCall();
+          }}
+        />
+      );
+    }
 
     return (
       <CallWithChatComposite
@@ -110,7 +134,6 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
       />
     );
   }
-
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
   }

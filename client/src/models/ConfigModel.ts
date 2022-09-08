@@ -3,12 +3,19 @@
 
 import { Theme } from '@fluentui/theme';
 
-type PostCallSurveyType = 'msforms' | 'thirdparty';
-interface MSFormsSurveryOptions {
+export type PostCallSurveyType = 'msforms' | 'thirdparty';
+interface MSFormsSurveyOptions {
   surveyUrl: string;
 }
 interface ThirdPartySurveyOptions {
   surveyUrl: string;
+}
+
+export interface PostCallConfig {
+  survey?: {
+    type: PostCallSurveyType;
+    options: MSFormsSurveyOptions | ThirdPartySurveyOptions;
+  };
 }
 export interface AppConfigModel {
   communicationEndpoint: string;
@@ -20,10 +27,5 @@ export interface AppConfigModel {
   waitingTitle: string;
   waitingSubtitle: string;
   logoUrl: string;
-  postCall?: {
-    survey?: {
-      type: PostCallSurveyType;
-      options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
-    };
-  };
+  postCall?: PostCallConfig;
 }

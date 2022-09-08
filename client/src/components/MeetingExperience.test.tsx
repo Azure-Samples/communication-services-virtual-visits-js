@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import React from 'react';
 import { CallWithChatComposite } from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
@@ -14,7 +15,8 @@ import {
   createMockStatefulChatClient,
   runFakeTimers
 } from '../utils/TestUtils';
-
+import { PostCallConfig } from '../models/ConfigModel';
+import { Survey } from '../components/Survey';
 configure({ adapter: new Adapter() });
 
 // Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
@@ -39,6 +41,19 @@ jest.mock('@azure/communication-common', () => {
       return { token: '', getToken: () => '' };
     }
   };
+});
+
+const mockPostCall: PostCallConfig = {
+  survey: {
+    type: 'msforms',
+    options: {
+      surveyUrl: 'dummySurveyUrl'
+    }
+  }
+};
+
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('MeetingExperience', () => {
@@ -67,6 +82,7 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
     );
@@ -74,7 +90,6 @@ describe('MeetingExperience', () => {
     await runFakeTimers();
     meetingExperience.update();
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().locale?.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(
       waitingTitle
@@ -104,6 +119,7 @@ describe('MeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
     );
@@ -115,5 +131,66 @@ describe('MeetingExperience', () => {
 
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
+  });
+
+  it('should render CallWithChatComposite when renderPostCall is false', async () => {
+    const meetingExperience = await mount<MeetingExperienceProps>(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={mockPostCall}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    meetingExperience.update();
+
+    const survey = meetingExperience.find(Survey);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+
+    expect(survey.length).toBe(0);
+    expect(callWithChatComposites.length).toBe(1);
+  });
+
+  it('should render Survey component', async () => {
+    const setRenderPostCallMock = jest.fn();
+    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
+    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+
+    const meetingExperience = await mount<MeetingExperienceProps>(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={mockPostCall}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+
+    meetingExperience.update();
+
+    const survey = meetingExperience.find(Survey);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+    expect(callWithChatComposites.length).toBe(0);
+    expect(survey.length).toBe(1);
+    expect(callWithChatComposites.length).toBe(0);
   });
 });
