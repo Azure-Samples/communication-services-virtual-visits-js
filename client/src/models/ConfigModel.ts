@@ -12,7 +12,7 @@ interface ThirdPartySurveyOptions {
 }
 
 export interface PostCallConfig {
-  survey?: {
+  survey: {
     type: PostCallSurveyType;
     options: MSFormsSurveyOptions | ThirdPartySurveyOptions;
   };

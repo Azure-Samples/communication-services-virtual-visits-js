@@ -18,7 +18,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
       <iframe
         title={SURVEY}
         style={surveyIframeStyle}
-        src={props.postCall.survey?.options.surveyUrl}
+        src={props.postCall.survey.options.surveyUrl}
         scrolling="yes"
       ></iframe>
       <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>

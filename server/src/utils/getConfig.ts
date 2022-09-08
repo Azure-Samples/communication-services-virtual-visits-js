@@ -55,9 +55,9 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
   //Setting values for postcallconfig from defaultconfig values first (if valid)
 
   try {
-    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey?.type;
+    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey.type;
     const postcallSurveyUrl =
-      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? defaultConfig.postCall?.survey?.options?.surveyUrl;
+      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? defaultConfig.postCall?.survey.options?.surveyUrl;
 
     if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType) && postcallSurveyUrl) {
       postcallConfig = {

@@ -127,7 +127,8 @@ Where do I set this?
   - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
-  - `postCall`. Example value:
+  - `postCall`. Add the link to your survey in "surveyUrl" below. Set "type" to "msforms" if using MSForms or "thirdparty" for other survey providers. This survey will then be shown to the user in an iframe after your call.
+    Example value:
   ```
    "postCall": {
       "survey": {
