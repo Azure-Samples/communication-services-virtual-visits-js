@@ -114,7 +114,7 @@ Where do I set this?
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
   - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "thirdpartysurvey".
-  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/suvey
+  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/survey".
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
@@ -128,16 +128,16 @@ Where do I set this?
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
   - `postCall`. Example value:
-  ```
-   "postCall": {
+    ```json
+    "postCall": {
       "survey": {
-         "type": "msforms",
+        "type": "msforms",
           "options": {
-             "surveyUrl": "https://forms.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR0bub2Uua3hJoCvb"
-                      }
-                }
-            }
-  ```
+            "surveyUrl": "https://your_survey_service/survey"
+          }
+        }
+      }
+    ```
 
 ### End to End tests
 
