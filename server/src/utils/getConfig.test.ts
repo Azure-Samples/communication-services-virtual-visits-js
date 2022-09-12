@@ -131,7 +131,7 @@ describe('config', () => {
       waitingSubtitle: 'Your clinician is joining the meeting',
       logoUrl: '',
       postCall: {
-        survey: { type: 'thirdparty', options: { surveyUrl: 'thirdpartySurveyURL' } }
+        survey: { type: 'custom', options: { surveyUrl: 'customSurveyURL' } }
       }
     };
     const getDefaultConfigSpy = jest
@@ -159,7 +159,7 @@ describe('config', () => {
       waitingSubtitle: 'Your clinician is joining the meeting',
       logoUrl: '',
       postCall: {
-        survey: { type: 'randomtype', options: { surveyUrl: 'thirdpartySurveyURL' } }
+        survey: { type: 'randomtype', options: { surveyUrl: 'customSurveyURL' } }
       }
     };
     const getDefaultConfigSpy = jest
