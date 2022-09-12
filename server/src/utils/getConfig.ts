@@ -47,7 +47,7 @@ export const getServerConfig = (): ServerConfigModel => {
 };
 
 const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
-  return ['msforms', 'thirdparty'].indexOf(postcallSurveyType) !== -1;
+  return ['msforms', 'custom'].indexOf(postcallSurveyType) !== -1;
 };
 
 const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | undefined => {
