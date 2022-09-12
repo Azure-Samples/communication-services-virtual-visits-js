@@ -49,9 +49,9 @@ describe('FetchConfig', () => {
     expect(fetchedConfig?.waitingSubtitle).toBe(mockConfig.waitingSubtitle);
     expect(fetchedConfig?.postCall).toBeDefined();
     expect(fetchedConfig?.postCall?.survey).toBeDefined();
-    expect(fetchedConfig?.postCall?.survey?.type).toBe('msforms');
-    expect(fetchedConfig?.postCall?.survey?.options).toBeDefined();
-    expect(fetchedConfig?.postCall?.survey?.options?.surveyUrl).toBe('msFormsSurveyURL');
+    expect(fetchedConfig?.postCall?.survey.type).toBe('msforms');
+    expect(fetchedConfig?.postCall?.survey.options).toBeDefined();
+    expect(fetchedConfig?.postCall?.survey.options?.surveyUrl).toBe('msFormsSurveyURL');
   });
 
   test('Should return undefined if status code is not 200', async () => {

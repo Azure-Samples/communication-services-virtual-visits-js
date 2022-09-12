@@ -114,9 +114,9 @@ describe('config', () => {
     expect(clientConfig.companyName).toBe('test Healthcare');
     expect(clientConfig.postCall).toBeDefined();
     expect(clientConfig.postCall?.survey).toBeDefined();
-    expect(clientConfig.postCall?.survey?.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(clientConfig.postCall?.survey?.options).toBeDefined();
-    expect(clientConfig.postCall?.survey?.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
+    expect(clientConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
+    expect(clientConfig.postCall?.survey.options).toBeDefined();
+    expect(clientConfig.postCall?.survey.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 
   test('getServerConfig returns correctly mapped values for a specific postcall option', () => {
@@ -142,9 +142,9 @@ describe('config', () => {
     expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(config.postCall).toBeDefined();
     expect(config.postCall?.survey).toBeDefined();
-    expect(config.postCall?.survey?.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(config.postCall?.survey?.options).toBeDefined();
-    expect(config.postCall?.survey?.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
+    expect(config.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
+    expect(config.postCall?.survey.options).toBeDefined();
+    expect(config.postCall?.survey.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 
   test('getServerConfig returns empty postcall object when postCallSurveyType is invalid', () => {
