@@ -69,7 +69,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           endpointUrl,
           chatEnabled
         );
-        if (postCall?.survey?.type) {
+        if (postCall?.survey.type) {
           adapter.on('callEnded', () => {
             setRenderPostCall(true);
           });

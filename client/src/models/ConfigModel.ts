@@ -12,7 +12,7 @@ interface CustomSurveyOptions {
 }
 
 export interface PostCallConfig {
-  survey?: {
+  survey: {
     type: PostCallSurveyType;
     options: MSFormsSurveyOptions | CustomSurveyOptions;
   };
