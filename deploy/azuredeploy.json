@@ -56,11 +56,7 @@
     "waitingSubtitle": "Your clinician is joining the meeting",
     "logoUrl": "",
     "postCallSurveyType": "",
-    "postCallSurveyOptionsSurveyUrl": "",
-    "postCallSurveyOneQuestionPollTitle": "",
-    "postCallSurveyOneQuestionPollPrompt": "",
-    "postCallSurveyOneQuestionPollPromptType": "",
-    "postCallSurveyOneQuestionPollSaveButtonText": ""
+    "postCallSurveyOptionsSurveyUrl": ""
   },
   "resources": [
     {
@@ -119,11 +115,7 @@
             "VV_WAITING_SUBTITLE": "[variables('waitingSubtitle')]",
             "VV_LOGO_URL": "[variables('logoUrl')]",
             "VV_POSTCALL_SURVEY_TYPE": "[variables('postCallSurveyType')]",
-            "VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL": "[variables('postCallSurveyOptionsSurveyUrl')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME": "[variables('postCallSurveyOneQuestionPollTitle')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME": "[variables('postCallSurveyOneQuestionPollPrompt')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_TYPE_ENV_NAME": "[variables('postCallSurveyOneQuestionPollPromptType')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME": "[variables('postCallSurveyOneQuestionPollSaveButtonText')]"
+            "VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL": "[variables('postCallSurveyOptionsSurveyUrl')]"
           }
         },
         {
