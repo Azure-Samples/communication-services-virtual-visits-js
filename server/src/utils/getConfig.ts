@@ -73,7 +73,7 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
     if (postcallSurveyType === 'msforms') {
       const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
       postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
-    } else if (postcallSurveyType === 'thirdparty') {
+    } else if (postcallSurveyType === 'custom') {
       const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
       postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
     } else {

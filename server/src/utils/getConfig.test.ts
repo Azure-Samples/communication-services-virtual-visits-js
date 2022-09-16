@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { CustomSurveyOptions, MSFormsSurveyOptions } from '../models/configModel';
 import * as getConfig from './getConfig';
 import * as getDefaultConfig from './getDefaultConfig';
 
@@ -64,6 +65,7 @@ describe('config', () => {
     process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = 'msformstesturl';
 
     const config = getConfig.getServerConfig();
+    const options: MSFormsSurveyOptions = config?.postCall?.survey.options as MSFormsSurveyOptions;
 
     expect(config.communicationServicesConnectionString).toBe(process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING);
     expect(config.microsoftBookingsUrl).toBe(process.env.VV_MICROSOFT_BOOKINGS_URL);
@@ -74,8 +76,8 @@ describe('config', () => {
     expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
     expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
     expect(config.logoUrl).toBe(process.env.VV_LOGO_URL);
-    expect(config.postCall?.survey?.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
-    expect(config.postCall?.survey?.options?.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
+    expect(config.postCall?.survey.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
+    expect(options.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
   });
 
   test('client config should not contain the connection string', () => {
@@ -109,6 +111,7 @@ describe('config', () => {
     const serverConfig = getConfig.getServerConfig();
     serverConfig.communicationServicesConnectionString = 'endpoint=test_endpoint_value;accesskey=secret';
     const clientConfig = getConfig.getClientConfig(serverConfig);
+    const options: MSFormsSurveyOptions = clientConfig?.postCall?.survey.options as MSFormsSurveyOptions;
 
     expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(clientConfig.companyName).toBe('test Healthcare');
@@ -116,7 +119,7 @@ describe('config', () => {
     expect(clientConfig.postCall?.survey).toBeDefined();
     expect(clientConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
     expect(clientConfig.postCall?.survey.options).toBeDefined();
-    expect(clientConfig.postCall?.survey.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
+    expect(options.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 
   test('getServerConfig returns correctly mapped values for a specific postcall option', () => {
@@ -138,13 +141,16 @@ describe('config', () => {
       .spyOn(getDefaultConfig, 'getDefaultConfig')
       .mockImplementation((): any => mockDefaultConfig);
 
-    const config = getConfig.getServerConfig();
+    const serverConfig = getConfig.getServerConfig();
+    serverConfig.communicationServicesConnectionString = 'endpoint=test_endpoint_value;accesskey=secret';
+    const clientConfig = getConfig.getClientConfig(serverConfig);
+    const options: CustomSurveyOptions = clientConfig?.postCall?.survey.options as CustomSurveyOptions;
     expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.postCall).toBeDefined();
-    expect(config.postCall?.survey).toBeDefined();
-    expect(config.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(config.postCall?.survey.options).toBeDefined();
-    expect(config.postCall?.survey.options?.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
+    expect(clientConfig.postCall).toBeDefined();
+    expect(clientConfig.postCall?.survey).toBeDefined();
+    expect(clientConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
+    expect(clientConfig.postCall?.survey.options).toBeDefined();
+    expect(options.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
   });
 
   test('getServerConfig returns empty postcall object when postCallSurveyType is invalid', () => {
