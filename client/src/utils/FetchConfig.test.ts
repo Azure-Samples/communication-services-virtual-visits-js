@@ -39,7 +39,7 @@ describe('FetchConfig', () => {
     );
 
     const fetchedConfig = await fetchConfig();
-    const options: MSFormsSurveyOptions = fetchedConfig?.postCall?.survey?.options as MSFormsSurveyOptions;
+    const options: MSFormsSurveyOptions = fetchedConfig?.postCall?.survey.options as MSFormsSurveyOptions;
 
     expect(fetchedConfig).toBeDefined();
     expect(fetchedConfig?.microsoftBookingsUrl).toBe(mockConfig.microsoftBookingsUrl);
@@ -51,8 +51,8 @@ describe('FetchConfig', () => {
     expect(fetchedConfig?.waitingSubtitle).toBe(mockConfig.waitingSubtitle);
     expect(fetchedConfig?.postCall).toBeDefined();
     expect(fetchedConfig?.postCall?.survey).toBeDefined();
-    expect(fetchedConfig?.postCall?.survey?.type).toBe('msforms');
-    expect(fetchedConfig?.postCall?.survey?.options).toBeDefined();
+    expect(fetchedConfig?.postCall?.survey.type).toBe('msforms');
+    expect(fetchedConfig?.postCall?.survey.options).toBeDefined();
     expect(options.surveyUrl).toBe('msFormsSurveyURL');
   });
 
