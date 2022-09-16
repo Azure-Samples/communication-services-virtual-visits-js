@@ -14,10 +14,23 @@ import {
   VV_WAITING_TITLE_ENV_NAME,
   VV_LOGO_URL_ENV_NAME,
   VV_POSTCALL_SURVEY_TYPE_ENV_NAME,
-  VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME
+  VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_TYPE_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME
 } from '../constants';
 
-import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../models/configModel';
+import {
+  ServerConfigModel,
+  ClientConfigModel,
+  PostCallSurveyType,
+  PostCallConfig,
+  MSFormsSurveyOptions,
+  OneQuestionPollOptions,
+  OneQuestionPollPromptType,
+  CustomSurveyOptions
+} from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
@@ -56,13 +69,43 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
 
   try {
     const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey.type;
-    const postcallSurveyUrl =
-      process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? defaultConfig.postCall?.survey.options?.surveyUrl;
+    let postcallSurveyUrl = '';
+    if (postcallSurveyType === 'msforms') {
+      const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
+      postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
+    } else if (postcallSurveyType === 'thirdparty') {
+      const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
+      postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
+    } else {
+      postcallSurveyUrl = '';
+    }
 
-    if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType) && postcallSurveyUrl) {
-      postcallConfig = {
-        survey: { type: postcallSurveyType, options: { surveyUrl: postcallSurveyUrl } }
-      };
+    if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType)) {
+      if (postcallSurveyUrl !== '') {
+        postcallConfig = {
+          survey: { type: postcallSurveyType, options: { surveyUrl: postcallSurveyUrl } }
+        };
+      } else {
+        const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
+        const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
+        const surveyPromptType: OneQuestionPollPromptType =
+          (process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_TYPE_ENV_NAME] as OneQuestionPollPromptType) ??
+          (options.promptType as OneQuestionPollPromptType);
+        const surveyPrompt = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME] ?? options.prompt;
+        const surveySaveButtonText =
+          process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME] ?? options.saveButtonText;
+        postcallConfig = {
+          survey: {
+            type: postcallSurveyType,
+            options: {
+              title: surveyTitle,
+              prompt: surveyPrompt,
+              promptType: surveyPromptType,
+              saveButtonText: surveySaveButtonText
+            }
+          }
+        };
+      }
     }
   } catch (e) {
     console.error('Unable to parse post call values from environment variables');
