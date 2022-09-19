@@ -100,10 +100,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
             }}
           />
         )}
-        <div
-          id="CallWithChat"
-          style={{ display: renderPostCall ? 'none' : 'flex', flexGrow: 1, position: 'relative', height: '100%' }}
-        >
+        <div style={{ display: renderPostCall ? 'none' : 'flex', flexGrow: 1, position: 'relative', height: '100%' }}>
           <CallWithChatComposite
             adapter={callWithChatAdapter}
             fluentTheme={fluentTheme}

@@ -17,8 +17,6 @@ import {
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
 import { Survey } from '../components/Survey';
-import '@testing-library/jest-dom/extend-expect';
-
 configure({ adapter: new Adapter() });
 
 // Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
@@ -71,7 +69,7 @@ describe('MeetingExperience', () => {
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
   });
 
-  it.skip('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
+  it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -104,7 +102,7 @@ describe('MeetingExperience', () => {
     expect(callWithChatComposites.first().props().formFactor).toEqual('desktop');
   });
 
-  it.skip('sets the formFactor to mobile in the CallWithChatComposite', async () => {
+  it('sets the formFactor to mobile in the CallWithChatComposite', async () => {
     const mobileSafariUserAgent =
       'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
     userAgentGetter.mockReturnValue(mobileSafariUserAgent);
@@ -135,7 +133,7 @@ describe('MeetingExperience', () => {
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
   });
 
-  it.skip('should render CallWithChatComposite when renderPostCall is false', async () => {
+  it('should render CallWithChatComposite when renderPostCall is false', async () => {
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -188,14 +186,14 @@ describe('MeetingExperience', () => {
     await runFakeTimers();
 
     meetingExperience.update();
-    console.debug(meetingExperience.get(0));
 
-    const surveyIFrame = meetingExperience.find(Survey);
+    expect(setRenderPostCallMock).toBeCalled();
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-    console.log(callWithChatComposites.get(0));
     expect(callWithChatComposites.length).toBe(1);
-    expect(surveyIFrame.length).toBe(1);
-    expect(surveyIFrame.get(0)).toBeVisible();
-    expect(callWithChatComposites.get(0)).not.toBeVisible();
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('none');
+
+    const iframe = meetingExperience.find('iframe');
+    expect(iframe.props().title).toBe('SurveyComponent');
   });
 });
