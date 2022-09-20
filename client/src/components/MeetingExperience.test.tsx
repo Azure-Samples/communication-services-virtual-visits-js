@@ -193,7 +193,7 @@ describe('MeetingExperience', () => {
     const parentDiv = callWithChatComposites.parent();
     expect(parentDiv.props().style.display).toBe('none');
 
-    const iframe = meetingExperience.find('iframe');
-    expect(iframe.props().title).toBe('SurveyComponent');
+    const survey = meetingExperience.find(Survey);
+    expect(survey.length).toBe(1);
   });
 });
