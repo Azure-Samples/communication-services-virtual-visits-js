@@ -9,12 +9,12 @@ export interface CustomSurveyOptions {
   surveyUrl: string;
 }
 
-export type OneQuestionPollPromptType = 'likeorDislike' | 'rating' | 'text';
+export type OneQuestionPollType = 'likeorDislike' | 'rating' | 'text';
 
 export interface OneQuestionPollOptions {
   title?: string;
   prompt: string;
-  promptType: OneQuestionPollPromptType;
+  pollType: OneQuestionPollType;
   saveButtonText: string;
 }
 export interface PostCallConfig {

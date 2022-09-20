@@ -16,7 +16,7 @@ import {
   VV_POSTCALL_SURVEY_TYPE_ENV_NAME,
   VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME,
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_TYPE_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME,
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME,
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME
 } from '../constants';
@@ -28,10 +28,39 @@ import {
   PostCallConfig,
   MSFormsSurveyOptions,
   OneQuestionPollOptions,
-  OneQuestionPollPromptType,
+  OneQuestionPollType,
   CustomSurveyOptions
 } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
+
+const getMSFormsOptions = (defaultConfig: any): MSFormsSurveyOptions => {
+  const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
+  const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
+  return { surveyUrl: postcallSurveyUrl };
+};
+
+const getCustomSurveyOptions = (defaultConfig: any): CustomSurveyOptions => {
+  const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
+  const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
+  return { surveyUrl: postcallSurveyUrl };
+};
+
+const getOneQuestionPollOptions = (defaultConfig: any): OneQuestionPollOptions => {
+  const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
+  const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
+  const surveyPromptType: OneQuestionPollType =
+    (process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME] as OneQuestionPollType) ??
+    (options.pollType as OneQuestionPollType);
+  const surveyPrompt = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME] ?? options.prompt;
+  const surveySaveButtonText =
+    process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME] ?? options.saveButtonText;
+  return {
+    title: surveyTitle,
+    prompt: surveyPrompt,
+    pollType: surveyPromptType,
+    saveButtonText: surveySaveButtonText
+  };
+};
 
 export const getServerConfig = (): ServerConfigModel => {
   const defaultConfig = getDefaultConfig();
@@ -60,7 +89,7 @@ export const getServerConfig = (): ServerConfigModel => {
 };
 
 const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
-  return ['msforms', 'custom'].indexOf(postcallSurveyType) !== -1;
+  return ['msforms', 'custom', 'onequestionpoll'].indexOf(postcallSurveyType) !== -1;
 };
 
 const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | undefined => {
@@ -69,42 +98,24 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
 
   try {
     const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey.type;
-    let postcallSurveyUrl = '';
-    if (postcallSurveyType === 'msforms') {
-      const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
-      postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
-    } else if (postcallSurveyType === 'custom') {
-      const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
-      postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
-    } else {
-      postcallSurveyUrl = '';
-    }
-
     if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType)) {
-      if (postcallSurveyUrl !== '') {
+      if (postcallSurveyType === 'msforms') {
+        const configOptions: MSFormsSurveyOptions = getMSFormsOptions(defaultConfig);
         postcallConfig = {
-          survey: { type: postcallSurveyType, options: { surveyUrl: postcallSurveyUrl } }
+          survey: { type: postcallSurveyType, options: configOptions }
+        };
+      } else if (postcallSurveyType === 'custom') {
+        const configOptions: CustomSurveyOptions = getCustomSurveyOptions(defaultConfig);
+        postcallConfig = {
+          survey: { type: postcallSurveyType, options: configOptions }
+        };
+      } else if (postcallSurveyType === 'onequestionpoll') {
+        const configOptions: OneQuestionPollOptions = getOneQuestionPollOptions(defaultConfig);
+        postcallConfig = {
+          survey: { type: postcallSurveyType, options: configOptions }
         };
       } else {
-        const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
-        const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
-        const surveyPromptType: OneQuestionPollPromptType =
-          (process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_TYPE_ENV_NAME] as OneQuestionPollPromptType) ??
-          (options.promptType as OneQuestionPollPromptType);
-        const surveyPrompt = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME] ?? options.prompt;
-        const surveySaveButtonText =
-          process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME] ?? options.saveButtonText;
-        postcallConfig = {
-          survey: {
-            type: postcallSurveyType,
-            options: {
-              title: surveyTitle,
-              prompt: surveyPrompt,
-              promptType: surveyPromptType,
-              saveButtonText: surveySaveButtonText
-            }
-          }
-        };
+        postcallConfig = undefined;
       }
     }
   } catch (e) {
