@@ -120,10 +120,10 @@
             "VV_LOGO_URL": "[variables('logoUrl')]",
             "VV_POSTCALL_SURVEY_TYPE": "[variables('postCallSurveyType')]",
             "VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL": "[variables('postCallSurveyOptionsSurveyUrl')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME": "[variables('postCallSurveyOneQuestionPollTitle')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME": "[variables('postCallSurveyOneQuestionPollPrompt')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME": "[variables('postCallSurveyOneQuestionPollType')]",
-            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME": "[variables('postCallSurveyOneQuestionPollSaveButtonText')]"
+            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE": "[variables('postCallSurveyOneQuestionPollTitle')]",
+            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT": "[variables('postCallSurveyOneQuestionPollPrompt')]",
+            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE": "[variables('postCallSurveyOneQuestionPollType')]",
+            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT": "[variables('postCallSurveyOneQuestionPollSaveButtonText')]"
           }
         },
         {

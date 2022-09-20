@@ -33,19 +33,19 @@ import {
 } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
-const getMSFormsOptions = (defaultConfig: any): MSFormsSurveyOptions => {
+const getMSFormsOptions = (defaultConfig: ServerConfigModel): MSFormsSurveyOptions => {
   const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
   const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
   return { surveyUrl: postcallSurveyUrl };
 };
 
-const getCustomSurveyOptions = (defaultConfig: any): CustomSurveyOptions => {
+const getCustomSurveyOptions = (defaultConfig: ServerConfigModel): CustomSurveyOptions => {
   const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
   const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
   return { surveyUrl: postcallSurveyUrl };
 };
 
-const getOneQuestionPollOptions = (defaultConfig: any): OneQuestionPollOptions => {
+const getOneQuestionPollOptions = (defaultConfig: ServerConfigModel): OneQuestionPollOptions => {
   const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
   const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
   const surveyPromptType: OneQuestionPollType =
