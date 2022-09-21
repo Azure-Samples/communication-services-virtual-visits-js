@@ -33,19 +33,19 @@ import {
 } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
-const getMSFormsOptions = (defaultConfig: ServerConfigModel): MSFormsSurveyOptions => {
+export const getMSFormsOptions = (defaultConfig: ServerConfigModel): MSFormsSurveyOptions => {
   const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
   const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
   return { surveyUrl: postcallSurveyUrl };
 };
 
-const getCustomSurveyOptions = (defaultConfig: ServerConfigModel): CustomSurveyOptions => {
+export const getCustomSurveyOptions = (defaultConfig: ServerConfigModel): CustomSurveyOptions => {
   const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
   const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
   return { surveyUrl: postcallSurveyUrl };
 };
 
-const getOneQuestionPollOptions = (defaultConfig: ServerConfigModel): OneQuestionPollOptions => {
+export const getOneQuestionPollOptions = (defaultConfig: ServerConfigModel): OneQuestionPollOptions => {
   const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
   const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
   const surveyPromptType: OneQuestionPollType =
@@ -98,25 +98,27 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
 
   try {
     const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey.type;
-    if (postcallSurveyType && isValidPostCallSurveyType(postcallSurveyType)) {
-      if (postcallSurveyType === 'msforms') {
-        const configOptions: MSFormsSurveyOptions = getMSFormsOptions(defaultConfig);
-        postcallConfig = {
-          survey: { type: postcallSurveyType, options: configOptions }
-        };
-      } else if (postcallSurveyType === 'custom') {
-        const configOptions: CustomSurveyOptions = getCustomSurveyOptions(defaultConfig);
-        postcallConfig = {
-          survey: { type: postcallSurveyType, options: configOptions }
-        };
-      } else if (postcallSurveyType === 'onequestionpoll') {
-        const configOptions: OneQuestionPollOptions = getOneQuestionPollOptions(defaultConfig);
-        postcallConfig = {
-          survey: { type: postcallSurveyType, options: configOptions }
-        };
-      } else {
-        postcallConfig = undefined;
-      }
+    if (!postcallSurveyType || !isValidPostCallSurveyType(postcallSurveyType)) {
+      return undefined;
+    }
+
+    if (postcallSurveyType === 'msforms') {
+      const configOptions: MSFormsSurveyOptions = getMSFormsOptions(defaultConfig);
+      postcallConfig = {
+        survey: { type: postcallSurveyType, options: configOptions }
+      };
+    } else if (postcallSurveyType === 'custom') {
+      const configOptions: CustomSurveyOptions = getCustomSurveyOptions(defaultConfig);
+      postcallConfig = {
+        survey: { type: postcallSurveyType, options: configOptions }
+      };
+    } else if (postcallSurveyType === 'onequestionpoll') {
+      const configOptions: OneQuestionPollOptions = getOneQuestionPollOptions(defaultConfig);
+      postcallConfig = {
+        survey: { type: postcallSurveyType, options: configOptions }
+      };
+    } else {
+      postcallConfig = undefined;
     }
   } catch (e) {
     console.error('Unable to parse post call values from environment variables');
