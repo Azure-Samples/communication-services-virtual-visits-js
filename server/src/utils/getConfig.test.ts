@@ -113,7 +113,6 @@ describe('config', () => {
     expect(options.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
   });
 
-
   test('should use environment variables when available, testing variables for one question poll post-call survey option ', () => {
     process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING = 'MYCONNECTIONSTRING';
     process.env.VV_MICROSOFT_BOOKINGS_URL = 'https://testurl';
