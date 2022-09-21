@@ -18,7 +18,8 @@ import {
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME,
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME,
   VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME,
+  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER_ENV_NAME
 } from '../constants';
 
 import {
@@ -48,16 +49,19 @@ export const getCustomSurveyOptions = (defaultConfig: ServerConfigModel): Custom
 export const getOneQuestionPollOptions = (defaultConfig: ServerConfigModel): OneQuestionPollOptions => {
   const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
   const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
-  const surveyPromptType: OneQuestionPollType =
+  const surveyPollType: OneQuestionPollType =
     (process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME] as OneQuestionPollType) ??
     (options.pollType as OneQuestionPollType);
   const surveyPrompt = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME] ?? options.prompt;
+  const answerPlaceholder =
+    process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER_ENV_NAME] ?? options.answerPlaceholder;
   const surveySaveButtonText =
     process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME] ?? options.saveButtonText;
   return {
     title: surveyTitle,
     prompt: surveyPrompt,
-    pollType: surveyPromptType,
+    pollType: surveyPollType,
+    answerPlaceholder: answerPlaceholder,
     saveButtonText: surveySaveButtonText
   };
 };

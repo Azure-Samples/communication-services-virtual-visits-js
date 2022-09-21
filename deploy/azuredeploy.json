@@ -60,6 +60,7 @@
     "postCallSurveyOneQuestionPollTitle": "",
     "postCallSurveyOneQuestionPollPrompt": "",
     "postCallSurveyOneQuestionPollType": "",
+    "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
     "postCallSurveyOneQuestionPollSaveButtonText": ""
   },
   "resources": [
@@ -123,6 +124,7 @@
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE": "[variables('postCallSurveyOneQuestionPollTitle')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT": "[variables('postCallSurveyOneQuestionPollPrompt')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE": "[variables('postCallSurveyOneQuestionPollType')]",
+            "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER": "[variables('postCallSurveyOneQuestionPollAnswerPlaceholder')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT": "[variables('postCallSurveyOneQuestionPollSaveButtonText')]"
           }
         },

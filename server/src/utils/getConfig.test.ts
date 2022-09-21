@@ -127,6 +127,7 @@ describe('config', () => {
     process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE = 'Customer Satisfaction Survey';
     process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT = 'Were you satisfied with your service?';
     process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE = 'likeOrDislike';
+    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER = 'Great service!';
     process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT = 'Save';
 
     const config = getConfig.getServerConfig();
@@ -145,6 +146,7 @@ describe('config', () => {
     expect(options.title).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE);
     expect(options.prompt).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT);
     expect(options.pollType).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE);
+    expect(options.answerPlaceholder).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER);
     expect(options.saveButtonText).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT);
   });
 
@@ -237,6 +239,7 @@ describe('config', () => {
             title: 'Customer Satisfaction Survey',
             prompt: 'Were you satisfied with your service?',
             pollType: 'likeOrDislike',
+            answerPlaceholder: 'Great service!',
             saveButtonText: 'Save'
           }
         }
@@ -247,7 +250,7 @@ describe('config', () => {
       .mockImplementation((): any => mockDefaultConfig);
 
     const serverConfig = getConfig.getServerConfig();
-    const options: OneQuestionPollOptions = getOneQuestionPollOptions(serverConfig);
+    const options: OneQuestionPollOptions = getConfig.getOneQuestionPollOptions(serverConfig);
 
     expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(serverConfig.companyName).toBe('test Healthcare');
@@ -258,6 +261,7 @@ describe('config', () => {
     expect(options.title).toBe(mockDefaultConfig.postCall.survey.options.title);
     expect(options.prompt).toBe(mockDefaultConfig.postCall.survey.options.prompt);
     expect(options.pollType).toBe(mockDefaultConfig.postCall.survey.options.pollType);
+    expect(options.answerPlaceholder).toBe(mockDefaultConfig.postCall.survey.options.answerPlaceholder);
     expect(options.saveButtonText).toBe(mockDefaultConfig.postCall.survey.options.saveButtonText);
   });
 
