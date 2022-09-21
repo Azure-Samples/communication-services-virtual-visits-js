@@ -60,10 +60,4 @@ VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "<your_survey_url>"
 
 The [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) provides a default post-call screen that is rendered after a call ends, no configuration required.
 
-### Configure using environment variables
-
-Remove `VV_POSTCALL_SURVEY_TYPE` from your environment variables.
-
-### Configure using defaultConfig.json
-
-Remove `postCall` from your config.
+To use the default post-call screen, remove `VV_POSTCALL_SURVEY_TYPE` from your environment variables and remove `postCall` from your config.
