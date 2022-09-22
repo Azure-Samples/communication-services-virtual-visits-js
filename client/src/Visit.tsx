@@ -85,6 +85,30 @@ export const Visit = (): JSX.Element => {
     // show a separate screen with "enter meeting link" textbox
     return (
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
+        <button
+          style={{ width: '500px', height: '100px' }}
+          onClick={() => {
+            fetch('http://localhost:8080/api/createSurveyResult', {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              mode: 'cors',
+              method: 'POST',
+              body: JSON.stringify({
+                sessionId: 'test_session_id',
+                callId: 'test_call_id',
+                acsUserId: 'test_acs_user_id',
+                response: true
+              })
+            })
+              .then((data) => data.json())
+              .then((response) => console.log(response));
+            console.log('clicked test');
+            console.log(process.env);
+          }}
+        >
+          Click here to test API
+        </button>
         <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
       </ThemeProvider>
     );
