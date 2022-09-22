@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { ServerConfigModel } from '../models/configModel';
+import { ServerConfigModel } from '../interfaces/configModel';
 import { configController } from './configController';
 import { NextFunction } from 'express';
 

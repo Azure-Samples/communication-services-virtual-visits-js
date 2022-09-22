@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import { ServerConfigModel } from '../models/configModel';
+import { ServerConfigModel } from '../interfaces/configModel';
 import { getClientConfig } from '../utils/getConfig';
 
 export const configController = (config: ServerConfigModel) => {

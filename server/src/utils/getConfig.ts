@@ -17,7 +17,7 @@ import {
   VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME
 } from '../constants';
 
-import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../models/configModel';
+import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../interfaces/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
