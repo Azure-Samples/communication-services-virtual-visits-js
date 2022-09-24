@@ -4,6 +4,9 @@
 import { parseConnectionString } from '@azure/communication-common';
 
 import {
+  VV_COSMOS_DB_CONNECTION_STRING,
+  VV_COSMOS_DB_ENDPOINT,
+  VV_COSMOS_DB_NAME,
   VV_COMMUNICATION_SERVICES_CONNECTION_STRING,
   VV_CHAT_ENABLED_ENV_NAME,
   VV_COLOR_PALETTE_ENV_NAME,
@@ -17,7 +20,7 @@ import {
   VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME
 } from '../constants';
 
-import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../interfaces/configModel';
+import { ServerConfigModel, ClientConfigModel, PostCallSurveyType, PostCallConfig } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
@@ -40,7 +43,10 @@ export const getServerConfig = (): ServerConfigModel => {
     waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? defaultConfig.waitingTitle,
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl,
-    postCall: getPostCallConfig(defaultConfig)
+    postCall: getPostCallConfig(defaultConfig),
+    cosmosDBConnectionString: process.env[VV_COSMOS_DB_CONNECTION_STRING],
+    cosmosDBEndpoint: process.env[VV_COSMOS_DB_ENDPOINT],
+    cosmosDBName: process.env[VV_COSMOS_DB_NAME]
   } as ServerConfigModel;
 
   return config;

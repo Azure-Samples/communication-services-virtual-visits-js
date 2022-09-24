@@ -10,5 +10,3 @@ export interface SurveyResultRequestModel {
 }
 
 export type OneQuestionPollResult = boolean | string | number;
-
-export type SurveyResultResponseModel = OneQuestionPollResult;

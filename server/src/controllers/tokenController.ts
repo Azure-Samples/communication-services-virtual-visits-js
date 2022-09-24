@@ -3,7 +3,7 @@
 
 import * as express from 'express';
 import { CommunicationIdentityClient, TokenScope } from '@azure/communication-identity';
-import { ServerConfigModel } from '../interfaces/configModel';
+import { ServerConfigModel } from '../models/configModel';
 
 export const tokenController = (client: CommunicationIdentityClient, config: ServerConfigModel) => {
   return async (_req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
