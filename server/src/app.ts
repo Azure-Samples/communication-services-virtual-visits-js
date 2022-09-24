@@ -8,7 +8,9 @@ import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
-import { storeSurveyResult } from './controllers/surveyResultController';
+import { storeSurveyResult } from './controllers/surveyController';
+import CosmosClient from './databases/cosmosClient';
+import SurveyService from './services/surveyService';
 import { ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
@@ -58,7 +60,10 @@ const identityClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
-app.post('/api/createSurveyResult', storeSurveyResult);
+const cosmosClient = new CosmosClient(config);
+const surveyService = new SurveyService(cosmosClient);
+
+app.post('/api/createSurveyResult', storeSurveyResult(surveyService));
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));

@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
+
 export type PostCallSurveyType = 'msforms' | 'thirdparty';
 interface MSFormsSurveryOptions {
   surveyUrl: string;
@@ -24,6 +25,9 @@ export interface ServerConfigModel {
   waitingSubtitle: string;
   logoUrl: string;
   postCall?: PostCallConfig;
+  cosmosDBConnectionString: string | undefined;
+  cosmosDBEndpoint;
+  cosmosDBName: string;
 }
 
 export interface ClientConfigModel {
