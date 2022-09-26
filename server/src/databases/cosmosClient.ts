@@ -12,7 +12,9 @@ import { DefaultAzureCredential } from '@azure/identity';
 import { ServerConfigModel } from '../models/configModel';
 
 class CosmosClient extends AzureCosmosClient {
-  private cosmosDBName: string;
+  private _cosmosDBName: string;
+  private _database: Database | undefined;
+  private _container: Container | undefined;
 
   constructor({ cosmosDBConnectionString, cosmosDBEndpoint, cosmosDBName }: ServerConfigModel) {
     const cosmosClientOptions: CosmosClientOptions = {
@@ -26,25 +28,32 @@ class CosmosClient extends AzureCosmosClient {
       super(cosmosClientOptions);
     }
 
-    this.cosmosDBName = cosmosDBName;
+    this._cosmosDBName = cosmosDBName;
+    this._database = undefined;
+    this._container = undefined;
   }
 
-  async createDatabase(): Promise<Database> {
-    const { database } = await this.databases.createIfNotExists({
-      id: this.cosmosDBName
-    });
+  async createDatabase(): Promise<void> {
+    if (this._database === undefined) {
+      console.log('database is undefined');
+      const { database } = await this.databases.createIfNotExists({
+        id: this._cosmosDBName
+      });
 
-    return database;
+      this._database = database;
+    }
   }
 
-  async createContainer(containerRequest: ContainerRequest): Promise<Container> {
-    const { container } = await this.database(this.cosmosDBName).containers.createIfNotExists(containerRequest);
+  async createContainer(containerRequest: ContainerRequest): Promise<void> {
+    if (this._container === undefined) {
+      const { container } = await this.database(this._cosmosDBName).containers.createIfNotExists(containerRequest);
 
-    return container;
+      this._container = container;
+    }
   }
 
   async upsert(containerId: string, item: any): Promise<void> {
-    await this.database(this.cosmosDBName).container(containerId).items.upsert(item);
+    await this.database(this._cosmosDBName).container(containerId).items.upsert(item);
   }
 }
 
