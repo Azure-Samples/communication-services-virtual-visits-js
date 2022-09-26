@@ -13,7 +13,7 @@ Azure Communication Services Virtual Visits is a web app you can host to provide
 - **Integration with Microsoft Teams**. Let your staff host and join meetings using familiar Teams UI, while the clients join the same call via your custom branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
 - **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
 - **Industry.** A virtual appointment template with pre-selected theme color schemes.
-- **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends.
+- **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md).
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
 
 ## Getting Started
@@ -113,7 +113,7 @@ Where do I set this?
   - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
-  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "custom".
+  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "custom". [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
   - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/survey".
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
@@ -127,18 +127,7 @@ Where do I set this?
   - `waitingTitle`. Example value: "Thank you for choosing Lamna Healthcare".
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
-  - `postCall`. Set "surveyUrl" below to a valid survey link. Set "type" to "msforms" if using MSForms or "custom" for other survey providers. This survey will then be shown to the user in an iframe after the call ends.  
-    Example value:
-    ```json
-    "postCall": {
-      "survey": {
-        "type": "msforms",
-          "options": {
-            "surveyUrl": "https://your_survey_service/survey"
-          }
-        }
-      }
-    ```
+  - `postCall`. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
 
 ### End to End tests
 
