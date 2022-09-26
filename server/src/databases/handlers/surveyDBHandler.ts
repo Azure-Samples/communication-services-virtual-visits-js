@@ -2,8 +2,8 @@
 // Licensed under the MIT license.
 
 import { ContainerRequest } from '@azure/cosmos';
-import CosmosClient from '../databases/cosmosClient';
-import { SurveyResultRequestModel } from '../models/surveyModel';
+import CosmosClient from '../../databases/cosmosClient';
+import { SurveyResultRequestModel } from '../../models/surveyModel';
 
 const surveyContainerName = 'Surveys';
 const containerRequest: ContainerRequest = {
@@ -13,7 +13,7 @@ const containerRequest: ContainerRequest = {
   }
 };
 
-class SurveyService {
+class SurveyDBHandler {
   private cosmosClient: CosmosClient;
 
   constructor(cosmosClient: CosmosClient) {
@@ -30,4 +30,4 @@ class SurveyService {
   }
 }
 
-export default SurveyService;
+export default SurveyDBHandler;

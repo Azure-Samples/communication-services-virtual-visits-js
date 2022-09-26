@@ -2,10 +2,10 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import SurveyService from '../services/surveyService';
+import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
 import { SurveyResultRequestModel } from '../models/surveyModel';
 
-export const storeSurveyResult = (surveyService: SurveyService) => async (
+export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -31,8 +31,8 @@ export const storeSurveyResult = (surveyService: SurveyService) => async (
       createdOn: new Date()
     };
 
-    await surveyService.init();
-    await surveyService.saveSurveyResult(inputData);
+    await surveyDBHandler.init();
+    await surveyDBHandler.saveSurveyResult(inputData);
 
     res.json('Store successfully.');
   } catch (error) {

@@ -10,7 +10,7 @@ import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import CosmosClient from './databases/cosmosClient';
-import SurveyService from './services/surveyService';
+import SurveyDBHandler from './databases/handlers/surveyDBHandler';
 import { ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
@@ -61,9 +61,9 @@ app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
 const cosmosClient = new CosmosClient(config);
-const surveyService = new SurveyService(cosmosClient);
+const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
-app.post('/api/createSurveyResult', storeSurveyResult(surveyService));
+app.post('/api/createSurveyResult', storeSurveyResult(surveyDBHandler));
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
