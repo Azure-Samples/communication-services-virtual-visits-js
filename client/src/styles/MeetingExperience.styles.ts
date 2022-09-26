@@ -5,9 +5,9 @@ export const meetingExperienceLogoStyles = {
   width: '2.5rem'
 };
 
-export const callWithChatComponentStyles = (displayFlag: boolean): any => {
+export const callWithChatComponentStyles = (showPostCall: boolean): any => {
   return {
-    display: displayFlag ? 'none' : 'flex',
+    display: showPostCall ? 'none' : 'flex',
     flexGrow: 1,
     position: 'relative',
     height: '100%'
