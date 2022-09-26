@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
-import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
+import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
 import { Survey } from '../components/Survey';
 
@@ -100,14 +100,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
             }}
           />
         )}
-        <div
-          style={{
-            display: renderPostCall && postCall ? 'none' : 'flex',
-            flexGrow: 1,
-            position: 'relative',
-            height: '100%'
-          }}
-        >
+        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
           <CallWithChatComposite
             adapter={callWithChatAdapter}
             fluentTheme={fluentTheme}

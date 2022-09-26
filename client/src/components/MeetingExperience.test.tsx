@@ -161,7 +161,7 @@ describe('MeetingExperience', () => {
     expect(callWithChatComposites.length).toBe(1);
   });
 
-  it('should render Survey component', async () => {
+  it('should render Survey component when postcall is defined and valid', async () => {
     const setRenderPostCallMock = jest.fn();
     const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
     jest.spyOn(React, 'useState').mockImplementation(useStateMock);
@@ -197,7 +197,7 @@ describe('MeetingExperience', () => {
     expect(survey.length).toBe(1);
   });
 
-  it('should not render Survey component', async () => {
+  it('should not render Survey component when postcall is undefined', async () => {
     const setRenderPostCallMock = jest.fn();
     const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
     jest.spyOn(React, 'useState').mockImplementation(useStateMock);
