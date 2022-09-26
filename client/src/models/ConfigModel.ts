@@ -3,18 +3,28 @@
 
 import { Theme } from '@fluentui/theme';
 
-export type PostCallSurveyType = 'msforms' | 'custom';
-interface MSFormsSurveyOptions {
+export type PostCallSurveyType = 'msforms' | 'custom' | 'onequestionpoll';
+export interface MSFormsSurveyOptions {
   surveyUrl: string;
 }
-interface CustomSurveyOptions {
+export interface CustomSurveyOptions {
   surveyUrl: string;
+}
+
+export type OneQuestionPollType = 'likeOrDislike' | 'rating' | 'text';
+
+export interface OneQuestionPollOptions {
+  title?: string;
+  prompt: string;
+  pollType: OneQuestionPollType;
+  answerPlaceholder?: string;
+  saveButtonText: string;
 }
 
 export interface PostCallConfig {
   survey: {
     type: PostCallSurveyType;
-    options: MSFormsSurveyOptions | CustomSurveyOptions;
+    options: MSFormsSurveyOptions | CustomSurveyOptions | OneQuestionPollOptions;
   };
 }
 export interface AppConfigModel {
