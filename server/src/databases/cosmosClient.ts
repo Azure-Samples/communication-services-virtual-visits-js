@@ -35,7 +35,6 @@ class CosmosClient extends AzureCosmosClient {
 
   async createDatabase(): Promise<void> {
     if (this._database === undefined) {
-      console.log('database is undefined');
       const { database } = await this.databases.createIfNotExists({
         id: this._cosmosDBName
       });
@@ -54,6 +53,14 @@ class CosmosClient extends AzureCosmosClient {
 
   async upsert(containerId: string, item: any): Promise<void> {
     await this.database(this._cosmosDBName).container(containerId).items.upsert(item);
+  }
+
+  getDatabase() {
+    return this._database;
+  }
+
+  getContainer() {
+    return this._container;
   }
 }
 
