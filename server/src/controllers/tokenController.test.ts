@@ -5,7 +5,7 @@ import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { getDefaultConfig } from '../utils/getDefaultConfig';
 import { tokenController } from './tokenController';
 import { NextFunction } from 'express';
-import { ServerConfigModel } from '../interfaces/configModel';
+import { ServerConfigModel } from '../models/configModel';
 
 function createMockedResponseObject(): any {
   const res: any = {};
