@@ -116,6 +116,7 @@ export const Visit = (): JSX.Element => {
             waitingTitle={config.waitingTitle}
             waitingSubtitle={config.waitingSubtitle}
             chatEnabled={config.chatEnabled}
+            postCall={config.postCall}
             onDisplayError={(error) => setError(error)}
           />
         </LayerHost>

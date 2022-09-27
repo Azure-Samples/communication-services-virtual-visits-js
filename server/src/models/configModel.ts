@@ -1,17 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export type PostCallSurveyType = 'msforms' | 'thirdparty';
-interface MSFormsSurveryOptions {
+export type PostCallSurveyType = 'msforms' | 'custom' | 'onequestionpoll';
+export interface MSFormsSurveyOptions {
   surveyUrl: string;
 }
-interface ThirdPartySurveyOptions {
+export interface CustomSurveyOptions {
   surveyUrl: string;
+}
+
+export type OneQuestionPollType = 'likeOrDislike' | 'rating' | 'text';
+
+export interface OneQuestionPollOptions {
+  title?: string;
+  prompt: string;
+  pollType: OneQuestionPollType;
+  answerPlaceholder?: string;
+  saveButtonText: string;
 }
 export interface PostCallConfig {
-  survey?: {
+  survey: {
     type: PostCallSurveyType;
-    options: MSFormsSurveryOptions | ThirdPartySurveyOptions;
+    options: MSFormsSurveyOptions | CustomSurveyOptions | OneQuestionPollOptions;
   };
 }
 export interface ServerConfigModel {

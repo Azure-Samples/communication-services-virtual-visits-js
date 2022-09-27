@@ -11,15 +11,17 @@ import {
   createAzureCommunicationCallWithChatAdapterFromClients,
   createStatefulChatClient
 } from '@azure/communication-react';
-import { Theme, PartialTheme, Spinner } from '@fluentui/react';
+import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
 import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
-import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
+import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
+import { Survey } from '../components/Survey';
 
+import { PostCallConfig } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -31,6 +33,7 @@ export interface MeetingExperienceProps {
   waitingSubtitle: string;
   logoUrl: string;
   chatEnabled: boolean;
+  postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
 
@@ -46,11 +49,12 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     userId,
     waitingSubtitle,
     waitingTitle,
+    postCall,
     onDisplayError
   } = props;
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
-
+  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -64,7 +68,11 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           endpointUrl,
           chatEnabled
         );
-
+        if (postCall?.survey.type) {
+          adapter.on('callEnded', () => {
+            setRenderPostCall(true);
+          });
+        }
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -75,42 +83,54 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
     _createAdapters();
   }, [credential, displayName, endpointUrl, locator, userId, onDisplayError]);
-
   if (callWithChatAdapter) {
     const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
     return (
-      <CallWithChatComposite
-        adapter={callWithChatAdapter}
-        fluentTheme={fluentTheme}
-        options={{
-          callControls: {
-            chatButton: chatEnabled
-          }
-        }}
-        locale={{
-          component: locale.component,
-          strings: {
-            chat: locale.strings.chat,
-            call: {
-              ...locale.strings.call,
-              lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
-              lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
-            },
-            callWithChat: locale.strings.callWithChat
-          }
-        }}
-        icons={{
-          LobbyScreenWaitingToBeAdmitted: logo,
-          LobbyScreenConnectingToCall: logo
-        }}
-        formFactor={formFactorValue}
-      />
+      <>
+        {renderPostCall && postCall && (
+          <Survey
+            data-testid="Survey"
+            postCall={postCall}
+            onRejoinCall={async () => {
+              await callWithChatAdapter.joinCall();
+              setRenderPostCall(false);
+            }}
+          />
+        )}
+        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
+          <CallWithChatComposite
+            adapter={callWithChatAdapter}
+            fluentTheme={fluentTheme}
+            options={{
+              callControls: {
+                chatButton: chatEnabled
+              }
+            }}
+            locale={{
+              component: locale.component,
+              strings: {
+                chat: locale.strings.chat,
+                call: {
+                  ...locale.strings.call,
+                  lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
+                  lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
+                },
+                callWithChat: locale.strings.callWithChat
+              }
+            }}
+            icons={{
+              LobbyScreenWaitingToBeAdmitted: logo,
+              LobbyScreenConnectingToCall: logo
+            }}
+            formFactor={formFactorValue}
+          />
+        </div>
+      </>
     );
   }
-
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
   }

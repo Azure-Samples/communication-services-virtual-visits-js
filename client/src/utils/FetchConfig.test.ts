@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { MSFormsSurveyOptions } from '../models/ConfigModel';
 import { fetchConfig } from './FetchConfig';
 
 let fetchBackup: any = undefined;
@@ -38,6 +39,7 @@ describe('FetchConfig', () => {
     );
 
     const fetchedConfig = await fetchConfig();
+    const options: MSFormsSurveyOptions = fetchedConfig?.postCall?.survey.options as MSFormsSurveyOptions;
 
     expect(fetchedConfig).toBeDefined();
     expect(fetchedConfig?.microsoftBookingsUrl).toBe(mockConfig.microsoftBookingsUrl);
@@ -49,9 +51,9 @@ describe('FetchConfig', () => {
     expect(fetchedConfig?.waitingSubtitle).toBe(mockConfig.waitingSubtitle);
     expect(fetchedConfig?.postCall).toBeDefined();
     expect(fetchedConfig?.postCall?.survey).toBeDefined();
-    expect(fetchedConfig?.postCall?.survey?.type).toBe('msforms');
-    expect(fetchedConfig?.postCall?.survey?.options).toBeDefined();
-    expect(fetchedConfig?.postCall?.survey?.options?.surveyUrl).toBe('msFormsSurveyURL');
+    expect(fetchedConfig?.postCall?.survey.type).toBe('msforms');
+    expect(fetchedConfig?.postCall?.survey.options).toBeDefined();
+    expect(options.surveyUrl).toBe('msFormsSurveyURL');
   });
 
   test('Should return undefined if status code is not 200', async () => {
