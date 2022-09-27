@@ -36,7 +36,7 @@ export interface ServerConfigModel {
   logoUrl: string;
   postCall?: PostCallConfig;
   cosmosDBConnectionString: string | undefined;
-  cosmosDBEndpoint;
+  cosmosDBEndpoint: string;
   cosmosDBName: string;
 }
 

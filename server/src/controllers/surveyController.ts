@@ -23,6 +23,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
       if (!callId) errors.push('callId is missing');
       if (!acsUserId) errors.push('acsUserId is missing');
       if (!response) errors.push('response is missing');
+
       return res.status(400).send({ errors });
     }
 
@@ -34,7 +35,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
     await surveyDBHandler.init();
     await surveyDBHandler.saveSurveyResult(inputData);
 
-    res.json('Store successfully.');
+    return res.status(201).send();
   } catch (error) {
     return next(error);
   }

@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.sendStatus(200);
   }
 
   next();
