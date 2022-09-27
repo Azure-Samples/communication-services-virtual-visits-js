@@ -67,7 +67,6 @@ describe('configController', () => {
       waitingTitle: '',
       waitingSubtitle: '',
       logoUrl: '',
-      postCall: {},
       cosmosDBConnectionString: '',
       cosmosDBEndpoint: '',
       cosmosDBName: ''

@@ -55,11 +55,11 @@ class CosmosClient extends AzureCosmosClient {
     await this.database(this._cosmosDBName).container(containerId).items.upsert(item);
   }
 
-  getDatabase() {
+  getDatabase(): Database | undefined {
     return this._database;
   }
 
-  getContainer() {
+  getContainer(): Container | undefined {
     return this._container;
   }
 }

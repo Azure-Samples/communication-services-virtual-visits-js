@@ -9,7 +9,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) => {
+): Promise<any> => {
   try {
     const { body: requestData } = req;
     const { sessionId, callId, acsUserId, response } = requestData;
@@ -17,7 +17,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
     // Validation.
     // If any one of field does not exists in the payload the validation failed.
     if (!(sessionId && callId && acsUserId && response)) {
-      let errors: string[] = [];
+      const errors: string[] = [];
 
       if (!sessionId) errors.push('sessionId is missing');
       if (!callId) errors.push('callId is missing');

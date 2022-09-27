@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Containers, Databases, Items } from '@azure/cosmos';
+import { Containers, ContainerResponse, Databases, DatabaseResponse, Items } from '@azure/cosmos';
 import { getServerConfig } from '../../utils/getConfig';
 import CosmosClient from '../cosmosClient';
 import SurveyDBHandler from './surveyDBHandler';
@@ -11,8 +11,12 @@ describe('Test surveyDBHandler', () => {
     const config = getServerConfig();
     const cosmosClient = new CosmosClient(config);
 
-    const spyOnDatabasesCreateIfNotExists = jest.spyOn(Databases.prototype, 'createIfNotExists');
-    const spyOnContainersCreateIfNotExists = jest.spyOn(Containers.prototype, 'createIfNotExists');
+    const spyOnDatabasesCreateIfNotExists = jest
+      .spyOn(Databases.prototype, 'createIfNotExists')
+      .mockResolvedValueOnce({} as DatabaseResponse);
+    const spyOnContainersCreateIfNotExists = jest
+      .spyOn(Containers.prototype, 'createIfNotExists')
+      .mockResolvedValueOnce({} as ContainerResponse);
 
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
     await surveyDBHandler.init();
@@ -31,7 +35,9 @@ describe('Test surveyDBHandler', () => {
     const config = getServerConfig();
     const cosmosClient = new CosmosClient(config);
 
-    const spyOnUpsert = jest.spyOn(Items.prototype, 'upsert');
+    const spyOnUpsert = jest
+      .spyOn(Items.prototype, 'upsert')
+      .mockImplementationOnce((): Promise<any> => Promise.resolve());
 
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
     await surveyDBHandler.saveSurveyResult(testInputData);

@@ -53,7 +53,11 @@ describe('Test cosmosClient', () => {
 
     const createdDatabase = cosmosClient.getDatabase();
 
-    expect(createdDatabase!.id).toBe(expectedDatabaseId);
+    if (createdDatabase) {
+      expect(createdDatabase.id).toBe(expectedDatabaseId);
+    } else {
+      expect(createdDatabase).not.toBeUndefined();
+    }
   });
 
   test("Test createIfNotExists doesn't get trigger when database already exists", async () => {
@@ -97,7 +101,11 @@ describe('Test cosmosClient', () => {
 
     const createdContainer = cosmosClient.getContainer();
 
-    expect(createdContainer!.id).toBe(expectedContainerId);
+    if (createdContainer) {
+      expect(createdContainer.id).toBe(expectedContainerId);
+    } else {
+      expect(createdContainer).not.toBeUndefined();
+    }
   });
 
   test('Test if container is undefined without calling createContainer', () => {
