@@ -161,7 +161,7 @@ describe('MeetingExperience', () => {
     expect(callWithChatComposites.length).toBe(1);
   });
 
-  it('should render Survey component', async () => {
+  it('should render Survey component when postcall is defined and valid', async () => {
     const setRenderPostCallMock = jest.fn();
     const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
     jest.spyOn(React, 'useState').mockImplementation(useStateMock);
@@ -187,10 +187,48 @@ describe('MeetingExperience', () => {
 
     meetingExperience.update();
 
-    const survey = meetingExperience.find(Survey);
+    expect(setRenderPostCallMock).toBeCalled();
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-    expect(callWithChatComposites.length).toBe(0);
+    expect(callWithChatComposites.length).toBe(1);
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('none');
+
+    const survey = meetingExperience.find(Survey);
     expect(survey.length).toBe(1);
-    expect(callWithChatComposites.length).toBe(0);
+  });
+
+  it('should not render Survey component when postcall is undefined', async () => {
+    const setRenderPostCallMock = jest.fn();
+    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
+    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+
+    const meetingExperience = await mount<MeetingExperienceProps>(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={undefined}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+
+    meetingExperience.update();
+
+    expect(setRenderPostCallMock).toBeCalled();
+    const survey = meetingExperience.find(Survey);
+    expect(survey.length).toBe(0);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+    expect(callWithChatComposites.length).toBe(1);
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('flex');
   });
 });

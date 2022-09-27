@@ -9,8 +9,7 @@ import {
   COMPOSITE_LOCALE_EN_US,
   createStatefulCallClient,
   createAzureCommunicationCallWithChatAdapterFromClients,
-  createStatefulChatClient,
-  CallWithChatAdapterState
+  createStatefulChatClient
 } from '@azure/communication-react';
 import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
@@ -18,7 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
-import { meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
+import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
 import { Survey } from '../components/Survey';
 
@@ -89,49 +88,47 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-    if (renderPostCall && postCall) {
-      return (
-        <Survey
-          postCall={postCall}
-          onRejoinCall={() => {
-            setRenderPostCall(false);
-            callWithChatAdapter.onStateChange((state: CallWithChatAdapterState) => {
-              //page is set to lobby to avoid flicker of Devices page when "rejoin call" is clicked
-              if (state.page === 'configuration') state.page = 'lobby';
-            });
-            callWithChatAdapter.joinCall();
-          }}
-        />
-      );
-    }
-
     return (
-      <CallWithChatComposite
-        adapter={callWithChatAdapter}
-        fluentTheme={fluentTheme}
-        options={{
-          callControls: {
-            chatButton: chatEnabled
-          }
-        }}
-        locale={{
-          component: locale.component,
-          strings: {
-            chat: locale.strings.chat,
-            call: {
-              ...locale.strings.call,
-              lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
-              lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
-            },
-            callWithChat: locale.strings.callWithChat
-          }
-        }}
-        icons={{
-          LobbyScreenWaitingToBeAdmitted: logo,
-          LobbyScreenConnectingToCall: logo
-        }}
-        formFactor={formFactorValue}
-      />
+      <>
+        {renderPostCall && postCall && (
+          <Survey
+            data-testid="Survey"
+            postCall={postCall}
+            onRejoinCall={async () => {
+              await callWithChatAdapter.joinCall();
+              setRenderPostCall(false);
+            }}
+          />
+        )}
+        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
+          <CallWithChatComposite
+            adapter={callWithChatAdapter}
+            fluentTheme={fluentTheme}
+            options={{
+              callControls: {
+                chatButton: chatEnabled
+              }
+            }}
+            locale={{
+              component: locale.component,
+              strings: {
+                chat: locale.strings.chat,
+                call: {
+                  ...locale.strings.call,
+                  lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
+                  lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
+                },
+                callWithChat: locale.strings.callWithChat
+              }
+            }}
+            icons={{
+              LobbyScreenWaitingToBeAdmitted: logo,
+              LobbyScreenConnectingToCall: logo
+            }}
+            formFactor={formFactorValue}
+          />
+        </div>
+      </>
     );
   }
   if (credential === undefined) {
