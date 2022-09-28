@@ -34,8 +34,7 @@ describe('Test cosmosClient', () => {
   test('Initialize cosmosClient when VV_COSMOS_DB_CONNECTION_STRING not present.', async () => {
     const config = getServerConfig();
     const cosmosClient = new CosmosClient(config);
-    console.log(process.env);
-    console.log(cosmosClient);
+
     expect(cosmosClient['clientContext']['cosmosClientOptions']).not.toHaveProperty('key');
   });
 
