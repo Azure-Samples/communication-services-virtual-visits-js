@@ -6,8 +6,14 @@ import CosmosClient from './cosmosClient';
 import { getServerConfig } from '../utils/getConfig';
 
 describe('Test cosmosClient', () => {
+  beforeEach(() => {
+    process.env.VV_COSMOS_DB_ENDPOINT = 'https://testinghost/';
+  });
+
   afterEach(() => {
     delete process.env.VV_COSMOS_DB_CONNECTION_STRING;
+    delete process.env.VV_COSMOS_DB_ENDPOINT;
+    delete process.env.VV_COSMOS_DB_NAME;
   });
 
   test('Initialize cosmosClient when VV_COSMOS_DB_CONNECTION_STRING present.', async () => {
@@ -28,7 +34,8 @@ describe('Test cosmosClient', () => {
   test('Initialize cosmosClient when VV_COSMOS_DB_CONNECTION_STRING not present.', async () => {
     const config = getServerConfig();
     const cosmosClient = new CosmosClient(config);
-
+    console.log(process.env);
+    console.log(cosmosClient);
     expect(cosmosClient['clientContext']['cosmosClientOptions']).not.toHaveProperty('key');
   });
 

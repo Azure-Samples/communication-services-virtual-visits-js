@@ -29,8 +29,7 @@ describe('surveyResultController', () => {
 
     const res = await request(app).post('/api/createSurveyResult').send(inputData);
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual('Store successfully.');
+    expect(res.statusCode).toEqual(201);
   });
 
   test.each([
