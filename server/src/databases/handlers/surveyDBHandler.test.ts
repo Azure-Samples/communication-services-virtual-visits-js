@@ -7,6 +7,14 @@ import CosmosClient from '../cosmosClient';
 import SurveyDBHandler from './surveyDBHandler';
 
 describe('Test surveyDBHandler', () => {
+  beforeEach(() => {
+    process.env.VV_COSMOS_DB_ENDPOINT = 'https://testinghost/';
+  });
+
+  afterEach(() => {
+    delete process.env.VV_COSMOS_DB_ENDPOINT;
+  });
+
   test('Test init', async () => {
     const config = getServerConfig();
     const cosmosClient = new CosmosClient(config);

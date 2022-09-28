@@ -10,6 +10,8 @@ import { ERROR_PAYLOAD_500 } from './errors';
 import fs from 'fs';
 import path from 'path';
 
+jest.mock('@azure/cosmos');
+
 const createFile = (filePath: string): void => {
   fs.writeFileSync(path.join(__dirname, filePath), '<!DOCTYPE html><html></html>');
 };
@@ -37,6 +39,7 @@ describe('app route tests', () => {
 describe('route tests', () => {
   const bookFilePath = 'public/book.html';
   const visitFilePath = 'public/visit.html';
+
   /**
    * Create static files as they are not available during the local development
    * In prod these are compiled from client and copied into the public folder
@@ -46,6 +49,7 @@ describe('route tests', () => {
     createFile(bookFilePath);
     createFile(visitFilePath);
   });
+
   /**
    * Delete the previously created files and directory */
   afterAll(() => {
@@ -53,6 +57,7 @@ describe('route tests', () => {
     deleteFile(visitFilePath);
     deleteDir();
   });
+
   test('/book should return 200 response with book html page', async () => {
     const getResponse = await request(app).get('/book');
     expect(getResponse.headers['content-type']).toEqual('text/html; charset=UTF-8');

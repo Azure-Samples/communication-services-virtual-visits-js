@@ -1,22 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Containers, ContainerResponse, Databases, DatabaseResponse, Items, ItemResponse } from '@azure/cosmos';
 import request from 'supertest';
 import app from '../app';
 import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
 
-jest
-  .spyOn(Databases.prototype, 'createIfNotExists')
-  .mockResolvedValueOnce({ database: { id: '1' } } as DatabaseResponse);
-
-jest
-  .spyOn(Containers.prototype, 'createIfNotExists')
-  .mockResolvedValueOnce({ container: { id: '1' } } as ContainerResponse);
-
-jest
-  .spyOn(Items.prototype, 'upsert')
-  .mockResolvedValueOnce({ item: { id: '1', container: { id: '1', database: { id: '1' } } } } as ItemResponse<any>);
+jest.mock('../databases/cosmosClient');
 
 describe('surveyResultController', () => {
   test('Should success on upsert.', async () => {
