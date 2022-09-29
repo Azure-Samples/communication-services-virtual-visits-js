@@ -2,9 +2,11 @@
 // Licensed under the MIT license.
 
 export type PostCallSurveyType = 'msforms' | 'custom' | 'onequestionpoll';
+
 export interface MSFormsSurveyOptions {
   surveyUrl: string;
 }
+
 export interface CustomSurveyOptions {
   surveyUrl: string;
 }
@@ -18,12 +20,20 @@ export interface OneQuestionPollOptions {
   answerPlaceholder?: string;
   saveButtonText: string;
 }
+
 export interface PostCallConfig {
   survey: {
     type: PostCallSurveyType;
     options: MSFormsSurveyOptions | CustomSurveyOptions | OneQuestionPollOptions;
   };
 }
+
+export interface CosmosDBConfig {
+  connectionString?: string;
+  endpoint?: string;
+  dbName: string;
+}
+
 export interface ServerConfigModel {
   communicationServicesConnectionString: string;
   microsoftBookingsUrl: string;
@@ -35,9 +45,7 @@ export interface ServerConfigModel {
   waitingSubtitle: string;
   logoUrl: string;
   postCall?: PostCallConfig;
-  cosmosDBConnectionString: string | undefined;
-  cosmosDBEndpoint: string;
-  cosmosDBName: string;
+  cosmosDb?: CosmosDBConfig;
 }
 
 export interface ClientConfigModel {

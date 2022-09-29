@@ -11,7 +11,7 @@ import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import CosmosClient from './databases/cosmosClient';
 import SurveyDBHandler from './databases/handlers/surveyDBHandler';
-import { ERROR_PAYLOAD_500 } from './errors';
+// import { ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
 
@@ -60,10 +60,12 @@ const identityClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
-const cosmosClient = new CosmosClient(config);
-const surveyDBHandler = new SurveyDBHandler(cosmosClient);
+if (config.cosmosDb) {
+  const cosmosClient = new CosmosClient(config.cosmosDb);
+  const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
-app.post('/api/createSurveyResult', storeSurveyResult(surveyDBHandler));
+  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
+}
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
@@ -74,7 +76,7 @@ app.use((err, req, res, next) => {
     return next(err);
   }
 
-  res.status(500).json(ERROR_PAYLOAD_500);
+  res.status(500).send({ error: err.message });
 });
 
 export default app;

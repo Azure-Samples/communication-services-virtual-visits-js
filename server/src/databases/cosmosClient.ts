@@ -9,26 +9,27 @@ import {
   Database
 } from '@azure/cosmos';
 import { DefaultAzureCredential } from '@azure/identity';
-import { ServerConfigModel } from '../models/configModel';
+import { CosmosDBConfig } from '../models/configModel';
+import { SurveyResultRequestModel } from '../models/surveyModel';
 
 class CosmosClient extends AzureCosmosClient {
   private _cosmosDBName: string;
   private _database: Database | undefined;
   private _container: Container | undefined;
 
-  constructor({ cosmosDBConnectionString, cosmosDBEndpoint, cosmosDBName }: ServerConfigModel) {
-    const cosmosClientOptions: CosmosClientOptions = {
-      endpoint: cosmosDBEndpoint,
-      aadCredentials: new DefaultAzureCredential()
-    };
-
-    if (cosmosDBConnectionString) {
-      super(cosmosDBConnectionString);
+  constructor({ connectionString, endpoint, dbName }: CosmosDBConfig) {
+    if (connectionString && connectionString.length > 0) {
+      super(connectionString);
     } else {
+      const cosmosClientOptions: CosmosClientOptions = {
+        endpoint: endpoint!,
+        aadCredentials: new DefaultAzureCredential()
+      };
+
       super(cosmosClientOptions);
     }
 
-    this._cosmosDBName = cosmosDBName;
+    this._cosmosDBName = dbName;
     this._database = undefined;
     this._container = undefined;
   }
@@ -51,7 +52,7 @@ class CosmosClient extends AzureCosmosClient {
     }
   }
 
-  async upsert(containerId: string, item: any): Promise<void> {
+  async upsert(containerId: string, item: SurveyResultRequestModel): Promise<void> {
     await this.database(this._cosmosDBName).container(containerId).items.upsert(item);
   }
 
