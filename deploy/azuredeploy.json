@@ -64,7 +64,7 @@
     "postCallSurveyOneQuestionPollSaveButtonText": "",
     "cosmosDbAccountName": "[concat('db-account-', parameters('appServiceName'))]",
     "roleDefinitionName": "[concat('sql-role-definition-', parameters('appServiceName'))]",
-    "cosmosDbName": "",
+    "cosmosDbName": "[concat('cosmos-db-', parameters('appServiceName'))]",
     "roleDefinitionId": "[guid('sql-role-definition-', resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]",
     "roleAssignmentId": "[guid(variables('roleDefinitionId'), resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]"
   },
@@ -91,7 +91,7 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
-      "apiVersion": "2021-10-15",
+      "apiVersion": "2022-05-15",
       "name": "[variables('cosmosDbAccountName')]",
       "location": "[resourceGroup().location]",
       "kind": "GlobalDocumentDB",
@@ -166,7 +166,7 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
-      "apiVersion": "2021-04-15",
+      "apiVersion": "2022-05-15",
       "name": "[format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
@@ -192,7 +192,7 @@
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
-      "apiVersion": "2021-04-15",
+      "apiVersion": "2022-05-15",
       "name": "[format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleAssignmentId'))]",
       "dependsOn": [
         "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]",
