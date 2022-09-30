@@ -31,10 +31,7 @@ describe('configController', () => {
       colorPalette: 'str4',
       waitingTitle: 'str5',
       waitingSubtitle: 'str6',
-      logoUrl: 'str7',
-      cosmosDBConnectionString: 'str8',
-      cosmosDBEndpoint: 'str9',
-      cosmosDBName: 'str10'
+      logoUrl: 'str7'
     };
     const controller = configController(cfg);
     const resp = createMockedResponseObject();
@@ -51,9 +48,6 @@ describe('configController', () => {
     expect(resp.lastJson.waitingTitle).toBe('str5');
     expect(resp.lastJson.waitingSubtitle).toBe('str6');
     expect(resp.lastJson.logoUrl).toBe('str7');
-    expect(resp.lastJson).not.toHaveProperty('cosmosDBConnectionString');
-    expect(resp.lastJson).not.toHaveProperty('cosmosDBEndpoint');
-    expect(resp.lastJson).not.toHaveProperty('cosmosDBName');
   });
 
   test('delegates errors to other handlers with next()', () => {
@@ -66,10 +60,7 @@ describe('configController', () => {
       colorPalette: '',
       waitingTitle: '',
       waitingSubtitle: '',
-      logoUrl: '',
-      cosmosDBConnectionString: '',
-      cosmosDBEndpoint: '',
-      cosmosDBName: ''
+      logoUrl: ''
     };
     const controller = configController(invalidConfig);
     const resp = createMockedResponseObject();
