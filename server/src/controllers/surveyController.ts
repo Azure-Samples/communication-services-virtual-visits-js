@@ -35,7 +35,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
     await surveyDBHandler.init();
     await surveyDBHandler.saveSurveyResult(inputData);
 
-    return res.status(201).send();
+    return res.status(200).send();
   } catch (error) {
     return next(error);
   }

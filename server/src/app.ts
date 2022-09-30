@@ -11,7 +11,6 @@ import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import CosmosClient from './databases/cosmosClient';
 import SurveyDBHandler from './databases/handlers/surveyDBHandler';
-// import { ERROR_PAYLOAD_500 } from './errors';
 
 const app = express();
 

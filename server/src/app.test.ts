@@ -6,7 +6,6 @@
 
 import request from 'supertest';
 import app from './app';
-import { ERROR_PAYLOAD_500 } from './errors';
 import fs from 'fs';
 import path from 'path';
 
@@ -91,8 +90,21 @@ describe('errors', () => {
 
   test('returns a generic 500 response when an endpoints throws an error', async () => {
     // calling the /api/token endpoint without proper mocking throws TypeError
+    const expectedError = { error: 'client.createUserAndToken is not a function' };
     const getResponse = await request(app).get('/api/token');
     expect(getResponse.status).toEqual(500);
-    expect(getResponse.text).toEqual(JSON.stringify(ERROR_PAYLOAD_500));
+    expect(getResponse.text).toEqual(JSON.stringify(expectedError));
+  });
+
+  test('return 200 sending option request', async () => {
+    const getResponse = await request(app).options('/api/surveyReesult');
+
+    expect(getResponse.status).toBe(200);
+  });
+
+  test('check if /api/surveyResults route is open without cosmosDb configs', async () => {
+    const getResponse = await request(app).post('/api/surveyReesult');
+
+    expect(getResponse.status).toBe(404);
   });
 });

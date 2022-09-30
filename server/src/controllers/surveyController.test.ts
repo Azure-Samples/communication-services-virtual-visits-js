@@ -1,24 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import request from 'supertest';
-import app from '../app';
+import CosmosClient from '../databases/cosmosClient';
 import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
+import { storeSurveyResult } from '../controllers/surveyController';
+import { getServerConfig } from '../utils/getConfig';
 
 jest.mock('../databases/cosmosClient');
 
 describe('surveyResultController', () => {
-  test('Should success on upsert.', async () => {
+  let response;
+  let next;
+
+  beforeEach(() => {
+    process.env.VV_COSMOS_DB_ENDPOINT = 'https://testinghost/';
+    response = {
+      send: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis()
+    } as any;
+    next = jest.fn();
+  });
+
+  afterEach(() => {
+    delete process.env.VV_COSMOS_DB_ENDPOINT;
+    jest.resetAllMocks();
+  });
+
+  test('Should success on upsert', async () => {
     const inputData: any = {
       sessionId: 'test_session_id',
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
       response: true
     };
+    const request: any = { body: inputData };
 
-    const res = await request(app).post('/api/createSurveyResult').send(inputData);
+    const config = getServerConfig();
+    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
-    expect(res.statusCode).toEqual(201);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(200);
   });
 
   test.each([
@@ -31,10 +55,17 @@ describe('surveyResultController', () => {
       errors: [expectedError]
     };
 
-    const res = await request(app).post('/api/createSurveyResult').send(invalidInput);
+    const request: any = { body: invalidInput };
 
-    expect(res.statusCode).toEqual(400);
-    expect(res.body).toEqual(expectedErrorResponse);
+    const config = getServerConfig();
+    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
+
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test.each([
@@ -50,14 +81,19 @@ describe('surveyResultController', () => {
     [3, ['callId is missing', 'acsUserId is missing', 'response is missing'], { sessionId: 'test_session_id' }],
     [4, ['sessionId is missing', 'callId is missing', 'acsUserId is missing', 'response is missing'], {}]
   ])('Test when %d validations failed: %s', async (_, errors: string[], invalidInput: any) => {
-    const expectedErrorResponse = {
-      errors: errors
-    };
+    const expectedErrorResponse = { errors };
 
-    const res = await request(app).post('/api/createSurveyResult').send(invalidInput);
+    const request: any = { body: invalidInput };
 
-    expect(res.statusCode).toEqual(400);
-    expect(res.body).toEqual(expectedErrorResponse);
+    const config = getServerConfig();
+    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
+
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test('Should failed on any other errors.', async () => {
@@ -67,21 +103,18 @@ describe('surveyResultController', () => {
       acsUserId: 'test_acs_user_id',
       response: true
     };
-    const expectedError = {
-      errors: [
-        {
-          detail: 'The server has encountered an error. Refresh the page to try again.',
-          status: 500,
-          title: '500: Internal server error'
-        }
-      ]
-    };
+    const expectedError = new Error('failed to save');
+    const request: any = { body: inputData };
 
-    jest.spyOn(SurveyDBHandler.prototype, 'saveSurveyResult').mockRejectedValueOnce(new Error('failed to save'));
+    jest.spyOn(SurveyDBHandler.prototype, 'saveSurveyResult').mockRejectedValueOnce(expectedError);
 
-    const res = await request(app).post('/api/createSurveyResult').send(inputData);
+    const config = getServerConfig();
+    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
-    expect(res.statusCode).toEqual(500);
-    expect(res.body).toEqual(expectedError);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expectedError);
   });
 });
