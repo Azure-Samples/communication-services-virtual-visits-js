@@ -22,34 +22,58 @@ describe('Test cosmosClient', () => {
     process.env.VV_COSMOS_DB_CONNECTION_STRING = `AccountEndpoint=${expectedEndpoint};AccountKey=${expectedAccountKey}`;
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
 
-    const endpoint = cosmosClient['clientContext']['cosmosClientOptions']['endpoint'];
-    const accountKey = cosmosClient['clientContext']['cosmosClientOptions']['key'];
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
 
-    expect(endpoint).toBe(expectedEndpoint);
-    expect(accountKey).toBe(expectedAccountKey);
+      const endpoint = cosmosClient['clientContext']['cosmosClientOptions']['endpoint'];
+      const accountKey = cosmosClient['clientContext']['cosmosClientOptions']['key'];
+
+      expect(endpoint).toBe(expectedEndpoint);
+      expect(accountKey).toBe(expectedAccountKey);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
   });
 
   test('Initialize cosmosClient when VV_COSMOS_DB_CONNECTION_STRING not present.', async () => {
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
 
-    expect(cosmosClient['clientContext']['cosmosClientOptions']).not.toHaveProperty('key');
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+
+      expect(cosmosClient['clientContext']['cosmosClientOptions']).not.toHaveProperty('key');
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
   });
 
   test('Test if database is undefined without calling createDatabase', () => {
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
 
-    expect(cosmosClient.getDatabase()).toBeUndefined();
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+
+      expect(cosmosClient.getDatabase()).toBeUndefined();
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
   });
 
   test('Test creating database', async () => {
     const expectedDatabaseId = 'testDatabaseId';
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     jest
       .spyOn(Databases.prototype, 'createIfNotExists')
@@ -70,7 +94,13 @@ describe('Test cosmosClient', () => {
     const expectedDatabaseId = 'testDatabaseId';
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     const mockedCreateIfNotExists = jest
       .spyOn(Databases.prototype, 'createIfNotExists')
@@ -97,7 +127,13 @@ describe('Test cosmosClient', () => {
     };
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     jest
       .spyOn(Containers.prototype, 'createIfNotExists')
@@ -116,9 +152,15 @@ describe('Test cosmosClient', () => {
 
   test('Test if container is undefined without calling createContainer', () => {
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
 
-    expect(cosmosClient.getContainer()).toBeUndefined();
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+
+      expect(cosmosClient.getContainer()).toBeUndefined();
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
   });
 
   test("Test createIfNotExists doesn't get trigger when container already exists", async () => {
@@ -131,7 +173,13 @@ describe('Test cosmosClient', () => {
     };
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     const mockedCreateIfNotExists = jest
       .spyOn(Containers.prototype, 'createIfNotExists')
@@ -164,7 +212,13 @@ describe('Test cosmosClient', () => {
       .mockImplementationOnce((result): Promise<any> => Promise.resolve((upsertResult = result)));
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     await cosmosClient.upsert(testContainerId, testInputData);
 

@@ -36,7 +36,12 @@ describe('surveyResultController', () => {
     const request: any = { body: inputData };
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    }
+
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
     await storeSurveyResult(surveyDBHandler)(request, response, next);
@@ -58,7 +63,11 @@ describe('surveyResultController', () => {
     const request: any = { body: invalidInput };
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    }
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
     await storeSurveyResult(surveyDBHandler)(request, response, next);
@@ -86,7 +95,11 @@ describe('surveyResultController', () => {
     const request: any = { body: invalidInput };
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    }
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
     await storeSurveyResult(surveyDBHandler)(request, response, next);
@@ -109,7 +122,11 @@ describe('surveyResultController', () => {
     jest.spyOn(SurveyDBHandler.prototype, 'saveSurveyResult').mockRejectedValueOnce(expectedError);
 
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    }
     const surveyDBHandler = new SurveyDBHandler(cosmosClient);
 
     await storeSurveyResult(surveyDBHandler)(request, response, next);

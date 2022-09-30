@@ -103,7 +103,7 @@ describe('errors', () => {
   });
 
   test('check if /api/surveyResults route is open without cosmosDb configs', async () => {
-    const getResponse = await request(app).post('/api/surveyReesult');
+    const getResponse = await request(app).post('/api/surveyResults');
 
     expect(getResponse.status).toBe(404);
   });

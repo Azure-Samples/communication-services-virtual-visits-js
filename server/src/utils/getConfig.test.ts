@@ -288,4 +288,88 @@ describe('config', () => {
     expect(getDefaultConfigSpy).toHaveBeenCalled();
     expect(config.postCall).not.toBeDefined();
   });
+
+  test('getSeverConfig returns undefined cosmosDb without any cosmosDb', () => {
+    const config = getConfig.getServerConfig();
+
+    expect(config.cosmosDb).toBeUndefined();
+  });
+
+  test('getServerConfig returns cosmosDb with connection string with database name from environment variable', () => {
+    process.env.VV_COSMOS_DB_CONNECTION_STRING = 'testingConnectionString';
+    process.env.VV_COSMOS_DB_NAME = 'testingDBName';
+
+    const config = getConfig.getServerConfig();
+
+    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toHaveProperty('connectionString');
+    expect(config.cosmosDb).toHaveProperty('dbName');
+  });
+
+  test('getServerConfig return cosmosDb with endpoint with database name from environment variable', () => {
+    process.env.VV_COSMOS_DB_ENDPOINT = 'testingEndpoint';
+    process.env.VV_COSMOS_DB_NAME = 'testingDBName';
+
+    const config = getConfig.getServerConfig();
+
+    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toHaveProperty('endpoint');
+    expect(config.cosmosDb).toHaveProperty('dbName');
+  });
+
+  test('getServerConfig return cosmosDb with connection string with database name from defaultConfig', () => {
+    const mockDefaultConfig = {
+      communicationServicesConnectionString: 'dummy endpoint',
+      microsoftBookingsUrl: 'dummyBookingsUrl',
+      chatEnabled: true,
+      screenShareEnabled: true,
+      companyName: 'test Healthcare',
+      colorPalette: '#0078d4',
+      waitingTitle: 'Thank you for choosing Lamna Healthcare',
+      waitingSubtitle: 'Your clinician is joining the meeting',
+      logoUrl: '',
+      cosmosDb: {
+        connectionString: 'testingConnectionString',
+        dbName: 'testingDBName'
+      }
+    };
+
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
+    const config = getConfig.getServerConfig();
+
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
+    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toHaveProperty('connectionString');
+    expect(config.cosmosDb).toHaveProperty('dbName');
+  });
+
+  test('getServerConfig return cosmosDb with endpoint with database name from defaultConfig', () => {
+    const mockDefaultConfig = {
+      communicationServicesConnectionString: 'dummy endpoint',
+      microsoftBookingsUrl: 'dummyBookingsUrl',
+      chatEnabled: true,
+      screenShareEnabled: true,
+      companyName: 'test Healthcare',
+      colorPalette: '#0078d4',
+      waitingTitle: 'Thank you for choosing Lamna Healthcare',
+      waitingSubtitle: 'Your clinician is joining the meeting',
+      logoUrl: '',
+      cosmosDb: {
+        endpoint: 'testingEndpoint',
+        dbName: 'testingDBName'
+      }
+    };
+
+    const getDefaultConfigSpy = jest
+      .spyOn(getDefaultConfig, 'getDefaultConfig')
+      .mockImplementation((): any => mockDefaultConfig);
+    const config = getConfig.getServerConfig();
+
+    expect(getDefaultConfigSpy).toHaveBeenCalled();
+    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toHaveProperty('endpoint');
+    expect(config.cosmosDb).toHaveProperty('dbName');
+  });
 });

@@ -17,7 +17,13 @@ describe('Test surveyDBHandler', () => {
 
   test('Test init', async () => {
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     const spyOnDatabasesCreateIfNotExists = jest
       .spyOn(Databases.prototype, 'createIfNotExists')
@@ -41,7 +47,13 @@ describe('Test surveyDBHandler', () => {
       response: true
     };
     const config = getServerConfig();
-    const cosmosClient = new CosmosClient(config.cosmosDb!);
+    let cosmosClient;
+
+    if (config.cosmosDb) {
+      cosmosClient = new CosmosClient(config.cosmosDb);
+    } else {
+      expect(cosmosClient).toBeUndefined();
+    }
 
     const spyOnUpsert = jest
       .spyOn(Items.prototype, 'upsert')

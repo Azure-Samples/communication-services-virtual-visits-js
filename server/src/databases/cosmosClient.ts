@@ -22,7 +22,7 @@ class CosmosClient extends AzureCosmosClient {
       super(connectionString);
     } else {
       const cosmosClientOptions: CosmosClientOptions = {
-        endpoint: endpoint!,
+        endpoint: endpoint as string,
         aadCredentials: new DefaultAzureCredential()
       };
 

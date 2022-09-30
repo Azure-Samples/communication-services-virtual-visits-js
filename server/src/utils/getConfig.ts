@@ -137,7 +137,7 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
 
 const getCosmosDBConfig = (defaultConfig: ServerConfigModel): CosmosDBConfig | undefined => {
   let cosmosDBConfig: CosmosDBConfig = {
-    dbName: process.env[VV_COSMOS_DB_NAME] ?? defaultConfig.cosmosDb?.dbName!
+    dbName: process.env[VV_COSMOS_DB_NAME] ?? (defaultConfig.cosmosDb?.dbName as string)
   };
 
   const cosmosDBConnectionString =
