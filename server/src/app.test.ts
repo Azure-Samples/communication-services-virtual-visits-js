@@ -9,7 +9,21 @@ import app from './app';
 import fs from 'fs';
 import path from 'path';
 
-jest.mock('@azure/cosmos');
+jest.mock('./utils/getConfig', () => {
+  return {
+    getServerConfig: () => ({
+      communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
+      microsoftBookingsUrl: 'https://testBookingsUrl',
+      chatEnabled: true,
+      screenShareEnabled: true,
+      companyName: 'Lamna Healthcare',
+      colorPalette: '#0078d4',
+      waitingTitle: 'Thank you for choosing Lamna Healthcare',
+      waitingSubtitle: 'Your clinician is joining the meeting',
+      logoUrl: ''
+    })
+  };
+});
 
 const createFile = (filePath: string): void => {
   fs.writeFileSync(path.join(__dirname, filePath), '<!DOCTYPE html><html></html>');
@@ -94,17 +108,5 @@ describe('errors', () => {
     const getResponse = await request(app).get('/api/token');
     expect(getResponse.status).toEqual(500);
     expect(getResponse.text).toEqual(JSON.stringify(expectedError));
-  });
-
-  test('return 200 sending option request', async () => {
-    const getResponse = await request(app).options('/api/surveyReesult');
-
-    expect(getResponse.status).toBe(200);
-  });
-
-  test('check if /api/surveyResults route is open without cosmosDb configs', async () => {
-    const getResponse = await request(app).post('/api/surveyResults');
-
-    expect(getResponse.status).toBe(404);
   });
 });

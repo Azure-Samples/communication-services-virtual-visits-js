@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import CosmosClient from '../databases/cosmosClient';
+import { Items } from '@azure/cosmos';
 import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
 import { storeSurveyResult } from '../controllers/surveyController';
 import { getServerConfig } from '../utils/getConfig';
-
-jest.mock('../databases/cosmosClient');
 
 describe('surveyResultController', () => {
   let response;
@@ -34,20 +32,32 @@ describe('surveyResultController', () => {
       response: true
     };
     const request: any = { body: inputData };
-
+    const mockedUpsert = jest.fn();
+    const mockedCosmosClient = {
+      database: jest.fn().mockImplementation(() => {
+        return {
+          container: jest.fn().mockImplementation(() => {
+            return {
+              items: {
+                upsert: mockedUpsert
+              }
+            };
+          })
+        };
+      })
+    };
     const config = getServerConfig();
-    let cosmosClient;
+
+    jest.spyOn(Items.prototype, 'upsert').mockImplementationOnce((): Promise<any> => Promise.resolve());
 
     if (config.cosmosDb) {
-      cosmosClient = new CosmosClient(config.cosmosDb);
+      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+
+      await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+      expect(response.send).toHaveBeenCalled();
+      expect(response.status).toHaveBeenCalledWith(200);
     }
-
-    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
-
-    await storeSurveyResult(surveyDBHandler)(request, response, next);
-
-    expect(response.send).toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(200);
   });
 
   test.each([
@@ -59,22 +69,32 @@ describe('surveyResultController', () => {
     const expectedErrorResponse = {
       errors: [expectedError]
     };
-
     const request: any = { body: invalidInput };
-
+    const mockedUpsert = jest.fn();
+    const mockedCosmosClient = {
+      database: jest.fn().mockImplementation(() => {
+        return {
+          container: jest.fn().mockImplementation(() => {
+            return {
+              items: {
+                upsert: mockedUpsert
+              }
+            };
+          })
+        };
+      })
+    };
     const config = getServerConfig();
-    let cosmosClient;
 
     if (config.cosmosDb) {
-      cosmosClient = new CosmosClient(config.cosmosDb);
+      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+
+      await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+      expect(response.send).toHaveBeenCalled();
+      expect(response.status).toHaveBeenCalledWith(400);
+      expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
     }
-    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
-
-    await storeSurveyResult(surveyDBHandler)(request, response, next);
-
-    expect(response.send).toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(400);
-    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test.each([
@@ -91,22 +111,32 @@ describe('surveyResultController', () => {
     [4, ['sessionId is missing', 'callId is missing', 'acsUserId is missing', 'response is missing'], {}]
   ])('Test when %d validations failed: %s', async (_, errors: string[], invalidInput: any) => {
     const expectedErrorResponse = { errors };
-
     const request: any = { body: invalidInput };
-
+    const mockedUpsert = jest.fn();
+    const mockedCosmosClient = {
+      database: jest.fn().mockImplementation(() => {
+        return {
+          container: jest.fn().mockImplementation(() => {
+            return {
+              items: {
+                upsert: mockedUpsert
+              }
+            };
+          })
+        };
+      })
+    };
     const config = getServerConfig();
-    let cosmosClient;
 
     if (config.cosmosDb) {
-      cosmosClient = new CosmosClient(config.cosmosDb);
+      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+
+      await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+      expect(response.send).toHaveBeenCalled();
+      expect(response.status).toHaveBeenCalledWith(400);
+      expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
     }
-    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
-
-    await storeSurveyResult(surveyDBHandler)(request, response, next);
-
-    expect(response.send).toHaveBeenCalled();
-    expect(response.status).toHaveBeenCalledWith(400);
-    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test('Should failed on any other errors.', async () => {
@@ -118,20 +148,32 @@ describe('surveyResultController', () => {
     };
     const expectedError = new Error('failed to save');
     const request: any = { body: inputData };
+    const mockedUpsert = jest.fn();
+    const mockedCosmosClient = {
+      database: jest.fn().mockImplementation(() => {
+        return {
+          container: jest.fn().mockImplementation(() => {
+            return {
+              items: {
+                upsert: mockedUpsert
+              }
+            };
+          })
+        };
+      })
+    };
 
     jest.spyOn(SurveyDBHandler.prototype, 'saveSurveyResult').mockRejectedValueOnce(expectedError);
 
     const config = getServerConfig();
-    let cosmosClient;
 
     if (config.cosmosDb) {
-      cosmosClient = new CosmosClient(config.cosmosDb);
+      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+
+      await storeSurveyResult(surveyDBHandler)(request, response, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expectedError);
     }
-    const surveyDBHandler = new SurveyDBHandler(cosmosClient);
-
-    await storeSurveyResult(surveyDBHandler)(request, response, next);
-
-    expect(next).toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(expectedError);
   });
 });

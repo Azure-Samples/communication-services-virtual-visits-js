@@ -21,6 +21,9 @@ describe('config', () => {
     delete process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT;
     delete process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE;
     delete process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT;
+    delete process.env.VV_COSMOS_DB_CONNECTION_STRING;
+    delete process.env.VV_COSMOS_DB_ENDPOINT;
+    delete process.env.VV_COSMOS_DB_NAME;
   });
   afterEach(() => {
     jest.clearAllMocks();
