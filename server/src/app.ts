@@ -9,8 +9,7 @@ import { removeJsonpCallback } from './utils/removeJsonpCallback';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
-import CosmosClient from './databases/cosmosClient';
-import SurveyDBHandler from './databases/handlers/surveyDBHandler';
+import { createSurveyDBHandler } from './utils/surveyDBHandlerUtil';
 
 const app = express();
 
@@ -59,9 +58,10 @@ const identityClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
-if (config.cosmosDb) {
-  const cosmosClient = new CosmosClient(config.cosmosDb);
-  const surveyDBHandler = new SurveyDBHandler(cosmosClient);
+const surveyDBHandler = createSurveyDBHandler(config);
+
+if (surveyDBHandler) {
+  Promise.resolve(surveyDBHandler.init());
 
   app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
 }

@@ -32,7 +32,6 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
       createdOn: new Date()
     };
 
-    await surveyDBHandler.init();
     await surveyDBHandler.saveSurveyResult(inputData);
 
     return res.status(200).send();
