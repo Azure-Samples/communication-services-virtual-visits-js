@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { Survey, SurveyProps } from './Survey';
-import { MSFormsSurveyOptions, PostCallConfig } from '../models/ConfigModel';
+import { MSFormsSurveyOptions, PostCallConfig } from '../../models/ConfigModel';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 

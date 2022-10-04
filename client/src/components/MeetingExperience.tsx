@@ -19,7 +19,7 @@ import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
-import { Survey } from '../components/Survey';
+import { Survey } from './postcall/Survey';
 
 import { PostCallConfig } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
@@ -92,6 +92,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
       <>
         {renderPostCall && postCall && (
           <Survey
+            theme={fluentTheme}
             data-testid="Survey"
             postCall={postCall}
             onRejoinCall={async () => {
