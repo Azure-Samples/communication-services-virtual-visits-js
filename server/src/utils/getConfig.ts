@@ -149,17 +149,11 @@ const getCosmosDBConfig = (defaultConfig: ServerConfigModel): CosmosDBConfig | u
   }
 
   if (cosmosDBConnectionString) {
-    cosmosDBConfig = {
-      ...cosmosDBConfig,
-      connectionString: cosmosDBConnectionString
-    };
+    cosmosDBConfig.connectionString = cosmosDBConnectionString;
   }
 
   if (cosmosDBEndpoint) {
-    cosmosDBConfig = {
-      ...cosmosDBConfig,
-      endpoint: cosmosDBEndpoint
-    };
+    cosmosDBConfig.endpoint = cosmosDBEndpoint;
   }
 
   return cosmosDBConfig;
