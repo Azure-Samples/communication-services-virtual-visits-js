@@ -2,16 +2,19 @@
 // Licensed under the MIT license.
 
 import { Items } from '@azure/cosmos';
-import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
+import SurveyDBHandler from '../databaseHandlers/surveyDBHandler';
 import { storeSurveyResult } from '../controllers/surveyController';
-import { getServerConfig } from '../utils/getConfig';
+
+const cosmosDBConfig = {
+  endpoint: 'https://testinghost.com',
+  dbName: 'testingDbName'
+};
 
 describe('surveyResultController', () => {
   let response;
   let next;
 
   beforeEach(() => {
-    process.env.VV_COSMOS_DB_ENDPOINT = 'https://testinghost/';
     response = {
       send: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis()
@@ -20,7 +23,6 @@ describe('surveyResultController', () => {
   });
 
   afterEach(() => {
-    delete process.env.VV_COSMOS_DB_ENDPOINT;
     jest.resetAllMocks();
   });
 
@@ -46,18 +48,15 @@ describe('surveyResultController', () => {
         };
       })
     };
-    const config = getServerConfig();
 
     jest.spyOn(Items.prototype, 'upsert').mockImplementationOnce((): Promise<any> => Promise.resolve());
 
-    if (config.cosmosDb) {
-      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
 
-      await storeSurveyResult(surveyDBHandler)(request, response, next);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
 
-      expect(response.send).toHaveBeenCalled();
-      expect(response.status).toHaveBeenCalledWith(200);
-    }
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(200);
   });
 
   test.each([
@@ -84,17 +83,14 @@ describe('surveyResultController', () => {
         };
       })
     };
-    const config = getServerConfig();
 
-    if (config.cosmosDb) {
-      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
 
-      await storeSurveyResult(surveyDBHandler)(request, response, next);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
 
-      expect(response.send).toHaveBeenCalled();
-      expect(response.status).toHaveBeenCalledWith(400);
-      expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
-    }
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test.each([
@@ -126,17 +122,14 @@ describe('surveyResultController', () => {
         };
       })
     };
-    const config = getServerConfig();
 
-    if (config.cosmosDb) {
-      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
 
-      await storeSurveyResult(surveyDBHandler)(request, response, next);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
 
-      expect(response.send).toHaveBeenCalled();
-      expect(response.status).toHaveBeenCalledWith(400);
-      expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
-    }
+    expect(response.send).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.send).toHaveBeenCalledWith(expectedErrorResponse);
   });
 
   test('Should failed on any other errors.', async () => {
@@ -165,15 +158,11 @@ describe('surveyResultController', () => {
 
     jest.spyOn(SurveyDBHandler.prototype, 'saveSurveyResult').mockRejectedValueOnce(expectedError);
 
-    const config = getServerConfig();
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
 
-    if (config.cosmosDb) {
-      const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, config.cosmosDb);
+    await storeSurveyResult(surveyDBHandler)(request, response, next);
 
-      await storeSurveyResult(surveyDBHandler)(request, response, next);
-
-      expect(next).toHaveBeenCalled();
-      expect(next).toHaveBeenCalledWith(expectedError);
-    }
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expectedError);
   });
 });

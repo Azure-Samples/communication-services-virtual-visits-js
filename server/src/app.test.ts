@@ -8,6 +8,7 @@ import request from 'supertest';
 import app from './app';
 import fs from 'fs';
 import path from 'path';
+import * as surveyDBHandler from './databaseHandlers/surveyDBHandler';
 
 jest.mock('./utils/getConfig', () => {
   return {
@@ -108,5 +109,22 @@ describe('errors', () => {
     const getResponse = await request(app).get('/api/token');
     expect(getResponse.status).toEqual(500);
     expect(getResponse.text).toEqual(JSON.stringify(expectedError));
+  });
+
+  test('check if /api/surveyResults route is open with cosmosDb configs', async () => {
+    const inputData: any = {
+      sessionId: 'test_session_id',
+      callId: 'test_call_id',
+      acsUserId: 'test_acs_user_id',
+      response: true
+    };
+
+    jest.spyOn(surveyDBHandler, 'createSurveyDBHandler').mockReturnValueOnce(undefined);
+
+    const app = (await import('./app')).default;
+
+    const getResponse = await request(app).post('/api/surveyResults').send(inputData);
+
+    expect(getResponse.status).toBe(404);
   });
 });

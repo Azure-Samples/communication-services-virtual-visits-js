@@ -3,8 +3,7 @@
 
 import request from 'supertest';
 import * as SurveyController from './controllers/surveyController';
-
-jest.mock('./databases/handlers/surveyDBHandler');
+import * as SurveyDBHandler from './databaseHandlers/surveyDBHandler';
 
 jest.mock('./utils/getConfig', () => {
   return {
@@ -42,9 +41,14 @@ describe('Tes survey route', () => {
   });
 
   test('check if /api/surveyResults route is open with cosmosDb configs', async () => {
+    const mockedSurveyDBHandler = {
+      init: jest.fn()
+    };
     const mockStoreSurveyResult = jest
       .spyOn(SurveyController, 'storeSurveyResult')
       .mockImplementationOnce(() => async () => Promise.resolve());
+
+    jest.spyOn(SurveyDBHandler, 'createSurveyDBHandler').mockReturnValueOnce(mockedSurveyDBHandler as any);
 
     (await import('./app')).default;
 

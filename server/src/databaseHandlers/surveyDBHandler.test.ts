@@ -1,10 +1,68 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import SurveyDBHandler, { createSurveyDBHandler } from './surveyDBHandler';
 import { ServerConfigModel } from '../models/configModel';
-import { createSurveyDBHandler } from './surveyDBHandlerUtil';
 
-describe('Test surveyDBHandlerUtil', () => {
+const cosmosDBConfig = {
+  endpoint: 'https://testinghost.com',
+  dbName: 'testingDbName'
+};
+
+describe('Test surveyDBHandler', () => {
+  test('Test init', async () => {
+    const mockedCreateIfNotExists = jest.fn();
+    const mockedCosmosClient = {
+      databases: {
+        createIfNotExists: jest.fn()
+      },
+      database: jest.fn().mockImplementation(() => {
+        return {
+          containers: {
+            createIfNotExists: mockedCreateIfNotExists
+          }
+        };
+      })
+    };
+
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
+    await surveyDBHandler.init();
+
+    expect(mockedCosmosClient.databases.createIfNotExists).toHaveBeenCalled();
+    expect(mockedCreateIfNotExists).toHaveBeenCalled();
+  });
+
+  test('Test saveSurveyResult', async () => {
+    const inputData: any = {
+      sessionId: 'test_session_id',
+      callId: 'test_call_id',
+      acsUserId: 'test_acs_user_id',
+      response: true
+    };
+    const mockedUpsert = jest.fn();
+    const mockedCosmosClient = {
+      database: jest.fn().mockImplementation(() => {
+        return {
+          container: jest.fn().mockImplementation(() => {
+            return {
+              items: {
+                upsert: mockedUpsert
+              }
+            };
+          })
+        };
+      })
+    };
+
+    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
+
+    surveyDBHandler.saveSurveyResult(inputData);
+
+    expect(mockedUpsert).toHaveBeenCalled();
+  });
+});
+
+describe('Test surveyDBHandlerUtils', () => {
   test('Test createSurveyDBHandler with no postCall and cosmosDb', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',

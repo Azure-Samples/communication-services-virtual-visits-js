@@ -304,7 +304,7 @@ describe('config', () => {
 
     const config = getConfig.getServerConfig();
 
-    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toBeDefined();
     expect(config.cosmosDb).toHaveProperty('connectionString');
     expect(config.cosmosDb).toHaveProperty('dbName');
   });
@@ -315,7 +315,7 @@ describe('config', () => {
 
     const config = getConfig.getServerConfig();
 
-    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toBeDefined();
     expect(config.cosmosDb).toHaveProperty('endpoint');
     expect(config.cosmosDb).toHaveProperty('dbName');
   });
@@ -343,7 +343,7 @@ describe('config', () => {
     const config = getConfig.getServerConfig();
 
     expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toBeDefined();
     expect(config.cosmosDb).toHaveProperty('connectionString');
     expect(config.cosmosDb).toHaveProperty('dbName');
   });
@@ -371,7 +371,7 @@ describe('config', () => {
     const config = getConfig.getServerConfig();
 
     expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.cosmosDb).not.toBeUndefined();
+    expect(config.cosmosDb).toBeDefined();
     expect(config.cosmosDb).toHaveProperty('endpoint');
     expect(config.cosmosDb).toHaveProperty('dbName');
   });
