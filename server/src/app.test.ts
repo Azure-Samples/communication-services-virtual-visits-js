@@ -8,7 +8,6 @@ import request from 'supertest';
 import app from './app';
 import fs from 'fs';
 import path from 'path';
-import * as surveyDBHandler from './databaseHandlers/surveyDBHandler';
 
 jest.mock('./utils/getConfig', () => {
   return {
@@ -108,6 +107,7 @@ describe('errors', () => {
     const expectedError = { error: 'client.createUserAndToken is not a function' };
     const getResponse = await request(app).get('/api/token');
     expect(getResponse.status).toEqual(500);
+    expect(JSON.parse(getResponse.text)).toHaveProperty('error');
     expect(getResponse.text).toEqual(JSON.stringify(expectedError));
   });
 
@@ -118,10 +118,6 @@ describe('errors', () => {
       acsUserId: 'test_acs_user_id',
       response: true
     };
-
-    jest.spyOn(surveyDBHandler, 'createSurveyDBHandler').mockReturnValueOnce(undefined);
-
-    const app = (await import('./app')).default;
 
     const getResponse = await request(app).post('/api/surveyResults').send(inputData);
 

@@ -22,3 +22,9 @@ export const VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME =
 export const VV_COSMOS_DB_CONNECTION_STRING = 'VV_COSMOS_DB_CONNECTION_STRING';
 export const VV_COSMOS_DB_ENDPOINT = 'VV_COSMOS_DB_ENDPOINT';
 export const VV_COSMOS_DB_NAME = 'VV_COSMOS_DB_NAME';
+
+export const ERROR_PAYLOAD_500 = {
+  status: 500,
+  title: '500: Internal server error',
+  detail: 'The server has encountered an error. Refresh the page to try again.'
+};

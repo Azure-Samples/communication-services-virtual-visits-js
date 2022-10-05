@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 export interface SurveyResultRequestModel {
-  dateTime: Date;
+  createdOn: Date;
   sessionId: string;
   callId: string;
   acsUserId: string;

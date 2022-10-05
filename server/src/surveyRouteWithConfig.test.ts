@@ -57,20 +57,8 @@ describe('Tes survey route', () => {
 
   test('return 200 sending option request', async () => {
     const app = (await import('./app')).default;
-    const getResponse = await request(app).options('/api/surveyReesult');
+    const getResponse = await request(app).options('/api/surveyResults');
 
     expect(getResponse.status).toBe(200);
-  });
-
-  test('check if /api/surveyResults route fail', async () => {
-    jest
-      .spyOn(SurveyController, 'storeSurveyResult')
-      .mockImplementationOnce(() => async () => Promise.reject('failed'));
-
-    const app = (await import('./app')).default;
-
-    const getResponse = await request(app).post('/api/surveyReesult');
-
-    expect(getResponse.status).toBe(500);
   });
 });

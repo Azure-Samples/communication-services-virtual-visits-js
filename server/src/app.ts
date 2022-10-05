@@ -10,6 +10,7 @@ import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import { createSurveyDBHandler } from './databaseHandlers/surveyDBHandler';
+import { ERROR_PAYLOAD_500 } from './constants';
 
 const app = express();
 
@@ -75,7 +76,7 @@ app.use((err, req, res, next) => {
     return next(err);
   }
 
-  res.status(500).send({ error: err.message });
+  res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 
 export default app;

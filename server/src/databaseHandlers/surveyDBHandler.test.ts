@@ -62,7 +62,7 @@ describe('Test surveyDBHandler', () => {
   });
 });
 
-describe('Test surveyDBHandlerUtils', () => {
+describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with no postCall and cosmosDb', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
