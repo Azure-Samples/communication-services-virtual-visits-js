@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import SurveyDBHandler from '../databases/handlers/surveyDBHandler';
+import SurveyDBHandler from '../databaseHandlers/surveyDBHandler';
 import { SurveyResultRequestModel } from '../models/surveyModel';
 
 export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (

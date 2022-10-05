@@ -9,7 +9,7 @@ import { removeJsonpCallback } from './utils/removeJsonpCallback';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
-import { createSurveyDBHandler } from './utils/surveyDBHandlerUtil';
+import { createSurveyDBHandler } from './databaseHandlers/surveyDBHandler';
 
 const app = express();
 
@@ -61,7 +61,7 @@ app.get('/api/token', tokenController(identityClient, config));
 const surveyDBHandler = createSurveyDBHandler(config);
 
 if (surveyDBHandler) {
-  Promise.resolve(surveyDBHandler.init());
+  surveyDBHandler.init();
 
   app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
 }
