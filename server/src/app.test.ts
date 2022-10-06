@@ -104,16 +104,13 @@ describe('errors', () => {
 
   test('returns a generic 500 response when an endpoints throws an error', async () => {
     // calling the /api/token endpoint without proper mocking throws TypeError
-    const expectedError = { error: 'client.createUserAndToken is not a function' };
     const getResponse = await request(app).get('/api/token');
     expect(getResponse.status).toEqual(500);
     expect(JSON.parse(getResponse.text)).toHaveProperty('error');
-    expect(getResponse.text).toEqual(JSON.stringify(expectedError));
   });
 
   test('check if /api/surveyResults route is close with no cosmosDb configs', async () => {
     const inputData: any = {
-      sessionId: 'test_session_id',
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
       response: true

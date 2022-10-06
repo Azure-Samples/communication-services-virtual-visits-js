@@ -34,7 +34,6 @@ describe('Test surveyDBHandler', () => {
 
   test('Test saveSurveyResult', async () => {
     const inputData: any = {
-      sessionId: 'test_session_id',
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
       response: true

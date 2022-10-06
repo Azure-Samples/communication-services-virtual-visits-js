@@ -3,7 +3,6 @@
 
 export interface SurveyResultRequestModel {
   createdOn: Date;
-  sessionId: string;
   callId: string;
   acsUserId: string;
   response: OneQuestionPollResult;

@@ -12,14 +12,13 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
 ): Promise<any> => {
   try {
     const { body: requestData } = req;
-    const { sessionId, callId, acsUserId, response } = requestData;
+    const { callId, acsUserId, response } = requestData;
 
     // Validation.
     // If any one of field does not exists in the payload the validation failed.
-    if (!(sessionId && callId && acsUserId && response)) {
+    if (!(callId && acsUserId && response)) {
       const errors: string[] = [];
 
-      if (!sessionId) errors.push('sessionId is missing');
       if (!callId) errors.push('callId is missing');
       if (!acsUserId) errors.push('acsUserId is missing');
       if (!response) errors.push('response is missing');

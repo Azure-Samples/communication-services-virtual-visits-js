@@ -28,7 +28,6 @@ describe('surveyResultController', () => {
 
   test('Should success on upsert', async () => {
     const inputData: any = {
-      sessionId: 'test_session_id',
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
       response: true
@@ -60,10 +59,9 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    ['sessionId is missing', { callId: 'test_call_id', acsUserId: 'test_acs_user_id', response: true }],
-    ['callId is missing', { sessionId: 'test_session_id', acsUserId: 'test_acs_user_id', response: true }],
-    ['acsUserId is missing', { sessionId: 'test_session_id', callId: 'test_call_id', response: true }],
-    ['response is missing', { sessionId: 'test_session_id', callId: 'test_call_id', acsUserId: 'test_acs_user_id' }]
+    ['callId is missing', { acsUserId: 'test_acs_user_id', response: true }],
+    ['acsUserId is missing', { callId: 'test_call_id', response: true }],
+    ['response is missing', { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }]
   ])('Test %s', async (expectedError: string, invalidInput: any) => {
     const expectedErrorResponse = {
       errors: [expectedError]
@@ -94,17 +92,13 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    [2, ['sessionId is missing', 'callId is missing'], { acsUserId: 'test_acs_user_id', response: true }],
-    [2, ['sessionId is missing', 'acsUserId is missing'], { callId: 'test_call_id', response: true }],
-    [2, ['sessionId is missing', 'response is missing'], { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }],
-    [2, ['callId is missing', 'acsUserId is missing'], { sessionId: 'test_session_id', response: true }],
-    [2, ['callId is missing', 'response is missing'], { sessionId: 'test_session_id', acsUserId: 'test_acs_user_id' }],
-    [2, ['acsUserId is missing', 'response is missing'], { sessionId: 'test_session_id', callId: 'test_call_id' }],
-    [3, ['sessionId is missing', 'callId is missing', 'acsUserId is missing'], { response: true }],
-    [3, ['sessionId is missing', 'callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
-    [3, ['sessionId is missing', 'acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
-    [3, ['callId is missing', 'acsUserId is missing', 'response is missing'], { sessionId: 'test_session_id' }],
-    [4, ['sessionId is missing', 'callId is missing', 'acsUserId is missing', 'response is missing'], {}]
+    [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
+    [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
+    [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
+    [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
+    [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
+    [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
+    [4, ['callId is missing', 'acsUserId is missing', 'response is missing'], {}]
   ])('Test when %d validations failed: %s', async (_, errors: string[], invalidInput: any) => {
     const expectedErrorResponse = { errors };
     const request: any = { body: invalidInput };
@@ -134,7 +128,6 @@ describe('surveyResultController', () => {
 
   test('Should failed on any other errors.', async () => {
     const inputData: any = {
-      sessionId: 'test_session_id',
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
       response: true
