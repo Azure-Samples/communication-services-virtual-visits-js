@@ -111,7 +111,7 @@ describe('errors', () => {
     expect(getResponse.text).toEqual(JSON.stringify(expectedError));
   });
 
-  test('check if /api/surveyResults route is open with cosmosDb configs', async () => {
+  test('check if /api/surveyResults route is close with no cosmosDb configs', async () => {
     const inputData: any = {
       sessionId: 'test_session_id',
       callId: 'test_call_id',
