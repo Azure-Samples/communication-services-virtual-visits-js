@@ -16,12 +16,12 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
 
     // Validation.
     // If any one of field does not exists in the payload the validation failed.
-    if (!(callId && acsUserId && response)) {
+    if (!callId || !acsUserId || response === undefined) {
       const errors: string[] = [];
 
       if (!callId) errors.push('callId is missing');
       if (!acsUserId) errors.push('acsUserId is missing');
-      if (!response) errors.push('response is missing');
+      if (response === undefined) errors.push('response is missing');
 
       return res.status(400).send({ errors });
     }
