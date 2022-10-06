@@ -20,14 +20,6 @@ app.disable('x-powered-by');
 app.use((req, res, next) => {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'DELETE, POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  }
 
   next();
 });

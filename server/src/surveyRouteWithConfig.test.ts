@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import request from 'supertest';
 import * as SurveyController from './controllers/surveyController';
 import * as SurveyDBHandler from './databaseHandlers/surveyDBHandler';
 
@@ -53,12 +52,5 @@ describe('Tes survey route', () => {
     (await import('./app')).default;
 
     expect(mockStoreSurveyResult).toHaveBeenCalled();
-  });
-
-  test('return 200 sending option request', async () => {
-    const app = (await import('./app')).default;
-    const getResponse = await request(app).options('/api/surveyResults');
-
-    expect(getResponse.status).toBe(200);
   });
 });
