@@ -4,6 +4,9 @@
 import { parseConnectionString } from '@azure/communication-common';
 
 import {
+  VV_COSMOS_DB_CONNECTION_STRING,
+  VV_COSMOS_DB_ENDPOINT,
+  VV_COSMOS_DB_NAME,
   VV_COMMUNICATION_SERVICES_CONNECTION_STRING,
   VV_CHAT_ENABLED_ENV_NAME,
   VV_COLOR_PALETTE_ENV_NAME,
@@ -27,6 +30,7 @@ import {
   ClientConfigModel,
   PostCallSurveyType,
   PostCallConfig,
+  CosmosDBConfig,
   MSFormsSurveyOptions,
   OneQuestionPollOptions,
   OneQuestionPollType,
@@ -86,7 +90,8 @@ export const getServerConfig = (): ServerConfigModel => {
     waitingTitle: process.env[VV_WAITING_TITLE_ENV_NAME] ?? defaultConfig.waitingTitle,
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl,
-    postCall: getPostCallConfig(defaultConfig)
+    postCall: getPostCallConfig(defaultConfig),
+    cosmosDb: getCosmosDBConfig(defaultConfig)
   } as ServerConfigModel;
 
   return config;
@@ -128,6 +133,30 @@ const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | u
     console.error('Unable to parse post call values from environment variables');
   }
   return postcallConfig;
+};
+
+const getCosmosDBConfig = (defaultConfig: ServerConfigModel): CosmosDBConfig | undefined => {
+  const cosmosDBConfig: CosmosDBConfig = {
+    dbName: process.env[VV_COSMOS_DB_NAME] ?? (defaultConfig.cosmosDb?.dbName as string)
+  };
+
+  const cosmosDBConnectionString =
+    process.env[VV_COSMOS_DB_CONNECTION_STRING] ?? defaultConfig.cosmosDb?.connectionString;
+  const cosmosDBEndpoint = process.env[VV_COSMOS_DB_ENDPOINT] ?? defaultConfig.cosmosDb?.endpoint;
+
+  if (!(cosmosDBConnectionString || cosmosDBEndpoint)) {
+    return undefined;
+  }
+
+  if (cosmosDBConnectionString) {
+    cosmosDBConfig.connectionString = cosmosDBConnectionString;
+  }
+
+  if (cosmosDBEndpoint) {
+    cosmosDBConfig.endpoint = cosmosDBEndpoint;
+  }
+
+  return cosmosDBConfig;
 };
 
 export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigModel => {
