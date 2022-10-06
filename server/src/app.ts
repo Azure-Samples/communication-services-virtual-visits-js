@@ -8,7 +8,9 @@ import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
-import { ERROR_PAYLOAD_500 } from './errors';
+import { storeSurveyResult } from './controllers/surveyController';
+import { createSurveyDBHandler } from './databaseHandlers/surveyDBHandler';
+import { ERROR_PAYLOAD_500 } from './constants';
 
 const app = express();
 
@@ -18,12 +20,14 @@ app.disable('x-powered-by');
 app.use((req, res, next) => {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
   next();
 });
 
 app.use(removeJsonpCallback);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_, res) => {
   res.redirect('book');
@@ -47,6 +51,14 @@ const identityClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 
+const surveyDBHandler = createSurveyDBHandler(config);
+
+if (surveyDBHandler) {
+  surveyDBHandler.init();
+
+  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
+}
+
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
 });
@@ -56,7 +68,7 @@ app.use((err, req, res, next) => {
     return next(err);
   }
 
-  res.status(500).json(ERROR_PAYLOAD_500);
+  res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 
 export default app;
