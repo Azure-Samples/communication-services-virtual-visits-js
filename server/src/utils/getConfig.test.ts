@@ -31,7 +31,7 @@ describe('config', () => {
   test('should use defaultConfig.json values if environment variables are not defined', () => {
     const mockDefaultConfig = {
       communicationServicesConnectionString: 'test endpoint',
-      microsoftBookingsUrl: 'testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'test Healthcare',

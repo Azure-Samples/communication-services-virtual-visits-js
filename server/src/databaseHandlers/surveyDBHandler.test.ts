@@ -5,7 +5,7 @@ import SurveyDBHandler, { createSurveyDBHandler } from './surveyDBHandler';
 import { ServerConfigModel } from '../models/configModel';
 
 const cosmosDBConfig = {
-  endpoint: 'https://testinghost.com',
+  endpoint: 'https://example.org',
   dbName: 'testingDbName'
 };
 
@@ -65,7 +65,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with no postCall and cosmosDb', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -83,7 +83,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with postCall and cosmosDb exists', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -102,7 +102,7 @@ describe('Test createSurveyDBHandler', () => {
         }
       },
       cosmosDb: {
-        endpoint: 'http://testinghost.com',
+        endpoint: 'http://example.org',
         dbName: 'testingDBName'
       }
     };
@@ -115,7 +115,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with only postCall exists', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -143,7 +143,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with cosmosDb connectionString exists', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -162,7 +162,7 @@ describe('Test createSurveyDBHandler', () => {
         }
       },
       cosmosDb: {
-        connectionString: 'AccountEndpoint=https://testing.com/;AccountKey=testingAccountKey',
+        connectionString: 'AccountEndpoint=https://example.org/;AccountKey=testingAccountKey',
         dbName: 'testingDBName'
       }
     };
@@ -175,7 +175,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with cosmosDb connectionString with empty', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -209,7 +209,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with survey type not onequestionpoll', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -228,7 +228,7 @@ describe('Test createSurveyDBHandler', () => {
         }
       },
       cosmosDb: {
-        connectionString: 'AccountEndpoint=https://testing.com/;AccountKey=testingAccountKey',
+        connectionString: 'AccountEndpoint=https://example.org/;AccountKey=testingAccountKey',
         dbName: 'testingDBName'
       }
     };
@@ -241,7 +241,7 @@ describe('Test createSurveyDBHandler', () => {
   test('Test createSurveyDBHandler with ony cosmosDb exists', () => {
     const config = {
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -250,7 +250,7 @@ describe('Test createSurveyDBHandler', () => {
       waitingSubtitle: 'Your clinician is joining the meeting',
       logoUrl: '',
       cosmosDb: {
-        endpoint: 'http://testinghost.com',
+        endpoint: 'http://example.org',
         dbName: 'testingDBName'
       }
     };

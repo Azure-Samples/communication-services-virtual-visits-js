@@ -8,7 +8,7 @@ jest.mock('./utils/getConfig', () => {
   return {
     getServerConfig: () => ({
       communicationServicesConnectionString: 'endpoint=your_endpoint;accesskey=secret',
-      microsoftBookingsUrl: 'https://testBookingsUrl',
+      microsoftBookingsUrl: 'https://example.org',
       chatEnabled: true,
       screenShareEnabled: true,
       companyName: 'Lamna Healthcare',
@@ -27,7 +27,7 @@ jest.mock('./utils/getConfig', () => {
         }
       },
       cosmosDb: {
-        endpoint: 'http://testinghost.com',
+        endpoint: 'http://example.org',
         dbName: 'testingDBName'
       }
     })
