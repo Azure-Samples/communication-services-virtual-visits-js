@@ -88,35 +88,4 @@ describe('PostCallOneQuestionPoll', () => {
     const textField = postCallOneQuestionPoll.find(TextField);
     expect(textField.length).toBe(1);
   });
-
-  it('throws error if response status is not 200', async () => {
-    const mockStatus = 400;
-    (fetch as jest.Mock).mockImplementation(() => {
-      return Promise.resolve({
-        status: mockStatus
-      });
-    });
-    try {
-      //implementation for testing submitSurveyResult
-      //   const mockOneQuestionPollInfo: OneQuestionPollOptions = {
-      //     title: '',
-      //     prompt: '',
-      //     pollType: 'text',
-      //     answerPlaceholder: '',
-      //     saveButtonText: ''
-      //   };
-      //   const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
-      //     <PostCallOneQuestionPoll
-      //       theme={mockTheme}
-      //       oneQuestionPollInfo={mockOneQuestionPollInfo}
-      //       callId={mockCallId}
-      //       acsUserId={mockAcsUserId}
-      //     />
-      //   );
-      //   const primaryButton = postCallOneQuestionPoll.find(PrimaryButton);
-      //   primaryButton.simulate('click');
-    } catch (e) {
-      expect(e.message).toEqual('Could not insert into DB');
-    }
-  });
 });
