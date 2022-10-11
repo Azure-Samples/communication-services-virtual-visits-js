@@ -17,6 +17,8 @@ export interface SurveyProps {
   theme?: PartialTheme | Theme;
   onRejoinCall: () => void;
   postCall: PostCallConfig;
+  callId?: string;
+  acsUserId: string;
 }
 const SURVEY = 'SurveyComponent';
 
@@ -32,6 +34,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
   } else {
     postcallSurveyUrl = '';
   }
+
   if (surveyType === 'msforms' || surveyType === 'custom') {
     return (
       <Stack styles={surveyStyle}>
@@ -49,7 +52,12 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
     const oneQuestionPollInfo: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
     return (
       <Stack styles={fullScreenStyles} horizontalAlign="center" verticalAlign="center">
-        <PostCallOneQuestionPoll theme={props.theme} oneQuestionPollInfo={oneQuestionPollInfo} />
+        <PostCallOneQuestionPoll
+          theme={props.theme}
+          oneQuestionPollInfo={oneQuestionPollInfo}
+          callId={props.callId}
+          acsUserId={props.acsUserId}
+        />
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
           <RejoinLink
             onRejoinCall={() => {

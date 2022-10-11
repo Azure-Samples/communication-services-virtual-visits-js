@@ -41,3 +41,11 @@ export const pollTitleStyle = {
     textAlign: 'center'
   }
 };
+
+export const surveySubmitButtonStyles = {
+  root: {
+    width: '20rem',
+    height: '2.5rem',
+    marginTop: '1rem'
+  }
+};

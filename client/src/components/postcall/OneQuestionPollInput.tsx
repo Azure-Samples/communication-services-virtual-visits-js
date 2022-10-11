@@ -2,31 +2,25 @@
 // Licensed under the MIT license.
 
 import { useState } from 'react';
-//import { Theme } from '@fluentui/theme';
-import { Stack, StackItem } from '@fluentui/react/lib/Stack';
+import { Stack, StackItem } from '@fluentui/react';
 import { IIconProps } from '@fluentui/react';
-import { IconButton } from '@fluentui/react/lib/Button';
-import { Text } from '@fluentui/react/lib/Text';
-import { TextField } from '@fluentui/react/lib/TextField';
-import { Rating } from '@fluentui/react/lib/Rating';
+import { IconButton } from '@fluentui/react';
+import { Text } from '@fluentui/react';
+import { TextField } from '@fluentui/react';
+import { Rating } from '@fluentui/react';
 import { FocusZone } from '@fluentui/react-focus';
 import { starRatingLabelStyles } from '../../styles/Survey.styles';
-//import { OneQuestionPollType } from '../../models/ConfigModel';
-// import {
-//   postCallOneQuestionPollPreviewStylesLessThan900Height,
-//   postCallOneQuestionPollPreviewStylesGreaterThanEqual900Height
-// } from '../../../styles/PostCallOneQuestionPollPreview.styles';
-// import * as ClientResources from "ClientResources";
 
-interface OneQuestionPollInputProps {
-  //isScaled: boolean;
+export interface OneQuestionPollInputProps {
   pollType: string;
-  //theme: Theme;
   textInputPlaceholder?: string;
+  setPollResponse: (pollResponse: boolean | number | string | undefined) => void;
 }
 
 const RATING_MAX = 5;
 const RATING_DEFAULT = 0;
+const LIKE = true;
+const DISLIKE = false;
 
 enum LikeOrDislikeSelection {
   None,
@@ -34,7 +28,7 @@ enum LikeOrDislikeSelection {
   Dislike
 }
 
-const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => {
+export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => {
   const { pollType, textInputPlaceholder } = props;
 
   const [likeOrDislike, setLikeOrDislike] = useState(LikeOrDislikeSelection.None);
@@ -44,10 +38,6 @@ const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => 
   const dislikeIcon: IIconProps = { iconName: 'Dislike' };
   const dislikeSolidIcon: IIconProps = { iconName: 'DislikeSolid' };
 
-  //   const styles = isScaled
-  //     ? postCallOneQuestionPollPreviewStylesLessThan900Height
-  //     : postCallOneQuestionPollPreviewStylesGreaterThanEqual900Height;
-
   if (pollType === 'likeOrDislike') {
     return (
       <Stack horizontal>
@@ -55,14 +45,20 @@ const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => 
           toggle
           checked={likeOrDislike === LikeOrDislikeSelection.Like}
           iconProps={likeOrDislike === LikeOrDislikeSelection.Like ? likeSolidIcon : likeIcon}
-          onClick={() => setLikeOrDislike(LikeOrDislikeSelection.Like)}
+          onClick={() => {
+            setLikeOrDislike(LikeOrDislikeSelection.Like);
+            props.setPollResponse(LIKE);
+          }}
           tabIndex={-1}
         />
         <IconButton
           toggle
           checked={likeOrDislike === LikeOrDislikeSelection.Dislike}
           iconProps={likeOrDislike === LikeOrDislikeSelection.Dislike ? dislikeSolidIcon : dislikeIcon}
-          onClick={() => setLikeOrDislike(LikeOrDislikeSelection.Dislike)}
+          onClick={() => {
+            setLikeOrDislike(LikeOrDislikeSelection.Dislike);
+            props.setPollResponse(DISLIKE);
+          }}
           tabIndex={-1}
         />
       </Stack>
@@ -72,7 +68,15 @@ const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => 
   if (pollType === 'rating') {
     return (
       <FocusZone disabled={true}>
-        <Rating tabIndex={-1} allowZeroStars={true} max={RATING_MAX} defaultRating={RATING_DEFAULT} />
+        <Rating
+          tabIndex={-1}
+          allowZeroStars={true}
+          max={RATING_MAX}
+          defaultRating={RATING_DEFAULT}
+          onChange={(event: React.FormEvent<HTMLElement>, rating?: number) => {
+            props.setPollResponse(rating);
+          }}
+        />
         <Stack horizontalAlign="center">
           <StackItem>
             <Text styles={starRatingLabelStyles}>{'Choose a star rating'}</Text>
@@ -82,9 +86,19 @@ const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Element => 
     );
   }
 
-  if (pollType === 'textInput') {
+  if (pollType === 'text') {
     return (
-      <TextField tabIndex={-1} placeholder={textInputPlaceholder} multiline rows={3} resizable={false} width="100%" />
+      <TextField
+        tabIndex={-1}
+        placeholder={textInputPlaceholder}
+        multiline
+        rows={3}
+        resizable={false}
+        width="100%"
+        onChange={(_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
+          props.setPollResponse(newValue)
+        }
+      />
     );
   }
 

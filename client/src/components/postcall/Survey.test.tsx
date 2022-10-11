@@ -19,7 +19,9 @@ const mockPostCall: PostCallConfig = {
 
 describe('Survey', () => {
   it('should render iframe with correct url', async () => {
-    const survey = await mount<SurveyProps>(<Survey postCall={mockPostCall} onRejoinCall={jest.fn()} />);
+    const survey = await mount<SurveyProps>(
+      <Survey callId="mockCallId" acsUserId="mockAcsUserId" postCall={mockPostCall} onRejoinCall={jest.fn()} />
+    );
     const iframe = survey.find('iframe');
     const options: MSFormsSurveyOptions = mockPostCall.survey?.options as MSFormsSurveyOptions;
     expect(iframe.length).toBe(1);

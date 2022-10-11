@@ -55,6 +55,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
   const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
+  const [callId, setCallId] = useState<string>();
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -73,6 +74,11 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
             setRenderPostCall(true);
           });
         }
+        adapter.onStateChange((state) => {
+          if (state.call?.id !== undefined && state.call?.id !== callId) {
+            setCallId(adapter.getState().call?.id);
+          }
+        });
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -88,10 +94,17 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
     const locale = COMPOSITE_LOCALE_EN_US;
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
+    const acsUserId =
+      callWithChatAdapter.getState().userId.kind === 'communicationUser'
+        ? (callWithChatAdapter.getState().userId as CommunicationUserIdentifier).communicationUserId
+        : '';
+
     return (
       <>
         {renderPostCall && postCall && (
           <Survey
+            callId={callId}
+            acsUserId={acsUserId}
             theme={fluentTheme}
             data-testid="Survey"
             postCall={postCall}
