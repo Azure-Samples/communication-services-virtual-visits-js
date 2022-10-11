@@ -31,8 +31,6 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
   } else if (surveyType === 'custom') {
     const options: CustomSurveyOptions = props.postCall.survey?.options as CustomSurveyOptions;
     postcallSurveyUrl = options.surveyUrl;
-  } else {
-    postcallSurveyUrl = '';
   }
 
   if (surveyType === 'msforms' || surveyType === 'custom') {
@@ -67,5 +65,6 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
         </Stack>
       </Stack>
     );
-  } else return <></>;
+  }
+  return <></>;
 };

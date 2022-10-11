@@ -5,7 +5,7 @@ import { PostCallOneQuestionPollProps, PostCallOneQuestionPoll } from './PostCal
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Theme } from '@fluentui/theme';
-import { getTheme, IconButton, PrimaryButton, Rating, TextField } from '@fluentui/react';
+import { getTheme, IconButton, Rating, TextField } from '@fluentui/react';
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
 
 configure({ adapter: new Adapter() });
