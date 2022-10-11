@@ -63,8 +63,8 @@
     "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
     "postCallSurveyOneQuestionPollSaveButtonText": "",
     "cosmosDbAccountName": "[concat('db-account-', parameters('appServiceName'))]",
+    "cosmosDbName": "myDatabase",
     "roleDefinitionName": "[concat('sql-role-definition-', parameters('appServiceName'))]",
-    "cosmosDbName": "[concat('cosmos-db-', parameters('appServiceName'))]",
     "roleDefinitionId": "[guid('sql-role-definition-', resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]",
     "roleAssignmentId": "[guid(variables('roleDefinitionId'), resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]"
   },
