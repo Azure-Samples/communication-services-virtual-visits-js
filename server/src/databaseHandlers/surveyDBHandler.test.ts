@@ -109,7 +109,7 @@ describe('Test createSurveyDBHandler', () => {
 
     const surveyDBHandler = createSurveyDBHandler(config as ServerConfigModel);
 
-    expect(surveyDBHandler).not.toBeUndefined();
+    expect(surveyDBHandler).toBeDefined();
   });
 
   test('Test createSurveyDBHandler with only postCall exists', () => {
@@ -169,7 +169,7 @@ describe('Test createSurveyDBHandler', () => {
 
     const surveyDBHandler = createSurveyDBHandler(config as ServerConfigModel);
 
-    expect(surveyDBHandler).not.toBeUndefined();
+    expect(surveyDBHandler).toBeDefined();
   });
 
   test('Test createSurveyDBHandler with cosmosDb connectionString with empty', () => {
