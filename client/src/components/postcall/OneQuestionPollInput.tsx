@@ -2,14 +2,14 @@
 // Licensed under the MIT license.
 
 import { useState } from 'react';
-import { Stack, StackItem } from '@fluentui/react';
+import { RatingSize, Stack, StackItem } from '@fluentui/react';
 import { IIconProps } from '@fluentui/react';
 import { IconButton } from '@fluentui/react';
 import { Text } from '@fluentui/react';
 import { TextField } from '@fluentui/react';
 import { Rating } from '@fluentui/react';
 import { FocusZone } from '@fluentui/react-focus';
-import { starRatingLabelStyles } from '../../styles/Survey.styles';
+import { starRatingLabelStyles, surveyTextFieldStyles } from '../../styles/Survey.styles';
 
 export interface OneQuestionPollInputProps {
   pollType: string;
@@ -72,6 +72,7 @@ export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Elem
           tabIndex={-1}
           allowZeroStars={true}
           max={RATING_MAX}
+          size={RatingSize.Large}
           defaultRating={RATING_DEFAULT}
           onChange={(event: React.FormEvent<HTMLElement>, rating?: number) => {
             props.setPollResponse(rating);
@@ -89,6 +90,7 @@ export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Elem
   if (pollType === 'text') {
     return (
       <TextField
+        styles={surveyTextFieldStyles}
         tabIndex={-1}
         placeholder={textInputPlaceholder}
         multiline

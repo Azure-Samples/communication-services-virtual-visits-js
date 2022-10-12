@@ -30,7 +30,7 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
         setPollResponse={setPollResponse}
       />
       <PrimaryButton
-        styles={surveySubmitButtonStyles}
+        style={surveySubmitButtonStyles}
         onClick={() =>
           submitSurveyResponse(
             props.acsUserId,

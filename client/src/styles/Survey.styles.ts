@@ -4,7 +4,7 @@ export const surveyStyle = {
   root: { height: '100%' }
 };
 
-export const rejoinLinkStyle = { root: { height: '5rem', textDecoration: 'underline' } };
+export const rejoinLinkStyle = { root: { height: '3rem', textDecoration: 'underline' } };
 
 export const surveyIframeStyle = { height: '100%', width: '100%', border: 0 };
 
@@ -17,10 +17,11 @@ export const fullScreenStyles = {
 
 export const pollPromptStyle = {
   root: {
-    marginBottom: '0.5rem',
+    marginBottom: '1rem',
     fontSize: '0.938rem',
     fontWeight: '600',
-    textAlign: 'center'
+    textAlign: 'center',
+    maxWidth: '20rem'
   }
 };
 export const starRatingLabelStyles = {
@@ -35,7 +36,7 @@ export const starRatingLabelStyles = {
 
 export const pollTitleStyle = {
   root: {
-    marginBottom: '0.5rem',
+    marginBottom: '1.5rem',
     fontSize: '1.25rem',
     fontWeight: '600',
     textAlign: 'center'
@@ -43,9 +44,13 @@ export const pollTitleStyle = {
 };
 
 export const surveySubmitButtonStyles = {
+  width: '20rem',
+  height: '2.5rem',
+  marginTop: '1rem'
+};
+
+export const surveyTextFieldStyles = {
   root: {
-    width: '20rem',
-    height: '2.5rem',
-    marginTop: '1rem'
+    width: '20rem'
   }
 };
