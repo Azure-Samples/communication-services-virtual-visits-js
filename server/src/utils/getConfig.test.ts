@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CustomSurveyOptions, MSFormsSurveyOptions, OneQuestionPollOptions } from '../models/configModel';
 import * as getConfig from './getConfig';
 import * as getDefaultConfig from './getDefaultConfig';
+import * as getPostCallConfig from './getPostCallConfig';
+import * as getCosmosDbConfig from './getCosmosDbConfig';
 
 describe('config', () => {
   beforeEach(() => {
@@ -44,6 +45,9 @@ describe('config', () => {
       .spyOn(getDefaultConfig, 'getDefaultConfig')
       .mockImplementation((): any => mockDefaultConfig);
 
+    const postCallConfigSpy = jest.spyOn(getPostCallConfig, 'default');
+    const cosmosDbConfigSpy = jest.spyOn(getCosmosDbConfig, 'default');
+
     const config = getConfig.getServerConfig();
 
     expect(getDefaultConfigSpy).toHaveBeenCalled();
@@ -56,9 +60,11 @@ describe('config', () => {
     expect(config.waitingTitle).toBe(mockDefaultConfig.waitingTitle);
     expect(config.waitingSubtitle).toBe(mockDefaultConfig.waitingSubtitle);
     expect(config.postCall).not.toBeDefined();
+    expect(postCallConfigSpy).toHaveBeenCalled();
+    expect(cosmosDbConfigSpy).toHaveBeenCalled();
   });
 
-  test('should use environment variables when available, testing variables for MS Forms post-call survey option ', () => {
+  test('should use environment variables when available', () => {
     process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING = 'MYCONNECTIONSTRING';
     process.env.VV_MICROSOFT_BOOKINGS_URL = 'https://testurl';
     process.env.VV_CHAT_ENABLED = 'True';
@@ -68,11 +74,11 @@ describe('config', () => {
     process.env.VV_WAITING_TITLE = 'title';
     process.env.VV_WAITING_SUBTITLE = 'subtitle';
     process.env.VV_LOGO_URL = 'logoUrl';
-    process.env.VV_POSTCALL_SURVEY_TYPE = 'msforms';
-    process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = 'msformstesturl';
+
+    const postCallConfigSpy = jest.spyOn(getPostCallConfig, 'default');
+    const cosmosDbConfigSpy = jest.spyOn(getCosmosDbConfig, 'default');
 
     const config = getConfig.getServerConfig();
-    const options: MSFormsSurveyOptions = getConfig.getMSFormsOptions(config);
 
     expect(config.communicationServicesConnectionString).toBe(process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING);
     expect(config.microsoftBookingsUrl).toBe(process.env.VV_MICROSOFT_BOOKINGS_URL);
@@ -83,74 +89,8 @@ describe('config', () => {
     expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
     expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
     expect(config.logoUrl).toBe(process.env.VV_LOGO_URL);
-    expect(config.postCall?.survey.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
-    expect(options.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
-  });
-
-  test('should use environment variables when available, testing variables for custom post-call survey option ', () => {
-    process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING = 'MYCONNECTIONSTRING';
-    process.env.VV_MICROSOFT_BOOKINGS_URL = 'https://testurl';
-    process.env.VV_CHAT_ENABLED = 'True';
-    process.env.VV_SCREENSHARE_ENABLED = 'True';
-    process.env.VV_COMPANY_NAME = 'Company';
-    process.env.VV_COLOR_PALETTE = '#FFFFFF';
-    process.env.VV_WAITING_TITLE = 'title';
-    process.env.VV_WAITING_SUBTITLE = 'subtitle';
-    process.env.VV_LOGO_URL = 'logoUrl';
-    process.env.VV_POSTCALL_SURVEY_TYPE = 'custom';
-    process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = 'customtesturl';
-
-    const config = getConfig.getServerConfig();
-    const options: CustomSurveyOptions = getConfig.getCustomSurveyOptions(config);
-
-    expect(config.communicationServicesConnectionString).toBe(process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING);
-    expect(config.microsoftBookingsUrl).toBe(process.env.VV_MICROSOFT_BOOKINGS_URL);
-    expect(config.chatEnabled).toBe(true);
-    expect(config.screenShareEnabled).toBe(true);
-    expect(config.companyName).toBe(process.env.VV_COMPANY_NAME);
-    expect(config.colorPalette).toBe(process.env.VV_COLOR_PALETTE);
-    expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
-    expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
-    expect(config.logoUrl).toBe(process.env.VV_LOGO_URL);
-    expect(config.postCall?.survey.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
-    expect(options.surveyUrl).toBe(process.env.VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL);
-  });
-
-  test('should use environment variables when available, testing variables for one question poll post-call survey option ', () => {
-    process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING = 'MYCONNECTIONSTRING';
-    process.env.VV_MICROSOFT_BOOKINGS_URL = 'https://testurl';
-    process.env.VV_CHAT_ENABLED = 'True';
-    process.env.VV_SCREENSHARE_ENABLED = 'True';
-    process.env.VV_COMPANY_NAME = 'Company';
-    process.env.VV_COLOR_PALETTE = '#FFFFFF';
-    process.env.VV_WAITING_TITLE = 'title';
-    process.env.VV_WAITING_SUBTITLE = 'subtitle';
-    process.env.VV_LOGO_URL = 'logoUrl';
-    process.env.VV_POSTCALL_SURVEY_TYPE = 'onequestionpoll';
-    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE = 'Customer Satisfaction Survey';
-    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT = 'Were you satisfied with your service?';
-    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE = 'likeOrDislike';
-    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER = 'Great service!';
-    process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT = 'Save';
-
-    const config = getConfig.getServerConfig();
-    const options: OneQuestionPollOptions = getConfig.getOneQuestionPollOptions(config);
-
-    expect(config.communicationServicesConnectionString).toBe(process.env.VV_COMMUNICATION_SERVICES_CONNECTION_STRING);
-    expect(config.microsoftBookingsUrl).toBe(process.env.VV_MICROSOFT_BOOKINGS_URL);
-    expect(config.chatEnabled).toBe(true);
-    expect(config.screenShareEnabled).toBe(true);
-    expect(config.companyName).toBe(process.env.VV_COMPANY_NAME);
-    expect(config.colorPalette).toBe(process.env.VV_COLOR_PALETTE);
-    expect(config.waitingTitle).toBe(process.env.VV_WAITING_TITLE);
-    expect(config.waitingSubtitle).toBe(process.env.VV_WAITING_SUBTITLE);
-    expect(config.logoUrl).toBe(process.env.VV_LOGO_URL);
-    expect(config.postCall?.survey.type).toBe(process.env.VV_POSTCALL_SURVEY_TYPE);
-    expect(options.title).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE);
-    expect(options.prompt).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT);
-    expect(options.pollType).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE);
-    expect(options.answerPlaceholder).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER);
-    expect(options.saveButtonText).toBe(process.env.VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT);
+    expect(postCallConfigSpy).toHaveBeenCalled();
+    expect(cosmosDbConfigSpy).toHaveBeenCalled();
   });
 
   test('client config should not contain the connection string', () => {
@@ -160,219 +100,5 @@ describe('config', () => {
     config.communicationServicesConnectionString = 'endpoint=test_endpoint_value;accesskey=secret';
     const clientConfig = getConfig.getClientConfig(config);
     expect(clientConfig.communicationEndpoint).toBe('test_endpoint_value');
-  });
-
-  test('server config returns correctly mapped values for MS Forms survey as post-call option', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      postCall: {
-        survey: { type: 'msforms', options: { surveyUrl: 'msFormsSurveyURL' } }
-      }
-    };
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-
-    const serverConfig = getConfig.getServerConfig();
-    const options: MSFormsSurveyOptions = getConfig.getMSFormsOptions(serverConfig);
-
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(serverConfig.companyName).toBe('test Healthcare');
-    expect(serverConfig.postCall).toBeDefined();
-    expect(serverConfig.postCall?.survey).toBeDefined();
-    expect(serverConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(serverConfig.postCall?.survey.options).toBeDefined();
-    expect(options.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
-  });
-
-  test('server config returns correctly mapped values for custom survey as post-call option', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      postCall: {
-        survey: { type: 'custom', options: { surveyUrl: 'customSurveyURL' } }
-      }
-    };
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-
-    const serverConfig = getConfig.getServerConfig();
-    const options: CustomSurveyOptions = getConfig.getCustomSurveyOptions(serverConfig);
-
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(serverConfig.companyName).toBe('test Healthcare');
-    expect(serverConfig.postCall).toBeDefined();
-    expect(serverConfig.postCall?.survey).toBeDefined();
-    expect(serverConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(serverConfig.postCall?.survey.options).toBeDefined();
-    expect(options.surveyUrl).toBe(mockDefaultConfig.postCall.survey.options.surveyUrl);
-  });
-
-  test('server config returns correctly mapped values for one question poll survey as post-call option', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      postCall: {
-        survey: {
-          type: 'onequestionpoll',
-          options: {
-            title: 'Customer Satisfaction Survey',
-            prompt: 'Were you satisfied with your service?',
-            pollType: 'likeOrDislike',
-            answerPlaceholder: 'Great service!',
-            saveButtonText: 'Save'
-          }
-        }
-      }
-    };
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-
-    const serverConfig = getConfig.getServerConfig();
-    const options: OneQuestionPollOptions = getConfig.getOneQuestionPollOptions(serverConfig);
-
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(serverConfig.companyName).toBe('test Healthcare');
-    expect(serverConfig.postCall).toBeDefined();
-    expect(serverConfig.postCall?.survey).toBeDefined();
-    expect(serverConfig.postCall?.survey.type).toBe(mockDefaultConfig.postCall.survey.type);
-    expect(serverConfig.postCall?.survey.options).toBeDefined();
-    expect(options.title).toBe(mockDefaultConfig.postCall.survey.options.title);
-    expect(options.prompt).toBe(mockDefaultConfig.postCall.survey.options.prompt);
-    expect(options.pollType).toBe(mockDefaultConfig.postCall.survey.options.pollType);
-    expect(options.answerPlaceholder).toBe(mockDefaultConfig.postCall.survey.options.answerPlaceholder);
-    expect(options.saveButtonText).toBe(mockDefaultConfig.postCall.survey.options.saveButtonText);
-  });
-
-  test('getServerConfig returns undefined when postCallSurveyType is invalid', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      postCall: {
-        survey: { type: 'randomtype', options: { surveyUrl: 'customSurveyURL' } }
-      }
-    };
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-
-    const config = getConfig.getServerConfig();
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.postCall).not.toBeDefined();
-  });
-
-  test('getSeverConfig returns undefined cosmosDb without any cosmosDb', () => {
-    const config = getConfig.getServerConfig();
-
-    expect(config.cosmosDb).toBeUndefined();
-  });
-
-  test('getServerConfig returns cosmosDb with connection string with database name from environment variable', () => {
-    process.env.VV_COSMOS_DB_CONNECTION_STRING = 'testingConnectionString';
-    process.env.VV_COSMOS_DB_NAME = 'testingDBName';
-
-    const config = getConfig.getServerConfig();
-
-    expect(config.cosmosDb).toBeDefined();
-    expect(config.cosmosDb).toHaveProperty('connectionString');
-    expect(config.cosmosDb).toHaveProperty('dbName');
-  });
-
-  test('getServerConfig return cosmosDb with endpoint with database name from environment variable', () => {
-    process.env.VV_COSMOS_DB_ENDPOINT = 'testingEndpoint';
-    process.env.VV_COSMOS_DB_NAME = 'testingDBName';
-
-    const config = getConfig.getServerConfig();
-
-    expect(config.cosmosDb).toBeDefined();
-    expect(config.cosmosDb).toHaveProperty('endpoint');
-    expect(config.cosmosDb).toHaveProperty('dbName');
-  });
-
-  test('getServerConfig return cosmosDb with connection string with database name from defaultConfig', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      cosmosDb: {
-        connectionString: 'testingConnectionString',
-        dbName: 'testingDBName'
-      }
-    };
-
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-    const config = getConfig.getServerConfig();
-
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.cosmosDb).toBeDefined();
-    expect(config.cosmosDb).toHaveProperty('connectionString');
-    expect(config.cosmosDb).toHaveProperty('dbName');
-  });
-
-  test('getServerConfig return cosmosDb with endpoint with database name from defaultConfig', () => {
-    const mockDefaultConfig = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      cosmosDb: {
-        endpoint: 'testingEndpoint',
-        dbName: 'testingDBName'
-      }
-    };
-
-    const getDefaultConfigSpy = jest
-      .spyOn(getDefaultConfig, 'getDefaultConfig')
-      .mockImplementation((): any => mockDefaultConfig);
-    const config = getConfig.getServerConfig();
-
-    expect(getDefaultConfigSpy).toHaveBeenCalled();
-    expect(config.cosmosDb).toBeDefined();
-    expect(config.cosmosDb).toHaveProperty('endpoint');
-    expect(config.cosmosDb).toHaveProperty('dbName');
   });
 });
