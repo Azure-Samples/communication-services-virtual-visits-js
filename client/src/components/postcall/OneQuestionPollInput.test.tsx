@@ -27,7 +27,7 @@ describe('OneQuestionPollInput', () => {
     const iconButton = onQuestionPollInput.find(IconButton);
     expect(iconButton.length).toBe(2);
     iconButton.first().simulate('click');
-    expect(mockSetPollResponse).toBeCalledWith('LIKE');
+    expect(mockSetPollResponse).toBeCalledWith(true);
   });
 
   it('should trigger setPollResponse when rating changed', async () => {

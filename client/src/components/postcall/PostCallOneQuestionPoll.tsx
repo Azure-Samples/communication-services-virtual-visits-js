@@ -32,7 +32,11 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
       <PrimaryButton
         styles={surveySubmitButtonStyles}
         onClick={() =>
-          submitSurveyResponse(props.callId ? props.callId : '', props.acsUserId, pollResponse ? pollResponse : '')
+          submitSurveyResponse(
+            props.acsUserId,
+            pollResponse !== undefined ? pollResponse : undefined,
+            props.callId ? props.callId : undefined
+          )
         }
       >
         <Stack horizontal verticalAlign="center">
