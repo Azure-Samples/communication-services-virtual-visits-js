@@ -12,7 +12,7 @@ export const surveyResultRequestValidator = async (
   const errors: string[] = [];
   const responseAllowedtypes = ['boolean', 'number', 'string'];
 
-  // Check fields are undefined
+  // Check if fields are defined
   if (!callId) errors.push('callId must be present');
   if (!acsUserId) errors.push('acsUserId must be present');
   if (response === undefined) errors.push('response must be present');

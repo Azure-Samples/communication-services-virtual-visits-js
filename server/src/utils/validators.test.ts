@@ -11,7 +11,7 @@ const cosmosDBConfig = {
 
 describe('validators test', () => {
   describe('testing surveyResultRequestValidator', () => {
-    describe('testing when fields is not present', () => {
+    describe('testing when fields are not present', () => {
       test.each([
         [1, ['callId must be present'], { acsUserId: 'test_acs_user_id', response: true }],
         [1, ['acsUserId must be present'], { callId: 'test_call_id', response: true }],
