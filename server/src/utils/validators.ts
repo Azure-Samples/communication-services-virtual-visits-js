@@ -13,9 +13,9 @@ export const surveyResultRequestValidator = async (
   const responseAllowedtypes = ['boolean', 'number', 'string'];
 
   // Check fields are undefined
-  if (!callId) errors.push('callId is missing');
-  if (!acsUserId) errors.push('acsUserId is missing');
-  if (response === undefined) errors.push('response is missing');
+  if (!callId) errors.push('callId must be present');
+  if (!acsUserId) errors.push('acsUserId must be present');
+  if (response === undefined) errors.push('response must be present');
 
   // Check if each field types are correct
   if (callId && typeof callId !== 'string') errors.push('callId type must be string');

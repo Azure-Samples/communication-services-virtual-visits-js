@@ -13,16 +13,16 @@ describe('validators test', () => {
   describe('testing surveyResultRequestValidator', () => {
     describe('testing when fields is not present', () => {
       test.each([
-        [1, ['callId is missing'], { acsUserId: 'test_acs_user_id', response: true }],
-        [1, ['acsUserId is missing'], { callId: 'test_call_id', response: true }],
-        [1, ['response is missing'], { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }],
-        [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
-        [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
-        [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
-        [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
-        [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
-        [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
-        [3, ['callId is missing', 'acsUserId is missing', 'response is missing'], {}]
+        [1, ['callId must be present'], { acsUserId: 'test_acs_user_id', response: true }],
+        [1, ['acsUserId must be present'], { callId: 'test_call_id', response: true }],
+        [1, ['response must be present'], { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }],
+        [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
+        [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
+        [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
+        [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
+        [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
+        [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
+        [3, ['callId must be present', 'acsUserId must be present', 'response must be present'], {}]
       ])('Test when %d input fields missing: %s', async (_, expectedErrors: string[], invalidInput: any) => {
         const mockedCosmosClient = {
           database: jest.fn().mockImplementation(() => {
