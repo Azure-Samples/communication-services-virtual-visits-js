@@ -15,15 +15,12 @@ describe('surveyResultController', () => {
   let next;
 
   beforeEach(() => {
+    jest.resetAllMocks();
     response = {
       send: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis()
     } as any;
     next = jest.fn();
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
   });
 
   test('Should success on upsert', async () => {
@@ -40,7 +37,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -74,7 +76,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -109,7 +116,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -141,7 +153,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
