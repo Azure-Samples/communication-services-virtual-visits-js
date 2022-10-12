@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 export const submitSurveyResponse = async (
-  callId: string,
   acsUserId: string,
-  pollResponse: number | boolean | string
+  pollResponse: number | boolean | string | undefined,
+  callId?: string
 ): Promise<void> => {
   try {
     const res = await fetch('/api/surveyResults', {
@@ -22,6 +22,7 @@ export const submitSurveyResponse = async (
     if (res.status === 200) {
       window.location.replace('/book');
     } else {
+      window.location.replace('/book');
       throw new Error('Error during insertion');
     }
   } catch (e) {
