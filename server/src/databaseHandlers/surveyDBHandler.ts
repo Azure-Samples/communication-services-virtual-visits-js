@@ -10,9 +10,7 @@ import { ServerConfigModel } from '../models/configModel';
 const surveyContainerName = 'Surveys';
 
 const createCosmosClient = (config): CosmosClient => {
-  if (config.cosmosDb.connectionString && config.cosmosDb.connectionString.length > 0) {
-    return new CosmosClient(config.cosmosDb.connectionString);
-  } else {
+  if (config.cosmosDb.endpoint && config.cosmosDb.endpoint.length > 0) {
     const cosmosClientOptions: CosmosClientOptions = {
       endpoint: config.cosmosDb.endpoint as string,
       aadCredentials: new DefaultAzureCredential()
@@ -20,6 +18,8 @@ const createCosmosClient = (config): CosmosClient => {
 
     return new CosmosClient(cosmosClientOptions);
   }
+
+  return new CosmosClient(config.cosmosDb.connectionString);
 };
 
 export const createSurveyDBHandler = (config: ServerConfigModel): SurveyDBHandler | undefined => {
@@ -35,7 +35,6 @@ export const createSurveyDBHandler = (config: ServerConfigModel): SurveyDBHandle
 };
 
 export default class SurveyDBHandler {
-  public connection;
   private cosmosClient: CosmosClient;
   private cosmosDBConfig: CosmosDBConfig;
 
