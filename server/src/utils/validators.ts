@@ -25,7 +25,8 @@ export const surveyResultRequestValidator = async (
 
   const queryResults = await surveyDBHandler.querySurvey(callId, acsUserId);
 
-  if (queryResults.length > 0) errors.push('you can only submit survey once');
+  if (queryResults.length > 0)
+    errors.push(`Response has already been recorded for call id ${callId} and user id ${acsUserId}`);
 
   return errors;
 };

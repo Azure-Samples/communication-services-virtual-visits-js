@@ -114,7 +114,9 @@ describe('validators test', () => {
       const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
       const errors = await surveyResultRequestValidator(invalidInput, surveyDBHandler);
 
-      expect(errors).toEqual(['you can only submit survey once']);
+      expect(errors).toEqual([
+        `Response has already been recorded for call id ${invalidInput.callId} and user id ${invalidInput.acsUserId}`
+      ]);
     });
   });
 });
