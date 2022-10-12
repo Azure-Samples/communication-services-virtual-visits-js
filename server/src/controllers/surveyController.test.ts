@@ -15,15 +15,12 @@ describe('surveyResultController', () => {
   let next;
 
   beforeEach(() => {
+    jest.resetAllMocks();
     response = {
       send: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis()
     } as any;
     next = jest.fn();
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
   });
 
   test('Should success on upsert', async () => {
@@ -40,7 +37,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -59,9 +61,9 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    ['callId is missing', { acsUserId: 'test_acs_user_id', response: true }],
-    ['acsUserId is missing', { callId: 'test_call_id', response: true }],
-    ['response is missing', { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }]
+    ['callId must be present', { acsUserId: 'test_acs_user_id', response: true }],
+    ['acsUserId must be present', { callId: 'test_call_id', response: true }],
+    ['response must be present', { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }]
   ])('Test %s', async (expectedError: string, invalidInput: any) => {
     const expectedErrorResponse = {
       errors: [expectedError]
@@ -74,7 +76,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -92,13 +99,13 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
-    [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
-    [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
-    [2, ['callId is missing', 'acsUserId is missing'], { response: true }],
-    [2, ['callId is missing', 'response is missing'], { acsUserId: 'test_acs_user_id' }],
-    [2, ['acsUserId is missing', 'response is missing'], { callId: 'test_call_id' }],
-    [4, ['callId is missing', 'acsUserId is missing', 'response is missing'], {}]
+    [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
+    [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
+    [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
+    [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
+    [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
+    [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
+    [4, ['callId must be present', 'acsUserId must be present', 'response must be present'], {}]
   ])('Test when %d validations failed: %s', async (_, errors: string[], invalidInput: any) => {
     const expectedErrorResponse = { errors };
     const request: any = { body: invalidInput };
@@ -109,7 +116,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
@@ -141,7 +153,12 @@ describe('surveyResultController', () => {
           container: jest.fn().mockImplementation(() => {
             return {
               items: {
-                upsert: mockedUpsert
+                upsert: mockedUpsert,
+                query: jest.fn().mockImplementation(() => {
+                  return {
+                    fetchAll: () => ({ resources: [] })
+                  };
+                })
               }
             };
           })
