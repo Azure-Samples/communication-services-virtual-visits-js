@@ -66,6 +66,6 @@ describe('OneQuestionPollInput', () => {
       .first()
       .find('textarea')
       .simulate('change', { target: { value: 'Changed' } });
-    expect(mockSetPollResponse).toHaveBeenCalled();
+    expect(mockSetPollResponse).toBeCalledWith('Changed');
   });
 });

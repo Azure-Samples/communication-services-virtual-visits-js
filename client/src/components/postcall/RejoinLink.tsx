@@ -9,13 +9,5 @@ export interface RejoinLinkProps {
 }
 
 export const RejoinLink: React.FunctionComponent<RejoinLinkProps> = (props: RejoinLinkProps) => {
-  return (
-    <Link
-      onClick={() => {
-        void props.onRejoinCall();
-      }}
-    >
-      {'or re-join the call'}
-    </Link>
-  );
+  return <Link onClick={props.onRejoinCall}>{'or re-join the call'}</Link>;
 };

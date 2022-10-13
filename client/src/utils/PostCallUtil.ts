@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export const submitSurveyResponse = async (
+export const submitSurveyResponseUtil = async (
   acsUserId: string,
   pollResponse: number | boolean | string | undefined,
   callId?: string
@@ -19,10 +19,7 @@ export const submitSurveyResponse = async (
         response: pollResponse
       })
     });
-    if (res.status === 200) {
-      window.location.replace('/book');
-    } else {
-      window.location.replace('/book');
+    if (res.status !== 200) {
       throw new Error('Error during insertion');
     }
   } catch (e) {

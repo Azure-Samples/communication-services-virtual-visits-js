@@ -47,12 +47,12 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
       </Stack>
     );
   } else if (surveyType === 'onequestionpoll') {
-    const oneQuestionPollInfo: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
+    const oneQuestionPollOptions: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
     return (
       <Stack styles={fullScreenStyles} horizontalAlign="center" verticalAlign="center">
         <PostCallOneQuestionPoll
           theme={props.theme}
-          oneQuestionPollInfo={oneQuestionPollInfo}
+          oneQuestionPollOptions={oneQuestionPollOptions}
           callId={props.callId}
           acsUserId={props.acsUserId}
         />

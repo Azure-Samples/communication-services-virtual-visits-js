@@ -33,7 +33,7 @@ describe('PostCallOneQuestionPoll', () => {
     const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
       <PostCallOneQuestionPoll
         theme={mockTheme}
-        oneQuestionPollInfo={mockOneQuestionPollInfo}
+        oneQuestionPollOptions={mockOneQuestionPollInfo}
         callId={mockCallId}
         acsUserId={mockAcsUserId}
       />
@@ -53,7 +53,7 @@ describe('PostCallOneQuestionPoll', () => {
     const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
       <PostCallOneQuestionPoll
         theme={mockTheme}
-        oneQuestionPollInfo={mockOneQuestionPollInfo}
+        oneQuestionPollOptions={mockOneQuestionPollInfo}
         callId={mockCallId}
         acsUserId={mockAcsUserId}
       />
@@ -73,7 +73,7 @@ describe('PostCallOneQuestionPoll', () => {
     const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
       <PostCallOneQuestionPoll
         theme={mockTheme}
-        oneQuestionPollInfo={mockOneQuestionPollInfo}
+        oneQuestionPollOptions={mockOneQuestionPollInfo}
         callId={mockCallId}
         acsUserId={mockAcsUserId}
       />
