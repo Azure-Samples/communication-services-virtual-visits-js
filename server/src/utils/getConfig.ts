@@ -4,9 +4,6 @@
 import { parseConnectionString } from '@azure/communication-common';
 
 import {
-  VV_COSMOS_DB_CONNECTION_STRING,
-  VV_COSMOS_DB_ENDPOINT,
-  VV_COSMOS_DB_NAME,
   VV_COMMUNICATION_SERVICES_CONNECTION_STRING,
   VV_CHAT_ENABLED_ENV_NAME,
   VV_COLOR_PALETTE_ENV_NAME,
@@ -15,60 +12,13 @@ import {
   VV_SCREENSHARE_ENABLED_ENV_NAME,
   VV_WAITING_SUBTITLE_ENV_NAME,
   VV_WAITING_TITLE_ENV_NAME,
-  VV_LOGO_URL_ENV_NAME,
-  VV_POSTCALL_SURVEY_TYPE_ENV_NAME,
-  VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME,
-  VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER_ENV_NAME
+  VV_LOGO_URL_ENV_NAME
 } from '../constants';
 
-import {
-  ServerConfigModel,
-  ClientConfigModel,
-  PostCallSurveyType,
-  PostCallConfig,
-  CosmosDBConfig,
-  MSFormsSurveyOptions,
-  OneQuestionPollOptions,
-  OneQuestionPollType,
-  CustomSurveyOptions
-} from '../models/configModel';
+import { ServerConfigModel, ClientConfigModel } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
-
-export const getMSFormsOptions = (defaultConfig: ServerConfigModel): MSFormsSurveyOptions => {
-  const options: MSFormsSurveyOptions = defaultConfig.postCall?.survey?.options as MSFormsSurveyOptions;
-  const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
-  return { surveyUrl: postcallSurveyUrl };
-};
-
-export const getCustomSurveyOptions = (defaultConfig: ServerConfigModel): CustomSurveyOptions => {
-  const options: CustomSurveyOptions = defaultConfig.postCall?.survey?.options as CustomSurveyOptions;
-  const postcallSurveyUrl = process.env[VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL_ENV_NAME] ?? options.surveyUrl;
-  return { surveyUrl: postcallSurveyUrl };
-};
-
-export const getOneQuestionPollOptions = (defaultConfig: ServerConfigModel): OneQuestionPollOptions => {
-  const options: OneQuestionPollOptions = defaultConfig.postCall?.survey?.options as OneQuestionPollOptions;
-  const surveyTitle = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE_ENV_NAME] ?? options.title;
-  const surveyPollType: OneQuestionPollType =
-    (process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE_ENV_NAME] as OneQuestionPollType) ??
-    (options.pollType as OneQuestionPollType);
-  const surveyPrompt = process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT_ENV_NAME] ?? options.prompt;
-  const answerPlaceholder =
-    process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER_ENV_NAME] ?? options.answerPlaceholder;
-  const surveySaveButtonText =
-    process.env[VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME] ?? options.saveButtonText;
-  return {
-    title: surveyTitle,
-    prompt: surveyPrompt,
-    pollType: surveyPollType,
-    answerPlaceholder: answerPlaceholder,
-    saveButtonText: surveySaveButtonText
-  };
-};
+import getCosmosDbConfig from './getCosmosDbConfig';
+import getPostCallConfig from './getPostCallConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
   const defaultConfig = getDefaultConfig();
@@ -91,72 +41,10 @@ export const getServerConfig = (): ServerConfigModel => {
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl,
     postCall: getPostCallConfig(defaultConfig),
-    cosmosDb: getCosmosDBConfig(defaultConfig)
+    cosmosDb: getCosmosDbConfig(defaultConfig)
   } as ServerConfigModel;
 
   return config;
-};
-
-const isValidPostCallSurveyType = (postcallSurveyType: string): postcallSurveyType is PostCallSurveyType => {
-  return ['msforms', 'custom', 'onequestionpoll'].indexOf(postcallSurveyType) !== -1;
-};
-
-const getPostCallConfig = (defaultConfig: ServerConfigModel): PostCallConfig | undefined => {
-  let postcallConfig: PostCallConfig | undefined;
-  //Setting values for postcallconfig from defaultconfig values first (if valid)
-
-  try {
-    const postcallSurveyType = process.env[VV_POSTCALL_SURVEY_TYPE_ENV_NAME] ?? defaultConfig.postCall?.survey.type;
-    if (!postcallSurveyType || !isValidPostCallSurveyType(postcallSurveyType)) {
-      return undefined;
-    }
-
-    if (postcallSurveyType === 'msforms') {
-      const configOptions: MSFormsSurveyOptions = getMSFormsOptions(defaultConfig);
-      postcallConfig = {
-        survey: { type: postcallSurveyType, options: configOptions }
-      };
-    } else if (postcallSurveyType === 'custom') {
-      const configOptions: CustomSurveyOptions = getCustomSurveyOptions(defaultConfig);
-      postcallConfig = {
-        survey: { type: postcallSurveyType, options: configOptions }
-      };
-    } else if (postcallSurveyType === 'onequestionpoll') {
-      const configOptions: OneQuestionPollOptions = getOneQuestionPollOptions(defaultConfig);
-      postcallConfig = {
-        survey: { type: postcallSurveyType, options: configOptions }
-      };
-    } else {
-      postcallConfig = undefined;
-    }
-  } catch (e) {
-    console.error('Unable to parse post call values from environment variables');
-  }
-  return postcallConfig;
-};
-
-const getCosmosDBConfig = (defaultConfig: ServerConfigModel): CosmosDBConfig | undefined => {
-  const cosmosDBConfig: CosmosDBConfig = {
-    dbName: process.env[VV_COSMOS_DB_NAME] ?? (defaultConfig.cosmosDb?.dbName as string)
-  };
-
-  const cosmosDBConnectionString =
-    process.env[VV_COSMOS_DB_CONNECTION_STRING] ?? defaultConfig.cosmosDb?.connectionString;
-  const cosmosDBEndpoint = process.env[VV_COSMOS_DB_ENDPOINT] ?? defaultConfig.cosmosDb?.endpoint;
-
-  if (!(cosmosDBConnectionString || cosmosDBEndpoint)) {
-    return undefined;
-  }
-
-  if (cosmosDBConnectionString) {
-    cosmosDBConfig.connectionString = cosmosDBConnectionString;
-  }
-
-  if (cosmosDBEndpoint) {
-    cosmosDBConfig.endpoint = cosmosDBEndpoint;
-  }
-
-  return cosmosDBConfig;
 };
 
 export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigModel => {
