@@ -11,7 +11,8 @@ export const surveyIframeStyle = { height: '100%', width: '100%', border: 0 };
 export const fullScreenStyles = {
   root: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    backgroundColor: 'white'
   }
 };
 
