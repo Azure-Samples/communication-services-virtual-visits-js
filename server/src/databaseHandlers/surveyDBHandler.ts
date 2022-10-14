@@ -52,6 +52,9 @@ export default class SurveyDBHandler {
       id: surveyContainerName,
       partitionKey: {
         paths: ['/callId']
+      },
+      uniqueKeyPolicy: {
+        uniqueKeys: [{ paths: ['/callId'] }]
       }
     };
 

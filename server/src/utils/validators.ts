@@ -6,7 +6,7 @@ import { SurveyResultRequest } from '../models/surveyModel';
 
 export const surveyResultRequestValidator = async (
   requestData: SurveyResultRequest,
-  surveyDBHandler: SurveyDBHandler
+  _surveyDBHandler: SurveyDBHandler
 ): Promise<string[]> => {
   const { callId, acsUserId, response } = requestData;
   const errors: string[] = [];
@@ -23,10 +23,10 @@ export const surveyResultRequestValidator = async (
   if (response !== undefined && !responseAllowedtypes.includes(typeof response))
     errors.push('response type must be one of boolean, string, number');
 
-  const queryResults = await surveyDBHandler.querySurvey(callId, acsUserId);
+  // const queryResults = await surveyDBHandler.querySurvey(callId, acsUserId);
 
-  if (queryResults.length > 0)
-    errors.push(`Response has already been recorded for call id ${callId} and user id ${acsUserId}`);
+  // if (queryResults.length > 0)
+  //   errors.push(`Response has already been recorded for call id ${callId} and user id ${acsUserId}`);
 
   return errors;
 };
