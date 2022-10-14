@@ -173,6 +173,8 @@ describe('MeetingExperience', () => {
 
     expect(survey.length).toBe(0);
     expect(callWithChatComposites.length).toBe(1);
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('flex');
   });
 
   it('should not render Survey component when postcall is undefined', async () => {
@@ -236,5 +238,9 @@ describe('MeetingExperience', () => {
 
     const survey = meetingExperience.find(Survey);
     expect(survey.length).toBe(1);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+    expect(callWithChatComposites.length).toBe(1);
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('none');
   });
 });
