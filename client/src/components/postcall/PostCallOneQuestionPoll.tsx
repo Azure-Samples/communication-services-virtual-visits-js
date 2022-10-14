@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
-import { PartialTheme, PrimaryButton, Stack, Text, Theme } from '@fluentui/react';
+import { PartialTheme, PrimaryButton, Spinner, SpinnerSize, Stack, Text, Theme } from '@fluentui/react';
 import OneQuestionPollInput from './OneQuestionPollInput';
 import { pollPromptStyle, pollTitleStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
 import { useState } from 'react';
@@ -13,16 +13,28 @@ export interface PostCallOneQuestionPollProps {
   theme?: PartialTheme | Theme;
   callId?: string;
   acsUserId: string;
+  onSurveyComplete?: () => void;
 }
 
 export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestionPollProps> = (
   props: PostCallOneQuestionPollProps
 ) => {
   const [pollResponse, setPollResponse] = useState<boolean | string | number>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const submitSurveyResponse = async (): Promise<void> => {
-    await submitSurveyResponseUtil(props.acsUserId, pollResponse, props.callId);
-    window.location.replace('/book');
+    try {
+      setIsLoading(true);
+      await submitSurveyResponseUtil(props.acsUserId, pollResponse, props.callId);
+      // window.location.replace('/book');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+      if (props.onSurveyComplete) {
+        props.onSurveyComplete();
+      }
+    }
   };
 
   return (
@@ -34,7 +46,13 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
         textInputPlaceholder={props.oneQuestionPollOptions.answerPlaceholder}
         setPollResponse={setPollResponse}
       />
-      <PrimaryButton style={surveySubmitButtonStyles} onClick={() => submitSurveyResponse()}>
+      <PrimaryButton
+        style={surveySubmitButtonStyles}
+        onClick={() => submitSurveyResponse()}
+        onRenderIcon={
+          isLoading ? () => <Spinner size={SpinnerSize.xSmall} styles={{ root: { paddingRight: '4px' } }} /> : undefined
+        }
+      >
         <Stack horizontal verticalAlign="center">
           <span>{props.oneQuestionPollOptions.saveButtonText}</span>
         </Stack>

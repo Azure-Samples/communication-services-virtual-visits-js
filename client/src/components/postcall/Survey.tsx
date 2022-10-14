@@ -12,6 +12,11 @@ import {
 import { fullScreenStyles, rejoinLinkStyle, surveyIframeStyle, surveyStyle } from '../../styles/Survey.styles';
 import { RejoinLink } from './RejoinLink';
 import { PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
+import MobileDetect from 'mobile-detect';
+import {
+  mainJoinTeamsMeetingContainerMobileStyles,
+  mainJoinTeamsMeetingContainerStyles
+} from '../../styles/JoinTeamsMeeting.Styles';
 
 export interface SurveyProps {
   theme?: PartialTheme | Theme;
@@ -19,6 +24,7 @@ export interface SurveyProps {
   postCall: PostCallConfig;
   callId?: string;
   acsUserId: string;
+  onSurveyComplete?: () => void;
 }
 const SURVEY = 'SurveyComponent';
 
@@ -44,16 +50,23 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
     );
   } else if (surveyType === 'onequestionpoll') {
     const oneQuestionPollOptions: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
+    const containerStyles = new MobileDetect(window.navigator.userAgent).mobile()
+      ? mainJoinTeamsMeetingContainerMobileStyles(props.theme)
+      : mainJoinTeamsMeetingContainerStyles(props.theme);
+
     return (
       <Stack styles={fullScreenStyles} horizontalAlign="center" verticalAlign="center">
-        <PostCallOneQuestionPoll
-          theme={props.theme}
-          oneQuestionPollOptions={oneQuestionPollOptions}
-          callId={props.callId}
-          acsUserId={props.acsUserId}
-        />
-        <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
-          <RejoinLink onRejoinCall={props.onRejoinCall}></RejoinLink>
+        <Stack styles={containerStyles} tokens={{ childrenGap: 15 }}>
+          <PostCallOneQuestionPoll
+            theme={props.theme}
+            oneQuestionPollOptions={oneQuestionPollOptions}
+            callId={props.callId}
+            acsUserId={props.acsUserId}
+            onSurveyComplete={props.onSurveyComplete}
+          />
+          <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
+            <RejoinLink onRejoinCall={props.onRejoinCall}></RejoinLink>
+          </Stack>
         </Stack>
       </Stack>
     );

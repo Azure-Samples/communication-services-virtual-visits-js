@@ -112,6 +112,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
               await callWithChatAdapter.joinCall();
               setRenderPostCall(false);
             }}
+            onSurveyComplete={() => setRenderPostCall(false)}
           />
         )}
         <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>

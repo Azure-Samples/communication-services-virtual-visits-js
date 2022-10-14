@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { Theme } from '@fluentui/theme';
+import { PartialTheme } from '@fluentui/react';
 
 export function makeJoinTeamsLayerHostStyles(): any {
   return {
@@ -13,7 +14,7 @@ export function makeJoinTeamsLayerHostStyles(): any {
   };
 }
 
-export function mainJoinTeamsMeetingContainerStyles(theme: Theme): any {
+export function mainJoinTeamsMeetingContainerStyles(theme: Theme | PartialTheme | undefined): any {
   return {
     root: {
       maxWidth: '64rem',
@@ -24,11 +25,11 @@ export function mainJoinTeamsMeetingContainerStyles(theme: Theme): any {
       alignItems: 'center',
       margin: 'auto',
       backgroundColor: '#ffffff',
-      borderRadius: theme.effects.roundedCorner4
+      borderRadius: theme?.effects?.roundedCorner4
     }
   };
 }
-export function mainJoinTeamsMeetingContainerMobileStyles(theme: Theme): any {
+export function mainJoinTeamsMeetingContainerMobileStyles(theme: Theme | PartialTheme | undefined): any {
   return {
     root: {
       maxWidth: '64rem',
@@ -39,7 +40,7 @@ export function mainJoinTeamsMeetingContainerMobileStyles(theme: Theme): any {
       alignItems: 'center',
       margin: '0rem auto',
       backgroundColor: '#ffffff',
-      borderRadius: theme.effects.roundedCorner4
+      borderRadius: theme?.effects?.roundedCorner4
     }
   };
 }
