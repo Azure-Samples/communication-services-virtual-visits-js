@@ -8,4 +8,6 @@ export interface SurveyResultRequestModel {
   response: OneQuestionPollResult;
 }
 
+export type SurveyResultRequest = Omit<SurveyResultRequestModel, 'createdOn'>;
+
 export type OneQuestionPollResult = boolean | string | number;

@@ -3,6 +3,7 @@
 
 import * as express from 'express';
 import SurveyDBHandler from '../databaseHandlers/surveyDBHandler';
+import { surveyResultRequestValidator } from '../utils/validators';
 import { SurveyResultRequestModel } from '../models/surveyModel';
 
 export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
@@ -12,17 +13,11 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
 ): Promise<any> => {
   try {
     const { body: requestData } = req;
-    const { callId, acsUserId, response } = requestData;
 
     // Validation.
-    // If any one of field does not exists in the payload the validation failed.
-    if (!callId || !acsUserId || response === undefined) {
-      const errors: string[] = [];
+    const errors = await surveyResultRequestValidator(requestData, surveyDBHandler);
 
-      if (!callId) errors.push('callId is missing');
-      if (!acsUserId) errors.push('acsUserId is missing');
-      if (response === undefined) errors.push('response is missing');
-
+    if (errors.length > 0) {
       return res.status(400).send({ errors });
     }
 
