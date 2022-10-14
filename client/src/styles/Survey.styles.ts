@@ -1,5 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
+
+import { Theme, PartialTheme } from '@fluentui/theme';
+
 export const surveyStyle = {
   root: { height: '100%' }
 };
@@ -11,10 +14,25 @@ export const surveyIframeStyle = { height: '100%', width: '100%', border: 0 };
 export const fullScreenStyles = {
   root: {
     width: '100%',
-    height: '100%',
-    backgroundColor: 'white'
+    height: '100%'
   }
 };
+
+export function oneQuestionPollStyle(theme: PartialTheme | Theme | undefined): any {
+  return {
+    root: {
+      maxWidth: '64rem',
+      width: '100%',
+      height: '80vmin',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 'auto',
+      backgroundColor: '#ffffff',
+      borderRadius: theme?.effects?.roundedCorner4
+    }
+  };
+}
 
 export const pollPromptStyle = {
   root: {

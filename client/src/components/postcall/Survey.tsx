@@ -9,7 +9,13 @@ import {
   PostCallConfig,
   OneQuestionPollOptions
 } from '../../models/ConfigModel';
-import { fullScreenStyles, rejoinLinkStyle, surveyIframeStyle, surveyStyle } from '../../styles/Survey.styles';
+import {
+  fullScreenStyles,
+  oneQuestionPollStyle,
+  rejoinLinkStyle,
+  surveyIframeStyle,
+  surveyStyle
+} from '../../styles/Survey.styles';
 import { RejoinLink } from './RejoinLink';
 import { PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
 
@@ -45,15 +51,17 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
   } else if (surveyType === 'onequestionpoll') {
     const oneQuestionPollOptions: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
     return (
-      <Stack styles={fullScreenStyles} horizontalAlign="center" verticalAlign="center">
-        <PostCallOneQuestionPoll
-          theme={props.theme}
-          oneQuestionPollOptions={oneQuestionPollOptions}
-          callId={props.callId}
-          acsUserId={props.acsUserId}
-        />
-        <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
-          <RejoinLink onRejoinCall={props.onRejoinCall} />
+      <Stack styles={fullScreenStyles}>
+        <Stack styles={oneQuestionPollStyle(props.theme)} tokens={{ childrenGap: 15 }}>
+          <PostCallOneQuestionPoll
+            theme={props.theme}
+            oneQuestionPollOptions={oneQuestionPollOptions}
+            callId={props.callId}
+            acsUserId={props.acsUserId}
+          />
+          <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
+            <RejoinLink onRejoinCall={props.onRejoinCall} />
+          </Stack>
         </Stack>
       </Stack>
     );
