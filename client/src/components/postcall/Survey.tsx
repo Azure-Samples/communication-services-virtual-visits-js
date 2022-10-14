@@ -38,11 +38,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
       <Stack styles={surveyStyle}>
         <iframe title={SURVEY} style={surveyIframeStyle} src={postcallSurveyUrl} scrolling="yes"></iframe>
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
-          <RejoinLink
-            onRejoinCall={() => {
-              void props.onRejoinCall();
-            }}
-          ></RejoinLink>
+          <RejoinLink onRejoinCall={props.onRejoinCall}></RejoinLink>
         </Stack>
       </Stack>
     );
@@ -57,11 +53,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
           acsUserId={props.acsUserId}
         />
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
-          <RejoinLink
-            onRejoinCall={() => {
-              void props.onRejoinCall();
-            }}
-          ></RejoinLink>
+          <RejoinLink onRejoinCall={props.onRejoinCall}></RejoinLink>
         </Stack>
       </Stack>
     );
