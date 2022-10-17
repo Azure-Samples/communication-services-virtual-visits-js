@@ -16,7 +16,7 @@ You can configure post-call surveys to collect valuable feedback like quality of
 VV_POSTCALL_SURVEY_TYPE = "onequestionpoll"
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE = "Tell us how we did"
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT = "How satisfied are you with this virtual appointment's audio and video quality?"
-VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE = "likeOrDislike"
+VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE = "likeOrDislike" or "rating" or "text"
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER = ""
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT = "Continue"
 VV_COSMOS_DB_ENDPOINT = "Set the endpoint to authenticate using Managed Identity method"
@@ -35,7 +35,7 @@ VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
             "options": {
                 "title": "Tell us how we did",
                 "prompt": "How satisfied are you with this virtual appointment's audio and video quality?",
-                "pollType": "likeOrDislike",
+                "pollType": "likeOrDislike" or "rating" or "text",
                 "answerPlaceholder": "",
                 "saveButtonText": "Continue"
             }
