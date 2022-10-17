@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import React from 'react';
-import { CallWithChatComposite } from '@azure/communication-react';
+import {
+  CallWithChatComposite,
+  createAzureCommunicationCallWithChatAdapterFromClients
+} from '@azure/communication-react';
 import { setIconOptions } from '@fluentui/react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -16,7 +18,8 @@ import {
   runFakeTimers
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
-import { Survey } from '../components/Survey';
+import { Survey } from './postcall/Survey';
+
 configure({ adapter: new Adapter() });
 
 // Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
@@ -28,7 +31,7 @@ setIconOptions({
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
-    createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
+    createAzureCommunicationCallWithChatAdapterFromClients: jest.fn(), //mocking state object callWithChatAdapter
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
     CallWithChatComposite: () => createMockCallWithChatComposite()
@@ -70,6 +73,10 @@ describe('MeetingExperience', () => {
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
+    (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
+      createMockCallWithChatAdapter()
+    );
+
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -106,6 +113,9 @@ describe('MeetingExperience', () => {
     const mobileSafariUserAgent =
       'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
     userAgentGetter.mockReturnValue(mobileSafariUserAgent);
+    (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
+      createMockCallWithChatAdapter()
+    );
 
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
@@ -134,6 +144,10 @@ describe('MeetingExperience', () => {
   });
 
   it('should render CallWithChatComposite when renderPostCall is false', async () => {
+    (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
+      createMockCallWithChatAdapter()
+    );
+
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -159,49 +173,14 @@ describe('MeetingExperience', () => {
 
     expect(survey.length).toBe(0);
     expect(callWithChatComposites.length).toBe(1);
-  });
-
-  it('should render Survey component when postcall is defined and valid', async () => {
-    const setRenderPostCallMock = jest.fn();
-    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
-    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
-
-    const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
-        userId={{ communicationUserId: 'test' }}
-        token={'token'}
-        displayName={'name'}
-        endpointUrl={'endpoint'}
-        locator={{ meetingLink: 'meeting link' }}
-        fluentTheme={undefined}
-        waitingTitle={waitingTitle}
-        waitingSubtitle={waitingSubtitle}
-        logoUrl={logoUrl}
-        chatEnabled={true}
-        postCall={mockPostCall}
-        onDisplayError={jest.fn()}
-      />
-    );
-
-    await runFakeTimers();
-
-    meetingExperience.update();
-
-    expect(setRenderPostCallMock).toBeCalled();
-    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
-    expect(callWithChatComposites.length).toBe(1);
     const parentDiv = callWithChatComposites.parent();
-    expect(parentDiv.props().style.display).toBe('none');
-
-    const survey = meetingExperience.find(Survey);
-    expect(survey.length).toBe(1);
+    expect(parentDiv.props().style.display).toBe('flex');
   });
 
   it('should not render Survey component when postcall is undefined', async () => {
-    const setRenderPostCallMock = jest.fn();
-    const useStateMock: any = (_: any) => [true, setRenderPostCallMock];
-    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
-
+    (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
+      createMockCallWithChatAdapter()
+    );
     const meetingExperience = await mount<MeetingExperienceProps>(
       <MeetingExperience
         userId={{ communicationUserId: 'test' }}
@@ -220,15 +199,48 @@ describe('MeetingExperience', () => {
     );
 
     await runFakeTimers();
-
     meetingExperience.update();
 
-    expect(setRenderPostCallMock).toBeCalled();
     const survey = meetingExperience.find(Survey);
     expect(survey.length).toBe(0);
     const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
     expect(callWithChatComposites.length).toBe(1);
     const parentDiv = callWithChatComposites.parent();
     expect(parentDiv.props().style.display).toBe('flex');
+  });
+
+  it('should render Survey component when postcall is defined and valid', async () => {
+    const mockedCallWithChatAdapter = createMockCallWithChatAdapter();
+    mockedCallWithChatAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
+    (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(
+      () => mockedCallWithChatAdapter
+    );
+
+    const meetingExperience = await mount<MeetingExperienceProps>(
+      <MeetingExperience
+        userId={{ communicationUserId: 'test' }}
+        token={'token'}
+        displayName={'name'}
+        endpointUrl={'endpoint'}
+        locator={{ meetingLink: 'meeting link' }}
+        fluentTheme={undefined}
+        waitingTitle={waitingTitle}
+        waitingSubtitle={waitingSubtitle}
+        logoUrl={logoUrl}
+        chatEnabled={true}
+        postCall={mockPostCall}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    meetingExperience.update();
+
+    const survey = meetingExperience.find(Survey);
+    expect(survey.length).toBe(1);
+    const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+    expect(callWithChatComposites.length).toBe(1);
+    const parentDiv = callWithChatComposites.parent();
+    expect(parentDiv.props().style.display).toBe('none');
   });
 });
