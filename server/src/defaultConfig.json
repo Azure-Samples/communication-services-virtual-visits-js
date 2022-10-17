@@ -7,5 +7,21 @@
   "colorPalette": "#0078d4",
   "waitingTitle": "Thank you for choosing Lamna Healthcare",
   "waitingSubtitle": "Your clinician is joining the meeting",
-  "logoUrl": ""
+  "logoUrl": "",
+  "postCall": {
+    "survey": {
+      "type": "onequestionpoll",
+      "options": {
+        "title": "Tell us how we did",
+        "prompt": "How satisfied are you with this virtual appointment's audio and video quality?",
+        "pollType": "likeOrDislike",
+        "saveButtonText": "Continue"
+      }
+    }
+  },
+  "cosmosDb": {
+    "endpoint": "Set the endpoint to authenticate using Managed Identity method",
+    "connectionString": "Or, set the connection string. If both values are defined, endpoint takes precedence",
+    "dbName": "Name of the Cosmos Database"
+  }
 }
