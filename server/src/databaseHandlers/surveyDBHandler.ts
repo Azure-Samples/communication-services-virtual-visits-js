@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CosmosClient, CosmosClientOptions, ContainerRequest, Resource } from '@azure/cosmos';
+import { CosmosClient, CosmosClientOptions, ContainerRequest } from '@azure/cosmos';
 import { DefaultAzureCredential } from '@azure/identity';
 import { CosmosDBConfig } from '../models/configModel';
 import { SurveyResultRequestModel } from '../models/surveyModel';
@@ -63,29 +63,5 @@ export default class SurveyDBHandler {
 
   async saveSurveyResult(inputData: SurveyResultRequestModel): Promise<void> {
     await this.cosmosClient.database(this.cosmosDBConfig.dbName).container(surveyContainerName).items.upsert(inputData);
-  }
-
-  async querySurvey(callId: string, acsUserId: string): Promise<Resource[]> {
-    const querySpec = {
-      query: `SELECT * FROM ${this.cosmosDBConfig.dbName} db WHERE db.callId = @callId AND db.acsUserId = @acsUserId`,
-      parameters: [
-        {
-          name: '@callId',
-          value: callId
-        },
-        {
-          name: '@acsUserId',
-          value: acsUserId
-        }
-      ]
-    };
-
-    const { resources: results } = await this.cosmosClient
-      .database(this.cosmosDBConfig.dbName)
-      .container(surveyContainerName)
-      .items.query(querySpec)
-      .fetchAll();
-
-    return results;
   }
 }
