@@ -113,8 +113,16 @@ Where do I set this?
   - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
-  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "custom". [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
-  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/survey".
+  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "onequestionpoll", "msforms" and "custom". [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
+  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Survey URL if post call survey type is "msforms" or "custom". Example value: "https://your_survey_service/survey".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE`. Example value: "Tell us how we did".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT`. Example value: "How satisfied are you with this virtual appointment's audio and video quality?".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE`. The types currently supported are "likeOrDislike", "rating" or "text".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER`. AnswerPlaceholder when one question poll type is "text". Example value: "Tell us why!".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT`. Example value: "Continue".
+  - `VV_COSMOS_DB_ENDPOINT`. Set the endpoint to authenticate using Managed Identity method.
+  - `VV_COSMOS_DB_CONNECTION_STRING`. Or, set the connection string. If both values are defined, endpoint takes precedence.
+  - `VV_COSMOS_DB_NAME`. Name of the Cosmos Database.
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
@@ -128,6 +136,7 @@ Where do I set this?
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
   - `postCall`. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
+  - `cosmosDb`. [Learn more about how to access Cosmos DB](./docs/post-call-survey.md#databaseConfiguration)
 
 ### End to End tests
 
