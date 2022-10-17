@@ -1,6 +1,6 @@
 {
   "communicationServicesConnectionString": "endpoint=your_endpoint;accesskey=secret",
-  "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings",
+  "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US",
   "chatEnabled": true,
   "screenShareEnabled": true,
   "companyName": "Lamna Healthcare",
@@ -22,6 +22,6 @@
   "cosmosDb": {
     "endpoint": "Set the endpoint to authenticate using Managed Identity method",
     "connectionString": "Or, set the connection string. If both values are defined, endpoint takes precedence",
-    "dbName": "Name of the Cosmos Database"
+    "dbName": ""
   }
 }

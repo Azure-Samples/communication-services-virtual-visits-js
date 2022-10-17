@@ -51,7 +51,7 @@
     },
     "microsoftBookingsUrl": {
       "type": "string",
-      "defaultValue": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings"
+      "defaultValue": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US"
     },
     "chatEnabled": {
       "type": "bool",
@@ -185,7 +185,7 @@
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE": "[parameters('postCallSurveyOneQuestionPollType')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER": "[parameters('postCallSurveyOneQuestionPollAnswerPlaceholder')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT": "[parameters('postCallSurveyOneQuestionPollSaveButtonText')]",
-            "VV_COSMOS_DB_ENDPOINT": "[if(equals(parameters('postCallSurveyType'),'onequestionpoll'), reference(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName'))).documentEndpoint, '')]",
+            "VV_COSMOS_DB_CONNECTION_STRING": "[if(equals(parameters('postCallSurveyType'),'onequestionpoll'), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName')), '2019-12-12').connectionStrings[0].connectionString, '')]",
             "VV_COSMOS_DB_NAME": "[parameters('cosmosDbName')]"
           }
         },
