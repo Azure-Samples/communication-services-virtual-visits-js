@@ -85,10 +85,6 @@
       "type": "string",
       "defaultValue": "onequestionpoll"
     },
-    "postCallSurveyOptionsSurveyUrl": {
-      "type": "string",
-      "defaultValue": ""
-    },
     "postCallSurveyOneQuestionPollTitle": {
       "type": "string",
       "defaultValue": "Tell us how we did"
@@ -101,10 +97,6 @@
       "type": "string",
       "defaultValue": "likeOrDislike"
     },
-    "postCallSurveyOneQuestionPollAnswerPlaceholder": {
-      "type": "string",
-      "defaultValue": ""
-    },
     "postCallSurveyOneQuestionPollSaveButtonText": {
       "type": "string",
       "defaultValue": "Continue"
@@ -115,7 +107,9 @@
     "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip",
     "roleDefinitionName": "[concat('sql-role-definition-', toLower(parameters('appServiceName')))]",
     "roleDefinitionId": "[guid('sql-role-definition-', resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName')))]",
-    "roleAssignmentId": "[guid(variables('roleDefinitionId'), resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName')))]"
+    "roleAssignmentId": "[guid(variables('roleDefinitionId'), resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName')))]",
+    "postCallSurveyOptionsSurveyUrl": "",
+    "postCallSurveyOneQuestionPollAnswerPlaceholder": ""
   },
   "resources": [
     {
