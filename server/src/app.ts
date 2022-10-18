@@ -68,6 +68,10 @@ app.use((err, req, res, next) => {
     return next(err);
   }
 
+  if (req.route.path === '/api/surveyResults') {
+    res.status(err.code).send({ error: err?.message });
+  }
+
   res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 

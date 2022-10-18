@@ -1,8 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as SurveyController from './controllers/surveyController';
-import * as SurveyDBHandler from './databaseHandlers/surveyDBHandler';
+const mockedSaveSurveyResult = jest.fn();
+
+import app from './app';
+import request from 'supertest';
+
+jest.mock('./databaseHandlers/surveyDBHandler', () => {
+  return {
+    createSurveyDBHandler: jest.fn().mockImplementation(() => ({
+      init: jest.fn(),
+      saveSurveyResult: mockedSaveSurveyResult
+    })),
+    SurveyDBHandler: jest.fn()
+  };
+});
 
 jest.mock('./utils/getConfig', () => {
   return {
@@ -40,17 +52,32 @@ describe('Tes survey route', () => {
   });
 
   test('check if /api/surveyResults route is open with cosmosDb configs', async () => {
-    const mockedSurveyDBHandler = {
-      init: jest.fn()
+    const inputData: any = {
+      callId: 'test_call_id',
+      acsUserId: 'test_acs_user_id',
+      response: true
     };
-    const mockStoreSurveyResult = jest
-      .spyOn(SurveyController, 'storeSurveyResult')
-      .mockImplementationOnce(() => async () => Promise.resolve());
+    const getResponse = await request(app).post('/api/surveyResults').send(inputData);
 
-    jest.spyOn(SurveyDBHandler, 'createSurveyDBHandler').mockReturnValueOnce(mockedSurveyDBHandler as any);
+    expect(mockedSaveSurveyResult).toHaveBeenCalled();
+    expect(getResponse.status).toBe(200);
+  });
 
-    (await import('./app')).default;
+  test('check if submit survey that already exists.', async () => {
+    const expectedErrorCode = 409;
+    const expectedErrorMessage = 'Unique index constraint violation.';
+    (mockedSaveSurveyResult as jest.Mock).mockRejectedValueOnce({
+      code: expectedErrorCode,
+      message: expectedErrorMessage
+    });
+    const inputData: any = {
+      callId: 'test_call_id',
+      acsUserId: 'test_acs_user_id',
+      response: true
+    };
+    const getResponse = await request(app).post('/api/surveyResults').send(inputData);
 
-    expect(mockStoreSurveyResult).toHaveBeenCalled();
+    expect(getResponse.status).toBe(expectedErrorCode);
+    expect(getResponse.body.error).toBe(expectedErrorMessage);
   });
 });
