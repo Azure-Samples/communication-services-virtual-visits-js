@@ -105,7 +105,7 @@ Where do I set this?
 - The environment variables currently used in the config are:
 
   - `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-  - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
+  - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US".
   - `VV_CHAT_ENABLED`. Example value: "true".
   - `VV_SCREENSHARE_ENABLED`. Example value: "true".
   - `VV_COMPANY_NAME`. Example value: "Lamna Healthcare".
@@ -113,13 +113,21 @@ Where do I set this?
   - `VV_WAITING_TITLE`. Example value: "Thank you for choosing Lamna Healthcare".
   - `VV_WAITING_SUBTITLE`. Example value: "Your clinician is joining the meeting".
   - `VV_LOGO_URL`. Example value: "https://your_cdn/logo.png".
-  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "msforms" and "custom". [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
-  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Example value: "https://your_survey_service/survey".
+  - `VV_POSTCALL_SURVEY_TYPE`. The types currently supported are "onequestionpoll", "msforms" and "custom". [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
+  - `VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL`. Survey URL if post call survey type is "msforms" or "custom". Example value: "https://your_survey_service/survey".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TITLE`. Example value: "Tell us how we did".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT`. Example value: "How satisfied are you with this virtual appointment's audio and video quality?".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE`. The types currently supported are "likeOrDislike", "rating" or "text".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER`. AnswerPlaceholder when one question poll type is "text". Example value: "Tell us why!".
+  - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT`. Example value: "Continue".
+  - `VV_COSMOS_DB_ENDPOINT`. Set the endpoint to authenticate using Managed Identity method.
+  - `VV_COSMOS_DB_CONNECTION_STRING`. Or, set the connection string. If both values are defined, endpoint takes precedence.
+  - `VV_COSMOS_DB_NAME`. Name of the Cosmos Database.
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
   - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US&CallBackURL=https%3A%2F%2Fproducts.office.com/business/bookings".
+  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US".
   - `chatEnabled`. Example value: "true".
   - `screenShareEnabled`. Example value: "true".
   - `companyName`. Example value: "Lamna Healthcare".
@@ -128,6 +136,7 @@ Where do I set this?
   - `waitingSubtitle`. Example value: "Your clinician is joining the meeting".
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
   - `postCall`. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
+  - `cosmosDb`. [Learn more about how to access Cosmos DB](./docs/post-call-survey.md#databaseConfiguration)
 
 ### End to End tests
 
