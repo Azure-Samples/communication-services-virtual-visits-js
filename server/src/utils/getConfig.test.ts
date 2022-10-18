@@ -39,7 +39,22 @@ describe('config', () => {
       colorPalette: '#0078d4',
       waitingTitle: 'Thank you for choosing Lamna Healthcare',
       waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: ''
+      logoUrl: '',
+      postCall: {
+        survey: {
+          type: 'onequestionpoll',
+          options: {
+            title: 'Tell us how we did',
+            prompt: `How satisfied are you with this virtual appointment's audio and video quality?`,
+            pollType: 'likeOrDislike',
+            saveButtonText: 'Continue'
+          }
+        }
+      },
+      cosmosDb: {
+        endpoint: 'cosmosDbEndpoint',
+        dbName: 'cosmosDbName'
+      }
     };
     const getDefaultConfigSpy = jest
       .spyOn(getDefaultConfig, 'getDefaultConfig')
@@ -59,9 +74,12 @@ describe('config', () => {
     expect(config.colorPalette).toBe(mockDefaultConfig.colorPalette);
     expect(config.waitingTitle).toBe(mockDefaultConfig.waitingTitle);
     expect(config.waitingSubtitle).toBe(mockDefaultConfig.waitingSubtitle);
-    expect(config.postCall).not.toBeDefined();
+    expect(config.postCall).toBeDefined();
+    expect(config.postCall).toEqual(mockDefaultConfig.postCall);
     expect(postCallConfigSpy).toHaveBeenCalled();
     expect(cosmosDbConfigSpy).toHaveBeenCalled();
+    expect(config.cosmosDb).toBeDefined();
+    expect(config.cosmosDb).toEqual(mockDefaultConfig.cosmosDb);
   });
 
   test('should use environment variables when available', () => {
