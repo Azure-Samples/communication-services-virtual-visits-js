@@ -29,8 +29,7 @@ export interface PostCallConfig {
 }
 
 export interface CosmosDBConfig {
-  connectionString?: string;
-  endpoint?: string;
+  connectionString: string;
   dbName: string;
 }
 

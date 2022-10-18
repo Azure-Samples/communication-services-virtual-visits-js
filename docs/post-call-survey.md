@@ -42,8 +42,7 @@ VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
         }
     },
     "cosmosDB": {
-        "endpoint": "Set the endpoint to authenticate using Managed Identity method",
-        "connectionString": "Or, set the connection string. If both values are defined, endpoint takes precedence",
+        "connectionString": "Connection string of your cosmos DB account",
         "dbName": "Name of the Cosmos Database"
     }
 }
