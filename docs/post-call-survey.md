@@ -54,7 +54,7 @@ VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
 [Learn how to control access to CosmosDB using Managed Identities](https://learn.microsoft.com/en-us/azure/cosmos-db/managed-identity-based-authentication)
 
 One question poll survey results will be stored in a Cosmos DB.
-Cosmos DB can be accessed either by using DB connection string or endpoint. If both values are present, endpoint takes precedence.
+Cosmos DB can be accessed by using DB connection string.
 The data stored in DB is as follows:
 
 ```
