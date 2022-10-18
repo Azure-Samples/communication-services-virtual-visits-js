@@ -22,7 +22,7 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
 
   const submitSurveyResponse = async (): Promise<void> => {
     await submitSurveyResponseUtil(props.acsUserId, pollResponse, props.callId);
-    window.location.replace('/book');
+    // window.location.replace('/book');
   };
 
   return (
