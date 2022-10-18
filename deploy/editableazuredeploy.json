@@ -152,6 +152,9 @@
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]"
       ],
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "httpsOnly": "true"
