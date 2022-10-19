@@ -120,8 +120,7 @@ Where do I set this?
   - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE`. The types currently supported are "likeOrDislike", "rating" or "text".
   - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER`. AnswerPlaceholder when one question poll type is "text". Example value: "Tell us why!".
   - `VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT`. Example value: "Continue".
-  - `VV_COSMOS_DB_ENDPOINT`. Set the endpoint to authenticate using Managed Identity method.
-  - `VV_COSMOS_DB_CONNECTION_STRING`. Or, set the connection string. If both values are defined, endpoint takes precedence.
+  - `VV_COSMOS_DB_CONNECTION_STRING`. Connection string of your cosmos DB account.
   - `VV_COSMOS_DB_NAME`. Name of the Cosmos Database.
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.

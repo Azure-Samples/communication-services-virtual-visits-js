@@ -1,31 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CosmosClient, CosmosClientOptions, ContainerRequest } from '@azure/cosmos';
-import { DefaultAzureCredential } from '@azure/identity';
+import { CosmosClient, ContainerRequest } from '@azure/cosmos';
 import { CosmosDBConfig } from '../models/configModel';
 import { SurveyResultRequestModel } from '../models/surveyModel';
 import { ServerConfigModel } from '../models/configModel';
 
 const surveyContainerName = 'Surveys';
 
-const createCosmosClient = (config): CosmosClient => {
-  if (config.cosmosDb.endpoint && config.cosmosDb.endpoint.length > 0) {
-    const cosmosClientOptions: CosmosClientOptions = {
-      endpoint: config.cosmosDb.endpoint as string,
-      aadCredentials: new DefaultAzureCredential()
-    };
-
-    return new CosmosClient(cosmosClientOptions);
-  }
-
-  return new CosmosClient(config.cosmosDb.connectionString);
-};
-
 export const createSurveyDBHandler = (config: ServerConfigModel): SurveyDBHandler | undefined => {
   if (config.postCall?.survey.type && config.postCall.survey.type === 'onequestionpoll') {
     if (config.cosmosDb) {
-      const cosmosClient = createCosmosClient(config);
+      const cosmosClient = new CosmosClient(config.cosmosDb.connectionString);
 
       return new SurveyDBHandler(cosmosClient, config.cosmosDb);
     }

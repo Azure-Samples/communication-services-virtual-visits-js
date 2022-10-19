@@ -20,8 +20,7 @@
     }
   },
   "cosmosDb": {
-    "endpoint": "Set the endpoint to authenticate using Managed Identity method",
-    "connectionString": "Or, set the connection string. If both values are defined, endpoint takes precedence",
+    "connectionString": "Connection string of your Cosmos DB account",
     "dbName": "Name of the Cosmos Database"
   }
 }

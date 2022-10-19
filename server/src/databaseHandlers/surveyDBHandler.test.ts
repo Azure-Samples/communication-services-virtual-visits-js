@@ -5,7 +5,7 @@ import SurveyDBHandler, { createSurveyDBHandler } from './surveyDBHandler';
 import { ServerConfigModel } from '../models/configModel';
 
 const cosmosDBConfig = {
-  endpoint: 'https://example.org',
+  connectionString: 'AccountEndpoint=https://example.org/;AccountKey=testingAccountKey',
   dbName: 'testingDbName'
 };
 
@@ -101,7 +101,7 @@ describe('Test createSurveyDBHandler', () => {
         }
       },
       cosmosDb: {
-        endpoint: 'http://example.org',
+        connectionString: 'AccountEndpoint=https://example.org/;AccountKey=testingAccountKey',
         dbName: 'testingDBName'
       }
     };
@@ -249,7 +249,7 @@ describe('Test createSurveyDBHandler', () => {
       waitingSubtitle: 'Your clinician is joining the meeting',
       logoUrl: '',
       cosmosDb: {
-        endpoint: 'http://example.org',
+        connectionString: 'AccountEndpoint=https://example.org/;AccountKey=testingAccountKey',
         dbName: 'testingDBName'
       }
     };
