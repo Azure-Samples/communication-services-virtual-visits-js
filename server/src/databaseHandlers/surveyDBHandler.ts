@@ -9,7 +9,6 @@ import { ServerConfigModel } from '../models/configModel';
 const surveyContainerName = 'Surveys';
 
 export const createSurveyDBHandler = (config: ServerConfigModel): SurveyDBHandler | undefined => {
-  console.log('in createSurveyDBHandler');
   if (config.postCall?.survey.type && config.postCall.survey.type === 'onequestionpoll') {
     if (config.cosmosDb) {
       const cosmosClient = new CosmosClient(config.cosmosDb.connectionString);
