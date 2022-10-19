@@ -19,8 +19,7 @@ VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_PROMPT = "How satisfied are you with this vir
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_TYPE = "likeOrDislike" or "rating" or "text"
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER = ""
 VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT = "Continue"
-VV_COSMOS_DB_ENDPOINT = "Set the endpoint to authenticate using Managed Identity method"
-VV_COSMOS_DB_CONNECTION_STRING = "Or, set the connection string. If both values are defined, endpoint takes precedence"
+VV_COSMOS_DB_CONNECTION_STRING = "Connection string of your Cosmos DB account"
 VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
 ```
 
@@ -41,8 +40,8 @@ VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
             }
         }
     },
-    "cosmosDB": {
-        "connectionString": "Connection string of your cosmos DB account",
+    "cosmosDb": {
+        "connectionString": "Connection string of your Cosmos DB account",
         "dbName": "Name of the Cosmos Database"
     }
 }

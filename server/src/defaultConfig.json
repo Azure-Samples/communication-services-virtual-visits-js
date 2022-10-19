@@ -20,7 +20,7 @@
     }
   },
   "cosmosDb": {
-    "connectionString": "Connection string of your cosmos DB account",
+    "connectionString": "Connection string of your Cosmos DB account",
     "dbName": "Name of the Cosmos Database"
   }
 }
