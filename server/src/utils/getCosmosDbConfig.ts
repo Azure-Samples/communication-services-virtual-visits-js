@@ -6,12 +6,11 @@ import { CosmosDBConfig, ServerConfigModel } from '../models/configModel';
 
 const getCosmosDBConfig = (defaultConfig: ServerConfigModel): CosmosDBConfig | undefined => {
   const cosmosDBConnectionString =
-    process.env[VV_COSMOS_DB_CONNECTION_STRING] ?? defaultConfig.cosmosDb?.connectionString;
+    process.env[VV_COSMOS_DB_CONNECTION_STRING] ?? (defaultConfig.cosmosDb?.connectionString as string);
 
   const cosmosDBConfig: CosmosDBConfig = {
     dbName: process.env[VV_COSMOS_DB_NAME] ?? (defaultConfig.cosmosDb?.dbName as string),
-    connectionString:
-      process.env[VV_COSMOS_DB_CONNECTION_STRING] ?? (defaultConfig.cosmosDb?.connectionString as string)
+    connectionString: cosmosDBConnectionString
   };
 
   if (!cosmosDBConnectionString) {
