@@ -51,7 +51,7 @@ describe('config', () => {
         }
       },
       cosmosDb: {
-        connectionString: 'comosConnectionString',
+        connectionString: 'cosmosConnectionString',
         dbName: 'cosmosDbName'
       }
     };
