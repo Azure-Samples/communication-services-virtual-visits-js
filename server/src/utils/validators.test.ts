@@ -5,7 +5,7 @@ import SurveyDBHandler from '../databaseHandlers/surveyDBHandler';
 import { surveyResultRequestValidator } from './validators';
 
 const cosmosDBConfig = {
-  endpoint: 'https://example.org',
+  connectionString: 'https://example.org',
   dbName: 'testingDbName'
 };
 

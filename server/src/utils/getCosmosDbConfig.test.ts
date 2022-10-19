@@ -31,27 +31,6 @@ describe('getCosmosDbConfig', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should return undefined if connection string and endpoint are undefined', () => {
-    const mockDefaultConfig: ServerConfigModel = {
-      communicationServicesConnectionString: 'dummy endpoint',
-      microsoftBookingsUrl: 'dummyBookingsUrl',
-      chatEnabled: true,
-      screenShareEnabled: true,
-      companyName: 'test Healthcare',
-      colorPalette: '#0078d4',
-      waitingTitle: 'Thank you for choosing Lamna Healthcare',
-      waitingSubtitle: 'Your clinician is joining the meeting',
-      logoUrl: '',
-      cosmosDb: {
-        dbName: 'my db'
-      }
-    };
-
-    const result = getCosmosDBConfig(mockDefaultConfig);
-
-    expect(result).toBeUndefined();
-  });
-
   it('should return config with connection string if environment variables are set', () => {
     const expectedDbName = 'my db name';
     const expectedConnectionString = 'my conn string';
