@@ -58,69 +58,6 @@ describe('Test surveyDBHandler', () => {
 
     expect(mockedUpsert).toHaveBeenCalled();
   });
-
-  test('Test querySurvey no duplicate survey', async () => {
-    const callId = 'test_call_id';
-    const acsUserId = 'test_acs_user_id';
-    const mockedFetchAll = jest.fn().mockImplementationOnce(() => ({ resources: [] }));
-    const mockedCosmosClient = {
-      database: jest.fn().mockImplementation(() => {
-        return {
-          container: jest.fn().mockImplementation(() => {
-            return {
-              items: {
-                upsert: jest.fn(),
-                query: jest.fn().mockImplementation(() => {
-                  return {
-                    fetchAll: mockedFetchAll
-                  };
-                })
-              }
-            };
-          })
-        };
-      })
-    };
-
-    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
-    const results = await surveyDBHandler.querySurvey(callId, acsUserId);
-
-    expect(mockedFetchAll).toHaveBeenCalled();
-    expect(results.length).toEqual(0);
-  });
-
-  test('Test querySurvey duplicate survey', async () => {
-    const invalidInput = {
-      callId: 'test_call_id',
-      acsUserId: 'test_acs_user_id',
-      response: true
-    };
-    const mockedFetchAll = jest.fn().mockImplementationOnce(() => ({ resources: [{ ...invalidInput }] }));
-    const mockedCosmosClient = {
-      database: jest.fn().mockImplementation(() => {
-        return {
-          container: jest.fn().mockImplementation(() => {
-            return {
-              items: {
-                upsert: jest.fn(),
-                query: jest.fn().mockImplementation(() => {
-                  return {
-                    fetchAll: mockedFetchAll
-                  };
-                })
-              }
-            };
-          })
-        };
-      })
-    };
-
-    const surveyDBHandler = new SurveyDBHandler(mockedCosmosClient as any, cosmosDBConfig);
-    const results = await surveyDBHandler.querySurvey(invalidInput.callId, invalidInput.acsUserId);
-
-    expect(mockedFetchAll).toHaveBeenCalled();
-    expect(results.length).not.toEqual(0);
-  });
 });
 
 describe('Test createSurveyDBHandler', () => {

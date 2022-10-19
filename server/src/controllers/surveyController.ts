@@ -15,7 +15,7 @@ export const storeSurveyResult = (surveyDBHandler: SurveyDBHandler) => async (
     const { body: requestData } = req;
 
     // Validation.
-    const errors = await surveyResultRequestValidator(requestData, surveyDBHandler);
+    const errors = surveyResultRequestValidator(requestData);
 
     if (errors.length > 0) {
       return res.status(400).send({ errors });
