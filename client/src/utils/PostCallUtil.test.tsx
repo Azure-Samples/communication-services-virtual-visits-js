@@ -18,6 +18,7 @@ describe('PostCallUtil', () => {
     const mockStatus = 200;
     const mockCallId = 'mockCallId';
     const mockAcsUserId = 'mockAcsUserId';
+    const mockMeetingLink = 'mockMeetingLink';
     const mockPollResponse = 'mockPollResponse';
 
     (fetch as jest.Mock).mockImplementation(() => {
@@ -26,7 +27,7 @@ describe('PostCallUtil', () => {
       });
     });
 
-    await submitSurveyResponseUtil(mockCallId, mockAcsUserId, mockPollResponse);
+    await submitSurveyResponseUtil(mockCallId, mockAcsUserId, mockMeetingLink, mockPollResponse);
     expect(fetch).toHaveBeenCalled();
   });
 
@@ -34,6 +35,7 @@ describe('PostCallUtil', () => {
     const mockStatus = 400;
     const mockCallId = 'mockCallId';
     const mockAcsUserId = 'mockAcsUserId';
+    const mockMeetingLink = 'mockMeetingLink';
     const mockPollResponse = 'mockPollResponse';
 
     (fetch as jest.Mock).mockImplementation(() => {
@@ -43,7 +45,7 @@ describe('PostCallUtil', () => {
     });
 
     try {
-      await submitSurveyResponseUtil(mockCallId, mockAcsUserId, mockPollResponse);
+      await submitSurveyResponseUtil(mockCallId, mockAcsUserId, mockMeetingLink, mockPollResponse);
     } catch (err) {
       expect(err).toEqual('Error during insertion');
     }

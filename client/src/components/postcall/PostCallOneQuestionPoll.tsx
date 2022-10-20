@@ -13,6 +13,7 @@ export interface PostCallOneQuestionPollProps {
   theme?: PartialTheme | Theme;
   callId?: string;
   acsUserId: string;
+  meetingLink: string;
 }
 
 export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestionPollProps> = (
@@ -21,7 +22,9 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
   const [pollResponse, setPollResponse] = useState<boolean | string | number>();
 
   const submitSurveyResponse = async (): Promise<void> => {
-    await submitSurveyResponseUtil(props.acsUserId, pollResponse, props.callId);
+    const { acsUserId, callId, meetingLink } = props;
+
+    await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
     window.location.replace('/book');
   };
 

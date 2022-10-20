@@ -20,7 +20,13 @@ describe('Survey', () => {
       }
     };
     const survey = await mount<SurveyProps>(
-      <Survey callId="mockCallId" acsUserId="mockAcsUserId" postCall={mockPostCall} onRejoinCall={jest.fn()} />
+      <Survey
+        callId="mockCallId"
+        acsUserId="mockAcsUserId"
+        meetingLink="mockMeetingLink"
+        postCall={mockPostCall}
+        onRejoinCall={jest.fn()}
+      />
     );
     const iframe = survey.find('iframe');
     const options: MSFormsSurveyOptions = mockPostCall.survey?.options as MSFormsSurveyOptions;
@@ -42,7 +48,13 @@ describe('Survey', () => {
       }
     };
     const survey = await mount<SurveyProps>(
-      <Survey callId="mockCallId" acsUserId="mockAcsUserId" postCall={mockPostCall} onRejoinCall={jest.fn()} />
+      <Survey
+        callId="mockCallId"
+        acsUserId="mockAcsUserId"
+        meetingLink="mockMeetingLink"
+        postCall={mockPostCall}
+        onRejoinCall={jest.fn()}
+      />
     );
     const postCallOneQuestionPoll = survey.find(PostCallOneQuestionPoll);
     expect(postCallOneQuestionPoll.length).toBe(1);
