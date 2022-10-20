@@ -27,6 +27,7 @@ describe('surveyResultController', () => {
     const inputData: any = {
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
+      meetingLink: 'test_meeting_link',
       response: true
     };
     const request: any = { body: inputData };
@@ -61,9 +62,13 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    ['callId must be present', { acsUserId: 'test_acs_user_id', response: true }],
-    ['acsUserId must be present', { callId: 'test_call_id', response: true }],
-    ['response must be present', { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }]
+    ['callId must be present', { acsUserId: 'test_acs_user_id', meetingLink: 'test_meeting_link', response: true }],
+    ['acsUserId must be present', { callId: 'test_call_id', meetingLink: 'test_meeting_link', response: true }],
+    ['meetingLink must be present', { callId: 'test_call_id', acsUserId: 'test_acs_user_id', response: true }],
+    [
+      'response must be present',
+      { callId: 'test_call_id', acsUserId: 'test_acs_user_id', meetingLink: 'test_meeting_link' }
+    ]
   ])('Test %s', async (expectedError: string, invalidInput: any) => {
     const expectedErrorResponse = {
       errors: [expectedError]
@@ -99,13 +104,50 @@ describe('surveyResultController', () => {
   });
 
   test.each([
-    [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
-    [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
-    [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
-    [2, ['callId must be present', 'acsUserId must be present'], { response: true }],
-    [2, ['callId must be present', 'response must be present'], { acsUserId: 'test_acs_user_id' }],
-    [2, ['acsUserId must be present', 'response must be present'], { callId: 'test_call_id' }],
-    [4, ['callId must be present', 'acsUserId must be present', 'response must be present'], {}]
+    [2, ['callId must be present', 'acsUserId must be present'], { meetingLink: 'test_meeting_link', response: true }],
+    [2, ['callId must be present', 'meetingLink must be present'], { acsUserId: 'test_acs_user_id', response: true }],
+    [
+      2,
+      ['callId must be present', 'response must be present'],
+      { acsUserId: 'test_acs_user_id', meetingLink: 'test_meeting_link' }
+    ],
+    [2, ['acsUserId must be present', 'meetingLink must be present'], { callId: 'test_call_id', response: true }],
+    [
+      2,
+      ['acsUserId must be present', 'response must be present'],
+      { callId: 'test_call_id', meetingLink: 'test_meeting_link' }
+    ],
+    [
+      2,
+      ['meetingLink must be present', 'response must be present'],
+      { callId: 'test_call_id', acsUserId: 'test_acs_user_id' }
+    ],
+    [3, ['callId must be present', 'acsUserId must be present', 'meetingLink must be present'], { response: true }],
+    [
+      3,
+      ['acsUserId must be present', 'meetingLink must be present', 'response must be present'],
+      { callId: 'test_call_id' }
+    ],
+    [
+      3,
+      ['callId must be present', 'acsUserId must be present', 'response must be present'],
+      { meetingLink: 'test_meeting_link' }
+    ],
+    [
+      3,
+      ['callId must be present', 'meetingLink must be present', 'response must be present'],
+      { acsUserId: 'test_acs_user_id' }
+    ],
+    [
+      4,
+      [
+        'callId must be present',
+        'acsUserId must be present',
+        'meetingLink must be present',
+        'response must be present'
+      ],
+      {}
+    ]
   ])('Test when %d validations failed: %s', async (_, errors: string[], invalidInput: any) => {
     const expectedErrorResponse = { errors };
     const request: any = { body: invalidInput };
@@ -142,6 +184,7 @@ describe('surveyResultController', () => {
     const inputData: any = {
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
+      meetingLink: 'test_meeting_link',
       response: true
     };
     const expectedError = new Error('failed to save');

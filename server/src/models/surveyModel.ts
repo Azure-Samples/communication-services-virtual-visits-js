@@ -5,6 +5,7 @@ export interface SurveyResultRequestModel {
   createdOn: Date;
   callId: string;
   acsUserId: string;
+  meetingLink: string;
   response: OneQuestionPollResult;
 }
 
