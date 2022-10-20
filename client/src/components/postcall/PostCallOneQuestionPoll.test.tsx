@@ -20,9 +20,7 @@ const mockCallId = 'mockCallId';
 const mockMeetingLink = 'mockMeetingLink';
 const mockTheme: Theme = getTheme();
 
-const mockReplace = jest.fn().mockImplementation(() => {
-  console.log('clicked');
-});
+const mockReplace = jest.fn();
 
 describe('PostCallOneQuestionPoll', () => {
   const originalwindowLocation = window.location;
