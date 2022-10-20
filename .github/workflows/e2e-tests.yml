@@ -33,21 +33,12 @@ jobs:
       - name: Checkout branch
         run: git checkout ${{ github.event.inputs.branch }}
 
-      # Run azure cosmos emulator
-      - name: "Azure Cosmos Emulator"
-        runs:
-          using: "docker"
-          image: "docker://microsoft/azure-cosmosdb-emulator"
-          args:
-            - "--name"
-            - "cosmosdb"
-            - "--memory"
-            - "2GB"
-            - "--mount"
-            - 'type=bind,source=%LOCALAPPDATA%\,destination=C:\CosmosDB.Emulator\bind-mount'
-            - "-P"
-            - "--interactive"
-            - "--tty"
+      # Run Azure Cosmos Emulator on docker
+      - name: "Pull Azure Cosmos Emulator Image"
+        run: |
+          docker pull microsoft/azure-cosmosdb-emulator
+          md %LOCALAPPDATA%\CosmosDBEmulatorCert 2>nul
+          docker run -v %LOCALAPPDATA%\CosmosDBEmulatorCert:c:\CosmosDBEmulator\CosmosDBEmulatorCert -P -t -i microsoft/azure-cosmosdb-emulator
 
       # Install dependencies
       - name: Install client dependencies
