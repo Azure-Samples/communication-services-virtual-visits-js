@@ -4,4 +4,4 @@
 // GENERATED FILE. DO NOT EDIT MANUALLY.
 
 export const appName = 'virtualvisits';
-export const appVersion = '1.1.0';
+export const appVersion = '1.1.1';
