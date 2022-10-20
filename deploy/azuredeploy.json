@@ -62,8 +62,8 @@
     "postCallSurveyOneQuestionPollType": "likeOrDislike",
     "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
     "postCallSurveyOneQuestionPollSaveButtonText": "Continue",
-    "cosmosDbAccountName": "[concat('db-account-', toLower(parameters('appServiceName')))]",
-    "cosmosDbName": "[concat('cosmos-db-', toLower(parameters('appServiceName')))]"
+    "cosmosDbAccountName": "[concat('db-account-', uniqueString(parameters('appServiceName')))]",
+    "cosmosDbName": "[concat('cosmos-db-', uniqueString(parameters('appServiceName')))]"
   },
   "resources": [
     {
