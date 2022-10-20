@@ -27,7 +27,7 @@ jest.mock('./utils/getConfig', () => {
         }
       },
       cosmosDb: {
-        endpoint: 'http://example.org',
+        connectionString: 'http://example.org',
         dbName: 'testingDBName'
       }
     })

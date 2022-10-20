@@ -63,10 +63,7 @@
     "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
     "postCallSurveyOneQuestionPollSaveButtonText": "Continue",
     "cosmosDbAccountName": "[concat('db-account-', toLower(parameters('appServiceName')))]",
-    "roleDefinitionName": "[concat('sql-role-definition-', toLower(parameters('appServiceName')))]",
-    "cosmosDbName": "[concat('cosmos-db-', toLower(parameters('appServiceName')))]",
-    "roleDefinitionId": "[guid('sql-role-definition-', resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]",
-    "roleAssignmentId": "[guid(variables('roleDefinitionId'), resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')))]"
+    "cosmosDbName": "[concat('cosmos-db-', toLower(parameters('appServiceName')))]"
   },
   "resources": [
     {
@@ -109,9 +106,6 @@
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]"
       ],
-      "identity": {
-        "type": "SystemAssigned"
-      },
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "httpsOnly": "true"
@@ -163,47 +157,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
-      "apiVersion": "2022-05-15",
-      "name": "[format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId'))]",
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-      ],
-      "properties": {
-        "roleName": "[variables('roleDefinitionName')]",
-        "type": "CustomRole",
-        "assignableScopes": [
-          "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-        ],
-        "permissions": [
-          {
-            "dataActions": [
-              "Microsoft.DocumentDB/databaseAccounts/readMetadata",
-              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read",
-              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
-              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed"
-            ]
-          }
-        ]
-      },
-      "condition": "[equals(variables('postCallSurveyType'),'onequestionpoll')]"
-    },
-    {
-      "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
-      "apiVersion": "2022-05-15",
-      "name": "[format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleAssignmentId'))]",
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]",
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', split(format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId')), '/')[0], split(format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId')), '/')[1])]"
-      ],
-      "properties": {
-        "roleDefinitionId": "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', split(format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId')), '/')[0], split(format('{0}/{1}', variables('cosmosDbAccountName'), variables('roleDefinitionId')), '/')[1])]",
-        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('appServiceName')),'2020-06-01', 'full').identity.principalId]",
-        "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName'))]"
-      },
-      "condition": "[equals(variables('postCallSurveyType'),'onequestionpoll')]"
     }
   ]
 }

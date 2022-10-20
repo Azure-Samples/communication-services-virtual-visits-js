@@ -6,7 +6,7 @@ import SurveyDBHandler from '../databaseHandlers/surveyDBHandler';
 import { storeSurveyResult } from '../controllers/surveyController';
 
 const cosmosDBConfig = {
-  endpoint: 'https://example.org',
+  connectionString: 'https://example.org',
   dbName: 'testingDbName'
 };
 

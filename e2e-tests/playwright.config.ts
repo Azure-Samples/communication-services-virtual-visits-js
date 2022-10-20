@@ -80,7 +80,6 @@ const config: PlaywrightTestConfig = {
       ["VV_POSTCALL_SURVEY_TYPE"]: "",
       ["VV_COSMOS_DB_NAME"]: "",
       ["VV_COSMOS_DB_CONNECTION_STRING"]: "",
-      ["VV_COSMOS_DB_ENDPOINT"]: "",
     },
   },
 };
