@@ -122,7 +122,7 @@ describe('PostCallOneQuestionPoll', () => {
 
     const mockSubmitSurveyResponseUtil = jest
       .spyOn(PostCallUtil, 'submitSurveyResponseUtil')
-      .mockImplementationOnce(async () => Promise.resolve());
+      .mockImplementationOnce(jest.fn());
 
     const button = postCallOneQuestionPoll.find(PrimaryButton);
     await button.simulate('click');
