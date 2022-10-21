@@ -1,0 +1,27 @@
+# Testing docker
+
+name: Azure DB Emulator
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to run E2E from"
+        required: false
+        default: "main"
+
+jobs:
+  runs-on: ubuntu-latest
+  name: Azure DB Emulator
+  steps:
+    # Checks-out your repository
+    - uses: actions/checkout@v3
+
+    # Check out onto desired branch to run e2e tests from
+    - name: Checkout branch
+      run: git checkout ${{ github.event.inputs.branch }}
+
+    # Install docker
+    - name: Install docker
+      run: sudo apt-get install docker-ce docker-ce-cli containerd.io
