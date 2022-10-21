@@ -50,11 +50,8 @@ VV_COSMOS_DB_NAME = "Name of the Cosmos Database"
 
 ### <a id="databaseConfiguration">Database configuration</a>
 
-[Learn how to control access to CosmosDB using Managed Identities](https://learn.microsoft.com/en-us/azure/cosmos-db/managed-identity-based-authentication)
-
-One question poll survey results will be stored in a Cosmos DB.
-Cosmos DB can be accessed by using DB connection string.
-The data stored in DB is as follows:
+1-Question Poll results are stored in Cosmos DB. Use a connection string to connect to your Cosmos DB.
+The data stored in the DB is as follows:
 
 ```
 {
@@ -68,7 +65,7 @@ The data stored in DB is as follows:
 Logs related to the call can be found in Azure Monitor logs
 [Learn how to enable logging via Azure Monitor logs](https://learn.microsoft.com/en-us/azure/communication-services/concepts/analytics/enable-logging)
 
-callId in the DB corresponds to CorrelationId in Azure Monitor logs
+The `callId` in the DB corresponds to CorrelationId in Azure Monitor logs
 
 ## <a id="msforms">Use Microsoft Forms</a>
 
@@ -78,7 +75,7 @@ Render your [Microsoft Form](https://www.microsoft.com/en-ca/microsoft-365/onlin
 
 ```
 VV_POSTCALL_SURVEY_TYPE = "msforms"
-VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "<your_MSForms_url>"
+VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "your MS Forms url"
 ```
 
 ### Configure using defaultConfig.json
@@ -90,7 +87,7 @@ VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "<your_MSForms_url>"
         "survey": {
             "type": "msforms",
             "options": {
-                "surveyUrl": "<your_MSForms_url>"
+                "surveyUrl": "your MS Forms url"
             }
         }
     }
@@ -105,7 +102,7 @@ Render a survey from your own survey provider:
 
 ```
 VV_POSTCALL_SURVEY_TYPE = "custom"
-VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "<your_survey_url>"
+VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "your survey url"
 ```
 
 ### Configure using defaultConfig.json
@@ -117,7 +114,7 @@ VV_POSTCALL_SURVEY_OPTIONS_SURVEYURL = "<your_survey_url>"
         "survey": {
             "type": "custom",
             "options": {
-                "surveyUrl": "<your_survey_url>"
+                "surveyUrl": "your survey url"
             }
         }
     }
