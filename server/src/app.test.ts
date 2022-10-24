@@ -113,6 +113,7 @@ describe('errors', () => {
     const inputData: any = {
       callId: 'test_call_id',
       acsUserId: 'test_acs_user_id',
+      meetingLink: 'test_meeting_link',
       response: true
     };
 

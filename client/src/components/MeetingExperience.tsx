@@ -105,6 +105,7 @@ export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element =>
           <Survey
             callId={callId}
             acsUserId={acsUserId}
+            meetingLink={locator.meetingLink}
             theme={fluentTheme}
             data-testid="Survey"
             postCall={postCall}

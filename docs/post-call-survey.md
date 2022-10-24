@@ -57,6 +57,7 @@ The data stored in the DB is as follows:
 {
     callId: string,
     acsUserId: string,
+    meetingLink: string,
     response: boolean | string | number //the response of the survey
 }
 ```

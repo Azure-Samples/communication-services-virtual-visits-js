@@ -25,6 +25,7 @@ export interface SurveyProps {
   postCall: PostCallConfig;
   callId?: string;
   acsUserId: string;
+  meetingLink: string;
 }
 const SURVEY = 'SurveyComponent';
 
@@ -58,6 +59,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
             oneQuestionPollOptions={oneQuestionPollOptions}
             callId={props.callId}
             acsUserId={props.acsUserId}
+            meetingLink={props.meetingLink}
           />
           <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
             <RejoinLink onRejoinCall={props.onRejoinCall} />

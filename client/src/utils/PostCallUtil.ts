@@ -4,6 +4,7 @@
 export const submitSurveyResponseUtil = async (
   acsUserId: string,
   pollResponse: number | boolean | string | undefined,
+  meetingLink: string,
   callId?: string
 ): Promise<void> => {
   try {
@@ -16,6 +17,7 @@ export const submitSurveyResponseUtil = async (
       body: JSON.stringify({
         callId: callId,
         acsUserId: acsUserId,
+        meetingLink: meetingLink,
         response: pollResponse
       })
     });
