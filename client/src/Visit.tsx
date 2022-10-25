@@ -15,6 +15,8 @@ import './styles/Common.css';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
+import { useCookies } from 'react-cookie';
+import { BOOKINGS_LINK_COOKIE } from './models/Cookies';
 
 const PARENT_ID = 'VisitSection';
 
@@ -37,12 +39,16 @@ export const Visit = (): JSX.Element => {
     window.location.assign(window.location.href);
   };
 
+  const [cookies, _setCookie] = useCookies([BOOKINGS_LINK_COOKIE]);
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
   const [token, setToken] = useState<CommunicationUserToken | undefined>(undefined);
   const [error, setError] = useState<any | undefined>(undefined);
   const [meetingLinkLocator, setMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
     _getMeetingLinkLocator(window.location.search) // case of direct link to visit with meeting link in URL
   );
+
+  // CONFIRM THAT COOKIES SET IN /book IS PERSISTED ACROSS PAGES
+  console.log(cookies);
 
   const _onJoinMeeting = (link: string): void => {
     const appendMeetingLinkToUrl = (): void => {
