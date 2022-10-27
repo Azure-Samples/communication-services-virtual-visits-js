@@ -4,7 +4,7 @@ This is an automation tests folder for Virtual Visits sample, which contains all
 
 ## Build and Run End to End tests locally
 
-- Before running the tests make sure that the environment variable for connection string is set. [Learn more about environment variables and how to set them.](https://github.com/Azure-Samples/communication-services-virtual-visits-js#environment-variables)
+- Before running the tests make sure that the environment variables VV_COMMUNICATION_SERVICES_CONNECTION_STRING, VV_COSMOS_DB_CONNECTION_STRING and VV_COSMOS_DB_NAME are set. [Learn more about environment variables and how to set them.](https://github.com/Azure-Samples/communication-services-virtual-visits-js#environment-variables)
 
 - To install dependencies, use the following command:
 
