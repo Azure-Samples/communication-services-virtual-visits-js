@@ -93,8 +93,3 @@ release/
 e2e-tests/test-results/
 e2e-tests/playwright-report/
 e2e-tests/playwright/.cache/
-
-# Snapshots generated while running e2e tests locally
-# Screenshots differ between browsers and platforms due to different rendering, fonts etc. 
-# Your Windows development environment may differ from someone else's. For more information, visit https://playwright.dev/docs/test-snapshots
-e2e-tests/tests/snapshots/**/*win*.png

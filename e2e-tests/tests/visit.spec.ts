@@ -36,7 +36,12 @@ const testVisitWithMeetingUrl = async (page) => {
 
   //Wait for rejoin call page to load
   await expect(page.locator('[data-icon-name="Waffle"]').first()).toBeVisible();
-  await expect(page.locator('text="You left the call"').first()).toBeVisible();
+  await expect(page.locator('text="Continue"').first()).toBeVisible();
+  await expect(page.locator('text="Tell us how we did"').first()).toBeVisible();
+  await expect(
+    page.locator('text="or re-join the call"').first()
+  ).toBeVisible();
+
   await delay(DELAY_MS);
   expect(await page.screenshot()).toMatchSnapshot("endCallScreenshot.png");
 };
@@ -53,6 +58,7 @@ test.describe("tests for visit:", () => {
     ).toBeVisible();
     await expect(page.locator('text="Join a call"').first()).toBeVisible();
     await expect(page.locator('text="Join call"').first()).toBeVisible();
+    await page.locator('button:has-text("Join call")').isEnabled;
     await delay(DELAY_MS);
     expect(await page.screenshot()).toMatchSnapshot("visitScreenshot.png");
 

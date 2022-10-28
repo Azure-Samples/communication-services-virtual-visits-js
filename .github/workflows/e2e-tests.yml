@@ -20,10 +20,12 @@ on:
 
 env:
   VV_COMMUNICATION_SERVICES_CONNECTION_STRING: ${{ secrets.COMMUNICATION_SERVICES_CONNECTION_STRING_E2E }}
+  VV_COSMOS_DB_NAME: "myDB"
+  VV_COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING_E2E }}
 
 jobs:
   e2e-tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     name: Run e2e tests
     steps:
       # Checks-out your repository
@@ -48,6 +50,13 @@ jobs:
           npm install
           npx playwright install
 
+      # Run Cosmos DB Emulator
+      - name: Run Cosmos DB Emulator
+        run: |
+          Write-Host "Launching Cosmos DB Emulator"
+          Import-Module "$env:ProgramFiles\Azure Cosmos DB Emulator\PSModules\Microsoft.Azure.CosmosDB.Emulator"
+          Start-CosmosDbEmulator
+
       # Build and run e2e
       - name: Build and run e2e tests
         working-directory: ./e2e-tests
@@ -66,7 +75,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Failed to pass the UI Test. If this PR is for UI change and the error is snapshot mismatch, please add "ui change" label to the PR for updating the snapshot.'
+              body: 'Failed to pass the UI Test. If this PR is for UI change and the error is snapshot mismatch, please add the latest snapshots.'
             })
 
       - name: Upload snapshots if failed
