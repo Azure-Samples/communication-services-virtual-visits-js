@@ -22,10 +22,10 @@ jobs:
     name: Check for new changes
     outputs:
       hasChanged: ${{ steps.checkChange.outputs.hasChanged }}
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     steps:
       # Check-out repo
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Check if any changes have been pushed to main since last release
       - name: Check latest commit age
@@ -55,7 +55,7 @@ jobs:
     name: Publish Nightly Release
     needs: checkForChanges
     if: needs.checkForChanges.outputs.hasChanged == 'true'
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     steps:
       - name: Install Node.js v14.19.x
         uses: actions/setup-node@v3
@@ -63,7 +63,7 @@ jobs:
           node-version: "14.19.x"
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

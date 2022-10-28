@@ -6,20 +6,20 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch or tag to create release from'
+        description: "Branch or tag to create release from"
         required: true
-        default: 'main'
+        default: "main"
       newVersion:
-        description: 'New version to set'
+        description: "New version to set"
         required: true
 
 jobs:
   release:
     name: Increment versions and create PR
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     steps:
       # Check-out repo
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
           # Use a service account when checking out. This is to workaround the issue were GitHub
