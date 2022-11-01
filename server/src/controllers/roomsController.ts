@@ -10,7 +10,7 @@ import {
   JoinTestAppointmentResponse,
   RoomParticipantRole,
   RoomParticipant as TestAppointmentRoomParticipant
-} from '../models/testAppointmentModel';
+} from '../models/roomModel';
 import { ERROR_NO_USER_FOUND_IN_ROOM } from '../constants';
 
 export const createRoom = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
