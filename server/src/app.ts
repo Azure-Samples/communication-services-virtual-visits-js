@@ -7,7 +7,7 @@ import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
-import { testAppointmentRouter } from './routes/testAppointmentRoutes';
+import { roomsRouter } from './routes/roomsRoutes';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
@@ -64,7 +64,7 @@ if (surveyDBHandler) {
   app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
 }
 
-app.use('/api/testAppointments', testAppointmentRouter(identityClient, roomsClient));
+app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));

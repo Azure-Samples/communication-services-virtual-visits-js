@@ -13,7 +13,7 @@ import {
 } from '../models/testAppointmentModel';
 import { ERROR_NO_USER_FOUND_IN_ROOM } from '../constants';
 
-export const createTestAppointment = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
+export const createRoom = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
   _req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -59,7 +59,7 @@ export const createTestAppointment = (identityClient: CommunicationIdentityClien
   }
 };
 
-export const joinTestAppointment = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
+export const joinRoom = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
