@@ -20,6 +20,7 @@
     "@azure/communication-chat": "1.0.0",
     "@azure/communication-common": "1.0.0",
     "@azure/communication-identity": "1.0.0",
+    "@azure/communication-rooms": "^1.0.0-alpha.20221017.1",
     "@azure/core-http": "1.2.4",
     "@azure/cosmos": "^3.17.0",
     "@types/cors": "^2.8.8",
