@@ -4,8 +4,7 @@
 import express from 'express';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
-import { createTestAppointment } from '../controllers/createTestAppointment';
-import { joinTestAppointment } from '../controllers/joinTestAppointment';
+import { createTestAppointment, joinTestAppointment } from '../controllers/testAppointmentController';
 
 export const testAppointmentRouter = (
   identityClient: CommunicationIdentityClient,
