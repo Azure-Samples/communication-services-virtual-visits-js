@@ -22,6 +22,7 @@ export const submitSurveyResponseUtil = async (
       })
     });
     if (res.status !== 200) {
+      console.log('Error during insertion');
       throw new Error('Error during insertion');
     }
   } catch (e) {

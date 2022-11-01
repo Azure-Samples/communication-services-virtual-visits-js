@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
-import { PartialTheme, PrimaryButton, Stack, Text, Theme } from '@fluentui/react';
+import { PartialTheme, PrimaryButton, Spinner, SpinnerSize, Stack, Text, Theme } from '@fluentui/react';
 import OneQuestionPollInput from './OneQuestionPollInput';
 import { pollPromptStyle, pollTitleStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
 import { useState } from 'react';
@@ -20,10 +20,11 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
   props: PostCallOneQuestionPollProps
 ) => {
   const [pollResponse, setPollResponse] = useState<boolean | string | number>();
+  const [isSubmittingResponse, setIsSubmittingResponse] = useState<boolean>(false);
 
   const submitSurveyResponse = async (): Promise<void> => {
     const { acsUserId, callId, meetingLink } = props;
-
+    setIsSubmittingResponse(true);
     await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
     window.location.replace('/book');
   };
@@ -37,11 +38,13 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
         textInputPlaceholder={props.oneQuestionPollOptions.answerPlaceholder}
         setPollResponse={setPollResponse}
       />
-      <PrimaryButton style={surveySubmitButtonStyles} onClick={() => submitSurveyResponse()}>
-        <Stack horizontal verticalAlign="center">
-          <span>{props.oneQuestionPollOptions.saveButtonText}</span>
-        </Stack>
-      </PrimaryButton>
+      <PrimaryButton
+        style={surveySubmitButtonStyles}
+        onClick={() => submitSurveyResponse()}
+        text={props.oneQuestionPollOptions.saveButtonText}
+        onRenderIcon={isSubmittingResponse ? () => <Spinner size={SpinnerSize.xSmall} /> : undefined}
+        disabled={isSubmittingResponse}
+      />
     </Stack>
   );
 };

@@ -102,7 +102,7 @@ describe('PostCallOneQuestionPoll', () => {
     expect(textField.length).toBe(1);
   });
 
-  it('should trigger window location to redirect to booking', async () => {
+  it('should call submitSurveyResponseUtil when submit button is clicked', async () => {
     const mockOneQuestionPollInfo: OneQuestionPollOptions = {
       title: '',
       prompt: '',
@@ -126,7 +126,6 @@ describe('PostCallOneQuestionPoll', () => {
 
     const button = postCallOneQuestionPoll.find(PrimaryButton);
     await button.simulate('click');
-
     expect(mockSubmitSurveyResponseUtil).toHaveBeenCalled();
   });
 });
