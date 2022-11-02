@@ -4,7 +4,7 @@
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
 import { PartialTheme, PrimaryButton, Spinner, SpinnerSize, Stack, Text, Theme } from '@fluentui/react';
 import OneQuestionPollInput from './OneQuestionPollInput';
-import { pollPromptStyle, pollTitleStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
+import { pollPromptStyle, pollTitleStyle, spinnerStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
 import { useState } from 'react';
 import { submitSurveyResponseUtil } from '../../utils/PostCallUtil';
 
@@ -46,10 +46,15 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
       <PrimaryButton
         style={surveySubmitButtonStyles}
         onClick={() => submitSurveyResponse()}
-        text={props.oneQuestionPollOptions.saveButtonText}
-        onRenderIcon={isSubmittingResponse ? () => <Spinner size={SpinnerSize.xSmall} /> : undefined}
+        onRenderIcon={
+          isSubmittingResponse ? () => <Spinner size={SpinnerSize.xSmall} styles={spinnerStyle} /> : undefined
+        }
         disabled={isSubmittingResponse}
-      />
+      >
+        <Stack horizontal verticalAlign="center">
+          <span>{props.oneQuestionPollOptions.saveButtonText}</span>
+        </Stack>
+      </PrimaryButton>
     </Stack>
   );
 };

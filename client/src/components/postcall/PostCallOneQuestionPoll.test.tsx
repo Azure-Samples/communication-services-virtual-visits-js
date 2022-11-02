@@ -5,7 +5,7 @@ import { PostCallOneQuestionPollProps, PostCallOneQuestionPoll } from './PostCal
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Theme } from '@fluentui/theme';
-import { getTheme, IconButton, Rating, setIconOptions, TextField, PrimaryButton } from '@fluentui/react';
+import { getTheme, IconButton, Rating, setIconOptions, TextField, PrimaryButton, Spinner } from '@fluentui/react';
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
 import * as PostCallUtil from '../../utils/PostCallUtil';
 
@@ -126,6 +126,8 @@ describe('PostCallOneQuestionPoll', () => {
 
     const button = postCallOneQuestionPoll.find(PrimaryButton);
     await button.simulate('click');
+    const spinner = postCallOneQuestionPoll.find(Spinner);
+    expect(spinner).toBeDefined();
     expect(mockSubmitSurveyResponseUtil).toHaveBeenCalled();
   });
 });

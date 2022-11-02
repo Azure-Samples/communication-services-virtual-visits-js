@@ -63,6 +63,7 @@ export const pollTitleStyle = {
 };
 
 export const surveySubmitButtonStyles = {
+  width: '20rem',
   height: '2.5rem',
   marginTop: '1rem'
 };
@@ -70,5 +71,11 @@ export const surveySubmitButtonStyles = {
 export const surveyTextFieldStyles = {
   root: {
     width: '20rem'
+  }
+};
+
+export const spinnerStyle = {
+  root: {
+    paddingRight: '4px'
   }
 };
