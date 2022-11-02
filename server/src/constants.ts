@@ -22,7 +22,7 @@ export const VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT_ENV_NAME =
 export const VV_COSMOS_DB_CONNECTION_STRING = 'VV_COSMOS_DB_CONNECTION_STRING';
 export const VV_COSMOS_DB_NAME = 'VV_COSMOS_DB_NAME';
 
-export const ERROR_NO_USER_FOUND_IN_ROOM = 'The user is not participant of the room';
+export const ERROR_NO_USER_FOUND_IN_ROOM = 'The user is not a participant of the room';
 
 export const ERROR_PAYLOAD_500 = {
   status: 500,
