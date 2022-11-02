@@ -26,6 +26,6 @@ export const submitSurveyResponseUtil = async (
       throw new Error('Error during insertion');
     }
   } catch (e) {
-    //todo - Error logging;
+    //Add Error logging here;
   }
 };

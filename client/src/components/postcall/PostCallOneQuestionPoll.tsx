@@ -25,8 +25,13 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
   const submitSurveyResponse = async (): Promise<void> => {
     const { acsUserId, callId, meetingLink } = props;
     setIsSubmittingResponse(true);
-    await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
-    window.location.replace('/book');
+    try {
+      await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
+      window.location.replace('/book');
+    } catch (e) {
+      setIsSubmittingResponse(false);
+      //Add Error logging here;
+    }
   };
 
   return (
