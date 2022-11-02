@@ -5,9 +5,10 @@ import express from 'express';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import { CommunicationAccessToken, CommunicationIdentityClient, TokenScope } from '@azure/communication-identity';
 import { Room, RoomsClient, RoomParticipant, CreateRoomOptions } from '@azure/communication-rooms';
+import { joinRoomRequestValidator } from '../utils/validators';
 import {
-  CreateTestAppointmentResponse,
-  JoinTestAppointmentResponse,
+  CreateRoomResponse,
+  JoinRoomResponse,
   RoomParticipantRole,
   RoomParticipant as TestAppointmentRoomParticipant
 } from '../models/roomModel';
@@ -48,12 +49,12 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     );
 
     // Formulate response
-    const response: CreateTestAppointmentResponse = {
+    const response: CreateRoomResponse = {
       roomId: createdRoom.id,
       participants: participants
     };
 
-    return res.send(response);
+    return res.status(201).send(response);
   } catch (error) {
     return next(error);
   }
@@ -65,7 +66,16 @@ export const joinRoom = (identityClient: CommunicationIdentityClient, roomsClien
   next: express.NextFunction
 ): Promise<any> => {
   try {
-    const { roomId, userId } = req.query;
+    const { body: requestData } = req;
+
+    // Validation
+    const errors = joinRoomRequestValidator(requestData);
+
+    if (errors.length > 0) {
+      return res.status(400).send({ errors });
+    }
+
+    const { roomId, userId } = requestData;
 
     // Retrieve participants list
     const participantsList = await roomsClient.getParticipants(roomId as string);
@@ -75,28 +85,28 @@ export const joinRoom = (identityClient: CommunicationIdentityClient, roomsClien
       (participant: RoomParticipant) => (participant.id as CommunicationUserIdentifier).communicationUserId === userId
     );
 
-    if (foundUserParticipant) {
-      // Create token
-      const scopes: TokenScope[] = ['voip'];
-      const user: CommunicationUserIdentifier = {
-        communicationUserId: userId as string
-      };
-
-      const tokenResponse: CommunicationAccessToken = await identityClient.getToken(user, scopes);
-
-      // Formulating response
-      const response: JoinTestAppointmentResponse = {
-        participant: {
-          id: (foundUserParticipant.id as CommunicationUserIdentifier).communicationUserId,
-          role: foundUserParticipant.role as RoomParticipantRole
-        },
-        token: tokenResponse.token
-      };
-
-      return res.send(response);
+    if (!foundUserParticipant) {
+      return res.status(404).send(ERROR_NO_USER_FOUND_IN_ROOM);
     }
 
-    return res.status(400).send(ERROR_NO_USER_FOUND_IN_ROOM);
+    // Create token
+    const scopes: TokenScope[] = ['voip'];
+    const user: CommunicationUserIdentifier = {
+      communicationUserId: userId as string
+    };
+
+    const tokenResponse: CommunicationAccessToken = await identityClient.getToken(user, scopes);
+
+    // Formulating response
+    const response: JoinRoomResponse = {
+      participant: {
+        id: (foundUserParticipant.id as CommunicationUserIdentifier).communicationUserId,
+        role: foundUserParticipant.role as RoomParticipantRole
+      },
+      token: tokenResponse.token
+    };
+
+    return res.send(response);
   } catch (error) {
     return next(error);
   }

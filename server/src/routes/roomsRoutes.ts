@@ -11,7 +11,7 @@ export const roomsRouter = (identityClient: CommunicationIdentityClient, roomsCl
   const router = express.Router();
 
   router.post('/', createRoom(identityClient, roomsClient));
-  router.get('/join', joinRoom(identityClient, roomsClient));
+  router.post('/token', joinRoom(identityClient, roomsClient));
 
   return router;
 };

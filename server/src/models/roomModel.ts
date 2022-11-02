@@ -12,12 +12,17 @@ export interface RoomParticipant {
   role: RoomParticipantRole;
 }
 
-export interface CreateTestAppointmentResponse {
+export interface CreateRoomResponse {
   roomId: string;
   participants: Array<RoomParticipant>;
 }
 
-export interface JoinTestAppointmentResponse {
+export interface JoinRoomRequest {
+  roomId: string;
+  userId: string;
+}
+
+export interface JoinRoomResponse {
   participant: RoomParticipant;
   token: string;
 }

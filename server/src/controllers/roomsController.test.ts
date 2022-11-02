@@ -74,6 +74,7 @@ describe('roomsController', () => {
       await createRoom(mockedIdentityClient, mockedRoomsClient)({} as any, response, next);
 
       expect(response.send).toHaveBeenCalled();
+      expect(response.status).toHaveBeenCalledWith(201);
       expect(response.send).toHaveBeenCalledWith(expectedResponse);
     });
 
@@ -112,12 +113,12 @@ describe('roomsController', () => {
 
   describe('test joinRoom', () => {
     test('Should send expected response', async () => {
-      const mockedQuery = {
+      const mockedBody = {
         roomId: expectedRoomId,
         userId: expectedPresenterId
       };
 
-      const request: any = { query: mockedQuery };
+      const request: any = { body: mockedBody };
 
       const mockedIdentityClient = {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
@@ -154,14 +155,14 @@ describe('roomsController', () => {
       expect(response.send).toHaveBeenCalledWith(expectedResponse);
     });
 
-    test('Should send error when user id does not exist in participants list', async () => {
-      const invalidUserId = 'invalid-user-id';
-      const mockedQuery = {
+    test('Should send error when validation fails on inputdata', async () => {
+      const invalidUserId = 1234;
+      const mockedBody = {
         roomId: expectedRoomId,
         userId: invalidUserId
       };
 
-      const request: any = { query: mockedQuery };
+      const request: any = { body: mockedBody };
 
       const mockedIdentityClient = {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
@@ -188,17 +189,53 @@ describe('roomsController', () => {
 
       expect(response.send).toHaveBeenCalled();
       expect(response.status).toHaveBeenCalledWith(400);
+    });
+
+    test('Should send error when user id does not exist in participants list', async () => {
+      const invalidUserId = 'invalid-user-id';
+      const mockedBody = {
+        roomId: expectedRoomId,
+        userId: invalidUserId
+      };
+
+      const request: any = { body: mockedBody };
+
+      const mockedIdentityClient = {
+        getToken: async (_user, _scopes) => ({ token: expectedToken })
+      } as CommunicationIdentityClient;
+
+      const mockedRoomsClient = {
+        getParticipants: async (_roomId) => [
+          {
+            id: {
+              communicationUserId: expectedPresenterId
+            },
+            role: RoomParticipantRole.presenter
+          },
+          {
+            id: {
+              communicationUserId: expectedAttendeeId
+            },
+            role: RoomParticipantRole.attendee
+          }
+        ]
+      } as RoomsClient;
+
+      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+
+      expect(response.send).toHaveBeenCalled();
+      expect(response.status).toHaveBeenCalledWith(404);
       expect(response.send).toHaveBeenCalledWith(ERROR_NO_USER_FOUND_IN_ROOM);
     });
 
     test('Should send error if getParticipants fails', async () => {
       const expectedError = new Error('Failed to get participants');
-      const mockedQuery = {
+      const mockedBody = {
         roomId: expectedRoomId,
         userId: expectedPresenterId
       };
 
-      const request: any = { query: mockedQuery };
+      const request: any = { body: mockedBody };
 
       const mockedIdentityClient = {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
@@ -216,12 +253,12 @@ describe('roomsController', () => {
 
     test('Should send error if getToken fails', async () => {
       const expectedError = new Error('Failed to get token');
-      const mockedQuery = {
+      const mockedBody = {
         roomId: expectedRoomId,
         userId: expectedPresenterId
       };
 
-      const request: any = { query: mockedQuery };
+      const request: any = { body: mockedBody };
 
       const mockedIdentityClient = {
         getToken: jest.fn().mockRejectedValueOnce(expectedError)
