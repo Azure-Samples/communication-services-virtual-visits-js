@@ -64,11 +64,12 @@ describe('Book', () => {
   });
 
   it('should render header and bookings iframe when config is loaded', async () => {
+    const mockBookingsUrl = 'https://example.org';
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(
       Promise.resolve({
         communicationEndpoint: 'endpoint=test_endpoint;',
-        microsoftBookingsUrl: '',
+        microsoftBookingsUrl: mockBookingsUrl,
         chatEnabled: true,
         screenShareEnabled: true,
         companyName: '',
@@ -92,5 +93,6 @@ describe('Book', () => {
     expect(spinners.length).toBe(0);
     expect(headers.length).toBe(1);
     expect(iframes.length).toBe(1);
+    expect(iframes.first().props().src).toBe(mockBookingsUrl);
   });
 });
