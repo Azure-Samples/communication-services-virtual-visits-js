@@ -18,6 +18,7 @@
 - [ ] I have updated the project documentation to reflect my changes if necessary.
 - [ ] I have read the [CONTRIBUTING](CONTRIBUTING.md) documentation.
 
+**Does this PR contain ARM Template changes?**
 <!--- If the PR has ARM Template changes check the boxes that apply. -->
 
 - [ ] I have verified deploying using the ARM Template
