@@ -3,7 +3,7 @@
 
 import { RoomsClient } from '@azure/communication-rooms';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
-import { createRoom, joinRoom } from './roomsController';
+import { createRoom, getToken } from './roomsController';
 import { RoomParticipantRole } from '../models/roomModel';
 import { ERROR_NO_USER_FOUND_IN_ROOM } from '../constants';
 
@@ -111,7 +111,7 @@ describe('roomsController', () => {
     });
   });
 
-  describe('test joinRoom', () => {
+  describe('test getToken', () => {
     test('Should send expected response', async () => {
       const mockedBody = {
         roomId: expectedRoomId,
@@ -149,7 +149,7 @@ describe('roomsController', () => {
         }
       };
 
-      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
 
       expect(response.send).toHaveBeenCalled();
       expect(response.send).toHaveBeenCalledWith(expectedResponse);
@@ -185,7 +185,7 @@ describe('roomsController', () => {
         ]
       } as RoomsClient;
 
-      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
 
       expect(response.send).toHaveBeenCalled();
       expect(response.status).toHaveBeenCalledWith(400);
@@ -221,7 +221,7 @@ describe('roomsController', () => {
         ]
       } as RoomsClient;
 
-      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
 
       expect(response.send).toHaveBeenCalled();
       expect(response.status).toHaveBeenCalledWith(404);
@@ -245,7 +245,7 @@ describe('roomsController', () => {
         getParticipants: jest.fn().mockRejectedValueOnce(expectedError)
       } as any;
 
-      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
 
       expect(next).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(expectedError);
@@ -281,7 +281,7 @@ describe('roomsController', () => {
         ]
       } as RoomsClient;
 
-      await joinRoom(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
 
       expect(next).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(expectedError);

@@ -60,7 +60,7 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
   }
 };
 
-export const joinRoom = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
+export const getToken = (identityClient: CommunicationIdentityClient, roomsClient: RoomsClient) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
