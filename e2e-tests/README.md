@@ -24,7 +24,7 @@ npm run build
 - Run the following command before running the tests for the first time to get the local copy of the snapshots.
 
 ```
-npm run update-snapshot
+npm run update-snapshots
 ```
 
 For more information about playwright snapshot testing, see the official [Playwright Documentation](https://playwright.dev/docs/test-snapshots).
