@@ -15,7 +15,7 @@ export const buildUrl = (
   }
 };
 
-export const DELAY_MS = 1200;
+export const DELAY_MS = 1500;
 
 const getGUID = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
