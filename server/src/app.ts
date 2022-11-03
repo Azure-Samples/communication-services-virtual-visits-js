@@ -43,6 +43,15 @@ app.get('/visit', (_, res) => {
 
 const config = getServerConfig();
 
+const surveyDBHandler = createSurveyDBHandler(config);
+if (surveyDBHandler) {
+  surveyDBHandler.init();
+
+  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
+} else {
+  config.postCall = undefined;
+}
+
 const identityClient =
   process.env.NODE_ENV === 'test'
     ? ({} as CommunicationIdentityClient)
@@ -50,14 +59,6 @@ const identityClient =
 
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
-
-const surveyDBHandler = createSurveyDBHandler(config);
-
-if (surveyDBHandler) {
-  surveyDBHandler.init();
-
-  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
-}
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
