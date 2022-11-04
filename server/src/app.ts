@@ -4,8 +4,10 @@
 import express from 'express';
 import path from 'path';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
+import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
+import { roomsRouter } from './routes/roomsRoutes';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
@@ -57,8 +59,12 @@ const identityClient =
     ? ({} as CommunicationIdentityClient)
     : new CommunicationIdentityClient(config.communicationServicesConnectionString);
 
+const roomsClient =
+  process.env.NODE_ENV === 'test' ? ({} as RoomsClient) : new RoomsClient(config.communicationServicesConnectionString);
+
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
+app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
