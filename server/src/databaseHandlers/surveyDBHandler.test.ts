@@ -129,7 +129,7 @@ describe('createSurveyDBHandler', () => {
       logoUrl: '',
       postCall: {
         survey: {
-          type: 'somethingelse',
+          type: 'onequestionpoll',
           options: {
             prompt: 'testing prompt',
             pollType: 'likeOrDislike',
