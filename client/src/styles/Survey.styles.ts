@@ -73,3 +73,9 @@ export const surveyTextFieldStyles = {
     width: '20rem'
   }
 };
+
+export const spinnerStyle = {
+  root: {
+    paddingRight: '4px'
+  }
+};
