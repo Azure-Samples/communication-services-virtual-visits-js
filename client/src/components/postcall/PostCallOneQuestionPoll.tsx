@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
-import { PartialTheme, PrimaryButton, Stack, Text, Theme } from '@fluentui/react';
+import { PartialTheme, PrimaryButton, Spinner, SpinnerSize, Stack, Text, Theme } from '@fluentui/react';
 import OneQuestionPollInput from './OneQuestionPollInput';
-import { pollPromptStyle, pollTitleStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
+import { pollPromptStyle, pollTitleStyle, spinnerStyle, surveySubmitButtonStyles } from '../../styles/Survey.styles';
 import { useState } from 'react';
 import { submitSurveyResponseUtil } from '../../utils/PostCallUtil';
 
@@ -20,12 +20,18 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
   props: PostCallOneQuestionPollProps
 ) => {
   const [pollResponse, setPollResponse] = useState<boolean | string | number>();
+  const [isSubmittingResponse, setIsSubmittingResponse] = useState<boolean>(false);
 
   const submitSurveyResponse = async (): Promise<void> => {
     const { acsUserId, callId, meetingLink } = props;
-
-    await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
-    window.location.replace('/book');
+    setIsSubmittingResponse(true);
+    try {
+      await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
+      window.location.replace('/book');
+    } catch (e) {
+      setIsSubmittingResponse(false);
+      //Add Error logging here;
+    }
   };
 
   return (
@@ -37,7 +43,14 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
         textInputPlaceholder={props.oneQuestionPollOptions.answerPlaceholder}
         setPollResponse={setPollResponse}
       />
-      <PrimaryButton style={surveySubmitButtonStyles} onClick={() => submitSurveyResponse()}>
+      <PrimaryButton
+        style={surveySubmitButtonStyles}
+        onClick={() => submitSurveyResponse()}
+        onRenderIcon={
+          isSubmittingResponse ? () => <Spinner size={SpinnerSize.xSmall} styles={spinnerStyle} /> : undefined
+        }
+        disabled={isSubmittingResponse}
+      >
         <Stack horizontal verticalAlign="center">
           <span>{props.oneQuestionPollOptions.saveButtonText}</span>
         </Stack>
