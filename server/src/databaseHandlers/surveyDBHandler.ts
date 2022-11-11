@@ -9,15 +9,20 @@ import { ServerConfigModel } from '../models/configModel';
 const surveyContainerName = 'Surveys';
 
 export const createSurveyDBHandler = (config: ServerConfigModel): SurveyDBHandler | undefined => {
-  if (config.postCall?.survey.type && config.postCall.survey.type === 'onequestionpoll') {
-    if (config.cosmosDb) {
-      const cosmosClient = new CosmosClient(config.cosmosDb.connectionString);
-
-      return new SurveyDBHandler(cosmosClient, config.cosmosDb);
+  try {
+    if (
+      config.postCall === undefined ||
+      config.postCall.survey.type !== 'onequestionpoll' ||
+      config.cosmosDb === undefined
+    ) {
+      return undefined;
     }
-  }
 
-  return undefined;
+    const cosmosClient = new CosmosClient(config.cosmosDb.connectionString);
+    return new SurveyDBHandler(cosmosClient, config.cosmosDb);
+  } catch (e) {
+    return undefined;
+  }
 };
 
 export default class SurveyDBHandler {

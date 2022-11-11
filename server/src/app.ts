@@ -4,8 +4,10 @@
 import express from 'express';
 import path from 'path';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
+import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
 import { removeJsonpCallback } from './utils/removeJsonpCallback';
+import { roomsRouter } from './routes/roomsRoutes';
 import { configController } from './controllers/configController';
 import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
@@ -43,21 +45,26 @@ app.get('/visit', (_, res) => {
 
 const config = getServerConfig();
 
+const surveyDBHandler = createSurveyDBHandler(config);
+if (surveyDBHandler) {
+  surveyDBHandler.init();
+
+  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
+} else {
+  config.postCall = undefined;
+}
+
 const identityClient =
   process.env.NODE_ENV === 'test'
     ? ({} as CommunicationIdentityClient)
     : new CommunicationIdentityClient(config.communicationServicesConnectionString);
 
+const roomsClient =
+  process.env.NODE_ENV === 'test' ? ({} as RoomsClient) : new RoomsClient(config.communicationServicesConnectionString);
+
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
-
-const surveyDBHandler = createSurveyDBHandler(config);
-
-if (surveyDBHandler) {
-  surveyDBHandler.init();
-
-  app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
-}
+app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));

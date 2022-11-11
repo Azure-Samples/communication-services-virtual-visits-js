@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { surveyResultRequestValidator } from './validators';
+import { surveyResultRequestValidator, joinRoomRequestValidator } from './validators';
 
 describe('validators test', () => {
   describe('testing surveyResultRequestValidator', () => {
@@ -106,6 +106,31 @@ describe('validators test', () => {
         ]
       ])('Test when %s input field type is wrong.', (_, expectedErrors: string[], invalidInput: any) => {
         const errors = surveyResultRequestValidator(invalidInput);
+
+        expect(errors).toEqual(expectedErrors);
+      });
+    });
+  });
+
+  describe('testing joinRoomRequestValidator', () => {
+    describe('testing when fields are not present', () => {
+      test.each([
+        [1, ['roomId must be present'], { userId: 'testing_user_id' }],
+        [1, ['userId must be present'], { roomId: 'testing_room_id' }],
+        [2, ['roomId must be present', 'userId must be present'], {}]
+      ])('Test when %d input fields missing: %s', (_, expectedErrors: string[], invalidInput: any) => {
+        const errors = joinRoomRequestValidator(invalidInput);
+
+        expect(errors).toEqual(expectedErrors);
+      });
+    });
+
+    describe('testing when field type is not correct', () => {
+      test.each([
+        ['roomId', ['roomId type must be string'], { roomId: 1234, userId: 'testing_user_id' }],
+        ['userId', ['userId type must be string'], { roomId: 'testing_user_id', userId: 1234 }]
+      ])('Test when %s input field type is wrong.', (_, expectedErrors: string[], invalidInput: any) => {
+        const errors = joinRoomRequestValidator(invalidInput);
 
         expect(errors).toEqual(expectedErrors);
       });

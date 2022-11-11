@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { SurveyResultRequest } from '../models/surveyModel';
+import { JoinRoomRequest } from '../models/roomModel';
 
 export const surveyResultRequestValidator = (requestData: SurveyResultRequest): string[] => {
   const { callId, acsUserId, meetingLink, response } = requestData;
@@ -20,6 +21,21 @@ export const surveyResultRequestValidator = (requestData: SurveyResultRequest): 
   if (meetingLink && typeof meetingLink !== 'string') errors.push('meetingLink type must be string');
   if (response !== undefined && !responseAllowedtypes.includes(typeof response))
     errors.push('response type must be one of boolean, string, number');
+
+  return errors;
+};
+
+export const joinRoomRequestValidator = (requestData: JoinRoomRequest): string[] => {
+  const { roomId, userId } = requestData;
+  const errors: string[] = [];
+
+  // Check if fields are defined
+  if (!roomId) errors.push('roomId must be present');
+  if (!userId) errors.push('userId must be present');
+
+  // Check if each field types are correct
+  if (roomId && typeof roomId !== 'string') errors.push('roomId type must be string');
+  if (userId && typeof userId !== 'string') errors.push('userId type must be string');
 
   return errors;
 };
