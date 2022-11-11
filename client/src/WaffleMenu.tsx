@@ -89,6 +89,11 @@ const navLinkGroups: INavLinkGroup[] = [
   {
     links: [
       {
+        name: 'Home',
+        url: './home',
+        key: 'home'
+      },
+      {
         name: 'Book',
         url: './book',
         key: 'book'

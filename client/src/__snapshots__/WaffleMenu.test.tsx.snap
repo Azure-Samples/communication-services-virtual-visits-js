@@ -29,6 +29,39 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
           >
             <div
               className="ms-Nav-compositeLink compositeLink-136"
+              name="Home"
+            >
+              <a
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-150"
+                data-is-focusable={true}
+                href="./home"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                onKeyPress={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseUp={[Function]}
+                title="Home"
+              >
+                <span
+                  className="ms-Button-flexContainer flexContainer-151"
+                  data-automationid="splitbuttonprimary"
+                >
+                  <div
+                    className="ms-Nav-linkText linkText-135"
+                  >
+                    Home
+                  </div>
+                </span>
+              </a>
+            </div>
+          </li>
+          <li
+            className="ms-Nav-navItem navItem-140"
+            role="listitem"
+          >
+            <div
+              className="ms-Nav-compositeLink compositeLink-136"
               name="Book"
             >
               <a
