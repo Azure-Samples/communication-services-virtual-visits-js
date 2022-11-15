@@ -1,6 +1,6 @@
 # How to Configure Microsoft Bookings
 
-This sample uses takes advantage of the Microsoft 365 Bookings app to power the consumer scheduling experience and create meetings for providers. Follow the steps below to create a Microsoft Bookings calendar and use it in the sample.
+This sample takes advantage of the Microsoft 365 Bookings app to power the consumer scheduling experience and create meetings for providers. Follow the steps below to create a Microsoft Bookings calendar and use it in the sample.
 
 ### Steps
 
