@@ -49,7 +49,7 @@ VV_MICROSOFT_BOOKINGS_URL = "Your Bookings URL"
 
 ## <a id="bookingssampleintegration">Integrate the Sample in Microsoft Bookings</a>
 
-Consumers want to jump directly to the virtual appointment from the email reminder they receive from Bookings. In Bookings, you can provide a URL prefix that will be used in reminders.
+End-users want to jump directly to the virtual appointment from the email reminder they receive from Bookings. In Bookings, you can provide your app's URL which will be used in reminders.
 
 Once you have deployed the Sample to Azure App Service, copy the App's URL.
 
