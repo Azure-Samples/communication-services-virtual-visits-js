@@ -77,4 +77,4 @@ As a professional, you will also receive an email confirming the end-user's appo
 
 ![bookings-book-reminder-teams.png](../docs/images/bookings/bookings-book-reminder-teams.png)
 
-You have successfully integrated the Virtual Appointment Sample and Microsoft Bookings! You are now ready to join appointments through Teams as a professional, and through Azure Communication Services as an end-user.
+You have successfully integrated the Virtual Appointment Sample and Microsoft Bookings! With Microsoft Bookings, end-users are able to schedule appointments, receive email reminders, and join appointments through Azure Communcation Services directly from the email reminders. Professionals also receive email reminders, and they can join appointments through Microsoft Teams.
