@@ -37,7 +37,7 @@ Copy the Microsoft Bookings URL from your Bookings calendar.
 VV_MICROSOFT_BOOKINGS_URL = "Your Bookings URL"
 ```
 
-If your app is hosted in Azure App Service, you can set environment variables in the App Service's Application Settings. [Learn more about Azure App Service Application Settings.](https://learn.microsoft.com/en-us/azure/app-service/configure-common?tabs=portal)
+If your app is hosted in Azure App Service, you can set environment variables in the App Service's Application Settings. [Learn more about Azure App Service Application Settings.](https://learn.microsoft.com/azure/app-service/configure-common?tabs=portal)
 
 ### Configure using defaultConfig.json
 
