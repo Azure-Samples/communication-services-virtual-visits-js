@@ -53,7 +53,7 @@ export const Home = (): JSX.Element => {
             width: '100%'
           }}
         >
-          <HomeComponent companyName={config.companyName} />
+          <HomeComponent companyName={config.companyName} theme={config.theme} />
         </LayerHost>
       </Stack>
     </ThemeProvider>

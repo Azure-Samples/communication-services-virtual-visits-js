@@ -2,8 +2,8 @@
 // Licensed under the MIT license.
 
 import { DefaultButton, Icon, IContextualMenuProps, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
-import { Stack, Text } from '@fluentui/react';
-import { Image } from '@fluentui/react/lib/Image';
+import { Stack, Text, Image } from '@fluentui/react';
+import imageCalendar from '../../assets/ligh';
 import {
   btnStackStyles,
   buttonStyle,
@@ -44,12 +44,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
       <Stack styles={containerStyles(props.theme)} tokens={{ childrenGap: 15 }}>
         <Stack styles={innerContainer}>
           <Stack verticalAlign="center" horizontalAlign="center">
-            <Image
-              width="23.75rem"
-              height="6.25rem"
-              src={require('../../../src/assets/lightCalendarSymbol.png')}
-              alt="calendarImage"
-            ></Image>
+            <Image width="23.75rem" height="6.25rem" src={imageCalendar} alt="calendarImage"></Image>
           </Stack>
           <Stack>
             <Text styles={{ root: { fontWeight: '600', fontSize: '20px', lineHeight: '28px' } }}>Hello,</Text>
