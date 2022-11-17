@@ -18,8 +18,6 @@ export function containerStyles(theme: PartialTheme | Theme | undefined): any {
       width: '100%',
       height: '100%',
       display: 'flex',
-      justifyContent: 'left', //use vertical and horizontal align instead
-      alignItems: 'center',
       margin: 'auto',
       marginTop: '38px',
       backgroundColor: '#ffffff',
@@ -98,4 +96,18 @@ export const font12pxWeight400Style = {
     fontSize: '12px',
     lineHeight: '16px'
   }
+};
+
+export const lineHeight28px = {
+  root: { fontWeight: '600', fontSize: '20px', lineHeight: '28px' }
+};
+
+export const lineHeight22px = {
+  root: { fontWeight: '600', fontSize: '16px', lineHeight: '22px', marginBottom: '16px' }
+};
+
+export const layerHostStyles: CSSProperties = {
+  position: 'relative',
+  height: '100%',
+  width: '100%'
 };

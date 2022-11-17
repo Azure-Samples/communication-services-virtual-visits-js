@@ -3,7 +3,6 @@
 
 import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
-// import { Header } from './Header';
 import { useEffect, useState } from 'react';
 import { fetchConfig } from './utils/FetchConfig';
 import { GenericError } from './components/GenericError';
@@ -11,6 +10,7 @@ import { AppConfigModel } from './models/ConfigModel';
 import { HomeComponent } from './components/home/Home';
 import { Header } from './Header';
 import './styles/Common.css';
+import { layerHostStyles } from './styles/Home.styles';
 
 const PARENT_ID = 'HomeSection';
 
@@ -45,14 +45,7 @@ export const Home = (): JSX.Element => {
     <ThemeProvider style={{ height: '100%' }}>
       <Stack styles={backgroundStyles(config.theme)}>
         <Header companyName={config.companyName} parentid={PARENT_ID} />
-        <LayerHost
-          id={PARENT_ID}
-          style={{
-            position: 'relative',
-            height: '100%',
-            width: '100%'
-          }}
-        >
+        <LayerHost id={PARENT_ID} style={layerHostStyles}>
           <HomeComponent companyName={config.companyName} theme={config.theme} />
         </LayerHost>
       </Stack>

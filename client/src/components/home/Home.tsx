@@ -13,6 +13,8 @@ import {
   font16pxStyle,
   fullScreenStyles,
   innerContainer,
+  lineHeight22px,
+  lineHeight28px,
   linkStyles,
   newWindowIconWrapper,
   textDecorationNone
@@ -41,16 +43,19 @@ const menuProps: IContextualMenuProps = {
 export const HomeComponent = (props: HomeProps): JSX.Element => {
   return (
     <Stack styles={fullScreenStyles}>
-      <Stack styles={containerStyles(props.theme)} tokens={{ childrenGap: 15 }}>
+      <Stack
+        horizontalAlign="center"
+        verticalAlign="start"
+        styles={containerStyles(props.theme)}
+        tokens={{ childrenGap: 15 }}
+      >
         <Stack styles={innerContainer}>
           <Stack verticalAlign="center" horizontalAlign="center">
             <Image width="23.75rem" height="6.25rem" src={imageCalendar} alt="calendarImage"></Image>
           </Stack>
           <Stack>
-            <Text styles={{ root: { fontWeight: '600', fontSize: '20px', lineHeight: '28px' } }}>Hello,</Text>
-            <Text styles={{ root: { fontWeight: '600', fontSize: '16px', lineHeight: '22px', marginBottom: '16px' } }}>
-              What would you like to do?
-            </Text>
+            <Text styles={lineHeight28px}>Hello,</Text>
+            <Text styles={lineHeight22px}>What would you like to do?</Text>
             <Stack horizontal horizontalAlign="space-between" styles={btnStackStyles}>
               <StackItem>
                 <DefaultButton text="Book an appointment" styles={buttonStyle} iconProps={{ iconName: 'Calendar' }} />
