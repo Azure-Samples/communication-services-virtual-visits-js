@@ -3,7 +3,7 @@
 
 import { DefaultButton, Icon, IContextualMenuProps, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
-import imageCalendar from '../../assets/ligh';
+import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   buttonStyle,
