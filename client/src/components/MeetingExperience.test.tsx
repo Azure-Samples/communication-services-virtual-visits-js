@@ -16,7 +16,7 @@ import {
   runFakeTimers
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
-import { Survey } from './PostCall/Survey';
+import { Survey } from './postcall/Survey';
 
 jest.mock('@azure/communication-react', () => {
   return {
