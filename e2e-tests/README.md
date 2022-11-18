@@ -1,6 +1,6 @@
-# Automation tests for Azure Communication Services Virtual Visits
+# Automation tests for Azure Communication Services Virtual Appointments
 
-This is an automation tests folder for Virtual Visits sample, which contains all UI tests.
+This is an automation tests folder for Virtual Appointments sample, which contains all UI tests.
 
 ## Build and Run End to End tests locally
 
