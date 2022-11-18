@@ -5,9 +5,7 @@ import {
   CallWithChatComposite,
   createAzureCommunicationCallWithChatAdapterFromClients
 } from '@azure/communication-react';
-import { setIconOptions } from '@fluentui/react';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import { MeetingExperience, MeetingExperienceProps } from './MeetingExperience';
 import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
 import {
@@ -18,15 +16,7 @@ import {
   runFakeTimers
 } from '../utils/TestUtils';
 import { PostCallConfig } from '../models/ConfigModel';
-import { Survey } from './postcall/Survey';
-
-configure({ adapter: new Adapter() });
-
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
+import { Survey } from './PostCall/Survey';
 
 jest.mock('@azure/communication-react', () => {
   return {
