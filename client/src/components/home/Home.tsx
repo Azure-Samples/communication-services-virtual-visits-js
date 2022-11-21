@@ -65,7 +65,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 tabIndex={0}
                 data-testid="bookingsSetupLink"
                 target="_blank"
-                href="aka.ms/virtual-appointments-sample-bookings"
+                href="https://aka.ms/virtual-appointments-sample-bookings"
               >
                 <Stack horizontal disableShrink>
                   <StackItem align="center" style={linkStyles}>
