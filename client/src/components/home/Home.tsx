@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, Icon, IContextualMenuProps, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, Icon, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
@@ -25,21 +25,6 @@ export interface HomeProps {
   theme?: PartialTheme | Theme;
 }
 
-const menuProps: IContextualMenuProps = {
-  items: [
-    {
-      key: 'host',
-      text: 'as host (presenter)'
-    },
-    {
-      key: 'attendee',
-      text: 'as attendee'
-    }
-  ]
-  // By default, the menu will be focused when it opens. Uncomment the next line to prevent this.
-  // shouldFocusOnMount: false
-};
-
 export const HomeComponent = (props: HomeProps): JSX.Element => {
   return (
     <Stack styles={fullScreenStyles}>
@@ -56,28 +41,32 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
           <Stack>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal horizontalAlign="space-between" styles={btnStackStyles}>
-              <StackItem>
-                <DefaultButton text="Book an appointment" styles={buttonStyle} iconProps={{ iconName: 'Calendar' }} />
-              </StackItem>
+            <Stack horizontal horizontalAlign="space-evenly" styles={btnStackStyles}>
               <StackItem>
                 <DefaultButton
-                  iconProps={{ iconName: 'Video' }}
-                  text="Start a call"
-                  split
-                  splitButtonAriaLabel="See 2 options"
-                  aria-roledescription="split button"
-                  menuProps={menuProps}
+                  text="Book an appointment"
                   styles={buttonStyle}
+                  iconProps={{ iconName: 'Calendar' }}
+                  onClick={() => window.location.replace('/book')}
                 />
               </StackItem>
               <StackItem>
-                <DefaultButton text="Join from link" styles={buttonStyle} iconProps={{ iconName: 'Link' }} />
+                <DefaultButton
+                  text="Join from link"
+                  styles={buttonStyle}
+                  iconProps={{ iconName: 'Link' }}
+                  onClick={() => window.location.replace('/visit')}
+                />
               </StackItem>
             </Stack>
             <Text styles={font16pxStyle}>Frequently asked questions</Text>
             <Stack styles={btnStackStyles}>
-              <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank">
+              <Link
+                tabIndex={0}
+                data-testid="bookingsSetupLink"
+                target="_blank"
+                href="aka.ms/virtual-appointments-sample-bookings"
+              >
                 <Stack horizontal disableShrink>
                   <StackItem align="center" style={linkStyles}>
                     How do I change my Microsoft Bookings page URL?
@@ -89,6 +78,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   </StackItem>
                 </Stack>
               </Link>
+              {/* todo- right href for below link - part of a separate workItem */}
               <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank">
                 <Stack horizontal disableShrink>
                   <StackItem align="center" style={linkStyles}>
@@ -101,33 +91,35 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   </StackItem>
                 </Stack>
               </Link>
-              <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank">
-                <Stack horizontal disableShrink>
-                  <StackItem align="center" style={linkStyles}>
-                    More frequently asked questions
-                  </StackItem>
-                  <StackItem align="center" style={textDecorationNone}>
-                    <span style={newWindowIconWrapper}>
-                      <Icon iconName="OpenInNewWindow" />
-                    </span>
-                  </StackItem>
-                </Stack>
-              </Link>
             </Stack>
             <Text styles={font16pxStyle}>Learn more about Azure Communication Services</Text>
-            <Link styles={font12pxSemiBoldStyle}>Azure Communication Services virtual appointments</Link>
+            <Link
+              styles={font12pxSemiBoldStyle}
+              href="https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits"
+            >
+              Azure Communication Services virtual appointments
+            </Link>
             <Text styles={font12pxWeight400Style}>
-              This tutorial describes concepts for virtual visit applications. After completing this tutorial and the
-              associated Sample Builder, you will understand common use cases that a virtual appointments application
-              delivers
+              This tutorial describes concepts for virtual appointment applications. After completing this tutorial and
+              the associated Sample Builder, you will understand common use cases that a virtual appointment delivers
             </Text>
-            <Link styles={font12pxSemiBoldStyle}>Azure Communication Services Rooms (Preview)</Link>
+            <Link
+              styles={font12pxSemiBoldStyle}
+              href="https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
+            >
+              Azure Communication Services Rooms (Preview)
+            </Link>
             <Text styles={font12pxWeight400Style}>
               Azure Communication Services provides a concept of a room for developers who are building structured
               conversations such as virtual appointments or virtual events. Rooms currently allow voice and video
               delivers
             </Text>
-            <Link styles={font12pxSemiBoldStyle}>Get Started with UI Library</Link>
+            <Link
+              styles={font12pxSemiBoldStyle}
+              href="https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
+            >
+              Get Started with UI Library
+            </Link>
             <Text styles={font12pxWeight400Style}>
               Get Started with Azure Communication Services UI Library to quickly integrate communication experiences
               into your applications. In this quickstart, learn how to integrate UI Library composites into an

@@ -20,7 +20,7 @@ export function containerStyles(theme: PartialTheme | Theme | undefined): any {
       display: 'flex',
       margin: 'auto',
       marginTop: '38px',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'white',
       borderRadius: theme?.effects?.roundedCorner4
     }
   };
