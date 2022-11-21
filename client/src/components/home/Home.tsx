@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, Icon, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
@@ -14,11 +14,10 @@ import {
   fullScreenStyles,
   innerContainer,
   lineHeight22px,
-  lineHeight28px,
-  linkStyles,
-  newWindowIconWrapper,
-  textDecorationNone
+  lineHeight28px
 } from '../../styles/Home.styles';
+import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
+import { LearnMoreItem } from '../LearnMoreItem';
 
 export interface HomeProps {
   companyName: string;
@@ -59,50 +58,15 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 />
               </StackItem>
             </Stack>
-            <Text styles={font16pxStyle}>Frequently asked questions</Text>
-            <Stack styles={btnStackStyles}>
-              <Link
-                tabIndex={0}
-                data-testid="bookingsSetupLink"
-                target="_blank"
-                href="https://aka.ms/virtual-appointments-sample-bookings"
-              >
-                <Stack horizontal disableShrink>
-                  <StackItem align="center" style={linkStyles}>
-                    How do I change my Microsoft Bookings page URL?
-                  </StackItem>
-                  <StackItem align="center" style={textDecorationNone}>
-                    <span style={newWindowIconWrapper}>
-                      <Icon iconName="OpenInNewWindow" />
-                    </span>
-                  </StackItem>
-                </Stack>
-              </Link>
-              {/* todo- right href for below link - part of a separate workItem */}
-              <Link tabIndex={0} data-testid="bookingsSetupLink" target="_blank">
-                <Stack horizontal disableShrink>
-                  <StackItem align="center" style={linkStyles}>
-                    How do I switch from using Rooms (preview) to using Microsoft Bookings?
-                  </StackItem>
-                  <StackItem align="center" style={textDecorationNone}>
-                    <span style={newWindowIconWrapper}>
-                      <Icon iconName="OpenInNewWindow" />
-                    </span>
-                  </StackItem>
-                </Stack>
-              </Link>
-            </Stack>
+            <FrequentlyAskedQuestions />
             <Text styles={font16pxStyle}>Learn more about Azure Communication Services</Text>
-            <Link
-              styles={font12pxSemiBoldStyle}
-              href="https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits"
-            >
-              Azure Communication Services virtual appointments
-            </Link>
-            <Text styles={font12pxWeight400Style}>
-              This tutorial describes concepts for virtual appointment applications. After completing this tutorial and
-              the associated Sample Builder, you will understand common use cases that a virtual appointment delivers
-            </Text>
+            <LearnMoreItem
+              headerText={'Azure Communication Services virtual appointments'}
+              headerLink={'https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits'}
+              description={
+                'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers'
+              }
+            />
             <Link
               styles={font12pxSemiBoldStyle}
               href="https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"

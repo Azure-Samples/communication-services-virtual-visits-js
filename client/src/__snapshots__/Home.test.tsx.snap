@@ -1,3 +1,239 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should render home page 1`] = `ReactWrapper {}`;
+exports[`HomePage tests should render home page 1`] = `
+<div
+  className="ms-Stack css-109"
+>
+  <div
+    className="ms-Stack css-110"
+  >
+    <div
+      className="ms-Stack css-111"
+    >
+      <div
+        className="ms-Stack css-112"
+      >
+        <div
+          className="ms-Image root-113"
+          style={
+            Object {
+              "height": "6.25rem",
+              "width": "23.75rem",
+            }
+          }
+        >
+          <img
+            alt="calendarImage"
+            className="ms-Image-image ms-Image-image--portrait is-notLoaded is-fadeIn image-114"
+            onError={[Function]}
+            onLoad={[Function]}
+          />
+        </div>
+      </div>
+      <div
+        className="ms-Stack css-115"
+      >
+        <span
+          className="css-116"
+        >
+          Hello,
+        </span>
+        <span
+          className="css-117"
+        >
+          What would you like to do?
+        </span>
+        <div
+          className="ms-Stack css-118"
+        >
+          <div
+            className="ms-StackItem css-119"
+          >
+            <button
+              className="ms-Button ms-Button--default root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
+            >
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
+              >
+                <i
+                  aria-hidden={true}
+                  className="ms-Icon root-105 ms-Button-icon icon-123"
+                  data-icon-name="Calendar"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
+                    }
+                  }
+                />
+                <span
+                  className="ms-Button-textContainer textContainer-122"
+                >
+                  <span
+                    className="ms-Button-label label-124"
+                    id="id__0"
+                  >
+                    Book an appointment
+                  </span>
+                </span>
+              </span>
+            </button>
+          </div>
+          <div
+            className="ms-StackItem css-119"
+          >
+            <button
+              className="ms-Button ms-Button--default root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
+            >
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
+              >
+                <i
+                  aria-hidden={true}
+                  className="ms-Icon root-105 ms-Button-icon icon-123"
+                  data-icon-name="Link"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
+                    }
+                  }
+                />
+                <span
+                  className="ms-Button-textContainer textContainer-122"
+                >
+                  <span
+                    className="ms-Button-label label-124"
+                    id="id__3"
+                  >
+                    Join from link
+                  </span>
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+        <span
+          className="css-128"
+        >
+          Frequently asked questions
+        </span>
+        <div
+          className="ms-Stack css-129"
+        >
+          <a
+            className="ms-Link root-130"
+            data-testid="bookingsSetupLink"
+            href="https://aka.ms/virtual-appointments-sample-bookings"
+            onClick={[Function]}
+            tabIndex={0}
+            target="_blank"
+          >
+            <div
+              className="ms-Stack css-131"
+            >
+              <div
+                className="ms-StackItem css-132"
+                style={
+                  Object {
+                    "fontFamily": "sf pro text",
+                    "fontSize": "15px",
+                    "fontWeight": "400",
+                    "letterSpacing": "-0.24px",
+                    "lineHeight": "20px",
+                    "paddingRight": " 8px",
+                    "textDecoration": "underline",
+                    "verticalAlign": "bottom",
+                  }
+                }
+              >
+                How do I change my Microsoft Bookings page URL?
+              </div>
+              <div
+                className="ms-StackItem css-132"
+                style={
+                  Object {
+                    "textDecoration": "none",
+                  }
+                }
+              >
+                <span
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "display": "flex",
+                    }
+                  }
+                >
+                  <i
+                    aria-hidden={true}
+                    className="root-105"
+                    data-icon-name="OpenInNewWindow"
+                  />
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+        <span
+          className="css-128"
+        >
+          Learn more about Azure Communication Services
+        </span>
+        <a
+          className="ms-Link root-133"
+          href="https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits"
+          onClick={[Function]}
+        >
+          Azure Communication Services virtual appointments
+        </a>
+        <span
+          className="css-134"
+        >
+          This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers
+        </span>
+        <a
+          className="ms-Link root-133"
+          href="https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
+          onClick={[Function]}
+        >
+          Azure Communication Services Rooms (Preview)
+        </a>
+        <span
+          className="css-134"
+        >
+          Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers
+        </span>
+        <a
+          className="ms-Link root-133"
+          href="https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
+          onClick={[Function]}
+        >
+          Get Started with UI Library
+        </a>
+        <span
+          className="css-134"
+        >
+          Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

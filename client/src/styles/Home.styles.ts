@@ -86,7 +86,8 @@ export const font12pxSemiBoldStyle = {
   root: {
     fontWeight: '600',
     fontSize: '12px',
-    lineHeight: '16px'
+    lineHeight: '16px',
+    marginBottom: '4px'
   }
 };
 
@@ -94,7 +95,8 @@ export const font12pxWeight400Style = {
   root: {
     fontWeight: '400',
     fontSize: '12px',
-    lineHeight: '16px'
+    lineHeight: '16px',
+    marginBottom: '4px'
   }
 };
 
