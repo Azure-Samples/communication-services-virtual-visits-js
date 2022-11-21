@@ -1,17 +1,17 @@
 ![vv-banner.png](./docs/images/vv-call-desktop.png)
 
-# Azure Communication Services Virtual Visits
+# Azure Communication Services Virtual Appointments
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fcommunication-services-virtual-visits-js%2Fmain%2Fdeploy%2Feditableazuredeploy.json)
 
-Azure Communication Services Virtual Visits is a web app you can host to provide your customers with a branded virtual consultation experience.
+Azure Communication Services Virtual Appointments is a web app you can host to provide your customers with a branded virtual consultation experience.
 
 ## Features
 
 - **Rich communications experience**. Includes lobby, calling, and chat experiences for your users. Browser-based and mobile-friendly, users won't need to install any apps.
 - **Quick customization** options for colors, themes, and features via a .json config file.
 - **Integration with Microsoft Teams**. Let your staff host and join meetings using familiar Teams UI, while the clients join the same call via your custom branded web app using [Teams interoperability](https://docs.microsoft.com/azure/communication-services/concepts/teams-interop).
-- **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app.
+- **Scheduling powered by Microsoft Bookings**. [Configure Bookings](https://aka.ms/virtual-visits) to allow your clients to schedule appointments and receive join links to your own hosted app. [Learn more about how to configure Microsoft Bookings](./docs/microsoft-bookings.md).
 - **Industry.** A virtual appointment template with pre-selected theme color schemes.
 - **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md).
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
@@ -105,7 +105,7 @@ Where do I set this?
 - The environment variables currently used in the config are:
 
   - `VV_COMMUNICATION_SERVICES_CONNECTION_STRING`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-  - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US".
+  - `VV_MICROSOFT_BOOKINGS_URL`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US". [Learn more about how to configure Microsoft Bookings](./docs/microsoft-bookings.md).
   - `VV_CHAT_ENABLED`. Example value: "true".
   - `VV_SCREENSHARE_ENABLED`. Example value: "true".
   - `VV_COMPANY_NAME`. Example value: "Lamna Healthcare".
@@ -126,7 +126,7 @@ Where do I set this?
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
   - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
-  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US".
+  - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US". [Learn more about how to configure Microsoft Bookings](./docs/microsoft-bookings.md).
   - `chatEnabled`. Example value: "true".
   - `screenShareEnabled`. Example value: "true".
   - `companyName`. Example value: "Lamna Healthcare".
