@@ -108,7 +108,7 @@ export const Visit = (): JSX.Element => {
           <MeetingExperience
             userId={token.user}
             token={token.token}
-            displayName="Virtual Visits User"
+            displayName="Virtual Appointments User"
             endpointUrl={config.communicationEndpoint}
             locator={locator}
             fluentTheme={config.theme}
