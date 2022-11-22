@@ -3,9 +3,8 @@
 
 import { CommunicationUserToken } from '@azure/communication-identity';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
-import { setIconOptions, Spinner } from '@fluentui/react';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { Spinner } from '@fluentui/react';
+import { mount } from 'enzyme';
 import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
@@ -23,14 +22,6 @@ import {
   createMockStatefulChatClient,
   runFakeTimers
 } from './utils/TestUtils';
-
-configure({ adapter: new Adapter() });
-
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
 
 jest.mock('@azure/communication-react', () => {
   return {

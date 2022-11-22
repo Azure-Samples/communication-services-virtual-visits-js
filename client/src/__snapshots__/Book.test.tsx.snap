@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Book should match snapshot when bookings link is empty 1`] = `
+<div
+  className="ms-Spinner root-111"
+>
+  <div
+    className="ms-Spinner-circle ms-Spinner--medium circle-112"
+  />
+</div>
+`;

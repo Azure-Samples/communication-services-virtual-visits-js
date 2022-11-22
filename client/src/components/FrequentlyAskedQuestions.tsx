@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Link } from '@fluentui/react/lib/Link';
-import { Stack, Text, StackItem, Icon } from '@fluentui/react';
+import { Stack, Text, StackItem, Icon, Link } from '@fluentui/react';
 import {
   btnStackStyles,
   font16pxStyle,

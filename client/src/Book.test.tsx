@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { setIconOptions, Spinner } from '@fluentui/react';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { Spinner } from '@fluentui/react';
+import { mount } from 'enzyme';
 import { Book } from './Book';
 import { Header } from './Header';
 import { GenericError } from './components/GenericError';
@@ -12,14 +11,8 @@ import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 import * as renderer from 'react-test-renderer';
-
-configure({ adapter: new Adapter() });
-
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
+import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
+import WarningBanner from './components/Book/WarningBanner';
 
 describe('Book', () => {
   beforeEach(() => {
@@ -90,8 +83,10 @@ describe('Book', () => {
     const spinners = book.find(Spinner);
     const headers = book.find(Header);
     const iframes = book.find('iframe');
+    const warningBanner = book.find(WarningBanner);
 
     expect(spinners.length).toBe(0);
+    expect(warningBanner.length).toBe(0);
     expect(headers.length).toBe(1);
     expect(iframes.length).toBe(1);
     expect(iframes.first().props().src).toBe(mockBookingsUrl);
@@ -116,15 +111,52 @@ describe('Book', () => {
     const book = await mount(<Book />);
 
     await runFakeTimers();
+
     book.update();
+
+    const spinners = book.find(Spinner);
+    const headers = book.find(Header);
+    const iframes = book.find('iframe');
+    const warningBanner = book.find(WarningBanner);
+
+    expect(spinners.length).toBe(0);
+    expect(warningBanner.length).toBe(0);
+    expect(headers.length).toBe(1);
+    expect(iframes.length).toBe(0);
+  });
+
+  it('should render warning banner if using specimen Bookings page', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: BOOKINGS_SPECIMEN_URL,
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+
+    const book = await mount(<Book />);
+
+    await runFakeTimers();
+    book.update();
+
+    const warningBanner = book.find(WarningBanner);
 
     const spinners = book.find(Spinner);
     const headers = book.find(Header);
     const iframes = book.find('iframe');
 
     expect(spinners.length).toBe(0);
+    expect(warningBanner.length).toBe(1);
     expect(headers.length).toBe(1);
-    expect(iframes.length).toBe(0);
+    expect(iframes.length).toBe(1);
+    expect(iframes.first().props().src).toBe(BOOKINGS_SPECIMEN_URL);
   });
 
   it('should match snapshot when bookings link is empty', () => {
