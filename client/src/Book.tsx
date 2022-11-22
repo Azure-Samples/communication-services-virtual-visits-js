@@ -10,6 +10,8 @@ import { fetchConfig } from './utils/FetchConfig';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
+import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
+import WarningBanner from './components/Book/WarningBanner';
 
 const PARENT_ID = 'BookMeetingSection';
 
@@ -43,6 +45,7 @@ export const Book = (): JSX.Element => {
               height: '100%'
             }}
           >
+            {config.microsoftBookingsUrl === BOOKINGS_SPECIMEN_URL ? <WarningBanner /> : <></>}
             <iframe src={config.microsoftBookingsUrl} scrolling="yes" style={embededIframeStyles}></iframe>
           </LayerHost>
         </Stack>

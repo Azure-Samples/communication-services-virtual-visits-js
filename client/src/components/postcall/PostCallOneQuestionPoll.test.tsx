@@ -2,19 +2,12 @@
 // Licensed under the MIT license.
 
 import { PostCallOneQuestionPollProps, PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import { Theme } from '@fluentui/theme';
-import { getTheme, IconButton, Rating, setIconOptions, TextField, PrimaryButton, Spinner } from '@fluentui/react';
+import { getTheme, IconButton, Rating, TextField, PrimaryButton, Spinner } from '@fluentui/react';
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
 import * as PostCallUtil from '../../utils/PostCallUtil';
 
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
-configure({ adapter: new Adapter() });
 const mockAcsUserId = 'mockAcsUserId';
 const mockCallId = 'mockCallId';
 const mockMeetingLink = 'mockMeetingLink';
