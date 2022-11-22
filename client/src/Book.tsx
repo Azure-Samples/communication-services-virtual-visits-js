@@ -3,7 +3,14 @@
 
 import { LayerHost, Spinner, Stack, ThemeProvider, Text } from '@fluentui/react';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
-import { embededIframeStyles } from './styles/Book.styles';
+import {
+  embededIframeStyles,
+  containerStyles,
+  fullScreenStyles,
+  innerContainer,
+  lineHeight22px,
+  lineHeight28px
+} from './styles/Book.styles';
 import { Header } from './Header';
 import './styles/Common.css';
 import { fetchConfig } from './utils/FetchConfig';
@@ -11,13 +18,6 @@ import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
 import { FrequentlyAskedQuestions } from './components/FrequentlyAskedQuestions';
-import {
-  containerStyles,
-  fullScreenStyles,
-  innerContainer,
-  lineHeight22px,
-  lineHeight28px
-} from './styles/FrequentlyAskedQuestions.styles';
 import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
 import WarningBanner from './components/Book/WarningBanner';
 
