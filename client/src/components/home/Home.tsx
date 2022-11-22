@@ -71,7 +71,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
               headerText={'Azure Communication Services Rooms (Preview)'}
               headerLink={'https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept'}
               description={
-                'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling.'
+                'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...'
               }
             />
             <LearnMoreItem
