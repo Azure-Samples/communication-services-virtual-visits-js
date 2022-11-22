@@ -10,7 +10,9 @@ import {
   containerStyles,
   font16pxStyle,
   fullScreenStyles,
+  iconStyles,
   innerContainer,
+  joinLinkButtonStyles,
   lineHeight22px,
   lineHeight28px
 } from '../../styles/Home.styles';
@@ -50,8 +52,8 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
               <StackItem>
                 <DefaultButton
                   text="Join from link"
-                  styles={buttonStyle}
-                  iconProps={{ iconName: 'Link' }}
+                  styles={joinLinkButtonStyles}
+                  iconProps={iconStyles}
                   onClick={() => window.location.replace('/visit')}
                 />
               </StackItem>

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { IIconProps } from '@fluentui/react';
 import { PartialTheme, Theme } from '@fluentui/theme';
 import { CSSProperties } from 'react';
 
@@ -19,7 +20,7 @@ export function containerStyles(theme: PartialTheme | Theme | undefined): any {
       height: '100%',
       display: 'flex',
       margin: 'auto',
-      marginTop: '38px',
+      marginTop: '2.375rem',
       backgroundColor: 'white',
       borderRadius: theme?.effects?.roundedCorner4
     }
@@ -37,13 +38,13 @@ export const newWindowIconWrapper: CSSProperties = {
 
 export const linkStyles: CSSProperties = {
   textDecoration: 'underline',
-  paddingRight: ' 8px',
-  fontSize: '15px',
+  paddingRight: '.5rem',
+  fontSize: '.9375rem',
   fontWeight: '400',
-  lineHeight: '20px',
+  lineHeight: '1.25rem',
   fontFamily: 'sf pro text',
   verticalAlign: 'bottom',
-  letterSpacing: '-0.24px'
+  letterSpacing: '-0.015rem'
 };
 
 export const imageStyles = {
@@ -55,61 +56,77 @@ export const imageStyles = {
 
 export const innerContainer = {
   root: {
-    width: '600px',
-    marginTop: '61px'
+    width: '37.5rem',
+    marginTop: '3.8125rem'
   }
 };
 
 export const buttonStyle = {
   root: {
-    width: '189px',
+    width: '11.8125rem',
     borderColor: '#E1DFDD',
-    fontSize: '12px'
+    fontSize: '.75rem'
   }
 };
 
 export const btnStackStyles = {
   root: {
-    marginBottom: '24px'
+    marginBottom: '1.5rem'
   }
 };
 
 export const font16pxStyle = {
   root: {
     fontWeight: '600',
-    fontSize: '16px',
-    lineHeight: '22px'
+    fontSize: '1rem',
+    lineHeight: '1.375rem'
   }
 };
 
 export const font12pxSemiBoldStyle = {
   root: {
     fontWeight: '600',
-    fontSize: '12px',
-    lineHeight: '16px',
-    marginBottom: '4px'
+    fontSize: '.75rem',
+    lineHeight: '1rem',
+    marginBottom: '.25rem'
   }
 };
 
 export const font12pxWeight400Style = {
   root: {
     fontWeight: '400',
-    fontSize: '12px',
-    lineHeight: '16px',
-    marginBottom: '4px'
+    fontSize: '.75rem',
+    lineHeight: '1rem',
+    marginBottom: '.25rem'
   }
 };
 
 export const lineHeight28px = {
-  root: { fontWeight: '600', fontSize: '20px', lineHeight: '28px' }
+  root: { fontWeight: '600', fontSize: '1.25rem', lineHeight: '1.75rem' }
 };
 
 export const lineHeight22px = {
-  root: { fontWeight: '600', fontSize: '16px', lineHeight: '22px', marginBottom: '16px' }
+  root: { fontWeight: '600', fontSize: '1rem', lineHeight: '1.375rem', marginBottom: '1rem' }
 };
 
 export const layerHostStyles: CSSProperties = {
   position: 'relative',
   height: '100%',
   width: '100%'
+};
+
+export const joinLinkButtonStyles = {
+  root: {
+    paddingRight: '1.875rem',
+    width: '11.8125rem',
+    borderColor: '#E1DFDD',
+    fontSize: '.75rem'
+  }
+};
+
+export const iconStyles: IIconProps = {
+  iconName: 'Link',
+  styles: {
+    root: { paddingLeft: '1.875rem' }
+  }
 };
