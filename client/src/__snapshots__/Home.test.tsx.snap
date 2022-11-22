@@ -201,11 +201,11 @@ exports[`HomePage tests should render home page 1`] = `
         <span
           className="css-137"
         >
-          This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers
+          This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...
         </span>
         <a
           className="ms-Link root-136"
-          href="https://learn.microsoft.com/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
+          href="https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept"
           onClick={[Function]}
         >
           Azure Communication Services Rooms (Preview)
@@ -213,14 +213,14 @@ exports[`HomePage tests should render home page 1`] = `
         <span
           className="css-137"
         >
-          Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers
+          Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...
         </span>
         <a
           className="ms-Link root-136"
           href="https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
           onClick={[Function]}
         >
-           Get Started with UI Library
+          Get Started with UI Library
         </a>
         <span
           className="css-137"
