@@ -198,7 +198,7 @@ exports[`HomePage tests should render home page 1`] = `
         </span>
         <a
           className="ms-Link root-134"
-          href="https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits"
+          href="https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits"
           onClick={[Function]}
         >
           Azure Communication Services virtual appointments
@@ -210,7 +210,7 @@ exports[`HomePage tests should render home page 1`] = `
         </span>
         <a
           className="ms-Link root-134"
-          href="https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
+          href="https://learn.microsoft.com/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
           onClick={[Function]}
         >
           Azure Communication Services Rooms (Preview)
@@ -222,10 +222,10 @@ exports[`HomePage tests should render home page 1`] = `
         </span>
         <a
           className="ms-Link root-134"
-          href="https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
+          href="https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
           onClick={[Function]}
         >
-          Get Started with UI Library
+           Get Started with UI Library
         </a>
         <span
           className="css-135"
