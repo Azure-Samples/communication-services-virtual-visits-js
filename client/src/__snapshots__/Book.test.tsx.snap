@@ -81,7 +81,6 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
           >
             <a
               className="ms-Link root-136"
-              data-testid="bookingsSetupLink"
               href="https://aka.ms/virtual-appointments-sample-bookings"
               onClick={[Function]}
               tabIndex={0}
@@ -95,11 +94,11 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
                   style={
                     Object {
                       "fontFamily": "sf pro text",
-                      "fontSize": "15px",
+                      "fontSize": ".9375rem",
                       "fontWeight": "400",
-                      "letterSpacing": "-0.24px",
-                      "lineHeight": "20px",
-                      "paddingRight": " 8px",
+                      "letterSpacing": "-0.015rem",
+                      "lineHeight": "1.25rem",
+                      "paddingRight": ".5rem",
                       "textDecoration": "underline",
                       "verticalAlign": "bottom",
                     }

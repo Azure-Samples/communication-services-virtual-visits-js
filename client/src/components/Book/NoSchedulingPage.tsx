@@ -22,7 +22,7 @@ export const NoSchedulingPage = (props: NoSchedulingPageProps): JSX.Element => {
         <Stack styles={innerContainer}>
           <Text styles={lineHeight28px}>No scheduling configured</Text>
           <Text styles={lineHeight22px}>This sample does not have a Microsoft Bookings page configured.</Text>
-          <FrequentlyAskedQuestions></FrequentlyAskedQuestions>
+          <FrequentlyAskedQuestions />
         </Stack>
       </Stack>
     </Stack>
