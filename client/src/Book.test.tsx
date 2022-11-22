@@ -11,6 +11,7 @@ import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
+import * as renderer from 'react-test-renderer';
 
 configure({ adapter: new Adapter() });
 
@@ -63,7 +64,7 @@ describe('Book', () => {
     expect(genericError.length).toBe(1);
   });
 
-  it('should render header and bookings iframe when config is loaded', async () => {
+  it('should render header and bookings iframe when config is loaded and bookings link is not empty', async () => {
     const mockBookingsUrl = 'https://example.org';
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(
@@ -94,5 +95,54 @@ describe('Book', () => {
     expect(headers.length).toBe(1);
     expect(iframes.length).toBe(1);
     expect(iframes.first().props().src).toBe(mockBookingsUrl);
+  });
+
+  it('should render header and no scheduling info when config is loaded and bookings link is empty', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+
+    const book = await mount(<Book />);
+
+    await runFakeTimers();
+    book.update();
+
+    const spinners = book.find(Spinner);
+    const headers = book.find(Header);
+    const iframes = book.find('iframe');
+
+    expect(spinners.length).toBe(0);
+    expect(headers.length).toBe(1);
+    expect(iframes.length).toBe(0);
+  });
+
+  it('should match snapshot when bookings link is empty', () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+    const book = renderer.create(<Book />).toJSON();
+    expect(book).toMatchSnapshot();
   });
 });
