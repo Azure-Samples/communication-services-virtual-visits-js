@@ -8,7 +8,6 @@ import {
   btnStackStyles,
   buttonStyle,
   containerStyles,
-  font12pxWeight400Style,
   font16pxStyle,
   fullScreenStyles,
   innerContainer,
@@ -84,7 +83,6 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 'Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...'
               }
             />
-            <Text styles={font12pxWeight400Style}></Text>
           </Stack>
         </Stack>
       </Stack>
