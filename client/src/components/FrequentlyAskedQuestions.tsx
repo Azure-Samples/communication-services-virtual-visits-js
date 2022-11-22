@@ -15,12 +15,7 @@ export const FrequentlyAskedQuestions: React.VoidFunctionComponent = () => {
     <>
       <Text styles={font16pxStyle}>Frequently asked questions</Text>
       <Stack styles={btnStackStyles}>
-        <Link
-          tabIndex={0}
-          data-testid="bookingsSetupLink"
-          target="_blank"
-          href="https://aka.ms/virtual-appointments-sample-bookings"
-        >
+        <Link tabIndex={0} target="_blank" href="https://aka.ms/virtual-appointments-sample-bookings">
           <Stack horizontal disableShrink>
             <StackItem align="center" style={linkStyles}>
               How do I change my Microsoft Bookings page URL?

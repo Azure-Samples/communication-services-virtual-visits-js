@@ -8,16 +8,10 @@ import renderer from 'react-test-renderer';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { Header } from './Header';
-import { setIconOptions, Spinner } from '@fluentui/react';
+import { Spinner } from '@fluentui/react';
 import { Home } from './Home';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
-
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
 
 configure({ adapter: new Adapter() });
 

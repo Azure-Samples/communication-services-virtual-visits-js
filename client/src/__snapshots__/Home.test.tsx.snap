@@ -134,7 +134,6 @@ exports[`HomePage tests should render home page 1`] = `
         >
           <a
             className="ms-Link root-133"
-            data-testid="bookingsSetupLink"
             href="https://aka.ms/virtual-appointments-sample-bookings"
             onClick={[Function]}
             tabIndex={0}
