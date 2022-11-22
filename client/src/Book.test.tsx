@@ -159,7 +159,7 @@ describe('Book', () => {
     expect(iframes.first().props().src).toBe(BOOKINGS_SPECIMEN_URL);
   });
 
-  it('should match snapshot when bookings link is empty', () => {
+  it('should match snapshot when bookings link is empty', async () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(
       Promise.resolve({
@@ -174,7 +174,9 @@ describe('Book', () => {
         logoUrl: ''
       } as AppConfigModel)
     );
-    const book = renderer.create(<Book />).toJSON();
-    expect(book).toMatchSnapshot();
+    const book = renderer.create(<Book />);
+    await runFakeTimers();
+
+    expect(book.toJSON()).toMatchSnapshot();
   });
 });
