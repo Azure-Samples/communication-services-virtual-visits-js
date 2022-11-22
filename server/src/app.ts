@@ -31,12 +31,12 @@ app.use(removeJsonpCallback);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (_, res) => {
-  res.redirect('book');
-});
-
 app.get('/book', (_, res) => {
   res.sendFile(path.join(__dirname, 'public/book.html'));
+});
+
+app.get('/', (_, res) => {
+  res.sendFile(path.join(__dirname, 'public/home.html'));
 });
 
 app.get('/visit', (_, res) => {

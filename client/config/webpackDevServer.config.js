@@ -100,7 +100,8 @@ module.exports = function (proxy, allowedHost) {
       // See https://github.com/facebook/create-react-app/issues/387.
       disableDotRule: true,
       rewrites: [
-        { from: /^\/$/, to: '/book.html' },
+        { from: /^\/$/, to: '/home.html' },
+        { from: /^\/home/, to: '/home.html' },
         { from: /^\/book/, to: '/book.html' },
         { from: /^\/visit/, to: '/visit.html' },
         { from: /^\/pageNotFound/, to: '/pageNotFound.html' }
