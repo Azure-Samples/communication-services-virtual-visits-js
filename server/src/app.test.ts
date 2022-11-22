@@ -41,17 +41,10 @@ const deleteFile = (filePath: string): void => {
   fs.unlinkSync(path.join(__dirname, filePath));
 };
 
-describe('app route tests', () => {
-  test('/ should redirect to /book', async () => {
-    const getResponse = await request(app).get('/');
-    expect(getResponse.status).toEqual(302);
-    expect(getResponse.headers.location).toEqual('book');
-  });
-});
-
 describe('route tests', () => {
   const bookFilePath = 'public/book.html';
   const visitFilePath = 'public/visit.html';
+  const homeFilePath = 'public/home.html';
 
   /**
    * Create static files as they are not available during the local development
@@ -61,6 +54,7 @@ describe('route tests', () => {
     createDir();
     createFile(bookFilePath);
     createFile(visitFilePath);
+    createFile(homeFilePath);
   });
 
   /**
@@ -68,6 +62,7 @@ describe('route tests', () => {
   afterAll(() => {
     deleteFile(bookFilePath);
     deleteFile(visitFilePath);
+    deleteFile(homeFilePath);
     deleteDir();
   });
 
@@ -81,6 +76,12 @@ describe('route tests', () => {
     const getResponse = await request(app).get('/visit');
     expect(getResponse.headers['content-type']).toEqual('text/html; charset=UTF-8');
     expect(getResponse.status).toEqual(200);
+  });
+
+  test('/home should return 200 response with home html page', async () => {
+    const getResponse = await request(app).get('/home');
+    expect(getResponse.status).toEqual(200);
+    expect(getResponse.headers['content-type']).toEqual('text/html; charset=UTF-8');
   });
 });
 

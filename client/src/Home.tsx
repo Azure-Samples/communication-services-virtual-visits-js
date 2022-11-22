@@ -24,7 +24,6 @@ export const Home = (): JSX.Element => {
         const config = await fetchConfig();
         setConfig(config);
       } catch (error) {
-        console.error(error);
         setError(error);
       }
     };
