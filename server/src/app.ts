@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
@@ -31,15 +30,6 @@ app.use(removeJsonpCallback);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// set up rate limiter: maximum of ten requests per minute
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 100
-});
-
-// apply rate limiter to all requests
-app.use(limiter);
 
 app.get('/book', (_, res) => {
   res.sendFile(path.join(__dirname, 'public/book.html'));
