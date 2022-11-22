@@ -71,7 +71,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 'https://learn.microsoft.com/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/'
               }
               description={
-                ' Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers'
+                'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers'
               }
             />
             <LearnMoreItem
