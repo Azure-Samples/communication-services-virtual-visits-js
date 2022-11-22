@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WarningBanner matches snapshot 1`] = `
+<div
+  className="ms-MessageBar ms-MessageBar--warning ms-MessageBar-singleline root-109"
+>
+  <div
+    className="ms-MessageBar-content content-110"
+  >
+    <div
+      aria-hidden={true}
+      className="ms-MessageBar-icon iconContainer-111"
+    >
+      <i
+        aria-hidden={true}
+        className="icon-118"
+        data-icon-name="Info"
+      />
+    </div>
+    <div
+      aria-live="polite"
+      className="ms-MessageBar-text text-113"
+      id="MessageBar0"
+      role="status"
+    >
+      <span
+        className="ms-MessageBar-innerText innerText-114"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`WarningMessage matches snapshot 1`] = `
+Array [
+  <span
+    className="css-119"
+  >
+    This Booking page is a specimen and will not create appointments or send reminders.
+  </span>,
+  <a
+    className="ms-Link root-120"
+    href="https://aka.ms/virtual-appointments-sample-bookings"
+    onClick={[Function]}
+    target="_blank"
+  >
+    <span
+      className="css-119"
+    >
+      Check out the sample readme.
+    </span>
+  </a>,
+]
+`;

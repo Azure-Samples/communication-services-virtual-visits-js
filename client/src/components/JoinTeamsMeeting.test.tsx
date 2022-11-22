@@ -1,11 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { LayerHost, PrimaryButton, setIconOptions, Stack, TextField } from '@fluentui/react';
+import { LayerHost, PrimaryButton, Stack, TextField } from '@fluentui/react';
 import { mount } from 'enzyme';
 import { generateTheme } from '../utils/ThemeGenerator';
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import { JoinTeamsMeeting } from './JoinTeamsMeeting';
 import { Header } from '../Header';
 import { getTeamsMeetingLink } from '../utils/GetTeamsMeetingLink';
@@ -13,14 +11,6 @@ import {
   mainJoinTeamsMeetingContainerMobileStyles,
   mainJoinTeamsMeetingContainerStyles
 } from '../styles/JoinTeamsMeeting.Styles';
-
-configure({ adapter: new Adapter() });
-
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
 
 const validTeamsMeetingLink = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'

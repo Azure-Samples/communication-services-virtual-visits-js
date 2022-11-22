@@ -1,16 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 import { OneQuestionPollInput, OneQuestionPollInputProps } from './OneQuestionPollInput';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { IconButton, Rating, setIconOptions, TextField } from '@fluentui/react';
+import { mount } from 'enzyme';
+import { IconButton, Rating, TextField } from '@fluentui/react';
 
-configure({ adapter: new Adapter() });
-// Disable icon warnings for tests as we don't register the icons for unit tests which causes warnings.
-// See: https://github.com/microsoft/fluentui/wiki/Using-icons#test-scenarios
-setIconOptions({
-  disableWarnings: true
-});
 describe('OneQuestionPollInput', () => {
   it('should trigger setPollResponse when like selected', async () => {
     const mockPollType = 'likeOrDislike';
