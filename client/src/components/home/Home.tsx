@@ -64,20 +64,18 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
               headerText={'Azure Communication Services virtual appointments'}
               headerLink={'https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits'}
               description={
-                'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers'
+                'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...'
               }
             />
             <LearnMoreItem
               headerText={'Azure Communication Services Rooms (Preview)'}
-              headerLink={
-                'https://learn.microsoft.com/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/'
-              }
+              headerLink={'https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept'}
               description={
-                'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers'
+                'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling.'
               }
             />
             <LearnMoreItem
-              headerText={' Get Started with UI Library'}
+              headerText={'Get Started with UI Library'}
               headerLink={
                 'https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web'
               }
