@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, Link, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   buttonStyle,
   containerStyles,
-  font12pxSemiBoldStyle,
   font12pxWeight400Style,
   font16pxStyle,
   fullScreenStyles,
@@ -62,7 +61,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
             <Text styles={font16pxStyle}>Learn more about Azure Communication Services</Text>
             <LearnMoreItem
               headerText={'Azure Communication Services virtual appointments'}
-              headerLink={'https://learn.microsoft.com/en-us/azure/communication-services/tutorials/virtual-visits'}
+              headerLink={'https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits'}
               description={
                 'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers'
               }
@@ -70,7 +69,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
             <LearnMoreItem
               headerText={'Azure Communication Services Rooms (Preview)'}
               headerLink={
-                'https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/'
+                'https://learn.microsoft.com/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/'
               }
               description={
                 ' Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers'
@@ -79,7 +78,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
             <LearnMoreItem
               headerText={' Get Started with UI Library'}
               headerLink={
-                'https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web'
+                'https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web'
               }
               description={
                 'Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...'
