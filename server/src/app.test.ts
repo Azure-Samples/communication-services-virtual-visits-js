@@ -79,7 +79,7 @@ describe('route tests', () => {
   });
 
   test('/home should return 200 response with home html page', async () => {
-    const getResponse = await request(app).get('/home');
+    const getResponse = await request(app).get('/');
     expect(getResponse.status).toEqual(200);
     expect(getResponse.headers['content-type']).toEqual('text/html; charset=UTF-8');
   });
