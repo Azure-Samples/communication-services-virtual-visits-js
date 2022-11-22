@@ -67,28 +67,25 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers'
               }
             />
-            <Link
-              styles={font12pxSemiBoldStyle}
-              href="https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/"
-            >
-              Azure Communication Services Rooms (Preview)
-            </Link>
-            <Text styles={font12pxWeight400Style}>
-              Azure Communication Services provides a concept of a room for developers who are building structured
-              conversations such as virtual appointments or virtual events. Rooms currently allow voice and video
-              delivers
-            </Text>
-            <Link
-              styles={font12pxSemiBoldStyle}
-              href="https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
-            >
-              Get Started with UI Library
-            </Link>
-            <Text styles={font12pxWeight400Style}>
-              Get Started with Azure Communication Services UI Library to quickly integrate communication experiences
-              into your applications. In this quickstart, learn how to integrate UI Library composites into an
-              application and set up...
-            </Text>
+            <LearnMoreItem
+              headerText={'Azure Communication Services Rooms (Preview)'}
+              headerLink={
+                'https://learn.microsoft.com/en-us/samples/azure-samples/communication-services-dotnet-quickstarts/azure-communication-services---rooms-public-preview/'
+              }
+              description={
+                ' Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video delivers'
+              }
+            />
+            <LearnMoreItem
+              headerText={' Get Started with UI Library'}
+              headerLink={
+                'https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web'
+              }
+              description={
+                'Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...'
+              }
+            />
+            <Text styles={font12pxWeight400Style}></Text>
           </Stack>
         </Stack>
       </Stack>
