@@ -42,7 +42,6 @@ export const linkStyles: CSSProperties = {
   fontSize: '.9375rem',
   fontWeight: '400',
   lineHeight: '1.25rem',
-  fontFamily: 'sf pro text',
   verticalAlign: 'bottom',
   letterSpacing: '-0.015rem'
 };
@@ -56,16 +55,24 @@ export const imageStyles = {
 
 export const innerContainer = {
   root: {
-    width: '37.5rem',
+    maxWidth: '37.5rem',
+    width: '100%',
     marginTop: '3.8125rem'
   }
 };
 
 export const buttonStyle = {
   root: {
-    width: '11.8125rem',
     borderColor: '#E1DFDD',
-    fontSize: '.75rem'
+    fontSize: '1rem'
+  }
+};
+
+export const joinLinkButtonStyles = {
+  root: {
+    paddingRight: '1.875rem',
+    borderColor: '#E1DFDD',
+    fontSize: '1rem'
   }
 };
 
@@ -113,15 +120,6 @@ export const layerHostStyles: CSSProperties = {
   position: 'relative',
   height: '100%',
   width: '100%'
-};
-
-export const joinLinkButtonStyles = {
-  root: {
-    paddingRight: '1.875rem',
-    width: '11.8125rem',
-    borderColor: '#E1DFDD',
-    fontSize: '.75rem'
-  }
 };
 
 export const iconStyles: IIconProps = {
