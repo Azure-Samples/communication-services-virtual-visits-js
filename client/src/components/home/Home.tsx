@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, ImageFit, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   buttonStyle,
+  containerMarginTop2rem,
   containerStyles,
   font16pxStyle,
   fullScreenStyles,
@@ -35,12 +36,12 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
       >
         <Stack styles={innerContainer}>
           <Stack verticalAlign="center" horizontalAlign="center">
-            <Image width="23.75rem" height="6.25rem" src={imageCalendar} alt="calendarImage"></Image>
+            <Image imageFit={ImageFit.contain} src={imageCalendar} alt="calendarImage"></Image>
           </Stack>
-          <Stack>
+          <Stack styles={containerMarginTop2rem}>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal horizontalAlign="space-evenly" styles={btnStackStyles}>
+            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-evenly">
               <StackItem>
                 <DefaultButton
                   text="Book an appointment"

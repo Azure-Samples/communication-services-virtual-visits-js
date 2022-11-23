@@ -70,7 +70,6 @@ export const buttonStyle = {
 
 export const joinLinkButtonStyles = {
   root: {
-    paddingRight: '1.875rem',
     borderColor: '#E1DFDD',
     fontSize: '1rem'
   }
@@ -78,7 +77,8 @@ export const joinLinkButtonStyles = {
 
 export const btnStackStyles = {
   root: {
-    marginBottom: '1.5rem'
+    marginBottom: '1.5rem',
+    width: '100%'
   }
 };
 
@@ -123,8 +123,9 @@ export const layerHostStyles: CSSProperties = {
 };
 
 export const iconStyles: IIconProps = {
-  iconName: 'Link',
-  styles: {
-    root: { paddingLeft: '1.875rem' }
-  }
+  iconName: 'Link'
+};
+
+export const containerMarginTop2rem = {
+  root: { marginTop: '2rem' }
 };
