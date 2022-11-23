@@ -14,7 +14,8 @@
     "prettier:check": "prettier --check --config .prettierrc src/**/*",
     "lint": "eslint src src --ext .tsx",
     "lint:fix": "eslint src src --ext .tsx --fix",
-    "lint:quiet": "eslint src src --ext .tsx --quiet"
+    "lint:quiet": "eslint src src --ext .tsx --quiet",
+    "watchtest": "jest --config ./jest.config.js --watch"
   },
   "dependencies": {
     "@azure/communication-calling": "1.4.4",
