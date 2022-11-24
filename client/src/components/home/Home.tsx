@@ -6,7 +6,7 @@ import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
-  buttonStyle,
+  bookAppointmentButtonStyle,
   calendarIconStyles,
   containerMarginTop2rem,
   containerStyles,
@@ -42,11 +42,11 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
           <Stack styles={containerMarginTop2rem}>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-evenly">
+            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="start">
               <StackItem>
                 <DefaultButton
                   text="Book an appointment"
-                  styles={buttonStyle}
+                  styles={bookAppointmentButtonStyle}
                   iconProps={calendarIconStyles(props.theme)}
                   onClick={() => window.location.replace('/book')}
                 />

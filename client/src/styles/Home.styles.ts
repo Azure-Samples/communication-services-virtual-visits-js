@@ -61,10 +61,12 @@ export const innerContainer = {
   }
 };
 
-export const buttonStyle = {
+export const bookAppointmentButtonStyle = {
   root: {
     borderColor: '#E1DFDD',
-    fontSize: '1rem'
+    fontSize: '1rem',
+    marginRight: '.5rem',
+    marginBottom: '.5rem'
   }
 };
 
@@ -87,7 +89,8 @@ export function calendarIconStyles(theme: PartialTheme | Theme | undefined): IIc
 export const btnStackStyles = {
   root: {
     marginBottom: '1.5rem',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'left'
   }
 };
 
