@@ -41,7 +41,7 @@ export const linkStyles: CSSProperties = {
   paddingRight: '.5rem',
   fontSize: '.9375rem',
   fontWeight: '400',
-  lineHeight: '1.25rem',
+  lineHeight: '1rem',
   verticalAlign: 'bottom',
   letterSpacing: '-0.015rem'
 };
@@ -75,6 +75,15 @@ export const joinLinkButtonStyles = {
   }
 };
 
+export function calendarIconStyles(theme: PartialTheme | Theme | undefined): IIconProps {
+  return {
+    iconName: 'Calendar',
+    styles: {
+      root: { color: theme?.palette?.themePrimary }
+    }
+  };
+}
+
 export const btnStackStyles = {
   root: {
     marginBottom: '1.5rem',
@@ -90,13 +99,12 @@ export const font16pxStyle = {
   }
 };
 
-export const font12pxSemiBoldStyle = {
-  root: {
-    fontWeight: '600',
-    fontSize: '.75rem',
-    lineHeight: '1rem',
-    marginBottom: '.25rem'
-  }
+export const font12pxSemiBoldStyle: CSSProperties = {
+  fontWeight: '600',
+  fontSize: '.75rem',
+  lineHeight: '1rem',
+  paddingRight: '.5rem',
+  verticalAlign: 'bottom'
 };
 
 export const font12pxWeight400Style = {
@@ -122,9 +130,14 @@ export const layerHostStyles: CSSProperties = {
   width: '100%'
 };
 
-export const iconStyles: IIconProps = {
-  iconName: 'Link'
-};
+export function linkIconStyles(theme: PartialTheme | Theme | undefined): IIconProps {
+  return {
+    iconName: 'Link',
+    styles: {
+      root: { color: theme?.palette?.themePrimary }
+    }
+  };
+}
 
 export const containerMarginTop2rem = {
   root: { marginTop: '2rem' }

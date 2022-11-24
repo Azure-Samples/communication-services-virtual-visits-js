@@ -7,15 +7,16 @@ import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   buttonStyle,
+  calendarIconStyles,
   containerMarginTop2rem,
   containerStyles,
   font16pxStyle,
   fullScreenStyles,
-  iconStyles,
   innerContainer,
   joinLinkButtonStyles,
   lineHeight22px,
-  lineHeight28px
+  lineHeight28px,
+  linkIconStyles
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
@@ -46,7 +47,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 <DefaultButton
                   text="Book an appointment"
                   styles={buttonStyle}
-                  iconProps={{ iconName: 'Calendar' }}
+                  iconProps={calendarIconStyles(props.theme)}
                   onClick={() => window.location.replace('/book')}
                 />
               </StackItem>
@@ -54,7 +55,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 <DefaultButton
                   text="Join from link"
                   styles={joinLinkButtonStyles}
-                  iconProps={iconStyles}
+                  iconProps={linkIconStyles(props.theme)}
                   onClick={() => window.location.replace('/visit')}
                 />
               </StackItem>
