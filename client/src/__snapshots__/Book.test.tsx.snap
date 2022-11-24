@@ -93,11 +93,10 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
                   className="ms-StackItem css-138"
                   style={
                     Object {
-                      "fontFamily": "sf pro text",
                       "fontSize": ".9375rem",
                       "fontWeight": "400",
                       "letterSpacing": "-0.015rem",
-                      "lineHeight": "1.25rem",
+                      "lineHeight": "1rem",
                       "paddingRight": ".5rem",
                       "textDecoration": "underline",
                       "verticalAlign": "bottom",
