@@ -3,7 +3,7 @@
 
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { HomeComponent } from './components/home/Home';
+import { HomeComponent } from './components/home/HomeComponent';
 import renderer from 'react-test-renderer';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';

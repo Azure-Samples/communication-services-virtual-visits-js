@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchConfig } from './utils/FetchConfig';
 import { GenericError } from './components/GenericError';
 import { AppConfigModel } from './models/ConfigModel';
-import { HomeComponent } from './components/home/Home';
+import { HomeComponent } from './components/home/HomeComponent';
 import { Header } from './Header';
 import './styles/Common.css';
 import { layerHostStyles } from './styles/Home.styles';
