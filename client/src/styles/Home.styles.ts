@@ -12,7 +12,7 @@ export const fullScreenStyles = {
   }
 };
 
-export function containerStyles(theme: PartialTheme | Theme | undefined): any {
+export function containerStyles(theme: PartialTheme | Theme): any {
   return {
     root: {
       maxWidth: '64rem',
@@ -22,7 +22,7 @@ export function containerStyles(theme: PartialTheme | Theme | undefined): any {
       margin: 'auto',
       marginTop: '2.375rem',
       backgroundColor: 'white',
-      borderRadius: theme?.effects?.roundedCorner4
+      borderRadius: theme.effects?.roundedCorner4
     }
   };
 }
@@ -41,8 +41,7 @@ export const linkStyles: CSSProperties = {
   paddingRight: '.5rem',
   fontSize: '.9375rem',
   fontWeight: '400',
-  lineHeight: '1.25rem',
-  fontFamily: 'sf pro text',
+  lineHeight: '1rem',
   verticalAlign: 'bottom',
   letterSpacing: '-0.015rem'
 };
@@ -56,22 +55,42 @@ export const imageStyles = {
 
 export const innerContainer = {
   root: {
-    width: '37.5rem',
+    maxWidth: '37.5rem',
+    width: '100%',
     marginTop: '3.8125rem'
   }
 };
 
-export const buttonStyle = {
+export const bookAppointmentButtonStyle = {
   root: {
-    width: '11.8125rem',
     borderColor: '#E1DFDD',
-    fontSize: '.75rem'
+    fontSize: '1rem',
+    marginRight: '.5rem',
+    marginBottom: '.5rem'
   }
 };
 
+export const joinLinkButtonStyles = {
+  root: {
+    borderColor: '#E1DFDD',
+    fontSize: '1rem'
+  }
+};
+
+export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
+  return {
+    iconName: 'Calendar',
+    styles: {
+      root: { color: theme.palette?.themePrimary }
+    }
+  };
+}
+
 export const btnStackStyles = {
   root: {
-    marginBottom: '1.5rem'
+    marginBottom: '1.5rem',
+    width: '100%',
+    justifyContent: 'left'
   }
 };
 
@@ -83,13 +102,12 @@ export const font16pxStyle = {
   }
 };
 
-export const font12pxSemiBoldStyle = {
-  root: {
-    fontWeight: '600',
-    fontSize: '.75rem',
-    lineHeight: '1rem',
-    marginBottom: '.25rem'
-  }
+export const font12pxSemiBoldStyle: CSSProperties = {
+  fontWeight: '600',
+  fontSize: '.75rem',
+  lineHeight: '1rem',
+  paddingRight: '.5rem',
+  verticalAlign: 'bottom'
 };
 
 export const font12pxWeight400Style = {
@@ -115,18 +133,15 @@ export const layerHostStyles: CSSProperties = {
   width: '100%'
 };
 
-export const joinLinkButtonStyles = {
-  root: {
-    paddingRight: '1.875rem',
-    width: '11.8125rem',
-    borderColor: '#E1DFDD',
-    fontSize: '.75rem'
-  }
-};
+export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
+  return {
+    iconName: 'Link',
+    styles: {
+      root: { color: theme.palette?.themePrimary }
+    }
+  };
+}
 
-export const iconStyles: IIconProps = {
-  iconName: 'Link',
-  styles: {
-    root: { paddingLeft: '1.875rem' }
-  }
+export const containerMarginTop2rem = {
+  root: { marginTop: '2rem' }
 };

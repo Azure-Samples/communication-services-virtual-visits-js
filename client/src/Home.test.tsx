@@ -3,7 +3,7 @@
 
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { HomeComponent } from './components/home/Home';
+import { HomeComponent } from './components/home/HomeComponent';
 import renderer from 'react-test-renderer';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
@@ -12,12 +12,15 @@ import { Spinner } from '@fluentui/react';
 import { Home } from './Home';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
+import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
 
 describe('HomePage tests', () => {
   it('should render home page', () => {
-    const home = renderer.create(<HomeComponent companyName="Lamna Healthcare" />).toJSON();
+    const home = renderer
+      .create(<HomeComponent companyName="Lamna Healthcare" theme={generateTheme('#0078d4')} />)
+      .toJSON();
     expect(home).toMatchSnapshot();
   });
 

@@ -1,27 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, ImageFit, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
-  buttonStyle,
+  bookAppointmentButtonStyle,
+  calendarIconStyles,
+  containerMarginTop2rem,
   containerStyles,
   font16pxStyle,
   fullScreenStyles,
-  iconStyles,
   innerContainer,
   joinLinkButtonStyles,
   lineHeight22px,
-  lineHeight28px
+  lineHeight28px,
+  linkIconStyles
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
 
 export interface HomeProps {
   companyName: string;
-  theme?: PartialTheme | Theme;
+  theme: PartialTheme | Theme;
 }
 
 export const HomeComponent = (props: HomeProps): JSX.Element => {
@@ -35,17 +37,17 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
       >
         <Stack styles={innerContainer}>
           <Stack verticalAlign="center" horizontalAlign="center">
-            <Image width="23.75rem" height="6.25rem" src={imageCalendar} alt="calendarImage"></Image>
+            <Image imageFit={ImageFit.contain} src={imageCalendar} alt="calendarImage"></Image>
           </Stack>
-          <Stack>
+          <Stack styles={containerMarginTop2rem}>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal horizontalAlign="space-evenly" styles={btnStackStyles}>
+            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="start">
               <StackItem>
                 <DefaultButton
                   text="Book an appointment"
-                  styles={buttonStyle}
-                  iconProps={{ iconName: 'Calendar' }}
+                  styles={bookAppointmentButtonStyle}
+                  iconProps={calendarIconStyles(props.theme)}
                   onClick={() => window.location.replace('/book')}
                 />
               </StackItem>
@@ -53,7 +55,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                 <DefaultButton
                   text="Join from link"
                   styles={joinLinkButtonStyles}
-                  iconProps={iconStyles}
+                  iconProps={linkIconStyles(props.theme)}
                   onClick={() => window.location.replace('/visit')}
                 />
               </StackItem>

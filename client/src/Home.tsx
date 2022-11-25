@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchConfig } from './utils/FetchConfig';
 import { GenericError } from './components/GenericError';
 import { AppConfigModel } from './models/ConfigModel';
-import { HomeComponent } from './components/home/Home';
+import { HomeComponent } from './components/home/HomeComponent';
 import { Header } from './Header';
 import './styles/Common.css';
 import { layerHostStyles } from './styles/Home.styles';
@@ -41,7 +41,7 @@ export const Home = (): JSX.Element => {
   }
 
   return (
-    <ThemeProvider style={{ height: '100%' }}>
+    <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
       <Stack styles={backgroundStyles(config.theme)}>
         <Header companyName={config.companyName} parentid={PARENT_ID} />
         <LayerHost id={PARENT_ID} style={layerHostStyles}>
