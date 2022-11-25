@@ -12,7 +12,7 @@ export const fullScreenStyles = {
   }
 };
 
-export function containerStyles(theme: PartialTheme | Theme | undefined): any {
+export function containerStyles(theme: PartialTheme | Theme): any {
   return {
     root: {
       maxWidth: '64rem',
@@ -77,7 +77,7 @@ export const joinLinkButtonStyles = {
   }
 };
 
-export function calendarIconStyles(theme: PartialTheme | Theme | undefined): IIconProps {
+export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Calendar',
     styles: {
@@ -133,7 +133,7 @@ export const layerHostStyles: CSSProperties = {
   width: '100%'
 };
 
-export function linkIconStyles(theme: PartialTheme | Theme | undefined): IIconProps {
+export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Link',
     styles: {
