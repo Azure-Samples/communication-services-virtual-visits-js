@@ -22,7 +22,7 @@ export function containerStyles(theme: PartialTheme | Theme): any {
       margin: 'auto',
       marginTop: '2.375rem',
       backgroundColor: 'white',
-      borderRadius: theme?.effects?.roundedCorner4
+      borderRadius: theme.effects?.roundedCorner4
     }
   };
 }
@@ -81,7 +81,7 @@ export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Calendar',
     styles: {
-      root: { color: theme?.palette?.themePrimary }
+      root: { color: theme.palette?.themePrimary }
     }
   };
 }
@@ -137,7 +137,7 @@ export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Link',
     styles: {
-      root: { color: theme?.palette?.themePrimary }
+      root: { color: theme.palette?.themePrimary }
     }
   };
 }

@@ -23,7 +23,7 @@ import { LearnMoreItem } from '../LearnMoreItem';
 
 export interface HomeProps {
   companyName: string;
-  theme?: PartialTheme | Theme;
+  theme: PartialTheme | Theme;
 }
 
 export const HomeComponent = (props: HomeProps): JSX.Element => {

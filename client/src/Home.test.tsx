@@ -12,12 +12,15 @@ import { Spinner } from '@fluentui/react';
 import { Home } from './Home';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
+import { generateTheme } from './utils/ThemeGenerator';
 
 configure({ adapter: new Adapter() });
 
 describe('HomePage tests', () => {
   it('should render home page', () => {
-    const home = renderer.create(<HomeComponent companyName="Lamna Healthcare" />).toJSON();
+    const home = renderer
+      .create(<HomeComponent companyName="Lamna Healthcare" theme={generateTheme('#0078d4')} />)
+      .toJSON();
     expect(home).toMatchSnapshot();
   });
 
