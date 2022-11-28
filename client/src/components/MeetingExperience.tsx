@@ -19,7 +19,7 @@ import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';
-import { Survey } from './postcall/Survey';
+import { Survey } from './Postcall/Survey';
 
 import { PostCallConfig } from '../models/ConfigModel';
 export interface MeetingExperienceProps {
