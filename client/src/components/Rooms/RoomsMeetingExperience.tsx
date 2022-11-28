@@ -6,7 +6,7 @@ import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInf
 import { useEffect, useState, useMemo } from 'react';
 import { createStatefulCallClient, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { Spinner, Stack } from '@fluentui/react';
+import { Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
 
