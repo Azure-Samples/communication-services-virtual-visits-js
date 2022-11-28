@@ -47,11 +47,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
 
   if (callAdapter) {
     if (userRole === RoomParticipantRole.presenter) {
-      return (
-        <Stack>
-          <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />
-        </Stack>
-      );
+      return <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />;
     } else if (userRole === RoomParticipantRole.attendee) {
       return <CallComposite adapter={callAdapter} />;
     }
