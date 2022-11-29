@@ -8,7 +8,6 @@ import {
   runFakeTimers
 } from '../../utils/TestUtils';
 import { mount } from 'enzyme';
-
 import { RoomsMeetingExperience, RoomsMeetingExperienceProps } from './RoomsMeetingExperience';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { CallComposite } from '@azure/communication-react';

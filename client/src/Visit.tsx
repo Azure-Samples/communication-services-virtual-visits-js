@@ -16,7 +16,7 @@ import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
 import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
 import { fetchRoomsResponse } from './utils/FetchRoomsResponse';
-import { RoomsMeetingExperience } from './components/Rooms/RoomsMeetingExperience';
+import { RoomsMeetingExperience } from './components/rooms/RoomsMeetingExperience';
 import { RoomParticipantRole } from './models/RoomModel';
 
 const PARENT_ID = 'VisitSection';

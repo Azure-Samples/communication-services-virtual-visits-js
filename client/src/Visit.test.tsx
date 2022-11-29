@@ -26,7 +26,7 @@ import {
   runFakeTimers
 } from './utils/TestUtils';
 import { JoinRoomResponse, RoomParticipantRole } from './models/RoomModel';
-import { RoomsMeetingExperience } from './components/Rooms/RoomsMeetingExperience';
+import { RoomsMeetingExperience } from './components/rooms/RoomsMeetingExperience';
 
 jest.mock('@azure/communication-react', () => {
   return {
