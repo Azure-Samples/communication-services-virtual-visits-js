@@ -7,7 +7,7 @@ import {
 } from '@azure/communication-react';
 import { mount } from 'enzyme';
 import { MeetingExperience, MeetingExperienceProps } from './MeetingExperience';
-import * as GetTeamsMeetingLink from '../utils/GetTeamsMeetingLink';
+import * as GetTeamsMeetingLink from '../utils/GetMeetingLink';
 import {
   createMockCallWithChatAdapter,
   createMockCallWithChatComposite,

@@ -15,7 +15,7 @@ import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
 import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
-import { getChatThreadIdFromTeamsLink } from '../utils/GetTeamsMeetingLink';
+import { getChatThreadIdFromTeamsLink } from '../utils/GetMeetingLink';
 import { fullSizeStyles } from '../styles/Common.styles';
 import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../utils/stubs/chat';

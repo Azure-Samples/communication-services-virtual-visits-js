@@ -9,13 +9,13 @@ import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
 import { fetchToken } from './utils/FetchToken';
-import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetTeamsMeetingLink';
+import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetMeetingLink';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import './styles/Common.css';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
 import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
-import { fetchRoomsResponse } from './utils/FetchRoomsToken';
+import { fetchRoomsResponse } from './utils/FetchRoomsResponse';
 import { RoomsMeetingExperience } from './components/Rooms/RoomsMeetingExperience';
 import { RoomParticipantRole } from './models/RoomModel';
 
@@ -41,7 +41,6 @@ export const Visit = (): JSX.Element => {
     try {
       meetingLinkModel = getRoomsMeetingLink(meetingLink);
     } catch (error) {
-      console.log(`In roomId catch ${error}`);
       meetingLinkModel = undefined;
     }
     return meetingLinkModel;
@@ -53,7 +52,6 @@ export const Visit = (): JSX.Element => {
     try {
       participantId = getRoomsUserId(meetingLink);
     } catch (error) {
-      console.log(`In participantId catch ${error}`);
       participantId = undefined;
     }
     return participantId;

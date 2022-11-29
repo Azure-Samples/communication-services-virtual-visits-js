@@ -46,6 +46,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
   }, [credential, displayName, locator, userId, onDisplayError]);
 
   if (callAdapter) {
+    //TODO set forFactor to mobile
     if (userRole === RoomParticipantRole.presenter) {
       return <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />;
     } else if (userRole === RoomParticipantRole.attendee) {

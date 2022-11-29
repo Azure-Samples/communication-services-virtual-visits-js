@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { AdapterError, CallWithChatAdapter, CallWithChatAdapterState } from '@azure/communication-react';
+import {
+  AdapterError,
+  CallAdapter,
+  CallAdapterState,
+  CallWithChatAdapter,
+  CallWithChatAdapterState
+} from '@azure/communication-react';
 import { act } from '@testing-library/react';
 
 export const runFakeTimers = async (): Promise<void> => {
@@ -45,6 +51,37 @@ export const createMockCallWithChatAdapter = (): CallWithChatAdapter => {
   return callWithChatAdapter;
 };
 
+export const createMockCallAdapter = (): CallAdapter => {
+  const callAdapter = {} as CallAdapter;
+  callAdapter.onStateChange = jest.fn();
+  callAdapter.offStateChange = jest.fn();
+  callAdapter.askDevicePermission = jest.fn();
+  callAdapter.queryCameras = jest.fn();
+  callAdapter.queryMicrophones = jest.fn();
+  callAdapter.querySpeakers = jest.fn();
+  callAdapter.on = jest.fn(); // allow for direct subscription to the state of the call-with-chat adapter
+  callAdapter.off = jest.fn(); // Allow for direct un-subscription to the state of the call-with-chat adapter
+  callAdapter.getState = jest.fn(
+    (): CallAdapterState => ({
+      page: 'lobby',
+      isLocalPreviewMicrophoneEnabled: false,
+      userId: { kind: 'communicationUser', communicationUserId: 'test' },
+      displayName: 'test',
+      call: undefined,
+      devices: {
+        isSpeakerSelectionAvailable: false,
+        cameras: [],
+        microphones: [],
+        speakers: [],
+        unparentedViews: []
+      },
+      isTeamsCall: false,
+      latestErrors: { test: new Error() as AdapterError }
+    })
+  );
+  return callAdapter;
+};
+
 export const createMockStatefulCallClient = () => {
   return { createCallAgent: () => '' };
 };
@@ -54,5 +91,9 @@ export const createMockStatefulChatClient = () => {
 };
 
 export const createMockCallWithChatComposite = () => {
+  return 'hello';
+};
+
+export const createMockCallComposite = () => {
   return 'hello';
 };

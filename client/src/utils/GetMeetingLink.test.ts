@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { getChatThreadIdFromTeamsLink, getCurrentMeetingURL, getTeamsMeetingLink } from './GetTeamsMeetingLink';
+import { getChatThreadIdFromTeamsLink, getCurrentMeetingURL, getTeamsMeetingLink } from './GetMeetingLink';
 
 describe('getTeamsMeetingLink', () => {
   test('should correctly parse valid url', () => {

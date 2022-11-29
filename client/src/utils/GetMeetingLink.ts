@@ -35,14 +35,12 @@ export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkLocato
 export const getRoomsMeetingLink = (queryString: string): RoomCallLocator => {
   const roomId = new URLSearchParams(queryString).get(ROOM_URL_PARAMNAME);
   if (!roomId) throw 'Unable to get roomId from the url string';
-  console.log(`got roomId : ${roomId}`);
   return { roomId: roomId };
 };
 
 export const getRoomsUserId = (queryString: string): string => {
   const userId = new URLSearchParams(queryString).get(USER_ID_PARAMNAME);
   if (!userId) throw 'Unable to get userId from the url string';
-  console.log(`got userId : ${userId}`);
   return userId;
 };
 
