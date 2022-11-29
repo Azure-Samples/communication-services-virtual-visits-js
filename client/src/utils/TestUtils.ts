@@ -59,8 +59,8 @@ export const createMockCallAdapter = (): CallAdapter => {
   callAdapter.queryCameras = jest.fn();
   callAdapter.queryMicrophones = jest.fn();
   callAdapter.querySpeakers = jest.fn();
-  callAdapter.on = jest.fn(); // allow for direct subscription to the state of the call-with-chat adapter
-  callAdapter.off = jest.fn(); // Allow for direct un-subscription to the state of the call-with-chat adapter
+  callAdapter.on = jest.fn(); // allow for direct subscription to the state of the call adapter
+  callAdapter.off = jest.fn(); // Allow for direct un-subscription to the state of the call adapter
   callAdapter.getState = jest.fn(
     (): CallAdapterState => ({
       page: 'lobby',
