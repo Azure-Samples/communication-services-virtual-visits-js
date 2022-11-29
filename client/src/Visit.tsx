@@ -25,7 +25,7 @@ export const Visit = (): JSX.Element => {
   const _getMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
     let meetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
 
-    // try extracting Teams link from the url
+    // try extracting Teams meeting link from the url
     try {
       meetingLinkModel = getTeamsMeetingLink(meetingLink);
     } catch (error) {
@@ -37,7 +37,7 @@ export const Visit = (): JSX.Element => {
 
   const _getRoomLocator = (meetingLink: string): RoomCallLocator | undefined => {
     let meetingLinkModel: RoomCallLocator | undefined = undefined;
-    // try extracting meeting link from the url
+    // try extracting rooms meeting link from the url
     try {
       meetingLinkModel = getRoomsMeetingLink(meetingLink);
     } catch (error) {
@@ -48,7 +48,7 @@ export const Visit = (): JSX.Element => {
 
   const _getParticipantId = (meetingLink: string): string | undefined => {
     let participantId: string | undefined = undefined;
-    //try extracting participant Id from the url
+    //try extracting rooms participant Id from the url
     try {
       participantId = getRoomsUserId(meetingLink);
     } catch (error) {

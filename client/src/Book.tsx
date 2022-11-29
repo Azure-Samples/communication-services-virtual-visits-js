@@ -9,8 +9,8 @@ import { fetchConfig } from './utils/FetchConfig';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
-import { BookingsPage } from './components/Book/BookingsPage';
-import { NoSchedulingPage } from './components/Book/NoSchedulingPage';
+import { BookingsPage } from './components/book/BookingsPage';
+import { NoSchedulingPage } from './components/book/NoSchedulingPage';
 
 export const Book = (): JSX.Element => {
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
