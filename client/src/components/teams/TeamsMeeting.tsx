@@ -7,7 +7,7 @@ import { fetchToken } from '../../utils/FetchToken';
 import { Spinner } from '@fluentui/react';
 import { AppConfigModel } from '../../models/ConfigModel';
 import { fullSizeStyles } from '../../styles/Common.styles';
-import { TeamsMeetingExperience } from './MeetingExperience';
+import { TeamsMeetingExperience } from './TeamsMeetingExperience';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
 
 export interface TeamsMeetingProps {

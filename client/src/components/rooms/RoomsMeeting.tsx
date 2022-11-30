@@ -32,7 +32,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
       }
     };
     fetchData();
-  }, []);
+  }, [roomsToken, userRole, locator, onDisplayError]);
 
   if (!roomsToken || !userRole) {
     // token or userRole not ready yet - show spinning/loading animation

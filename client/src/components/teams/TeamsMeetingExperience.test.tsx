@@ -6,7 +6,7 @@ import {
   createAzureCommunicationCallWithChatAdapterFromClients
 } from '@azure/communication-react';
 import { mount } from 'enzyme';
-import { TeamsMeetingExperience, MeetingExperienceProps } from './MeetingExperience';
+import { TeamsMeetingExperience, MeetingExperienceProps } from './TeamsMeetingExperience';
 import * as GetTeamsMeetingLink from '../../utils/GetMeetingLink';
 import {
   createMockCallWithChatAdapter,
@@ -49,7 +49,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('MeetingExperience', () => {
+describe('TeamsMeetingExperience', () => {
   const waitingTitle = 'waiting title';
   const waitingSubtitle = 'waiting subtitle';
   const logoUrl = 'logoUrl';

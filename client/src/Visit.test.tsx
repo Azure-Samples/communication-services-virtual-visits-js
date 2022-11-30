@@ -9,7 +9,7 @@ import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
-import { TeamsMeetingExperience } from './components/teams/MeetingExperience';
+import { TeamsMeetingExperience } from './components/teams/TeamsMeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import * as FetchToken from './utils/FetchToken';
@@ -50,6 +50,8 @@ jest.mock('@azure/communication-common', () => {
 
 describe('Visit with teams link', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
     jest.spyOn(console, 'error').mockImplementation();
 
     const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
@@ -59,6 +61,21 @@ describe('Visit with teams link', () => {
         token: 'token',
         expiresOn: new Date()
       } as CommunicationUserToken)
+    );
+
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
     );
   });
 
@@ -108,6 +125,17 @@ describe('Visit with teams link', () => {
       }
     );
 
+    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetMeetingLink, 'getChatThreadIdFromTeamsLink');
+    getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
+
+    const getTeamsMeetingLink = jest.spyOn(GetMeetingLink, 'getTeamsMeetingLink');
+    getTeamsMeetingLink.mockImplementation(() => {
+      return {
+        meetingLink:
+          '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
+      } as TeamsMeetingLinkLocator;
+    });
+
     const visit = mount(<Visit />);
 
     await runFakeTimers();
@@ -121,22 +149,7 @@ describe('Visit with teams link', () => {
     expect(genericErrors.length).toBe(1);
   });
 
-  it('should render JoinTeamsMeeting when config and token are loaded and meeting link is not set', async () => {
-    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
-    fetchConfigSpy.mockReturnValue(
-      Promise.resolve({
-        communicationEndpoint: 'endpoint=test_endpoint;',
-        microsoftBookingsUrl: '',
-        chatEnabled: true,
-        screenShareEnabled: true,
-        companyName: '',
-        theme: generateTheme('#FFFFFF'),
-        waitingTitle: '',
-        waitingSubtitle: '',
-        logoUrl: ''
-      } as AppConfigModel)
-    );
-
+  it('should render JoinTeamsMeeting when config is loaded and meeting link is not set', async () => {
     const visit = mount(<Visit />);
 
     await runFakeTimers();
@@ -151,21 +164,6 @@ describe('Visit with teams link', () => {
   });
 
   it('should render MeetingExperience when config and token are loaded and meeting link is set', async () => {
-    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
-    fetchConfigSpy.mockReturnValue(
-      Promise.resolve({
-        communicationEndpoint: 'endpoint=test_endpoint;',
-        microsoftBookingsUrl: '',
-        chatEnabled: true,
-        screenShareEnabled: true,
-        companyName: '',
-        theme: generateTheme('#FFFFFF'),
-        waitingTitle: '',
-        waitingSubtitle: '',
-        logoUrl: ''
-      } as AppConfigModel)
-    );
-
     const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetMeetingLink, 'getChatThreadIdFromTeamsLink');
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
 
@@ -193,6 +191,8 @@ describe('Visit with teams link', () => {
 
 describe('Visit with rooms link', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
     jest.spyOn(console, 'error').mockImplementation();
 
     const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
