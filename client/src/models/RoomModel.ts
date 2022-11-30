@@ -16,3 +16,8 @@ export interface JoinRoomResponse {
   participant: RoomParticipant;
   token: string;
 }
+
+export interface CreateRoomResponse {
+  roomId: string;
+  participants: Array<RoomParticipant>;
+}
