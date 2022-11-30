@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { RoomCallLocator } from '@azure/communication-calling';
+
 export enum RoomParticipantRole {
   presenter = 'Presenter',
   attendee = 'Attendee',
@@ -15,4 +17,10 @@ export interface RoomParticipant {
 export interface JoinRoomResponse {
   participant: RoomParticipant;
   token: string;
+}
+
+export interface RoomsInfo {
+  userId: string;
+  userRole: RoomParticipantRole;
+  locator: RoomCallLocator;
 }

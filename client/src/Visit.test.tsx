@@ -9,7 +9,7 @@ import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
-import { MeetingExperience } from './components/MeetingExperience';
+import { TeamsMeetingExperience } from './components/teams/MeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import * as FetchToken from './utils/FetchToken';
@@ -184,7 +184,7 @@ describe('Visit with teams link', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const meetingExperience = visit.find(MeetingExperience);
+    const meetingExperience = visit.find(TeamsMeetingExperience);
 
     expect(spinners.length).toBe(0);
     expect(meetingExperience.length).toBe(1);
@@ -275,7 +275,7 @@ describe('Visit with rooms link', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const meetingExperience = visit.find(MeetingExperience);
+    const meetingExperience = visit.find(TeamsMeetingExperience);
     const roomsMeetingExperience = visit.find(RoomsMeetingExperience);
 
     expect(spinners.length).toBe(0);
