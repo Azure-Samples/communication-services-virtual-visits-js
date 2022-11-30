@@ -2,16 +2,19 @@
 // Licensed under the MIT license.
 
 import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
-import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetMeetingLink';
-import { useEffect, useState } from 'react';
-import { Spinner, ThemeProvider } from '@fluentui/react';
+import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
+import { Header } from './Header';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
+import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import { GenericError } from './components/GenericError';
-import { fullSizeStyles } from './styles/Common.styles';
+import { useEffect, useState } from 'react';
+import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetMeetingLink';
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { RoomsMeeting } from './components/rooms/RoomsMeeting';
+
+const PARENT_ID = 'VisitSection';
 
 export const Visit = (): JSX.Element => {
   const _getMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
@@ -94,26 +97,41 @@ export const Visit = (): JSX.Element => {
     return <Spinner styles={fullSizeStyles} />;
   }
 
-  if (!meetingLinkLocator && roomsLocator && participantId) {
-    return (
-      <RoomsMeeting
-        config={config}
-        locator={roomsLocator}
-        participantId={participantId}
-        onDisplayError={(error) => setError(error)}
-      />
-    );
+  if (!meetingLinkLocator || !meetingLinkLocator.meetingLink) {
+    if (!roomsLocator || !participantId) {
+      // If we have config and token but don't have a meeting link,
+      // show a separate screen with "enter meeting link" textbox
+      return (
+        <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
+          <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
+        </ThemeProvider>
+      );
+    }
   }
 
-  if (meetingLinkLocator && meetingLinkLocator.meetingLink) {
-    return <TeamsMeeting config={config} locator={meetingLinkLocator} onDisplayError={(error) => setError(error)} />;
-  }
-
-  // If we have config and token but don't have a meeting link,
-  // show a separate screen with "enter meeting link" textbox
   return (
     <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-      <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
+      <Stack styles={backgroundStyles(config.theme)}>
+        <Header companyName={config.companyName} parentid={PARENT_ID} />
+        <LayerHost
+          id={PARENT_ID}
+          style={{
+            position: 'relative',
+            height: '100%'
+          }}
+        >
+          {meetingLinkLocator && meetingLinkLocator.meetingLink && (
+            <TeamsMeeting config={config} locator={meetingLinkLocator} onDisplayError={(error) => setError(error)} />
+          )}
+          {!meetingLinkLocator && roomsLocator && participantId && (
+            <RoomsMeeting
+              locator={roomsLocator}
+              participantId={participantId}
+              onDisplayError={(error) => setError(error)}
+            />
+          )}
+        </LayerHost>
+      </Stack>
     </ThemeProvider>
   );
 };

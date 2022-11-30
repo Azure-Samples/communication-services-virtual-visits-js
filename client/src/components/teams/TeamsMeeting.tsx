@@ -4,14 +4,11 @@
 import { CommunicationUserToken } from '@azure/communication-identity';
 import { useEffect, useState } from 'react';
 import { fetchToken } from '../../utils/FetchToken';
-import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
+import { Spinner } from '@fluentui/react';
 import { AppConfigModel } from '../../models/ConfigModel';
-import { backgroundStyles, fullSizeStyles } from '../../styles/Common.styles';
-import { Header } from '../../Header';
+import { fullSizeStyles } from '../../styles/Common.styles';
 import { TeamsMeetingExperience } from './MeetingExperience';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
-
-const PARENT_ID = 'VisitSection';
 
 export interface TeamsMeetingProps {
   config: AppConfigModel;
@@ -42,32 +39,19 @@ export const TeamsMeeting = (props: TeamsMeetingProps): JSX.Element => {
   }
 
   return (
-    <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-      <Stack styles={backgroundStyles(config.theme)}>
-        <Header companyName={config.companyName} parentid={PARENT_ID} />
-        <LayerHost
-          id={PARENT_ID}
-          style={{
-            position: 'relative',
-            height: '100%'
-          }}
-        >
-          <TeamsMeetingExperience
-            userId={token.user}
-            token={token.token}
-            displayName="Virtual Appointments User"
-            endpointUrl={config.communicationEndpoint}
-            locator={locator}
-            fluentTheme={config.theme}
-            logoUrl={config.logoUrl}
-            waitingTitle={config.waitingTitle}
-            waitingSubtitle={config.waitingSubtitle}
-            chatEnabled={config.chatEnabled}
-            postCall={config.postCall}
-            onDisplayError={(error) => onDisplayError(error)}
-          />
-        </LayerHost>
-      </Stack>
-    </ThemeProvider>
+    <TeamsMeetingExperience
+      userId={token.user}
+      token={token.token}
+      displayName="Virtual Appointments User"
+      endpointUrl={config.communicationEndpoint}
+      locator={locator}
+      fluentTheme={config.theme}
+      logoUrl={config.logoUrl}
+      waitingTitle={config.waitingTitle}
+      waitingSubtitle={config.waitingSubtitle}
+      chatEnabled={config.chatEnabled}
+      postCall={config.postCall}
+      onDisplayError={(error) => onDisplayError(error)}
+    />
   );
 };
