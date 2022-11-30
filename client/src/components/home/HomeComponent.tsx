@@ -16,7 +16,8 @@ import {
   joinLinkButtonStyles,
   lineHeight22px,
   lineHeight28px,
-  linkIconStyles
+  linkIconStyles,
+  menuProps
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
@@ -49,6 +50,16 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   styles={bookAppointmentButtonStyle}
                   iconProps={calendarIconStyles(props.theme)}
                   onClick={() => window.location.replace('/book')}
+                />
+              </StackItem>
+              <StackItem>
+                <DefaultButton
+                  iconProps={{ iconName: 'Video' }}
+                  text="Start a call"
+                  split
+                  splitButtonAriaLabel="See 2 options"
+                  aria-roledescription="split button"
+                  menuProps={menuProps}
                 />
               </StackItem>
               <StackItem>

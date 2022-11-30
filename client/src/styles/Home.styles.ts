@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { IIconProps } from '@fluentui/react';
+import { IContextualMenuProps, IIconProps } from '@fluentui/react';
 import { PartialTheme, Theme } from '@fluentui/theme';
 import { CSSProperties } from 'react';
 
@@ -144,4 +144,17 @@ export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
 
 export const containerMarginTop2rem = {
   root: { marginTop: '2rem' }
+};
+
+export const menuProps: IContextualMenuProps = {
+  items: [
+    {
+      key: 'host',
+      text: 'as host (presenter)'
+    },
+    {
+      key: 'attendee',
+      text: 'as attendee'
+    }
+  ]
 };
