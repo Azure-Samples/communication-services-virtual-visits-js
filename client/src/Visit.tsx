@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetMeetingLink';
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { RoomsMeeting } from './components/rooms/RoomsMeeting';
+import './styles/Common.css';
 
 const PARENT_ID = 'VisitSection';
 
