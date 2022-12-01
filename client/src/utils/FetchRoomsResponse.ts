@@ -4,7 +4,7 @@
 import createError from 'http-errors';
 import { JoinRoomResponse } from '../models/RoomModel';
 
-export async function fetchRoomsResponse(roomId: string, userId: string): Promise<JoinRoomResponse> {
+export const fetchRoomsResponse = async (roomId: string, userId: string): Promise<JoinRoomResponse> => {
   const response = await fetch('/api/rooms/token', {
     method: 'POST',
     body: JSON.stringify({
@@ -27,4 +27,4 @@ export async function fetchRoomsResponse(roomId: string, userId: string): Promis
   const roomResponse = JSON.parse(responseContent);
 
   return roomResponse;
-}
+};
