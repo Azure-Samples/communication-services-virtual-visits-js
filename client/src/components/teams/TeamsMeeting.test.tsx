@@ -112,8 +112,10 @@ describe('TeamsMeeting', () => {
     teamsMeeting.update();
 
     const spinners = teamsMeeting.find(Spinner);
+    const teamsMeetingExperience = teamsMeeting.find(TeamsMeetingExperience);
 
     expect(spinners.length).toBe(1);
+    expect(teamsMeetingExperience.length).toBe(0);
   });
 
   it('should load TeamsMeetingExperience when token is loaded', async () => {
@@ -125,8 +127,10 @@ describe('TeamsMeeting', () => {
 
     teamsMeeting.update();
 
+    const spinners = teamsMeeting.find(Spinner);
     const teamsMeetingExperience = teamsMeeting.find(TeamsMeetingExperience);
 
+    expect(spinners.length).toBe(0);
     expect(teamsMeetingExperience.length).toBe(1);
   });
 });

@@ -28,6 +28,7 @@ import { RoomsMeetingExperience } from './components/rooms/RoomsMeetingExperienc
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { CommunicationUserToken } from '@azure/communication-identity';
 import { RoomParticipantRole } from './models/RoomModel';
+import { RoomsMeeting } from './components/rooms/RoomsMeeting';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -137,10 +138,14 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const joinMeetings = visit.find(JoinTeamsMeeting);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
+    const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(joinMeetings.length).toBe(1);
+    expect(joinTeamsMeeting.length).toBe(1);
+    expect(roomsMeeting.length).toBe(0);
+    expect(teamsMeeting.length).toBe(0);
   });
 
   it('should render TeamsMeeting when config is loaded and meeting link is a teams meeting link', async () => {
@@ -161,9 +166,13 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
     const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
+    expect(joinTeamsMeeting.length).toBe(0);
+    expect(roomsMeeting.length).toBe(0);
     expect(teamsMeeting.length).toBe(1);
   });
 
@@ -190,11 +199,13 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const meetingExperience = visit.find(TeamsMeetingExperience);
-    const roomsMeetingExperience = visit.find(RoomsMeetingExperience);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
+    const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(meetingExperience.length).toBe(0);
-    expect(roomsMeetingExperience.length).toBe(1);
+    expect(joinTeamsMeeting.length).toBe(0);
+    expect(teamsMeeting.length).toBe(0);
+    expect(roomsMeeting.length).toBe(1);
   });
 });

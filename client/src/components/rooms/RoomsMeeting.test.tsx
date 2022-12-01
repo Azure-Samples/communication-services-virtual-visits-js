@@ -73,11 +73,13 @@ describe('RoomsMeeting', () => {
     roomsMeeting.update();
 
     const spinners = roomsMeeting.find(Spinner);
+    const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
 
     expect(spinners.length).toBe(1);
+    expect(roomsMeetingExperience.length).toBe(0);
   });
 
-  it('should render RoomsMeetingExperience when rooms respomse is loaded', async () => {
+  it('should render RoomsMeetingExperience when rooms response is loaded', async () => {
     const fetchRoomsResponseSpy = jest.spyOn(FetchRoomsResponse, 'fetchRoomsResponse');
     fetchRoomsResponseSpy.mockReturnValue(
       Promise.resolve({
