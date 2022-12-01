@@ -8,7 +8,6 @@ import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
-import { TeamsMeetingExperience } from './components/teams/TeamsMeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import * as FetchRoomsResponse from './utils/FetchRoomsResponse';
@@ -24,7 +23,6 @@ import {
   createMockStatefulChatClient,
   runFakeTimers
 } from './utils/TestUtils';
-import { RoomsMeetingExperience } from './components/rooms/RoomsMeetingExperience';
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { CommunicationUserToken } from '@azure/communication-identity';
 import { RoomParticipantRole } from './models/RoomModel';
