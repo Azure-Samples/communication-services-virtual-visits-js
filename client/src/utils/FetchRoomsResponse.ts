@@ -25,7 +25,6 @@ export async function fetchRoomsResponse(roomId: string, userId: string): Promis
 
   const responseContent = await response.text();
   const roomResponse = JSON.parse(responseContent);
-
   return roomResponse;
 }
 
