@@ -49,7 +49,7 @@ jest.mock('@azure/communication-common', () => {
   };
 });
 
-describe('Visit with teams link', () => {
+describe('Visit', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
