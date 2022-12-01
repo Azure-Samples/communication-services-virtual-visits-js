@@ -7,6 +7,7 @@ import { mount } from 'enzyme';
 import { TeamsMeeting } from './TeamsMeeting';
 import { generateTheme } from '../../utils/ThemeGenerator';
 import { runFakeTimers } from '../../utils/TestUtils';
+import { Spinner } from '@fluentui/react';
 
 describe('TeamsMeeting', () => {
   const mockConfig = {
@@ -44,9 +45,20 @@ describe('TeamsMeeting', () => {
     expect(teamsMeeting.props().onDisplayError).toHaveBeenCalled();
   });
 
-  //is there a case where token is not loaded?
-  //   it('should render loading spinner when token is not loaded', async () => {
-  //     const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
-  //     fetchTokenSpy.mockReturnValue(Promise.resolve(undefined));
-  //   });
+  it('should render loading spinner when token is not loaded', async () => {
+    const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
+    fetchTokenSpy.mockReturnValue(Promise.resolve(undefined));
+
+    const teamsMeeting = mount(
+      <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={jest.fn()} />
+    );
+
+    await runFakeTimers();
+
+    teamsMeeting.update();
+
+    const spinners = teamsMeeting.find(Spinner);
+
+    expect(spinners.length).toBe(1);
+  });
 });
