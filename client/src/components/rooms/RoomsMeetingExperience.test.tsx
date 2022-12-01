@@ -41,11 +41,13 @@ describe('RoomsMeetingExperience', () => {
   it('sets display name as Virtual appointments Host and should have invite url if the participant is a presenter', async () => {
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
-        userId={'userId'}
-        userRole={RoomParticipantRole.presenter}
+        roomsInfo={{
+          userId: 'userId',
+          userRole: RoomParticipantRole.presenter,
+          locator: { roomId: 'roomId' }
+        }}
         token={'token'}
         inviteParticipantUrl={'testUrl'}
-        locator={{ roomId: 'roomId' }}
         onDisplayError={jest.fn()}
       />
     );
@@ -62,10 +64,12 @@ describe('RoomsMeetingExperience', () => {
   it('sets display name as Virtual appointments Virtual appointments User and should have not have invite url if the participant is a attendee', async () => {
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
-        userId={'userId'}
-        userRole={RoomParticipantRole.presenter}
+        roomsInfo={{
+          userId: 'userId',
+          userRole: RoomParticipantRole.presenter,
+          locator: { roomId: 'roomId' }
+        }}
         token={'token'}
-        locator={{ roomId: 'roomId' }}
         onDisplayError={jest.fn()}
       />
     );

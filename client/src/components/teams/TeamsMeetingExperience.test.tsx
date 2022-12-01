@@ -6,17 +6,17 @@ import {
   createAzureCommunicationCallWithChatAdapterFromClients
 } from '@azure/communication-react';
 import { mount } from 'enzyme';
-import { MeetingExperience, MeetingExperienceProps } from './MeetingExperience';
-import * as GetTeamsMeetingLink from '../utils/GetMeetingLink';
+import { TeamsMeetingExperience, MeetingExperienceProps } from './TeamsMeetingExperience';
+import * as GetTeamsMeetingLink from '../../utils/GetMeetingLink';
 import {
   createMockCallWithChatAdapter,
   createMockCallWithChatComposite,
   createMockStatefulCallClient,
   createMockStatefulChatClient,
   runFakeTimers
-} from '../utils/TestUtils';
-import { PostCallConfig } from '../models/ConfigModel';
-import { Survey } from './postcall/Survey';
+} from '../../utils/TestUtils';
+import { PostCallConfig } from '../../models/ConfigModel';
+import { Survey } from '../postcall/Survey';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -49,7 +49,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('MeetingExperience', () => {
+describe('TeamsMeetingExperience', () => {
   const waitingTitle = 'waiting title';
   const waitingSubtitle = 'waiting subtitle';
   const logoUrl = 'logoUrl';
@@ -68,7 +68,7 @@ describe('MeetingExperience', () => {
     );
 
     const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
+      <TeamsMeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
         displayName={'name'}
@@ -108,7 +108,7 @@ describe('MeetingExperience', () => {
     );
 
     const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
+      <TeamsMeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
         displayName={'name'}
@@ -139,7 +139,7 @@ describe('MeetingExperience', () => {
     );
 
     const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
+      <TeamsMeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
         displayName={'name'}
@@ -172,7 +172,7 @@ describe('MeetingExperience', () => {
       createMockCallWithChatAdapter()
     );
     const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
+      <TeamsMeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
         displayName={'name'}
@@ -207,7 +207,7 @@ describe('MeetingExperience', () => {
     );
 
     const meetingExperience = await mount<MeetingExperienceProps>(
-      <MeetingExperience
+      <TeamsMeetingExperience
         userId={{ communicationUserId: 'test' }}
         token={'token'}
         displayName={'name'}

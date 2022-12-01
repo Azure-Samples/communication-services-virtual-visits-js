@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import { RoomCallLocator } from '@azure/communication-calling';
+
 import { CallAdapter, CallComposite } from '@azure/communication-react';
 import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInfo';
 import { useEffect, useState, useMemo } from 'react';
@@ -8,19 +8,18 @@ import { createStatefulCallClient, createAzureCommunicationCallAdapterFromClient
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
-import { RoomParticipantRole } from '../../models/RoomModel';
+import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
 
 export interface RoomsMeetingExperienceProps {
-  userId: string;
-  userRole: RoomParticipantRole;
+  roomsInfo: RoomsInfo;
   token: string;
   inviteParticipantUrl?: string;
-  locator: RoomCallLocator;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { userId, userRole, token, locator, onDisplayError } = props;
+  const { roomsInfo, token, onDisplayError } = props;
+  const { userId, userRole, locator } = roomsInfo;
 
   const displayName =
     userRole === RoomParticipantRole.presenter ? 'Virtual appointments Host' : 'Virtual appointments User';

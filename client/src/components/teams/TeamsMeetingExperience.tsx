@@ -14,14 +14,14 @@ import {
 import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
 import { useEffect, useMemo, useState } from 'react';
-import { getApplicationName, getApplicationVersion } from '../utils/GetAppInfo';
-import { getChatThreadIdFromTeamsLink } from '../utils/GetMeetingLink';
-import { fullSizeStyles } from '../styles/Common.styles';
-import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../styles/MeetingExperience.styles';
-import { createStubChatClient } from '../utils/stubs/chat';
-import { Survey } from './postcall/Survey';
+import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInfo';
+import { getChatThreadIdFromTeamsLink } from '../../utils/GetMeetingLink';
+import { fullSizeStyles } from '../../styles/Common.styles';
+import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../../styles/MeetingExperience.styles';
+import { createStubChatClient } from '../../utils/stubs/chat';
+import { Survey } from '../postcall/Survey';
 
-import { PostCallConfig } from '../models/ConfigModel';
+import { PostCallConfig } from '../../models/ConfigModel';
 export interface MeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -37,7 +37,7 @@ export interface MeetingExperienceProps {
   onDisplayError(error: any): void;
 }
 
-export const MeetingExperience = (props: MeetingExperienceProps): JSX.Element => {
+export const TeamsMeetingExperience = (props: MeetingExperienceProps): JSX.Element => {
   const {
     chatEnabled,
     displayName,
