@@ -58,7 +58,7 @@ describe('RoomsMeetingExperience', () => {
     const callComposite = roomsMeetingExperience.find(CallComposite);
     expect(callComposite.length).toBe(1);
     expect(callComposite.first().props().adapter.getState().displayName?.includes('Virtual appointments Host'));
-    expect(callComposite.first().props().callInvitationUrl?.includes('testUrl'));
+    expect(callComposite.first().props().callInvitationUrl).toBe('testUrl');
   });
 
   it('sets display name as Virtual appointments Virtual appointments User and should have not have invite url if the participant is a attendee', async () => {
