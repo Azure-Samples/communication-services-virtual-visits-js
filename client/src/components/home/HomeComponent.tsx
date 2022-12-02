@@ -1,30 +1,49 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, ImageFit, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, IContextualMenuProps, ImageFit, PartialTheme, StackItem, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
-  bookAppointmentButtonStyle,
   calendarIconStyles,
   containerMarginTop2rem,
   containerStyles,
   font16pxStyle,
   fullScreenStyles,
   innerContainer,
-  joinLinkButtonStyles,
   lineHeight22px,
   lineHeight28px,
-  linkIconStyles
+  linkIconStyles,
+  videoIconStyles,
+  buttonStyles
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
+import { createRoom } from '../../utils/CreateRoom';
+import { RoomParticipantRole } from '../../models/RoomModel';
 
 export interface HomeProps {
   companyName: string;
   theme: PartialTheme | Theme;
 }
+
+export const menuProps: IContextualMenuProps = {
+  items: [
+    {
+      key: RoomParticipantRole.presenter,
+      text: 'as host (presenter)',
+      onClick: (): void => {
+        callCreateRoom(RoomParticipantRole.presenter);
+      }
+    }
+  ]
+};
+
+const callCreateRoom = async (role: RoomParticipantRole): Promise<void> => {
+  const redirectUrl = await createRoom(role);
+  window.location.assign(redirectUrl);
+};
 
 export const HomeComponent = (props: HomeProps): JSX.Element => {
   return (
@@ -42,21 +61,31 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
           <Stack styles={containerMarginTop2rem}>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="start">
+            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-evenly">
               <StackItem>
                 <DefaultButton
                   text="Book an appointment"
-                  styles={bookAppointmentButtonStyle}
+                  styles={buttonStyles}
                   iconProps={calendarIconStyles(props.theme)}
-                  onClick={() => window.location.replace('/book')}
+                  onClick={() => window.location.assign('/book')}
+                />
+              </StackItem>
+              <StackItem>
+                <DefaultButton
+                  text="Start a call"
+                  splitButtonAriaLabel="See 2 options"
+                  styles={buttonStyles}
+                  iconProps={videoIconStyles(props.theme)}
+                  aria-roledescription="split button"
+                  menuProps={menuProps}
                 />
               </StackItem>
               <StackItem>
                 <DefaultButton
                   text="Join from link"
-                  styles={joinLinkButtonStyles}
+                  styles={buttonStyles}
                   iconProps={linkIconStyles(props.theme)}
-                  onClick={() => window.location.replace('/visit')}
+                  onClick={() => window.location.assign('/visit')}
                 />
               </StackItem>
             </Stack>
