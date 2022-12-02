@@ -32,7 +32,7 @@ export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkLocato
   return { meetingLink: meetingUrl };
 };
 
-export const getRoomsMeetingLink = (queryString: string): RoomCallLocator => {
+export const getRoomCallLocator = (queryString: string): RoomCallLocator => {
   const roomId = new URLSearchParams(queryString).get(ROOM_URL_PARAMNAME);
   if (!roomId) throw 'Unable to get roomId from the url string';
   return { roomId: roomId };

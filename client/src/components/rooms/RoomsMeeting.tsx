@@ -24,15 +24,17 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
     const fetchData = async (): Promise<void> => {
       try {
         const roomsResponse = await fetchRoomsResponse(locator.roomId, participantId);
-        setRoomsToken(roomsResponse.token);
-        setUserRole(roomsResponse.participant.role);
+        if (roomsResponse) {
+          setRoomsToken(roomsResponse.token);
+          setUserRole(roomsResponse.participant.role);
+        }
       } catch (error) {
         console.error(error);
         onDisplayError(error);
       }
     };
     fetchData();
-  }, [roomsToken, userRole, locator, onDisplayError]);
+  }, []);
 
   if (!roomsToken || !userRole) {
     // token or userRole not ready yet - show spinning/loading animation

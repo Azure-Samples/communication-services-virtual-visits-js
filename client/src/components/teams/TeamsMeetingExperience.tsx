@@ -22,7 +22,7 @@ import { createStubChatClient } from '../../utils/stubs/chat';
 import { Survey } from '../postcall/Survey';
 
 import { PostCallConfig } from '../../models/ConfigModel';
-export interface MeetingExperienceProps {
+export interface TeamsMeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
   displayName: string;
@@ -37,7 +37,7 @@ export interface MeetingExperienceProps {
   onDisplayError(error: any): void;
 }
 
-export const TeamsMeetingExperience = (props: MeetingExperienceProps): JSX.Element => {
+export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.Element => {
   const {
     chatEnabled,
     displayName,

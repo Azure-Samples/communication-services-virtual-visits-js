@@ -4,7 +4,7 @@
 import createError from 'http-errors';
 import { CreateRoomResponse, JoinRoomResponse } from '../models/RoomModel';
 
-export async function fetchRoomsResponse(roomId: string, userId: string): Promise<JoinRoomResponse> {
+export const fetchRoomsResponse = async (roomId: string, userId: string): Promise<JoinRoomResponse | undefined> => {
   const response = await fetch('/api/rooms/token', {
     method: 'POST',
     body: JSON.stringify({

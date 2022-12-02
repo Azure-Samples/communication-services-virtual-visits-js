@@ -10,7 +10,7 @@ import { fetchConfig } from './utils/FetchConfig';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
-import { getTeamsMeetingLink, getRoomsMeetingLink, getRoomsUserId } from './utils/GetMeetingLink';
+import { getTeamsMeetingLink, getRoomCallLocator, getRoomsUserId } from './utils/GetMeetingLink';
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { RoomsMeeting } from './components/rooms/RoomsMeeting';
 import './styles/Common.css';
@@ -18,24 +18,24 @@ import './styles/Common.css';
 const PARENT_ID = 'VisitSection';
 
 export const Visit = (): JSX.Element => {
-  const _getMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
-    let meetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
+  const _getTeamsMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
+    let teamsMeetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
 
     // try extracting Teams meeting link from the url
     try {
-      meetingLinkModel = getTeamsMeetingLink(meetingLink);
+      teamsMeetingLinkModel = getTeamsMeetingLink(meetingLink);
     } catch (error) {
-      meetingLinkModel = undefined;
+      teamsMeetingLinkModel = undefined;
     }
 
-    return meetingLinkModel;
+    return teamsMeetingLinkModel;
   };
 
-  const _getRoomLocator = (meetingLink: string): RoomCallLocator | undefined => {
+  const _getRoomCallLocator = (meetingLink: string): RoomCallLocator | undefined => {
     let meetingLinkModel: RoomCallLocator | undefined = undefined;
     // try extracting rooms meeting link from the url
     try {
-      meetingLinkModel = getRoomsMeetingLink(meetingLink);
+      meetingLinkModel = getRoomCallLocator(meetingLink);
     } catch (error) {
       console.log(error);
       meetingLinkModel = undefined;
@@ -62,17 +62,17 @@ export const Visit = (): JSX.Element => {
 
     appendMeetingLinkToUrl();
 
-    const meetingLinkLocator = _getMeetingLinkLocator(link);
-    setMeetingLinkLocator(meetingLinkLocator);
+    const meetingLinkLocator = _getTeamsMeetingLinkLocator(link);
+    setTeamsMeetingLinkLocator(meetingLinkLocator);
   };
 
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
   const [error, setError] = useState<any | undefined>(undefined);
-  const [meetingLinkLocator, setMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
-    _getMeetingLinkLocator(window.location.search) // case of direct link to visit with teams meeting link in URL
+  const [teamsMeetingLinkLocator, setTeamsMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
+    _getTeamsMeetingLinkLocator(window.location.search) // case of direct link to visit with teams meeting link in URL
   );
-  const [roomsLocator] = useState<RoomCallLocator | undefined>(
-    _getRoomLocator(window.location.search) // case of direct link to visit with rooms meeting link in URL
+  const [roomCallLocator] = useState<RoomCallLocator | undefined>(
+    _getRoomCallLocator(window.location.search) // case of direct link to visit with rooms meeting link in URL
   );
   const [participantId] = useState<string | undefined>(_getParticipantId(window.location.search)); // case of direct link to visit with rooms meeting link in URL
 
@@ -89,6 +89,9 @@ export const Visit = (): JSX.Element => {
     fetchData();
   }, []);
 
+  const isTeamsMeeting = teamsMeetingLinkLocator && teamsMeetingLinkLocator.meetingLink;
+  const isRoomsMeeting = roomCallLocator && participantId;
+
   if (error) {
     return <GenericError statusCode={error.statusCode} />;
   }
@@ -98,16 +101,14 @@ export const Visit = (): JSX.Element => {
     return <Spinner styles={fullSizeStyles} />;
   }
 
-  if (!meetingLinkLocator || !meetingLinkLocator.meetingLink) {
-    if (!roomsLocator || !participantId) {
-      // If we have config and token but don't have a meeting link,
-      // show a separate screen with "enter meeting link" textbox
-      return (
-        <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-          <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
-        </ThemeProvider>
-      );
-    }
+  if (!isTeamsMeeting && !isRoomsMeeting) {
+    // If we have config and token but don't have a meeting link,
+    // show a separate screen with "enter meeting link" textbox
+    return (
+      <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
+        <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
+      </ThemeProvider>
+    );
   }
 
   return (
@@ -121,12 +122,16 @@ export const Visit = (): JSX.Element => {
             height: '100%'
           }}
         >
-          {meetingLinkLocator && meetingLinkLocator.meetingLink && (
-            <TeamsMeeting config={config} locator={meetingLinkLocator} onDisplayError={(error) => setError(error)} />
+          {isTeamsMeeting && (
+            <TeamsMeeting
+              config={config}
+              locator={teamsMeetingLinkLocator}
+              onDisplayError={(error) => setError(error)}
+            />
           )}
-          {!meetingLinkLocator && roomsLocator && participantId && (
+          {!isTeamsMeeting && isRoomsMeeting && (
             <RoomsMeeting
-              locator={roomsLocator}
+              locator={roomCallLocator}
               participantId={participantId}
               onDisplayError={(error) => setError(error)}
             />
