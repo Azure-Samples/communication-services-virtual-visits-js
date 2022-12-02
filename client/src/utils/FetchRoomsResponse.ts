@@ -26,7 +26,7 @@ export const fetchRoomsResponse = async (roomId: string, userId: string): Promis
   const responseContent = await response.text();
   const roomResponse = JSON.parse(responseContent);
   return roomResponse;
-}
+};
 
 export async function fetchRoom(): Promise<CreateRoomResponse> {
   const response = await fetch('/api/rooms', {

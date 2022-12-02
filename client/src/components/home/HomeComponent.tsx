@@ -20,32 +20,36 @@ import {
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
-import { fetchRoom } from '../../utils/FetchRoomsResponse';
+import { createRoom } from '../../utils/CreateRoom';
+import { RoomParticipantRole } from '../../models/RoomModel';
 
 export interface HomeProps {
   companyName: string;
   theme: PartialTheme | Theme;
 }
 
-export const clickhandler = (key: string) => {
-  const roomResponse = fetchRoom();
-  console.log(roomResponse);
-};
-
 export const menuProps: IContextualMenuProps = {
   items: [
     {
-      key: 'host',
+      key: RoomParticipantRole.presenter,
       text: 'as host (presenter)',
-      onClick: () => {
-        clickhandler('host');
+      onClick: (): void => {
+        callCreateRoom(RoomParticipantRole.presenter);
       }
     },
     {
-      key: 'attendee',
-      text: 'as attendee'
+      key: RoomParticipantRole.attendee,
+      text: 'as attendee',
+      onClick: (): void => {
+        callCreateRoom(RoomParticipantRole.attendee);
+      }
     }
   ]
+};
+
+const callCreateRoom = async (role: RoomParticipantRole): Promise<void> => {
+  const redirectUrl = await createRoom(role);
+  window.location.assign(redirectUrl);
 };
 
 export const HomeComponent = (props: HomeProps): JSX.Element => {
@@ -70,7 +74,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   text="Book an appointment"
                   styles={buttonStyles}
                   iconProps={calendarIconStyles(props.theme)}
-                  onClick={() => window.location.replace('/book')}
+                  onClick={() => window.location.assign('/book')}
                 />
               </StackItem>
               <StackItem>
@@ -88,7 +92,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   text="Join from link"
                   styles={buttonStyles}
                   iconProps={linkIconStyles(props.theme)}
-                  onClick={() => window.location.replace('/visit')}
+                  onClick={() => window.location.assign('/visit')}
                 />
               </StackItem>
             </Stack>
