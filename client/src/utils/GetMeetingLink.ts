@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
+import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
 
 const MEETING_URL_PARAMNAME = 'meetingURL';
+const ROOM_URL_PARAMNAME = 'roomId';
+const USER_ID_PARAMNAME = 'userId';
 const JOIN_WEB_URL_PARAMNAME = 'JoinWebUrl';
 const VISIT_HOSTNAME = 'visit.teams.microsoft.com';
 const WEB_JOIN_PARAMNAME = 'webjoin';
@@ -28,6 +30,18 @@ export const getTeamsMeetingLink = (queryString: string): TeamsMeetingLinkLocato
   }
 
   return { meetingLink: meetingUrl };
+};
+
+export const getRoomCallLocator = (queryString: string): RoomCallLocator => {
+  const roomId = new URLSearchParams(queryString).get(ROOM_URL_PARAMNAME);
+  if (!roomId) throw 'Unable to get roomId from the url string';
+  return { roomId: roomId };
+};
+
+export const getRoomsUserId = (queryString: string): string => {
+  const userId = new URLSearchParams(queryString).get(USER_ID_PARAMNAME);
+  if (!userId) throw 'Unable to get userId from the url string';
+  return userId;
 };
 
 export const getCurrentMeetingURL = (queryString: string): string => {

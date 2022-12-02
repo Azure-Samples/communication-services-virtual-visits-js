@@ -1,35 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CommunicationUserToken } from '@azure/communication-identity';
-import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
+import { RoomCallLocator, TeamsMeetingLinkLocator } from '@azure/communication-calling';
 import { Spinner } from '@fluentui/react';
 import { mount } from 'enzyme';
 import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
-import { MeetingExperience } from './components/MeetingExperience';
 import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
-import * as FetchToken from './utils/FetchToken';
-import * as GetTeamsMeetingLink from './utils/GetTeamsMeetingLink';
+import * as FetchRoomsResponse from './utils/FetchRoomsResponse';
+import * as GetMeetingLink from './utils/GetMeetingLink';
 import { generateTheme } from './utils/ThemeGenerator';
+import * as FetchToken from './utils/FetchToken';
 import {
+  createMockCallAdapter,
+  createMockCallComposite,
   createMockCallWithChatAdapter,
   createMockCallWithChatComposite,
   createMockStatefulCallClient,
   createMockStatefulChatClient,
   runFakeTimers
 } from './utils/TestUtils';
+import { TeamsMeeting } from './components/teams/TeamsMeeting';
+import { CommunicationUserToken } from '@azure/communication-identity';
+import { RoomParticipantRole } from './models/RoomModel';
+import { RoomsMeeting } from './components/rooms/RoomsMeeting';
 
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
+    createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
-    CallWithChatComposite: () => createMockCallWithChatComposite()
+    CallWithChatComposite: () => createMockCallWithChatComposite(),
+    CallComposite: () => createMockCallComposite()
   };
 });
 
@@ -43,7 +50,24 @@ jest.mock('@azure/communication-common', () => {
 
 describe('Visit', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
     jest.spyOn(console, 'error').mockImplementation();
+
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
 
     const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
     fetchTokenSpy.mockReturnValue(
@@ -52,6 +76,17 @@ describe('Visit', () => {
         token: 'token',
         expiresOn: new Date()
       } as CommunicationUserToken)
+    );
+
+    const fetchRoomsResponseSpy = jest.spyOn(FetchRoomsResponse, 'fetchRoomsResponse');
+    fetchRoomsResponseSpy.mockReturnValue(
+      Promise.resolve({
+        participant: {
+          id: 'mockParticipantId',
+          role: RoomParticipantRole.presenter
+        },
+        token: 'token'
+      })
     );
   });
 
@@ -93,14 +128,7 @@ describe('Visit', () => {
     expect(genericErrors.length).toBe(1);
   });
 
-  it('renders a generic error when token throws an error', async () => {
-    const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
-    fetchTokenSpy.mockImplementation(
-      async (): Promise<CommunicationUserToken> => {
-        throw new Error('test error');
-      }
-    );
-
+  it('should render JoinTeamsMeeting when config is loaded and meeting link is not set', async () => {
     const visit = mount(<Visit />);
 
     await runFakeTimers();
@@ -108,67 +136,59 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const genericErrors = visit.find(GenericError);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
+    const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(genericErrors.length).toBe(1);
+    expect(joinTeamsMeeting.length).toBe(1);
+    expect(roomsMeeting.length).toBe(0);
+    expect(teamsMeeting.length).toBe(0);
   });
 
-  it('should render JoinTeamsMeeting when config and token are loaded and meeting link is not set', async () => {
-    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
-    fetchConfigSpy.mockReturnValue(
-      Promise.resolve({
-        communicationEndpoint: 'endpoint=test_endpoint;',
-        microsoftBookingsUrl: '',
-        chatEnabled: true,
-        screenShareEnabled: true,
-        companyName: '',
-        theme: generateTheme('#FFFFFF'),
-        waitingTitle: '',
-        waitingSubtitle: '',
-        logoUrl: ''
-      } as AppConfigModel)
-    );
-
-    const visit = mount(<Visit />);
-
-    await runFakeTimers();
-
-    visit.update();
-
-    const spinners = visit.find(Spinner);
-    const joinMeetings = visit.find(JoinTeamsMeeting);
-
-    expect(spinners.length).toBe(0);
-    expect(joinMeetings.length).toBe(1);
-  });
-
-  it('should render MeetingExperience when config and token are loaded and meeting link is set', async () => {
-    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
-    fetchConfigSpy.mockReturnValue(
-      Promise.resolve({
-        communicationEndpoint: 'endpoint=test_endpoint;',
-        microsoftBookingsUrl: '',
-        chatEnabled: true,
-        screenShareEnabled: true,
-        companyName: '',
-        theme: generateTheme('#FFFFFF'),
-        waitingTitle: '',
-        waitingSubtitle: '',
-        logoUrl: ''
-      } as AppConfigModel)
-    );
-
-    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
+  it('should render TeamsMeeting when config is loaded and meeting link is a teams meeting link', async () => {
+    const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetMeetingLink, 'getChatThreadIdFromTeamsLink');
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
 
-    const getTeamsMeetingLink = jest.spyOn(GetTeamsMeetingLink, 'getTeamsMeetingLink');
+    const getTeamsMeetingLink = jest.spyOn(GetMeetingLink, 'getTeamsMeetingLink');
     getTeamsMeetingLink.mockImplementation(() => {
       return {
         meetingLink:
           '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
       } as TeamsMeetingLinkLocator;
     });
+    const visit = mount(<Visit />);
+
+    await runFakeTimers();
+
+    visit.update();
+
+    const spinners = visit.find(Spinner);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
+    const teamsMeeting = visit.find(TeamsMeeting);
+
+    expect(spinners.length).toBe(0);
+    expect(joinTeamsMeeting.length).toBe(0);
+    expect(roomsMeeting.length).toBe(0);
+    expect(teamsMeeting.length).toBe(1);
+  });
+
+  it('should render RoomsMeeting when config is loaded and meeting link is rooms meeting link', async () => {
+    const getTeamsMeetingLink = jest.spyOn(GetMeetingLink, 'getTeamsMeetingLink');
+    getTeamsMeetingLink.mockImplementation(() => {
+      throw new Error('test error');
+    });
+
+    const getRoomCallLocatorSpy = jest.spyOn(GetMeetingLink, 'getRoomCallLocator');
+    getRoomCallLocatorSpy.mockImplementation(() => {
+      return {
+        roomId: 'mockRoomId'
+      } as RoomCallLocator;
+    });
+
+    const getRoomsUserIdSpy = jest.spyOn(GetMeetingLink, 'getRoomsUserId');
+    getRoomsUserIdSpy.mockReturnValue('mockParticipantId');
 
     const visit = mount(<Visit />);
 
@@ -177,9 +197,13 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const meetingExperience = visit.find(MeetingExperience);
+    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const roomsMeeting = visit.find(RoomsMeeting);
+    const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(meetingExperience.length).toBe(1);
+    expect(joinTeamsMeeting.length).toBe(0);
+    expect(teamsMeeting.length).toBe(0);
+    expect(roomsMeeting.length).toBe(1);
   });
 });

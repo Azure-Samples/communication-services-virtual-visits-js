@@ -5,7 +5,7 @@ import React from 'react';
 import { Stack, TextField, PrimaryButton, LayerHost, Theme, ThemeContext, createTheme } from '@fluentui/react';
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
-import { getCurrentMeetingURL, isValidTeamsLink, makeJoinUrl } from '../utils/GetTeamsMeetingLink';
+import { getCurrentMeetingURL, isValidTeamsLink, makeJoinUrl } from '../utils/GetMeetingLink';
 import { backgroundStyles } from '../styles/Common.styles';
 import {
   makeJoinTeamsLayerHostStyles,

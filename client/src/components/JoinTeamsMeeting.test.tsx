@@ -6,7 +6,7 @@ import { mount } from 'enzyme';
 import { generateTheme } from '../utils/ThemeGenerator';
 import { JoinTeamsMeeting } from './JoinTeamsMeeting';
 import { Header } from '../Header';
-import { getTeamsMeetingLink } from '../utils/GetTeamsMeetingLink';
+import { getTeamsMeetingLink } from '../utils/GetMeetingLink';
 import {
   mainJoinTeamsMeetingContainerMobileStyles,
   mainJoinTeamsMeetingContainerStyles
