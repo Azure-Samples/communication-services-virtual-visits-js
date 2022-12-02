@@ -36,13 +36,6 @@ export const menuProps: IContextualMenuProps = {
       onClick: (): void => {
         callCreateRoom(RoomParticipantRole.presenter);
       }
-    },
-    {
-      key: RoomParticipantRole.attendee,
-      text: 'as attendee',
-      onClick: (): void => {
-        callCreateRoom(RoomParticipantRole.attendee);
-      }
     }
   ]
 };
