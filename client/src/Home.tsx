@@ -45,7 +45,11 @@ export const Home = (): JSX.Element => {
       <Stack styles={backgroundStyles(config.theme)}>
         <Header companyName={config.companyName} parentid={PARENT_ID} />
         <LayerHost id={PARENT_ID} style={layerHostStyles}>
-          <HomeComponent companyName={config.companyName} theme={config.theme} />
+          <HomeComponent
+            companyName={config.companyName}
+            theme={config.theme}
+            onDisplayError={(error) => setError(error)}
+          />
         </LayerHost>
       </Stack>
     </ThemeProvider>

@@ -28,7 +28,7 @@ export const fetchRoomsResponse = async (roomId: string, userId: string): Promis
   return roomResponse;
 };
 
-export async function fetchRoom(): Promise<CreateRoomResponse> {
+export const createRoom = async (): Promise<CreateRoomResponse> => {
   const response = await fetch('/api/rooms', {
     method: 'POST',
     headers: {
@@ -41,9 +41,7 @@ export async function fetchRoom(): Promise<CreateRoomResponse> {
       `Unable to create room. Status: ${response.status}. Message: ${response.statusText}.`
     );
   }
-
   const responseContent = await response.text();
   const roomsResponse = JSON.parse(responseContent);
-
   return roomsResponse;
-}
+};

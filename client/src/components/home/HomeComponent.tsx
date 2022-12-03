@@ -20,32 +20,37 @@ import {
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
-import { createRoom } from '../../utils/CreateRoom';
+import { createRoomAndRedirectUrl } from '../../utils/CreateRoom';
 import { RoomParticipantRole } from '../../models/RoomModel';
 
-export interface HomeProps {
+export interface HomeComponentProps {
   companyName: string;
   theme: PartialTheme | Theme;
+  onDisplayError(error: any): void;
 }
 
-export const menuProps: IContextualMenuProps = {
+export const menuProps = (props: HomeComponentProps): IContextualMenuProps => ({
   items: [
     {
       key: RoomParticipantRole.presenter,
       text: 'as host (presenter)',
       onClick: (): void => {
-        callCreateRoom(RoomParticipantRole.presenter);
+        callCreateRoom(RoomParticipantRole.presenter, props);
       }
     }
   ]
+});
+
+const callCreateRoom = async (role: RoomParticipantRole, props: HomeComponentProps): Promise<void> => {
+  try {
+    const redirectUrl = await createRoomAndRedirectUrl(role);
+    window.location.assign(redirectUrl);
+  } catch (error) {
+    props.onDisplayError(error);
+  }
 };
 
-const callCreateRoom = async (role: RoomParticipantRole): Promise<void> => {
-  const redirectUrl = await createRoom(role);
-  window.location.assign(redirectUrl);
-};
-
-export const HomeComponent = (props: HomeProps): JSX.Element => {
+export const HomeComponent = (props: HomeComponentProps): JSX.Element => {
   return (
     <Stack styles={fullScreenStyles}>
       <Stack
@@ -77,7 +82,7 @@ export const HomeComponent = (props: HomeProps): JSX.Element => {
                   styles={buttonStyles}
                   iconProps={videoIconStyles(props.theme)}
                   aria-roledescription="split button"
-                  menuProps={menuProps}
+                  menuProps={menuProps(props)}
                 />
               </StackItem>
               <StackItem>
