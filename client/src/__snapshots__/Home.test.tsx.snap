@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`HomePage tests matches snapshot where form factor is desktop 1`] = `
+<div
+  className="ms-Spinner root-138"
+>
+  <div
+    className="ms-Spinner-circle ms-Spinner--medium circle-139"
+  />
+</div>
+`;
+
+exports[`HomePage tests matches snapshot where form factor is mobile 1`] = `
+<div
+  className="ms-Spinner root-138"
+>
+  <div
+    className="ms-Spinner-circle ms-Spinner--medium circle-139"
+  />
+</div>
+`;
+
 exports[`HomePage tests should render home page 1`] = `
 <div
   className="ms-Stack css-110"
@@ -49,128 +69,101 @@ exports[`HomePage tests should render home page 1`] = `
           <div
             className="ms-Stack-inner css-119"
           >
-            <div
-              className="ms-StackItem css-121"
+            <button
+              className="ms-Button ms-Button--default root-121"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                className="ms-Button ms-Button--default root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-122"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-129"
+                  data-icon-name="Calendar"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-130"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Calendar"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__0"
-                    >
-                      Book an appointment
-                    </span>
-                  </span>
+                  Book an appointment
                 </span>
-              </button>
-            </div>
-            <div
-              className="ms-StackItem css-121"
+              </span>
+            </button>
+            <button
+              aria-controls={null}
+              aria-expanded={false}
+              aria-haspopup={true}
+              aria-roledescription="split button"
+              className="ms-Button ms-Button--default ms-Button--hasMenu root-121"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                aria-controls={null}
-                aria-expanded={false}
-                aria-haspopup={true}
-                aria-roledescription="split button"
-                className="ms-Button ms-Button--default ms-Button--hasMenu root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-122"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-129"
+                  data-icon-name="Video"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-130"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Calendar"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__3"
-                    >
-                      Start a call
-                    </span>
-                  </span>
-                  <i
-                    aria-hidden={true}
-                    className="ms-Icon root-105 ms-Button-menuIcon menuIcon-127"
-                    data-icon-name="ChevronDown"
-                    style={
-                      Object {
-                        "fontFamily": undefined,
-                      }
+                  Start a call
+                </span>
+                <i
+                  aria-hidden={true}
+                  className="ms-Icon root-105 ms-Button-menuIcon menuIcon-126"
+                  data-icon-name="ChevronDown"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
                     }
-                  />
-                </span>
-              </button>
-            </div>
-            <div
-              className="ms-StackItem css-121"
+                  }
+                />
+              </span>
+            </button>
+            <button
+              className="ms-Button ms-Button--default root-121"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                className="ms-Button ms-Button--default root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-122"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-129"
+                  data-icon-name="Link"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-130"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Link"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__6"
-                    >
-                      Join from link
-                    </span>
-                  </span>
+                  Join from link
                 </span>
-              </button>
-            </div>
+              </span>
+            </button>
           </div>
         </div>
         <span

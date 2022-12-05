@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 import { HomeComponent } from './components/home/HomeComponent';
 import renderer from 'react-test-renderer';
 import * as FetchConfig from './utils/FetchConfig';
@@ -16,7 +15,11 @@ import { GenericError } from './components/GenericError';
 import { generateTheme } from './utils/ThemeGenerator';
 import { CreateRoomResponse } from './models/RoomModel';
 
-configure({ adapter: new Adapter() });
+let userAgentGetter: any = undefined;
+
+beforeEach(() => {
+  userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
+});
 
 describe('HomePage tests', () => {
   it('should render home page', () => {
@@ -85,5 +88,16 @@ describe('HomePage tests', () => {
 
     expect(spinners.length).toBe(0);
     expect(genericErrors.length).toBe(1);
+  });
+
+  it.each([['desktop'], ['mobile']])('matches snapshot where form factor is %s', async (formFactor: string) => {
+    if (formFactor === 'mobile') {
+      const mobileSafariUserAgent =
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
+      userAgentGetter.mockReturnValue(mobileSafariUserAgent);
+    }
+
+    const component = renderer.create(<Home />).toJSON();
+    expect(component).toMatchSnapshot();
   });
 });

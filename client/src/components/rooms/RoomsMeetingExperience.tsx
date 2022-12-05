@@ -6,7 +6,7 @@ import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInf
 import { useEffect, useState, useMemo } from 'react';
 import { createStatefulCallClient, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { Spinner } from '@fluentui/react';
+import { Theme, PartialTheme, Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
 
@@ -14,11 +14,12 @@ export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
   inviteParticipantUrl?: string;
+  fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, onDisplayError } = props;
+  const { roomsInfo, token, inviteParticipantUrl, fluentTheme, onDisplayError } = props;
   const { userId, userRole, locator } = roomsInfo;
 
   const displayName =
@@ -45,12 +46,14 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
   }, [credential, displayName, locator, userId, onDisplayError]);
 
   if (callAdapter) {
-    //TODO set forFactor to mobile
-    if (userRole === RoomParticipantRole.presenter) {
-      return <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />;
-    } else {
-      return <CallComposite adapter={callAdapter} />;
-    }
+    //TODO set formFactor to mobile
+    return (
+      <CallComposite
+        adapter={callAdapter}
+        fluentTheme={fluentTheme}
+        callInvitationUrl={userRole === RoomParticipantRole.presenter ? inviteParticipantUrl : undefined}
+      />
+    );
   }
 
   if (credential === undefined) {
