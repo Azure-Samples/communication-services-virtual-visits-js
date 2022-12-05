@@ -90,6 +90,27 @@ describe('HomePage tests', () => {
     expect(genericErrors.length).toBe(1);
   });
 
+  it('renders a generic error when createRoom throws an error', async () => {
+    const createRoomSpy = jest.spyOn(CreateRoom, 'createRoom');
+    createRoomSpy.mockImplementation(
+      async (): Promise<CreateRoomResponse> => {
+        throw new Error('test error');
+      }
+    );
+
+    const home = mount(<Home />);
+
+    await runFakeTimers();
+
+    home.update();
+
+    const spinners = home.find(Spinner);
+    const genericErrors = home.find(GenericError);
+
+    expect(spinners.length).toBe(0);
+    expect(genericErrors.length).toBe(1);
+  });
+
   it.each([['desktop'], ['mobile']])('matches snapshot where form factor is %s', async (formFactor: string) => {
     if (formFactor === 'mobile') {
       const mobileSafariUserAgent =
