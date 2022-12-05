@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { DefaultButton, IContextualMenuProps, ImageFit, PartialTheme, StackItem, Theme } from '@fluentui/react';
+import { DefaultButton, IContextualMenuProps, ImageFit, PartialTheme, Theme } from '@fluentui/react';
 import { Stack, Text, Image } from '@fluentui/react';
 import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   calendarIconStyles,
   containerMarginTop2rem,
-  containerStyles,
   font16pxStyle,
   fullScreenStyles,
   innerContainer,
@@ -16,7 +15,8 @@ import {
   lineHeight28px,
   linkIconStyles,
   videoIconStyles,
-  buttonStyles
+  buttonStyles,
+  buttonTextStyles
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
@@ -53,12 +53,7 @@ const callCreateRoom = async (role: RoomParticipantRole, props: HomeComponentPro
 export const HomeComponent = (props: HomeComponentProps): JSX.Element => {
   return (
     <Stack styles={fullScreenStyles}>
-      <Stack
-        horizontalAlign="center"
-        verticalAlign="start"
-        styles={containerStyles(props.theme)}
-        tokens={{ childrenGap: 15 }}
-      >
+      <Stack horizontalAlign="center" verticalAlign="start" tokens={{ childrenGap: 15 }}>
         <Stack styles={innerContainer}>
           <Stack verticalAlign="center" horizontalAlign="center">
             <Image imageFit={ImageFit.contain} src={imageCalendar} alt="calendarImage"></Image>
@@ -66,33 +61,30 @@ export const HomeComponent = (props: HomeComponentProps): JSX.Element => {
           <Stack styles={containerMarginTop2rem}>
             <Text styles={lineHeight28px}>Hello,</Text>
             <Text styles={lineHeight22px}>What would you like to do?</Text>
-            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-evenly">
-              <StackItem>
-                <DefaultButton
-                  text="Book an appointment"
-                  styles={buttonStyles}
-                  iconProps={calendarIconStyles(props.theme)}
-                  onClick={() => window.location.assign('/book')}
-                />
-              </StackItem>
-              <StackItem>
-                <DefaultButton
-                  text="Start a call"
-                  splitButtonAriaLabel="See 2 options"
-                  styles={buttonStyles}
-                  iconProps={videoIconStyles(props.theme)}
-                  aria-roledescription="split button"
-                  menuProps={menuProps(props)}
-                />
-              </StackItem>
-              <StackItem>
-                <DefaultButton
-                  text="Join from link"
-                  styles={buttonStyles}
-                  iconProps={linkIconStyles(props.theme)}
-                  onClick={() => window.location.assign('/visit')}
-                />
-              </StackItem>
+            <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-between">
+              <DefaultButton
+                styles={buttonStyles}
+                iconProps={calendarIconStyles(props.theme)}
+                onClick={() => window.location.assign('/book')}
+              >
+                <Text styles={buttonTextStyles}>Book an appointment</Text>
+              </DefaultButton>
+              <DefaultButton
+                splitButtonAriaLabel="See 2 options"
+                styles={buttonStyles}
+                iconProps={videoIconStyles(props.theme)}
+                aria-roledescription="split button"
+                menuProps={menuProps(props)}
+              >
+                <Text styles={buttonTextStyles}>Start a call</Text>
+              </DefaultButton>
+              <DefaultButton
+                styles={buttonStyles}
+                iconProps={linkIconStyles(props.theme)}
+                onClick={() => window.location.assign('/visit')}
+              >
+                <Text styles={buttonTextStyles}>Join from link</Text>
+              </DefaultButton>
             </Stack>
             <FrequentlyAskedQuestions />
             <Text styles={font16pxStyle}>Learn more about Azure Communication Services</Text>

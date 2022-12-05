@@ -2,7 +2,12 @@
 // Licensed under the MIT license.
 
 import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
-import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
+import {
+  backgroundStyles,
+  fullSizeStyles,
+  getDefaultContainerStyles,
+  getDefaultLayerHostStyles
+} from './styles/Common.styles';
 import { useEffect, useState } from 'react';
 import { fetchConfig } from './utils/FetchConfig';
 import { GenericError } from './components/GenericError';
@@ -10,7 +15,7 @@ import { AppConfigModel } from './models/ConfigModel';
 import { HomeComponent } from './components/home/HomeComponent';
 import { Header } from './Header';
 import './styles/Common.css';
-import { layerHostStyles } from './styles/Home.styles';
+import MobileDetect from 'mobile-detect';
 
 const PARENT_ID = 'HomeSection';
 
@@ -40,16 +45,23 @@ export const Home = (): JSX.Element => {
     return <Spinner styles={fullSizeStyles} />;
   }
 
+  const containerStyles = getDefaultContainerStyles(
+    config.theme,
+    new MobileDetect(window.navigator.userAgent).mobile()
+  );
+
   return (
     <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
       <Stack styles={backgroundStyles(config.theme)}>
         <Header companyName={config.companyName} parentid={PARENT_ID} />
-        <LayerHost id={PARENT_ID} style={layerHostStyles}>
-          <HomeComponent
-            companyName={config.companyName}
-            theme={config.theme}
-            onDisplayError={(error) => setError(error)}
-          />
+        <LayerHost id={PARENT_ID} style={getDefaultLayerHostStyles()}>
+          <Stack styles={containerStyles} tokens={{ childrenGap: 15 }}>
+            <HomeComponent
+              companyName={config.companyName}
+              theme={config.theme}
+              onDisplayError={(error) => setError(error)}
+            />
+          </Stack>
         </LayerHost>
       </Stack>
     </ThemeProvider>
