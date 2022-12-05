@@ -23,7 +23,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
   const [inviteUrl, setInviteUrl] = useState<string | undefined>(undefined);
 
   const formInviteUrl = (participantId: string): string => {
-    return window.location.href + `?roomId=${locator.roomId}&userId=${participantId}`;
+    return window.location.origin + `/visit?roomId=${locator.roomId}&userId=${participantId}`;
   };
 
   useEffect(() => {

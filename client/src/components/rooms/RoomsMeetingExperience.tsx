@@ -41,7 +41,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     };
 
     _createAdapters();
-  }, [credential, locator, userId, onDisplayError]);
+  }, [credential]);
 
   if (callAdapter) {
     //TODO set forFactor to mobile
