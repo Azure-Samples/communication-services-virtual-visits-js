@@ -6,8 +6,13 @@ import { Stack, TextField, PrimaryButton, LayerHost, Theme, ThemeContext, create
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
 import { getCurrentMeetingURL, isValidTeamsLink, makeJoinUrl } from '../utils/GetMeetingLink';
-import { backgroundStyles, getDefaultContainerStyles, getDefaultLayerHostStyles } from '../styles/Common.styles';
-import { formStyles } from '../styles/JoinTeamsMeeting.Styles';
+import { backgroundStyles } from '../styles/Common.styles';
+import {
+  makeJoinTeamsLayerHostStyles,
+  mainJoinTeamsMeetingContainerStyles,
+  mainJoinTeamsMeetingContainerMobileStyles,
+  formStyles
+} from '../styles/JoinTeamsMeeting.Styles';
 import MobileDetect from 'mobile-detect';
 
 interface JoinTeamsMeetingProps {
@@ -59,15 +64,14 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
             theme = createTheme();
           }
 
-          const containerStyles = getDefaultContainerStyles(
-            theme,
-            new MobileDetect(window.navigator.userAgent).mobile()
-          );
+          const containerStyles = new MobileDetect(window.navigator.userAgent).mobile()
+            ? mainJoinTeamsMeetingContainerMobileStyles(theme)
+            : mainJoinTeamsMeetingContainerStyles(theme);
 
           return (
             <Stack styles={backgroundStyles(theme)}>
               <Header companyName={this.props.config.companyName} parentid={parentID} />
-              <LayerHost id={parentID} style={getDefaultLayerHostStyles()}>
+              <LayerHost id={parentID} style={makeJoinTeamsLayerHostStyles()}>
                 <Stack styles={containerStyles} tokens={{ childrenGap: 15 }}>
                   <TextField
                     label="Join a call"

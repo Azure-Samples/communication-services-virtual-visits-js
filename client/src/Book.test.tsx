@@ -14,12 +14,6 @@ import * as renderer from 'react-test-renderer';
 import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
 import WarningBanner from './components/book/WarningBanner';
 
-let userAgentGetter: any = undefined;
-
-beforeEach(() => {
-  userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
-});
-
 describe('Book', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation();
@@ -165,33 +159,24 @@ describe('Book', () => {
     expect(iframes.first().props().src).toBe(BOOKINGS_SPECIMEN_URL);
   });
 
-  it.each([['desktop'], ['mobile']])(
-    'should match snapshot when bookings link is empty',
-    async (formFactor: string) => {
-      if (formFactor === 'mobile') {
-        const mobileSafariUserAgent =
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
-        userAgentGetter.mockReturnValue(mobileSafariUserAgent);
-      }
+  it('should match snapshot when bookings link is empty', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+    const book = renderer.create(<Book />);
+    await runFakeTimers();
 
-      const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
-      fetchConfigSpy.mockReturnValue(
-        Promise.resolve({
-          communicationEndpoint: 'endpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        } as AppConfigModel)
-      );
-      const book = renderer.create(<Book />);
-      await runFakeTimers();
-
-      expect(book.toJSON()).toMatchSnapshot();
-    }
-  );
+    expect(book.toJSON()).toMatchSnapshot();
+  });
 });

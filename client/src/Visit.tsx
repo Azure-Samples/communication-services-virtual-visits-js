@@ -37,6 +37,7 @@ export const Visit = (): JSX.Element => {
     try {
       meetingLinkModel = getRoomCallLocator(meetingLink);
     } catch (error) {
+      console.log(error);
       meetingLinkModel = undefined;
     }
     return meetingLinkModel;
@@ -48,6 +49,7 @@ export const Visit = (): JSX.Element => {
     try {
       participantId = getRoomsUserId(meetingLink);
     } catch (error) {
+      console.log(error);
       participantId = undefined;
     }
     return participantId;
@@ -131,7 +133,6 @@ export const Visit = (): JSX.Element => {
             <RoomsMeeting
               locator={roomCallLocator}
               participantId={participantId}
-              fluentTheme={config.theme}
               onDisplayError={(error) => setError(error)}
             />
           )}

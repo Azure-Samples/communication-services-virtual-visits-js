@@ -12,6 +12,21 @@ export const fullScreenStyles = {
   }
 };
 
+export function containerStyles(theme: PartialTheme | Theme): any {
+  return {
+    root: {
+      maxWidth: '64rem',
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      margin: 'auto',
+      marginTop: '2.375rem',
+      backgroundColor: 'white',
+      borderRadius: theme.effects?.roundedCorner4
+    }
+  };
+}
+
 export const textDecorationNone: CSSProperties = {
   textDecoration: 'none'
 };
@@ -49,17 +64,8 @@ export const innerContainer = {
 export const buttonStyles = {
   root: {
     borderColor: '#E1DFDD',
-    width: '32.33%',
-    fontSize: '.85rem',
+    fontSize: '1rem',
     marginBottom: '.5rem'
-  }
-};
-
-export const buttonTextStyles = {
-  root: {
-    fontSize: '.84rem',
-    fontWeight: '600',
-    marginLeft: '.2rem'
   }
 };
 
@@ -74,7 +80,7 @@ export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
 
 export function videoIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
-    iconName: 'Video',
+    iconName: 'Calendar',
     styles: {
       root: { color: theme.palette?.themePrimary }
     }
@@ -120,6 +126,12 @@ export const lineHeight28px = {
 
 export const lineHeight22px = {
   root: { fontWeight: '600', fontSize: '1rem', lineHeight: '1.375rem', marginBottom: '1rem' }
+};
+
+export const layerHostStyles: CSSProperties = {
+  position: 'relative',
+  height: '100%',
+  width: '100%'
 };
 
 export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
