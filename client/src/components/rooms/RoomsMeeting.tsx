@@ -8,6 +8,7 @@ import { Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import { makeRoomsJoinUrl } from '../../utils/GetMeetingLink';
 
 export interface RoomsMeetingProps {
   locator: RoomCallLocator;
@@ -23,7 +24,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
   const [inviteUrl, setInviteUrl] = useState<string | undefined>(undefined);
 
   const formInviteUrl = (participantId: string): string => {
-    return window.location.origin + `/visit?roomId=${locator.roomId}&userId=${participantId}`;
+    return window.location.origin + makeRoomsJoinUrl(locator.roomId, participantId);
   };
 
   useEffect(() => {

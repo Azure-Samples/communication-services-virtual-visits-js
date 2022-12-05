@@ -104,7 +104,7 @@ describe('RoomsMeeting', () => {
     const spinners = roomsMeeting.find(Spinner);
     const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
     const inviteLink = roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl;
-    expect(inviteLink).toBeDefined;
+    expect(inviteLink).toBeDefined();
     expect(inviteLink).toContain('/visit?roomId=mockRoomId&userId=mockAttendeeId');
     expect(spinners.length).toBe(0);
     expect(roomsMeetingExperience.length).toBe(1);
@@ -130,7 +130,7 @@ describe('RoomsMeeting', () => {
     roomsMeeting.update();
     const spinners = roomsMeeting.find(Spinner);
     const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
-    expect(roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl).toBeUndefined;
+    expect(roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl).toBeUndefined();
     expect(spinners.length).toBe(0);
     expect(roomsMeetingExperience.length).toBe(1);
   });
