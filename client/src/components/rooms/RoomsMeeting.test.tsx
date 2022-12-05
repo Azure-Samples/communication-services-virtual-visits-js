@@ -13,6 +13,8 @@ import {
 } from '../../utils/TestUtils';
 import { Spinner } from '@fluentui/react';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import { PostCallConfig } from '../../models/ConfigModel';
+import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -35,6 +37,18 @@ describe('RoomsMeeting', () => {
   const roomCallLocator = {
     roomId: 'mockRoomId'
   };
+  const mockPostCall: PostCallConfig = {
+    survey: {
+      type: 'onequestionpoll',
+      options: {
+        title: 'mock',
+        prompt: 'mock',
+        pollType: 'text',
+        answerPlaceholder: 'Enter your comments here...',
+        saveButtonText: 'Continue'
+      }
+    }
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -51,7 +65,13 @@ describe('RoomsMeeting', () => {
     );
 
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockParticipantId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
+        locator={roomCallLocator}
+        participantId={'mockParticipantId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -65,7 +85,13 @@ describe('RoomsMeeting', () => {
     fetchRoomsResponseSpy.mockReturnValue(Promise.resolve(undefined));
 
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockParticipantId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
+        locator={roomCallLocator}
+        participantId={'mockParticipantId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -91,7 +117,13 @@ describe('RoomsMeeting', () => {
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockParticipantId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
+        locator={roomCallLocator}
+        participantId={'mockParticipantId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();

@@ -11,6 +11,8 @@ import { mount } from 'enzyme';
 import { RoomsMeetingExperience, RoomsMeetingExperienceProps } from './RoomsMeetingExperience';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { CallComposite } from '@azure/communication-react';
+import { PostCallConfig } from '../../models/ConfigModel';
+import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -37,10 +39,24 @@ describe('RoomsMeetingExperience', () => {
   beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation();
   });
+  const mockPostCall: PostCallConfig = {
+    survey: {
+      type: 'onequestionpoll',
+      options: {
+        title: 'mock',
+        prompt: 'mock',
+        pollType: 'text',
+        answerPlaceholder: 'Enter your comments here...',
+        saveButtonText: 'Continue'
+      }
+    }
+  };
 
   it('sets display name as Virtual appointments Host and should have invite url if the participant is a presenter', async () => {
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
         roomsInfo={{
           userId: 'userId',
           userRole: RoomParticipantRole.presenter,
@@ -64,6 +80,8 @@ describe('RoomsMeetingExperience', () => {
   it('sets display name as Virtual appointments Virtual appointments User and should have not have invite url if the participant is a attendee', async () => {
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
         roomsInfo={{
           userId: 'userId',
           userRole: RoomParticipantRole.presenter,
