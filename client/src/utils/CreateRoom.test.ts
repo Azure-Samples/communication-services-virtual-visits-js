@@ -5,16 +5,6 @@ import { createRoomAndRedirectUrl } from './CreateRoom';
 import * as CreateRoom from './FetchRoomsResponse';
 import { CreateRoomResponse } from '../models/RoomModel';
 
-global.fetch = jest.fn(() => {
-  Promise.resolve({
-    status: 201
-  });
-}) as jest.Mock;
-
-afterEach(() => {
-  jest.resetAllMocks();
-});
-
 const mockCreateRoomResponse = {
   roomId: 'roomId',
   participants: [
@@ -52,14 +42,7 @@ describe('CreateRoomAndRedirectUrl', () => {
       }
     );
 
-    const mockStatus = 400;
     const mockUserRole = 'userRole';
-
-    (fetch as jest.Mock).mockImplementation(() => {
-      return Promise.resolve({
-        status: mockStatus
-      });
-    });
 
     try {
       await createRoomAndRedirectUrl(mockUserRole);
