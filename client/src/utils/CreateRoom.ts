@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 import { RoomParticipant, RoomParticipantRole } from '../models/RoomModel';
 import { createRoom } from './FetchRoomsResponse';
+import { makeRoomsJoinUrl } from './GetMeetingLink';
 
 export const createRoomAndRedirectUrl = async (userRole: string): Promise<string> => {
   let redirectUrl: string;
@@ -11,7 +12,8 @@ export const createRoomAndRedirectUrl = async (userRole: string): Promise<string
     const userId = roomResponse.participants.find(
       (participant: RoomParticipant) => (participant.role as RoomParticipantRole) === userRole
     )?.id;
-    redirectUrl = `/visit?roomId=${roomId}&userId=${userId}`;
+    if (userId) redirectUrl = makeRoomsJoinUrl(roomId, userId);
+    else throw new Error(`room does not have participant with role ${userRole}`);
   } catch (e) {
     //EndUser to add logging errors in place of console logging below
     console.log(e);

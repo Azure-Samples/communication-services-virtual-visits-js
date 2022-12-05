@@ -18,7 +18,7 @@ describe('FetchRoomsToken', () => {
   it('should fetch rooms response and return it', async () => {
     const mockRoomsResponse: JoinRoomResponse = {
       participant: {
-        id: 'mockParticipantId',
+        id: 'mockPresenterId',
         role: RoomParticipantRole.presenter
       },
       token: 'mockToken'
