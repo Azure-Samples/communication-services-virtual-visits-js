@@ -9,6 +9,7 @@ import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { Theme, PartialTheme, Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
+import MobileDetect from 'mobile-detect';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
@@ -46,11 +47,12 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
   }, [credential, displayName, locator, userId, onDisplayError]);
 
   if (callAdapter) {
-    //TODO set formFactor to mobile
+    const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
     return (
       <CallComposite
         adapter={callAdapter}
         fluentTheme={fluentTheme}
+        formFactor={formFactorValue}
         callInvitationUrl={userRole === RoomParticipantRole.presenter ? inviteParticipantUrl : undefined}
       />
     );
