@@ -89,6 +89,20 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
       return res.status(404).send(ERROR_NO_USER_FOUND_IN_ROOM);
     }
 
+    let invitee: TestAppointmentRoomParticipant | undefined;
+
+    if (foundUserParticipant.role === RoomParticipantRole.presenter) {
+      const attendee = participantsList.find(
+        (participant: RoomParticipant) => (participant.id as CommunicationUserIdentifier).communicationUserId !== userId
+      );
+      if (attendee) {
+        invitee = {
+          id: (attendee.id as CommunicationUserIdentifier).communicationUserId,
+          role: attendee.role as RoomParticipantRole
+        };
+      }
+    }
+
     // Create token
     const scopes: TokenScope[] = ['voip'];
     const user: CommunicationUserIdentifier = {
@@ -103,6 +117,7 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
         id: (foundUserParticipant.id as CommunicationUserIdentifier).communicationUserId,
         role: foundUserParticipant.role as RoomParticipantRole
       },
+      invitee: invitee,
       token: tokenResponse.token
     };
 

@@ -20,6 +20,12 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
 
   const [roomsToken, setRoomsToken] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<RoomParticipantRole | undefined>(undefined);
+  const [inviteUrl, setInviteUrl] = useState<string | undefined>(undefined);
+
+  const formInviteUrl = (participantId: string): string => {
+    return window.location.href + `?roomId=${locator.roomId}&userId=${participantId}`;
+  };
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       try {
@@ -27,6 +33,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
         if (roomsResponse) {
           setRoomsToken(roomsResponse.token);
           setUserRole(roomsResponse.participant.role);
+          if (roomsResponse.invitee) setInviteUrl(formInviteUrl(roomsResponse.invitee.id));
         }
       } catch (error) {
         console.error(error);
@@ -46,7 +53,8 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
       roomsInfo={{
         userId: participantId,
         userRole: userRole,
-        locator: locator
+        locator: locator,
+        inviteParticipantUrl: inviteUrl
       }}
       token={roomsToken}
       onDisplayError={(error) => onDisplayError(error)}

@@ -82,8 +82,12 @@ describe('Visit', () => {
     fetchRoomsResponseSpy.mockReturnValue(
       Promise.resolve({
         participant: {
-          id: 'mockParticipantId',
+          id: 'mockPresenterId',
           role: RoomParticipantRole.presenter
+        },
+        invitee: {
+          id: 'mockAttendeeId',
+          role: RoomParticipantRole.attendee
         },
         token: 'token'
       })

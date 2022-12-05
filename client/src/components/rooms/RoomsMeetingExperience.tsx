@@ -13,7 +13,6 @@ import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
-  inviteParticipantUrl?: string;
   onDisplayError(error: any): void;
 }
 
@@ -42,12 +41,12 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     };
 
     _createAdapters();
-  }, [credential, displayName, locator, userId, onDisplayError]);
+  }, [credential, locator, userId, onDisplayError]);
 
   if (callAdapter) {
     //TODO set forFactor to mobile
     if (userRole === RoomParticipantRole.presenter) {
-      return <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />;
+      return <CallComposite adapter={callAdapter} callInvitationUrl={props.roomsInfo.inviteParticipantUrl} />;
     } else {
       return <CallComposite adapter={callAdapter} />;
     }
