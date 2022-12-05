@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { mount } from 'enzyme';
-import { HomeComponent } from './components/home/HomeComponent';
 import renderer from 'react-test-renderer';
 import * as FetchConfig from './utils/FetchConfig';
 import * as CreateRoom from './utils/FetchRoomsResponse';
@@ -12,7 +11,6 @@ import { Spinner } from '@fluentui/react';
 import { Home } from './Home';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
-import { generateTheme } from './utils/ThemeGenerator';
 import { CreateRoomResponse } from './models/RoomModel';
 
 let userAgentGetter: any = undefined;
@@ -21,16 +19,7 @@ beforeEach(() => {
   userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
 });
 
-describe('HomePage tests', () => {
-  it('should render home page', () => {
-    const home = renderer
-      .create(
-        <HomeComponent companyName="Lamna Healthcare" theme={generateTheme('#0078d4')} onDisplayError={jest.fn()} />
-      )
-      .toJSON();
-    expect(home).toMatchSnapshot();
-  });
-
+describe('Home', () => {
   it('should render loading spinner when config is not loaded', async () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(Promise.resolve(undefined));
