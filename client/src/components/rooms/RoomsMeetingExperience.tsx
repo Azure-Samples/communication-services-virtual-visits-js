@@ -14,13 +14,12 @@ import MobileDetect from 'mobile-detect';
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
-  inviteParticipantUrl?: string;
   fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, inviteParticipantUrl, fluentTheme, onDisplayError } = props;
+  const { roomsInfo, token, fluentTheme, onDisplayError } = props;
   const { userId, userRole, locator } = roomsInfo;
 
   const displayName =
@@ -44,7 +43,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     };
 
     _createAdapters();
-  }, [credential, displayName, locator, userId, onDisplayError]);
+  }, [credential]);
 
   if (callAdapter) {
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
@@ -53,7 +52,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
         adapter={callAdapter}
         fluentTheme={fluentTheme}
         formFactor={formFactorValue}
-        callInvitationUrl={userRole === RoomParticipantRole.presenter ? inviteParticipantUrl : undefined}
+        callInvitationUrl={userRole === RoomParticipantRole.presenter ? roomsInfo.inviteParticipantUrl : undefined}
       />
     );
   }

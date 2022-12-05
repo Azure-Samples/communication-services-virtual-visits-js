@@ -7,7 +7,9 @@ import {
   getCurrentMeetingURL,
   getRoomCallLocator,
   getRoomsUserId,
-  getTeamsMeetingLink
+  getTeamsMeetingLink,
+  makeRoomsJoinUrl,
+  makeTeamsJoinUrl
 } from './GetMeetingLink';
 
 describe('getMeetingLink', () => {
@@ -122,5 +124,15 @@ describe('getMeetingLink', () => {
     } catch (error) {
       expect(error).toBeDefined();
     }
+  });
+
+  test('should make correct teams join url', () => {
+    const result = makeTeamsJoinUrl('mockTeamsMeetingUrl');
+    expect(result).toBe('?meetingURL=mockTeamsMeetingUrl');
+  });
+
+  test('should make correct rooms join url', () => {
+    const result = makeRoomsJoinUrl('mockRoomId', 'mockUserId');
+    expect(result).toBe('/visit?roomId=mockRoomId&userId=mockUserId');
   });
 });

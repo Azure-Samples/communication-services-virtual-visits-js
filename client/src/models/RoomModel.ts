@@ -15,8 +15,9 @@ export interface RoomParticipant {
 }
 
 export interface JoinRoomResponse {
-  participant: RoomParticipant;
   token: string;
+  participant: RoomParticipant;
+  invitee?: RoomParticipant;
 }
 
 export interface CreateRoomResponse {
@@ -28,4 +29,5 @@ export interface RoomsInfo {
   userId: string;
   userRole: RoomParticipantRole;
   locator: RoomCallLocator;
+  inviteParticipantUrl?: string;
 }
