@@ -80,7 +80,7 @@ export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
 
 export function videoIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
-    iconName: 'Calendar',
+    iconName: 'Video',
     styles: {
       root: { color: theme.palette?.themePrimary }
     }
