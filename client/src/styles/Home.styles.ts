@@ -61,23 +61,24 @@ export const innerContainer = {
   }
 };
 
-export const bookAppointmentButtonStyle = {
+export const buttonStyles = {
   root: {
     borderColor: '#E1DFDD',
     fontSize: '1rem',
-    marginRight: '.5rem',
     marginBottom: '.5rem'
   }
 };
 
-export const joinLinkButtonStyles = {
-  root: {
-    borderColor: '#E1DFDD',
-    fontSize: '1rem'
-  }
-};
-
 export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
+  return {
+    iconName: 'Calendar',
+    styles: {
+      root: { color: theme.palette?.themePrimary }
+    }
+  };
+}
+
+export function videoIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Calendar',
     styles: {
