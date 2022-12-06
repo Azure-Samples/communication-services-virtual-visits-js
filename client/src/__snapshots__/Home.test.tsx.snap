@@ -110,7 +110,7 @@ exports[`HomePage tests should render home page 1`] = `
                   <i
                     aria-hidden={true}
                     className="ms-Button-icon icon-130"
-                    data-icon-name="Calendar"
+                    data-icon-name="Video"
                   />
                   <span
                     className="ms-Button-textContainer textContainer-124"
