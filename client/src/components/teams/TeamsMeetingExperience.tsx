@@ -74,10 +74,8 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
             setRenderPostCall(true);
           });
         }
-        adapter.onStateChange((state) => {
-          if (state.call?.id !== undefined && state.call?.id !== callId) {
-            setCallId(adapter.getState().call?.id);
-          }
+        adapter.on('callIdChanged', () => {
+          setCallId(adapter.getState().call?.id);
         });
         setCallWithChatAdapter(adapter);
       } catch (err) {

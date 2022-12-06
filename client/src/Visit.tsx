@@ -131,8 +131,7 @@ export const Visit = (): JSX.Element => {
           )}
           {!isTeamsMeeting && isRoomsMeeting && (
             <RoomsMeeting
-              theme={config.theme}
-              postCall={config.postCall}
+              config={config}
               locator={roomCallLocator}
               participantId={participantId}
               onDisplayError={(error) => setError(error)}

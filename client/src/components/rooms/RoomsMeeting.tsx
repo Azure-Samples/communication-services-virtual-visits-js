@@ -4,22 +4,21 @@
 import { RoomCallLocator } from '@azure/communication-calling';
 import { useEffect, useState } from 'react';
 import { fetchRoomsResponse } from '../../utils/FetchRoomsResponse';
-import { PartialTheme, Spinner, Theme } from '@fluentui/react';
+import { Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
-import { PostCallConfig } from '../../models/ConfigModel';
+import { AppConfigModel } from '../../models/ConfigModel';
 
 export interface RoomsMeetingProps {
-  theme: PartialTheme | Theme;
-  postCall?: PostCallConfig;
+  config: AppConfigModel;
   locator: RoomCallLocator;
   participantId: string;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
-  const { theme, postCall, locator, participantId, onDisplayError } = props;
+  const { config, locator, participantId, onDisplayError } = props;
 
   const [roomsToken, setRoomsToken] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<RoomParticipantRole | undefined>(undefined);
@@ -46,7 +45,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
 
   return (
     <RoomsMeetingExperience
-      theme={theme}
+      theme={config.theme}
       roomsInfo={{
         userId: participantId,
         userRole: userRole,
@@ -54,7 +53,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
       }}
       token={roomsToken}
       onDisplayError={(error) => onDisplayError(error)}
-      postCall={postCall}
+      postCall={config.postCall}
     />
   );
 };

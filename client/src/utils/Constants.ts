@@ -4,3 +4,6 @@
 export const BOOKINGS_README_URL = 'https://aka.ms/virtual-appointments-sample-bookings';
 export const BOOKINGS_SPECIMEN_URL =
   'https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US';
+export const PRESENTER = 'presenter';
+export const ATTENDEE = 'attendee';
+export const SURVEY = 'survey';

@@ -13,7 +13,6 @@ import {
 } from '../../utils/TestUtils';
 import { Spinner } from '@fluentui/react';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
-import { PostCallConfig } from '../../models/ConfigModel';
 import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
@@ -37,17 +36,16 @@ describe('RoomsMeeting', () => {
   const roomCallLocator = {
     roomId: 'mockRoomId'
   };
-  const mockPostCall: PostCallConfig = {
-    survey: {
-      type: 'onequestionpoll',
-      options: {
-        title: 'mock',
-        prompt: 'mock',
-        pollType: 'text',
-        answerPlaceholder: 'Enter your comments here...',
-        saveButtonText: 'Continue'
-      }
-    }
+  const mockConfig = {
+    communicationEndpoint: 'endpoint=test_endpoint;',
+    microsoftBookingsUrl: '',
+    chatEnabled: true,
+    screenShareEnabled: true,
+    companyName: '',
+    theme: generateTheme('#FFFFFF'),
+    waitingTitle: '',
+    waitingSubtitle: '',
+    logoUrl: ''
   };
 
   beforeEach(() => {
@@ -66,8 +64,7 @@ describe('RoomsMeeting', () => {
 
     const roomsMeeting = mount(
       <RoomsMeeting
-        theme={generateTheme('#FFFFFF')}
-        postCall={mockPostCall}
+        config={mockConfig}
         locator={roomCallLocator}
         participantId={'mockParticipantId'}
         onDisplayError={jest.fn()}
@@ -86,8 +83,7 @@ describe('RoomsMeeting', () => {
 
     const roomsMeeting = mount(
       <RoomsMeeting
-        theme={generateTheme('#FFFFFF')}
-        postCall={mockPostCall}
+        config={mockConfig}
         locator={roomCallLocator}
         participantId={'mockParticipantId'}
         onDisplayError={jest.fn()}
@@ -118,8 +114,7 @@ describe('RoomsMeeting', () => {
     );
     const roomsMeeting = mount(
       <RoomsMeeting
-        theme={generateTheme('#FFFFFF')}
-        postCall={mockPostCall}
+        config={mockConfig}
         locator={roomCallLocator}
         participantId={'mockParticipantId'}
         onDisplayError={jest.fn()}

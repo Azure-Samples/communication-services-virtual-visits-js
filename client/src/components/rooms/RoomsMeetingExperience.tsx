@@ -11,13 +11,14 @@ import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
 import { PostCallConfig } from '../../models/ConfigModel';
 import { Survey } from '../postcall/Survey';
+import { PRESENTER, ATTENDEE, SURVEY } from '../../utils/Constants';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
   theme: PartialTheme | Theme;
   inviteParticipantUrl?: string;
-  postCall: PostCallConfig | undefined;
+  postCall?: PostCallConfig;
   onDisplayError(error: any): void;
 }
 
@@ -56,32 +57,46 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     _createAdapters();
   }, [credential, displayName, locator, userId, onDisplayError]);
 
-  if (callAdapter) {
-    //TODO set forFactor to mobile
-    if (userRole === RoomParticipantRole.presenter) {
-      return <CallComposite adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
-    } else if (renderPostCall && postCall) {
-      return (
-        <Survey
-          callId={callId}
-          acsUserId={userId}
-          meetingLink={locator.roomId}
-          theme={theme}
-          data-testid="Survey"
-          postCall={postCall}
-          onRejoinCall={async () => {
-            await callAdapter.joinCall();
-            setRenderPostCall(false);
-          }}
-        />
-      );
-    } else {
-      return <CallComposite adapter={callAdapter} />;
-    }
-  }
-
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
+  }
+  if (callAdapter) {
+    //TODO set forFactor to mobile
+    const componentToShow = (): string | undefined => {
+      if (!renderPostCall && userRole === RoomParticipantRole.presenter) return PRESENTER;
+      else if (!renderPostCall && userRole === RoomParticipantRole.attendee) return ATTENDEE;
+      else return SURVEY;
+    };
+
+    switch (componentToShow()) {
+      case PRESENTER:
+        return <CallComposite adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+      case ATTENDEE:
+        return <CallComposite adapter={callAdapter} />;
+      case SURVEY:
+        if (postCall)
+          return (
+            <Survey
+              callId={callId}
+              acsUserId={userId}
+              meetingLink={locator.roomId}
+              theme={theme}
+              data-testid="Survey"
+              postCall={postCall}
+              onRejoinCall={async () => {
+                await callAdapter.joinCall();
+                setRenderPostCall(false);
+              }}
+            />
+          );
+        break;
+      default: {
+        // this is triggered in case postCall config is not specified. It will show default postCall screen - with rejoin button
+        if (userRole === RoomParticipantRole.presenter)
+          return <CallComposite adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+        else return <CallComposite adapter={callAdapter} />;
+      }
+    }
   }
 
   return <Spinner styles={fullSizeStyles} />;
