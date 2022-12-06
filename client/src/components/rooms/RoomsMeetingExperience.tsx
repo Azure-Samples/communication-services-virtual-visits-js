@@ -70,9 +70,9 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
 
     switch (componentToShow()) {
       case PRESENTER:
-        return <CallComposite adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+        return <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
       case ATTENDEE:
-        return <CallComposite adapter={callAdapter} />;
+        return <CallComposite fluentTheme={theme} adapter={callAdapter} />;
       case SURVEY:
         if (postCall)
           return (
@@ -93,8 +93,8 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
       default: {
         // this is triggered in case postCall config is not specified. It will show default postCall screen - with rejoin button
         if (userRole === RoomParticipantRole.presenter)
-          return <CallComposite adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
-        else return <CallComposite adapter={callAdapter} />;
+          return <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+        else return <CallComposite fluentTheme={theme} adapter={callAdapter} />;
       }
     }
   }
