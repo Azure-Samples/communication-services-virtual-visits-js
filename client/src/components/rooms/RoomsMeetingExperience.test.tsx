@@ -108,7 +108,6 @@ describe('RoomsMeetingExperience', () => {
   it('should render Survey component when postcall is defined and valid', async () => {
     const mockedAdapter = createMockCallAdapter();
     mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
-    console.log(createAzureCommunicationCallAdapterFromClient);
     (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
 
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
@@ -136,7 +135,6 @@ describe('RoomsMeetingExperience', () => {
   it('should render CallComposite component when postcall is undefined', async () => {
     const mockedAdapter = createMockCallAdapter();
     mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
-    console.log(createAzureCommunicationCallAdapterFromClient);
     (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
 
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
