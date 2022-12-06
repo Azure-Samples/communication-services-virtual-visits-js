@@ -5,7 +5,7 @@ import React from 'react';
 import { Stack, TextField, PrimaryButton, LayerHost, Theme, ThemeContext, createTheme } from '@fluentui/react';
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
-import { getCurrentMeetingURL, isValidTeamsLink, makeJoinUrl } from '../utils/GetMeetingLink';
+import { getCurrentMeetingURL, isValidTeamsLink, makeTeamsJoinUrl } from '../utils/GetMeetingLink';
 import { backgroundStyles } from '../styles/Common.styles';
 import {
   makeJoinTeamsLayerHostStyles,
@@ -53,7 +53,7 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
   }
 
   render(): JSX.Element {
-    const link = makeJoinUrl(this.state.teamsMeetingLink);
+    const link = makeTeamsJoinUrl(this.state.teamsMeetingLink);
     const enableButton = isValidTeamsLink(this.state.teamsMeetingLink);
     const parentID = 'JoinTeamsMeetingSection';
 

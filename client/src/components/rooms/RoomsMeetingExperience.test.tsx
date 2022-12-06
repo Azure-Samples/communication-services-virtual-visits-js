@@ -60,10 +60,10 @@ describe('RoomsMeetingExperience', () => {
         roomsInfo={{
           userId: 'userId',
           userRole: RoomParticipantRole.presenter,
-          locator: { roomId: 'roomId' }
+          locator: { roomId: 'roomId' },
+          inviteParticipantUrl: 'testUrl'
         }}
         token={'token'}
-        inviteParticipantUrl={'testUrl'}
         onDisplayError={jest.fn()}
       />
     );

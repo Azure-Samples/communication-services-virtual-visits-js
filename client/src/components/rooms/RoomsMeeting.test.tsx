@@ -101,24 +101,23 @@ describe('RoomsMeeting', () => {
     expect(roomsMeetingExperience.length).toBe(0);
   });
 
-  it('should render RoomsMeetingExperience when rooms response is loaded', async () => {
+  it('should render RoomsMeetingExperience with invite link when rooms response is loaded for presenter', async () => {
     const fetchRoomsResponseSpy = jest.spyOn(FetchRoomsResponse, 'fetchRoomsResponse');
     fetchRoomsResponseSpy.mockReturnValue(
       Promise.resolve({
         participant: {
-          id: 'mockParticipantId',
+          id: 'mockPresenterId',
           role: RoomParticipantRole.presenter
+        },
+        invitee: {
+          id: 'mockAttendeeId',
+          role: RoomParticipantRole.attendee
         },
         token: 'token'
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting
-        config={mockConfig}
-        locator={roomCallLocator}
-        participantId={'mockParticipantId'}
-        onDisplayError={jest.fn()}
-      />
+      <RoomsMeeting locator={roomCallLocator} participantId={'mockPresenterId'} onDisplayError={jest.fn()} />
     );
 
     await runFakeTimers();
@@ -126,6 +125,34 @@ describe('RoomsMeeting', () => {
     roomsMeeting.update();
     const spinners = roomsMeeting.find(Spinner);
     const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
+    const inviteLink = roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl;
+    expect(inviteLink).toBeDefined();
+    expect(inviteLink).toContain('/visit?roomId=mockRoomId&userId=mockAttendeeId');
+    expect(spinners.length).toBe(0);
+    expect(roomsMeetingExperience.length).toBe(1);
+  });
+
+  it('should render RoomsMeetingExperience without invite link when rooms response is loaded for attendee', async () => {
+    const fetchRoomsResponseSpy = jest.spyOn(FetchRoomsResponse, 'fetchRoomsResponse');
+    fetchRoomsResponseSpy.mockReturnValue(
+      Promise.resolve({
+        participant: {
+          id: 'mockAttendeeId',
+          role: RoomParticipantRole.attendee
+        },
+        token: 'token'
+      })
+    );
+    const roomsMeeting = mount(
+      <RoomsMeeting locator={roomCallLocator} participantId={'mockAttendeeId'} onDisplayError={jest.fn()} />
+    );
+
+    await runFakeTimers();
+
+    roomsMeeting.update();
+    const spinners = roomsMeeting.find(Spinner);
+    const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
+    expect(roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl).toBeUndefined();
     expect(spinners.length).toBe(0);
     expect(roomsMeetingExperience.length).toBe(1);
   });
