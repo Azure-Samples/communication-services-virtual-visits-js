@@ -17,13 +17,12 @@ export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
   theme: PartialTheme | Theme;
-  inviteParticipantUrl?: string;
   postCall?: PostCallConfig;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, postCall, theme, inviteParticipantUrl, onDisplayError } = props;
+  const { roomsInfo, token, postCall, theme, onDisplayError } = props;
   const { userId, userRole, locator } = roomsInfo;
 
   const displayName =
@@ -55,7 +54,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     };
 
     _createAdapters();
-  }, [credential, displayName, locator, userId, onDisplayError]);
+  }, [credential]);
 
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
@@ -70,7 +69,9 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
 
     switch (componentToShow()) {
       case PRESENTER:
-        return <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+        return (
+          <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={roomsInfo.inviteParticipantUrl} />
+        );
       case ATTENDEE:
         return <CallComposite fluentTheme={theme} adapter={callAdapter} />;
       case SURVEY:
@@ -93,7 +94,13 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
       default: {
         // this is triggered in case postCall config is not specified. It will show default postCall screen - with rejoin button
         if (userRole === RoomParticipantRole.presenter)
-          return <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={inviteParticipantUrl} />;
+          return (
+            <CallComposite
+              fluentTheme={theme}
+              adapter={callAdapter}
+              callInvitationUrl={roomsInfo.inviteParticipantUrl}
+            />
+          );
         else return <CallComposite fluentTheme={theme} adapter={callAdapter} />;
       }
     }

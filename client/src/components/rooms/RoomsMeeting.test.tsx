@@ -117,7 +117,12 @@ describe('RoomsMeeting', () => {
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockPresenterId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockPresenterId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -144,7 +149,12 @@ describe('RoomsMeeting', () => {
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockAttendeeId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockAttendeeId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
