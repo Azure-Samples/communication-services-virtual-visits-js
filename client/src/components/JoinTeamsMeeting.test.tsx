@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { PrimaryButton, TextField } from '@fluentui/react';
-import * as renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import { generateTheme } from '../utils/ThemeGenerator';
 import { JoinTeamsMeeting } from './JoinTeamsMeeting';
@@ -12,12 +11,6 @@ import { getTeamsMeetingLink } from '../utils/GetMeetingLink';
 const validTeamsMeetingLink = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
 ).meetingLink;
-
-let userAgentGetter: any = undefined;
-
-beforeEach(() => {
-  userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get');
-});
 
 describe('JoinTeamsMeeting', () => {
   it('should render header when page is loaded', async () => {
@@ -90,37 +83,6 @@ describe('JoinTeamsMeeting', () => {
     const buttonState = joinButton.prop('disabled');
 
     expect(buttonState).toBe(false);
-  });
-
-  it.each([['desktop'], ['mobile']])('uses correct styles if form factor is %s', async (formFactor: string) => {
-    const theme = generateTheme('#FFFFFF');
-
-    if (formFactor === 'mobile') {
-      const mobileSafariUserAgent =
-        'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1';
-      userAgentGetter.mockReturnValue(mobileSafariUserAgent);
-    }
-
-    const container = renderer
-      .create(
-        <JoinTeamsMeeting
-          config={{
-            communicationEndpoint: 'enpoint=test_endpoint;',
-            microsoftBookingsUrl: '',
-            chatEnabled: true,
-            screenShareEnabled: true,
-            companyName: 'Lamna Healthcare',
-            theme: theme,
-            waitingTitle: 'Hello',
-            waitingSubtitle: 'World',
-            logoUrl: ''
-          }}
-          onJoinMeeting={jest.fn()}
-        />
-      )
-      .toJSON();
-
-    expect(container).toMatchSnapshot();
   });
 
   it('should call onJoinMeeting prop when join button is clicked', async () => {

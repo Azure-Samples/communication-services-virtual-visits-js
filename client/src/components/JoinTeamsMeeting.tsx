@@ -2,13 +2,13 @@
 // Licensed under the MIT license.
 
 import React from 'react';
-import { Stack, TextField, PrimaryButton, LayerHost, Theme, ThemeContext, createTheme } from '@fluentui/react';
+import { Stack, TextField, PrimaryButton, Theme, ThemeContext, createTheme } from '@fluentui/react';
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
-import { backgroundStyles, getDefaultContainerStyles, getDefaultLayerHostStyles } from '../styles/Common.styles';
+import { backgroundStyles } from '../styles/Common.styles';
 import { formStyles } from '../styles/JoinTeamsMeeting.Styles';
 import { getCurrentMeetingURL, isValidTeamsLink, makeTeamsJoinUrl } from '../utils/GetMeetingLink';
-import MobileDetect from 'mobile-detect';
+import GenericContainer from './GenericContainer';
 
 interface JoinTeamsMeetingProps {
   config: AppConfigModel;
@@ -58,34 +58,26 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
           if (theme === undefined) {
             theme = createTheme();
           }
-
-          const containerStyles = getDefaultContainerStyles(
-            theme,
-            new MobileDetect(window.navigator.userAgent).mobile()
-          );
-
           return (
             <Stack styles={backgroundStyles(theme)}>
               <Header companyName={this.props.config.companyName} parentid={parentID} />
-              <LayerHost id={parentID} style={getDefaultLayerHostStyles()}>
-                <Stack styles={containerStyles} tokens={{ childrenGap: 15 }}>
-                  <TextField
-                    label="Join a call"
-                    placeholder="Enter a meeting link"
-                    styles={formStyles}
-                    iconProps={{ iconName: 'Link' }}
-                    onChange={this.onTeamsMeetingLinkChange.bind(this)}
-                    onGetErrorMessage={this.onGetErrorMessage.bind(this)}
-                    defaultValue={this.state.teamsMeetingLink}
-                  />
-                  <PrimaryButton
-                    disabled={!enableButton}
-                    styles={formStyles}
-                    text={'Join call'}
-                    onClick={() => this.props.onJoinMeeting(link)}
-                  />
-                </Stack>
-              </LayerHost>
+              <GenericContainer layerHostId={parentID} theme={theme}>
+                <TextField
+                  label="Join a call"
+                  placeholder="Enter a meeting link"
+                  styles={formStyles}
+                  iconProps={{ iconName: 'Link' }}
+                  onChange={this.onTeamsMeetingLinkChange.bind(this)}
+                  onGetErrorMessage={this.onGetErrorMessage.bind(this)}
+                  defaultValue={this.state.teamsMeetingLink}
+                />
+                <PrimaryButton
+                  disabled={!enableButton}
+                  styles={formStyles}
+                  text={'Join call'}
+                  onClick={() => this.props.onJoinMeeting(link)}
+                />
+              </GenericContainer>
             </Stack>
           );
         }}
