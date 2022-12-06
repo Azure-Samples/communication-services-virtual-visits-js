@@ -49,9 +49,11 @@ export const innerContainer = {
 export const buttonStyles = {
   root: {
     borderColor: '#E1DFDD',
+    minWidth: '12.175rem',
     width: '32.33%',
     fontSize: '.85rem',
-    marginBottom: '.5rem'
+    marginBottom: '.5rem',
+    padding: '0'
   }
 };
 
