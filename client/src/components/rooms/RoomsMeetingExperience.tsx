@@ -12,6 +12,7 @@ import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
 import { PostCallConfig } from '../../models/ConfigModel';
 import { Survey } from '../postcall/Survey';
 import { PRESENTER, ATTENDEE, SURVEY } from '../../utils/Constants';
+import { componentToShow } from '../../utils/PostCallUtil';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
@@ -61,13 +62,8 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
   }
   if (callAdapter) {
     //TODO set forFactor to mobile
-    const componentToShow = (): string | undefined => {
-      if (!renderPostCall && userRole === RoomParticipantRole.presenter) return PRESENTER;
-      else if (!renderPostCall && userRole === RoomParticipantRole.attendee) return ATTENDEE;
-      else return SURVEY;
-    };
 
-    switch (componentToShow()) {
+    switch (componentToShow(renderPostCall, userRole)) {
       case PRESENTER:
         return (
           <CallComposite fluentTheme={theme} adapter={callAdapter} callInvitationUrl={roomsInfo.inviteParticipantUrl} />

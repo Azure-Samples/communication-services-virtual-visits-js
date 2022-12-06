@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { submitSurveyResponseUtil } from './PostCallUtil';
+import { RoomParticipantRole } from '../models/RoomModel';
+import { componentToShow, submitSurveyResponseUtil } from './PostCallUtil';
 
 global.fetch = jest.fn(() => {
   Promise.resolve({
@@ -49,5 +50,32 @@ describe('PostCallUtil', () => {
     } catch (err) {
       expect(err).toEqual('Error during insertion');
     }
+  });
+
+  it('returns PRESENTER', () => {
+    const mockRenderPostCall = false;
+    const mockUserRole = RoomParticipantRole.presenter;
+
+    const value = componentToShow(mockRenderPostCall, mockUserRole);
+
+    expect(value).toEqual('presenter');
+  });
+
+  it('returns ATTENDEE', () => {
+    const mockRenderPostCall = false;
+    const mockUserRole = RoomParticipantRole.attendee;
+
+    const value = componentToShow(mockRenderPostCall, mockUserRole);
+
+    expect(value).toEqual('attendee');
+  });
+
+  it('returns survey', () => {
+    const mockRenderPostCall = true;
+    const mockUserRole = RoomParticipantRole.attendee;
+
+    const value = componentToShow(mockRenderPostCall, mockUserRole);
+
+    expect(value).toEqual('survey');
   });
 });

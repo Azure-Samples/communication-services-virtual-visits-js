@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { RoomParticipantRole } from '../models/RoomModel';
+import { ATTENDEE, PRESENTER, SURVEY } from './Constants';
+
 export const submitSurveyResponseUtil = async (
   acsUserId: string,
   pollResponse: number | boolean | string | undefined,
@@ -28,4 +31,10 @@ export const submitSurveyResponseUtil = async (
   } catch (e) {
     //Add Error logging here;
   }
+};
+
+export const componentToShow = (renderPostCall: boolean, userRole: RoomParticipantRole): string => {
+  if (!renderPostCall && userRole === RoomParticipantRole.presenter) return PRESENTER;
+  else if (!renderPostCall && userRole === RoomParticipantRole.attendee) return ATTENDEE;
+  else return SURVEY;
 };

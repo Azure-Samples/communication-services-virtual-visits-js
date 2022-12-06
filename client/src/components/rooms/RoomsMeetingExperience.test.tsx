@@ -10,14 +10,15 @@ import {
 import { mount } from 'enzyme';
 import { RoomsMeetingExperience, RoomsMeetingExperienceProps } from './RoomsMeetingExperience';
 import { RoomParticipantRole } from '../../models/RoomModel';
-import { CallComposite } from '@azure/communication-react';
+import { CallComposite, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
 import { PostCallConfig } from '../../models/ConfigModel';
 import { generateTheme } from '../../utils/ThemeGenerator';
+import { Survey } from '../postcall/Survey';
 
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
-    createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
+    createAzureCommunicationCallAdapterFromClient: jest.fn(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     CallComposite: () => createMockCallComposite()
   };
@@ -53,6 +54,8 @@ describe('RoomsMeetingExperience', () => {
   };
 
   it('sets display name as Virtual appointments Host and should have invite url if the participant is a presenter', async () => {
+    (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => createMockCallAdapter());
+
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
         theme={generateTheme('#FFFFFF')}
@@ -77,7 +80,8 @@ describe('RoomsMeetingExperience', () => {
     expect(callComposite.first().props().callInvitationUrl).toBe('testUrl');
   });
 
-  it('sets display name as Virtual appointments Virtual appointments User and should have not have invite url if the participant is a attendee', async () => {
+  it('sets display name as Virtual appointments Virtual appointments User and should not have invite url if the participant is a attendee', async () => {
+    (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => createMockCallAdapter());
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
         theme={generateTheme('#FFFFFF')}
@@ -99,5 +103,61 @@ describe('RoomsMeetingExperience', () => {
     expect(callComposite.length).toBe(1);
     expect(callComposite.first().props().adapter.getState().displayName?.includes('Virtual appointments User'));
     expect(callComposite.first().props().callInvitationUrl).toBeUndefined;
+  });
+
+  it('should render Survey component when postcall is defined and valid', async () => {
+    const mockedAdapter = createMockCallAdapter();
+    mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
+    console.log(createAzureCommunicationCallAdapterFromClient);
+    (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
+
+    const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
+      <RoomsMeetingExperience
+        theme={generateTheme('#FFFFFF')}
+        postCall={mockPostCall}
+        roomsInfo={{
+          userId: 'userId',
+          userRole: RoomParticipantRole.attendee,
+          locator: { roomId: 'roomId' }
+        }}
+        token={'token'}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    roomsMeetingExperience.update();
+    const callComposites = roomsMeetingExperience.find(CallComposite);
+    expect(callComposites.length).toBe(0);
+    const survey = roomsMeetingExperience.find(Survey);
+    expect(survey.length).toBe(1);
+  });
+
+  it('should render CallComposite component when postcall is undefined', async () => {
+    const mockedAdapter = createMockCallAdapter();
+    mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
+    console.log(createAzureCommunicationCallAdapterFromClient);
+    (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
+
+    const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
+      <RoomsMeetingExperience
+        theme={generateTheme('#FFFFFF')}
+        postCall={undefined}
+        roomsInfo={{
+          userId: 'userId',
+          userRole: RoomParticipantRole.attendee,
+          locator: { roomId: 'roomId' }
+        }}
+        token={'token'}
+        onDisplayError={jest.fn()}
+      />
+    );
+
+    await runFakeTimers();
+    roomsMeetingExperience.update();
+    const callComposites = roomsMeetingExperience.find(CallComposite);
+    expect(callComposites.length).toBe(1);
+    const survey = roomsMeetingExperience.find(Survey);
+    expect(survey.length).toBe(0);
   });
 });
