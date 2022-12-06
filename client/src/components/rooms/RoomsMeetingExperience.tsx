@@ -38,13 +38,15 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     const _createAdapters = async (): Promise<void> => {
       try {
         const adapter = await _createCustomAdapter({ communicationUserId: userId }, credential, displayName, locator);
-        if (userRole === RoomParticipantRole.attendee && postCall?.survey.type) {
+        if (userRole === RoomParticipantRole.presenter && postCall?.survey.type) {
           adapter.on('callEnded', () => {
             setRenderPostCall(true);
           });
         }
-        adapter.on('callIdChanged', () => {
-          setCallId(adapter.getState().call?.id);
+        adapter.onStateChange((state) => {
+          if (state.call?.id !== undefined && state.call?.id !== callId) {
+            setCallId(adapter.getState().call?.id);
+          }
         });
         setCallAdapter(adapter);
       } catch (err) {
