@@ -38,7 +38,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     const _createAdapters = async (): Promise<void> => {
       try {
         const adapter = await _createCustomAdapter({ communicationUserId: userId }, credential, displayName, locator);
-        if (userRole === RoomParticipantRole.presenter && postCall?.survey.type) {
+        if (userRole === RoomParticipantRole.attendee && postCall?.survey.type) {
           adapter.on('callEnded', () => {
             setRenderPostCall(true);
           });
