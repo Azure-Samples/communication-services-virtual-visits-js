@@ -10,6 +10,7 @@ import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
+import * as renderer from 'react-test-renderer';
 import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
 import WarningBanner from './components/book/WarningBanner';
 
@@ -156,5 +157,26 @@ describe('Book', () => {
     expect(headers.length).toBe(1);
     expect(iframes.length).toBe(1);
     expect(iframes.first().props().src).toBe(BOOKINGS_SPECIMEN_URL);
+  });
+
+  it('should match snapshot when bookings link is empty', async () => {
+    const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
+    fetchConfigSpy.mockReturnValue(
+      Promise.resolve({
+        communicationEndpoint: 'endpoint=test_endpoint;',
+        microsoftBookingsUrl: '',
+        chatEnabled: true,
+        screenShareEnabled: true,
+        companyName: '',
+        theme: generateTheme('#FFFFFF'),
+        waitingTitle: '',
+        waitingSubtitle: '',
+        logoUrl: ''
+      } as AppConfigModel)
+    );
+    const book = renderer.create(<Book />);
+    await runFakeTimers();
+
+    expect(book.toJSON()).toMatchSnapshot();
   });
 });

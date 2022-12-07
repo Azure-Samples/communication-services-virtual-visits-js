@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Book should match snapshot when bookings link is empty 1`] = `
+<div
+  className="body-118"
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+>
+  <div
+    className="ms-Stack css-119"
+  >
+    <div
+      className="ms-Stack css-120"
+    >
+      <div>
+        <button
+          aria-label="Menu Button"
+          className="ms-Button ms-Button--icon root-121"
+          data-is-focusable={true}
+          id="waffle-menu"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyPress={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseUp={[Function]}
+          type="button"
+        >
+          <span
+            className="ms-Button-flexContainer flexContainer-122"
+            data-automationid="splitbuttonprimary"
+          >
+            <i
+              aria-hidden={true}
+              className="ms-Icon root-105 ms-Button-icon icon-124"
+              data-icon-name="Waffle"
+              style={
+                Object {
+                  "fontFamily": undefined,
+                }
+              }
+            />
+          </span>
+        </button>
+      </div>
+      <span
+        className="css-128"
+      >
+        
+      </span>
+    </div>
+    <div
+      className="ms-LayerHost"
+      id="BookMeetingSection"
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "height": "100%",
+          "justifyContent": "center",
+          "position": "relative",
+        }
+      }
+    >
+      <div
+        className="ms-Stack css-129"
+      >
+        <div
+          className="ms-Stack css-130"
+        >
+          <div
+            className="ms-Stack css-131"
+          >
+            <span
+              className="css-132"
+            >
+              No scheduling configured
+            </span>
+            <span
+              className="css-133"
+            >
+              This sample does not have a Microsoft Bookings page configured.
+            </span>
+            <span
+              className="css-134"
+            >
+              Frequently asked questions
+            </span>
+            <div
+              className="ms-Stack css-135"
+            >
+              <a
+                className="ms-Link root-136"
+                href="https://aka.ms/virtual-appointments-sample-bookings"
+                onClick={[Function]}
+                tabIndex={0}
+                target="_blank"
+              >
+                <div
+                  className="ms-Stack css-137"
+                >
+                  <div
+                    className="ms-StackItem css-138"
+                    style={
+                      Object {
+                        "fontSize": ".9375rem",
+                        "fontWeight": "400",
+                        "letterSpacing": "-0.015rem",
+                        "lineHeight": "1rem",
+                        "paddingRight": ".5rem",
+                        "textDecoration": "underline",
+                        "verticalAlign": "bottom",
+                      }
+                    }
+                  >
+                    How do I change my Microsoft Bookings page URL?
+                  </div>
+                  <div
+                    className="ms-StackItem css-138"
+                    style={
+                      Object {
+                        "textDecoration": "none",
+                      }
+                    }
+                  >
+                    <span
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "display": "flex",
+                        }
+                      }
+                    >
+                      <i
+                        aria-hidden={true}
+                        className="root-105"
+                        data-icon-name="OpenInNewWindow"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
