@@ -17,11 +17,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInfo';
 import { getChatThreadIdFromTeamsLink } from '../../utils/GetMeetingLink';
 import { fullSizeStyles } from '../../styles/Common.styles';
-import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../../styles/MeetingExperience.styles';
+import { meetingExperienceLogoStyles } from '../../styles/MeetingExperience.styles';
 import { createStubChatClient } from '../../utils/stubs/chat';
-import { Survey } from '../postcall/Survey';
-
 import { PostCallConfig } from '../../models/ConfigModel';
+import PostCallExperience from '../postcall/PostCallExperience';
+
 export interface TeamsMeetingExperienceProps {
   userId: CommunicationUserIdentifier;
   token: string;
@@ -54,8 +54,6 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
   } = props;
 
   const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
-  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
-  const [callId, setCallId] = useState<string>();
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   useEffect(() => {
@@ -69,16 +67,6 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
           endpointUrl,
           chatEnabled
         );
-        if (postCall?.survey.type) {
-          adapter.on('callEnded', () => {
-            setRenderPostCall(true);
-          });
-        }
-        adapter.onStateChange((state) => {
-          if (state.call?.id !== undefined && state.call?.id !== callId) {
-            setCallId(adapter.getState().call?.id);
-          }
-        });
         setCallWithChatAdapter(adapter);
       } catch (err) {
         // todo: error logging
@@ -100,50 +88,40 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
         : '';
 
     return (
-      <>
-        {renderPostCall && postCall && (
-          <Survey
-            callId={callId}
-            acsUserId={acsUserId}
-            meetingLink={locator.meetingLink}
-            theme={fluentTheme}
-            data-testid="Survey"
-            postCall={postCall}
-            onRejoinCall={async () => {
-              await callWithChatAdapter.joinCall();
-              setRenderPostCall(false);
-            }}
-          />
-        )}
-        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
-          <CallWithChatComposite
-            adapter={callWithChatAdapter}
-            fluentTheme={fluentTheme}
-            options={{
-              callControls: {
-                chatButton: chatEnabled
-              }
-            }}
-            locale={{
-              component: locale.component,
-              strings: {
-                chat: locale.strings.chat,
-                call: {
-                  ...locale.strings.call,
-                  lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
-                  lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
-                },
-                callWithChat: locale.strings.callWithChat
-              }
-            }}
-            icons={{
-              LobbyScreenWaitingToBeAdmitted: logo,
-              LobbyScreenConnectingToCall: logo
-            }}
-            formFactor={formFactorValue}
-          />
-        </div>
-      </>
+      <PostCallExperience
+        adapter={callWithChatAdapter}
+        postCall={postCall}
+        fluentTheme={fluentTheme}
+        meetingLink={locator.meetingLink}
+        acsUserId={acsUserId}
+      >
+        <CallWithChatComposite
+          adapter={callWithChatAdapter}
+          fluentTheme={fluentTheme}
+          options={{
+            callControls: {
+              chatButton: chatEnabled
+            }
+          }}
+          locale={{
+            component: locale.component,
+            strings: {
+              chat: locale.strings.chat,
+              call: {
+                ...locale.strings.call,
+                lobbyScreenWaitingToBeAdmittedTitle: waitingTitle,
+                lobbyScreenWaitingToBeAdmittedMoreDetails: waitingSubtitle
+              },
+              callWithChat: locale.strings.callWithChat
+            }
+          }}
+          icons={{
+            LobbyScreenWaitingToBeAdmitted: logo,
+            LobbyScreenConnectingToCall: logo
+          }}
+          formFactor={formFactorValue}
+        />
+      </PostCallExperience>
     );
   }
   if (credential === undefined) {
