@@ -4,7 +4,7 @@
 import { RoomCallLocator } from '@azure/communication-calling';
 import { useEffect, useState } from 'react';
 import { fetchRoomsResponse } from '../../utils/FetchRoomsResponse';
-import { Spinner } from '@fluentui/react';
+import { Spinner, PartialTheme, Theme } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
@@ -13,11 +13,12 @@ import { makeRoomsJoinUrl } from '../../utils/GetMeetingLink';
 export interface RoomsMeetingProps {
   locator: RoomCallLocator;
   participantId: string;
+  fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
-  const { locator, participantId, onDisplayError } = props;
+  const { locator, participantId, fluentTheme, onDisplayError } = props;
 
   const [roomsToken, setRoomsToken] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<RoomParticipantRole | undefined>(undefined);
@@ -58,6 +59,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
         inviteParticipantUrl: inviteUrl
       }}
       token={roomsToken}
+      fluentTheme={fluentTheme}
       onDisplayError={(error) => onDisplayError(error)}
     />
   );

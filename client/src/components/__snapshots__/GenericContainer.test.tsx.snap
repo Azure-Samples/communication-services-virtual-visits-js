@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DefaultContainer uses correct styles if form factor is desktop 1`] = `
+<div
+  className="ms-LayerHost"
+  id="layerHost"
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "height": "100%",
+      "justifyContent": "center",
+      "position": "relative",
+    }
+  }
+>
+  <div
+    className="ms-Stack css-109"
+  >
+    <div>
+      Hello, World!
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DefaultContainer uses correct styles if form factor is mobile 1`] = `
+<div
+  className="ms-LayerHost"
+  id="layerHost"
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "height": "100%",
+      "justifyContent": "center",
+      "position": "relative",
+    }
+  }
+>
+  <div
+    className="ms-Stack css-110"
+  >
+    <div>
+      Hello, World!
+    </div>
+  </div>
+</div>
+`;

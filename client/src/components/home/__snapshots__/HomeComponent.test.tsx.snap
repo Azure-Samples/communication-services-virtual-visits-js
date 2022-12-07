@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HomePage tests should render home page 1`] = `
+exports[`HomeComponent should render home page 1`] = `
 <div
-  className="ms-Stack css-110"
+  className="ms-Stack css-109"
 >
   <div
-    className="ms-Stack css-111"
+    className="ms-Stack css-110"
   >
     <div
-      className="ms-Stack css-112"
+      className="ms-Stack css-111"
     >
       <div
-        className="ms-Stack css-113"
+        className="ms-Stack css-112"
       >
         <div
-          className="ms-Image root-114"
+          className="ms-Image root-113"
           style={
             Object {
               "height": undefined,
@@ -24,175 +24,148 @@ exports[`HomePage tests should render home page 1`] = `
         >
           <img
             alt="calendarImage"
-            className="ms-Image-image ms-Image-image--contain ms-Image-image--portrait is-notLoaded is-fadeIn image-115"
+            className="ms-Image-image ms-Image-image--contain ms-Image-image--portrait is-notLoaded is-fadeIn image-114"
             onError={[Function]}
             onLoad={[Function]}
           />
         </div>
       </div>
       <div
-        className="ms-Stack css-116"
+        className="ms-Stack css-115"
       >
         <span
-          className="css-117"
+          className="css-116"
         >
           Hello,
         </span>
         <span
-          className="css-118"
+          className="css-117"
         >
           What would you like to do?
         </span>
         <div
-          className="ms-Stack css-120"
+          className="ms-Stack css-119"
         >
           <div
-            className="ms-Stack-inner css-119"
+            className="ms-Stack-inner css-118"
           >
-            <div
-              className="ms-StackItem css-121"
+            <button
+              className="ms-Button ms-Button--default root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                className="ms-Button ms-Button--default root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-128"
+                  data-icon-name="Calendar"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-129"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Calendar"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__0"
-                    >
-                      Book an appointment
-                    </span>
-                  </span>
+                  Book an appointment
                 </span>
-              </button>
-            </div>
-            <div
-              className="ms-StackItem css-121"
+              </span>
+            </button>
+            <button
+              aria-controls={null}
+              aria-expanded={false}
+              aria-haspopup={true}
+              aria-roledescription="split button"
+              className="ms-Button ms-Button--default ms-Button--hasMenu root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                aria-controls={null}
-                aria-expanded={false}
-                aria-haspopup={true}
-                aria-roledescription="split button"
-                className="ms-Button ms-Button--default ms-Button--hasMenu root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-128"
+                  data-icon-name="Video"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-129"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Calendar"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__3"
-                    >
-                      Start a call
-                    </span>
-                  </span>
-                  <i
-                    aria-hidden={true}
-                    className="ms-Icon root-105 ms-Button-menuIcon menuIcon-127"
-                    data-icon-name="ChevronDown"
-                    style={
-                      Object {
-                        "fontFamily": undefined,
-                      }
+                  Start a call
+                </span>
+                <i
+                  aria-hidden={true}
+                  className="ms-Icon root-105 ms-Button-menuIcon menuIcon-125"
+                  data-icon-name="ChevronDown"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
                     }
-                  />
-                </span>
-              </button>
-            </div>
-            <div
-              className="ms-StackItem css-121"
+                  }
+                />
+              </span>
+            </button>
+            <button
+              className="ms-Button ms-Button--default root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
             >
-              <button
-                className="ms-Button ms-Button--default root-122"
-                data-is-focusable={true}
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                onKeyPress={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseUp={[Function]}
-                type="button"
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
               >
+                <i
+                  aria-hidden={true}
+                  className="ms-Button-icon icon-128"
+                  data-icon-name="Link"
+                />
                 <span
-                  className="ms-Button-flexContainer flexContainer-123"
-                  data-automationid="splitbuttonprimary"
+                  className="css-129"
                 >
-                  <i
-                    aria-hidden={true}
-                    className="ms-Button-icon icon-130"
-                    data-icon-name="Link"
-                  />
-                  <span
-                    className="ms-Button-textContainer textContainer-124"
-                  >
-                    <span
-                      className="ms-Button-label label-126"
-                      id="id__6"
-                    >
-                      Join from link
-                    </span>
-                  </span>
+                  Join from link
                 </span>
-              </button>
-            </div>
+              </span>
+            </button>
           </div>
         </div>
         <span
-          className="css-131"
+          className="css-130"
         >
           Frequently asked questions
         </span>
         <div
-          className="ms-Stack css-132"
+          className="ms-Stack css-131"
         >
           <a
-            className="ms-Link root-133"
+            className="ms-Link root-132"
             href="https://aka.ms/virtual-appointments-sample-bookings"
             onClick={[Function]}
             tabIndex={0}
             target="_blank"
           >
             <div
-              className="ms-Stack css-134"
+              className="ms-Stack css-133"
             >
               <div
-                className="ms-StackItem css-135"
+                className="ms-StackItem css-134"
                 style={
                   Object {
                     "fontSize": ".9375rem",
@@ -208,7 +181,7 @@ exports[`HomePage tests should render home page 1`] = `
                 How do I change my Microsoft Bookings page URL?
               </div>
               <div
-                className="ms-StackItem css-135"
+                className="ms-StackItem css-134"
                 style={
                   Object {
                     "textDecoration": "none",
@@ -234,21 +207,21 @@ exports[`HomePage tests should render home page 1`] = `
           </a>
         </div>
         <span
-          className="css-131"
+          className="css-130"
         >
           Learn more about Azure Communication Services
         </span>
         <a
-          className="ms-Link root-133"
+          className="ms-Link root-132"
           href="https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-134"
+            className="ms-Stack css-133"
           >
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -262,7 +235,7 @@ exports[`HomePage tests should render home page 1`] = `
               Azure Communication Services virtual appointments
             </div>
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "textDecoration": "none",
@@ -287,21 +260,21 @@ exports[`HomePage tests should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-136"
+          className="css-135"
         >
           This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...
         </span>
         <a
-          className="ms-Link root-133"
+          className="ms-Link root-132"
           href="https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-134"
+            className="ms-Stack css-133"
           >
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -315,7 +288,7 @@ exports[`HomePage tests should render home page 1`] = `
               Azure Communication Services Rooms (Preview)
             </div>
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "textDecoration": "none",
@@ -340,21 +313,21 @@ exports[`HomePage tests should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-136"
+          className="css-135"
         >
           Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...
         </span>
         <a
-          className="ms-Link root-133"
+          className="ms-Link root-132"
           href="https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-134"
+            className="ms-Stack css-133"
           >
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -368,7 +341,7 @@ exports[`HomePage tests should render home page 1`] = `
               Get Started with UI Library
             </div>
             <div
-              className="ms-StackItem css-135"
+              className="ms-StackItem css-134"
               style={
                 Object {
                   "textDecoration": "none",
@@ -393,7 +366,7 @@ exports[`HomePage tests should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-136"
+          className="css-135"
         >
           Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...
         </span>
