@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { IIconProps } from '@fluentui/react';
+import { IButtonStyles } from '@fluentui/react';
 import { PartialTheme, Theme } from '@fluentui/theme';
 import { CSSProperties } from 'react';
 
@@ -46,17 +46,6 @@ export const innerContainer = {
   }
 };
 
-export const buttonStyles = {
-  root: {
-    borderColor: '#E1DFDD',
-    minWidth: '12.175rem',
-    width: '32.33%',
-    fontSize: '.85rem',
-    marginBottom: '.5rem',
-    padding: '0'
-  }
-};
-
 export const buttonTextStyles = {
   root: {
     fontSize: '.84rem',
@@ -65,23 +54,19 @@ export const buttonTextStyles = {
   }
 };
 
-export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
+export const getButtonStyles = (theme: PartialTheme | Theme): IButtonStyles => {
   return {
-    iconName: 'Calendar',
-    styles: {
-      root: { color: theme.palette?.themePrimary }
+    root: {
+      borderColor: '#E1DFDD',
+      minWidth: '12.175rem',
+      width: '32.33%',
+      fontSize: '.85rem',
+      marginBottom: '.5rem',
+      padding: '0',
+      color: theme.palette?.themePrimary
     }
   };
-}
-
-export function videoIconStyles(theme: PartialTheme | Theme): IIconProps {
-  return {
-    iconName: 'Video',
-    styles: {
-      root: { color: theme.palette?.themePrimary }
-    }
-  };
-}
+};
 
 export const btnStackStyles = {
   root: {
@@ -123,15 +108,6 @@ export const lineHeight28px = {
 export const lineHeight22px = {
   root: { fontWeight: '600', fontSize: '1rem', lineHeight: '1.375rem', marginBottom: '1rem' }
 };
-
-export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {
-  return {
-    iconName: 'Link',
-    styles: {
-      root: { color: theme.palette?.themePrimary }
-    }
-  };
-}
 
 export const containerMarginTop2rem = {
   root: { marginTop: '2rem' }
