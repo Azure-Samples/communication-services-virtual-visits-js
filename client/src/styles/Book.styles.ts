@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { PartialTheme, Theme } from '@fluentui/theme';
-
 export const embededIframeStyles = {
   width: '100%',
   height: '100%',
@@ -16,25 +14,9 @@ export const fullScreenStyles = {
   }
 };
 
-export function containerStyles(theme: PartialTheme | Theme | undefined): any {
-  return {
-    root: {
-      maxWidth: '64rem',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      margin: 'auto',
-      marginTop: '38px',
-      backgroundColor: 'white',
-      borderRadius: theme?.effects?.roundedCorner4
-    }
-  };
-}
-
 export const innerContainer = {
   root: {
-    width: '600px',
-    marginTop: '200px'
+    padding: '5rem'
   }
 };
 
