@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
+import { Spinner, Stack, ThemeProvider } from '@fluentui/react';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import { useEffect, useState } from 'react';
 import { fetchConfig } from './utils/FetchConfig';
@@ -10,7 +10,7 @@ import { AppConfigModel } from './models/ConfigModel';
 import { HomeComponent } from './components/home/HomeComponent';
 import { Header } from './Header';
 import './styles/Common.css';
-import { layerHostStyles } from './styles/Home.styles';
+import GenericContainer from './components/GenericContainer';
 
 const PARENT_ID = 'HomeSection';
 
@@ -44,13 +44,13 @@ export const Home = (): JSX.Element => {
     <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
       <Stack styles={backgroundStyles(config.theme)}>
         <Header companyName={config.companyName} parentid={PARENT_ID} />
-        <LayerHost id={PARENT_ID} style={layerHostStyles}>
+        <GenericContainer layerHostId={PARENT_ID} theme={config.theme}>
           <HomeComponent
             companyName={config.companyName}
             theme={config.theme}
             onDisplayError={(error) => setError(error)}
           />
-        </LayerHost>
+        </GenericContainer>
       </Stack>
     </ThemeProvider>
   );
