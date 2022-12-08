@@ -18,7 +18,6 @@ import {
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
 import { LearnMoreItem } from '../LearnMoreItem';
 import { createRoomAndRedirectUrl } from '../../utils/CreateRoom';
-import { RoomParticipantRole } from '../../models/RoomModel';
 
 export interface HomeComponentProps {
   companyName: string;
@@ -54,7 +53,7 @@ const HomeButtons = ({ theme, setError }): JSX.Element => {
 
   const callCreateRoom = async (): Promise<void> => {
     try {
-      const redirectUrl = await createRoomAndRedirectUrl(RoomParticipantRole.presenter);
+      const redirectUrl = await createRoomAndRedirectUrl();
       window.location.assign(redirectUrl);
     } catch (error) {
       setError(error);

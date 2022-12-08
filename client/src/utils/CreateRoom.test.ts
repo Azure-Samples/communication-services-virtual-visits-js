@@ -19,62 +19,52 @@ const mockCreateRoomResponse = {
   ]
 } as CreateRoomResponse;
 
-const mockErrorResponse = {
-  roomId: 'roomId',
-  participants: [
-    {
-      id: 'presenterId',
-      role: 'Presenter'
-    }
-  ]
-} as CreateRoomResponse;
-
 describe('CreateRoomAndRedirectUrl', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+    jest.spyOn(console, 'log').mockImplementation();
+  });
+
   it('returns rooms url with userId and roomId', async () => {
-    const createRoomSpy = jest.spyOn(CreateRoom, 'createRoom');
-    createRoomSpy.mockImplementation(
+    jest.spyOn(CreateRoom, 'createRoom').mockImplementation(
       async (): Promise<CreateRoomResponse> => {
         return mockCreateRoomResponse;
       }
     );
-    const mockUserRole = 'Presenter';
+
     const mockRedirectUrl = '/visit?roomId=roomId&userId=presenterId';
-    const redirectUrl = await createRoomAndRedirectUrl(mockUserRole);
+    const redirectUrl = await createRoomAndRedirectUrl();
 
     expect(redirectUrl).toEqual(mockRedirectUrl);
   });
 
-  it('throws error if response status code is not 201', async () => {
-    const createRoomSpy = jest.spyOn(CreateRoom, 'createRoom');
-    createRoomSpy.mockImplementation(
+  it('throws error if createRoom fails', async () => {
+    jest.spyOn(CreateRoom, 'createRoom').mockImplementation(
       async (): Promise<CreateRoomResponse> => {
         throw new Error('test error');
       }
     );
 
-    const mockUserRole = 'userRole';
-
     try {
-      await createRoomAndRedirectUrl(mockUserRole);
+      await createRoomAndRedirectUrl();
     } catch (err) {
       expect(err).toBeDefined();
     }
   });
 
-  it('throws error if no userId with given role is present in the room created', async () => {
-    const createRoomSpy = jest.spyOn(CreateRoom, 'createRoom');
-    createRoomSpy.mockImplementation(
+  it('throws error if no userId with Presenter role is present in the room created', async () => {
+    jest.spyOn(CreateRoom, 'createRoom').mockImplementation(
       async (): Promise<CreateRoomResponse> => {
-        return mockErrorResponse;
+        return { roomId: 'roomId', participants: [] } as CreateRoomResponse;
       }
     );
 
-    const mockUserRole = 'Attendee';
     try {
-      await createRoomAndRedirectUrl(mockUserRole);
+      await createRoomAndRedirectUrl();
     } catch (err) {
       expect(err).toBeDefined();
-      expect((err as Error).message).toBe('room does not have participant with role Attendee');
+      expect((err as Error).message).toBe('room does not have participant with role Presenter');
     }
   });
 });
