@@ -3,7 +3,7 @@
 
 import { createRoomAndRedirectUrl } from './CreateRoom';
 import * as CreateRoom from './FetchRoomsResponse';
-import { CreateRoomResponse } from '../models/RoomModel';
+import { CreateRoomResponse, RoomParticipant, RoomParticipantRole } from '../models/RoomModel';
 
 const mockCreateRoomResponse = {
   roomId: 'roomId',
@@ -53,18 +53,25 @@ describe('CreateRoomAndRedirectUrl', () => {
     }
   });
 
-  it('throws error if no userId with Presenter role is present in the room created', async () => {
-    jest.spyOn(CreateRoom, 'createRoom').mockImplementation(
-      async (): Promise<CreateRoomResponse> => {
-        return { roomId: 'roomId', participants: [] } as CreateRoomResponse;
-      }
-    );
+  it.each([
+    [[]],
+    [[{ id: '123', role: RoomParticipantRole.attendee }]],
+    [[{ id: '123', role: RoomParticipantRole.consumer }]]
+  ])(
+    'throws error if no userId with Presenter role is present in the room created',
+    async (participants: RoomParticipant[]) => {
+      jest.spyOn(CreateRoom, 'createRoom').mockImplementation(
+        async (): Promise<CreateRoomResponse> => {
+          return { roomId: 'roomId', participants: participants } as CreateRoomResponse;
+        }
+      );
 
-    try {
-      await createRoomAndRedirectUrl();
-    } catch (err) {
-      expect(err).toBeDefined();
-      expect((err as Error).message).toBe('room does not have participant with role Presenter');
+      try {
+        await createRoomAndRedirectUrl();
+      } catch (err) {
+        expect(err).toBeDefined();
+        expect((err as Error).message).toBe('room does not have participant with role Presenter');
+      }
     }
-  });
+  );
 });
