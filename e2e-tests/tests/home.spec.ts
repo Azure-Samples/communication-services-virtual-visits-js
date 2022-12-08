@@ -15,15 +15,10 @@ test("root page test", async ({ page }) => {
   await delay(DELAY_MS);
   expect(await page.screenshot()).toMatchSnapshot("homeScreenshot.png");
 
-  // Click button:has-text("Start a call")
-  await page.locator('button:has-text("Start a call")').isEnabled();
-  await page.locator('button:has-text("Start a call")').click();
-
-  // Click button[role="menuitem"]:has-text("as host (presenter)")
-  await page
-    .locator('button[role="menuitem"]:has-text("as host (presenter)")')
-    .click();
-  await delay(DELAY_MS);
+  // Click button:has-text("Start as Presenter")
+  const startAsPresenterBtn = 'button:has-text("Start as Presenter")';
+  await page.locator(startAsPresenterBtn).isEnabled();
+  await page.locator(startAsPresenterBtn).click();
 
   // Click button:has-text("Start call")
   await expect(page.locator('[data-icon-name="Waffle"]').first()).toBeVisible();
