@@ -57,7 +57,10 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
       id="BookMeetingSection"
       style={
         Object {
+          "alignItems": "center",
+          "display": "flex",
           "height": "100%",
+          "justifyContent": "center",
           "position": "relative",
         }
       }

@@ -12,21 +12,6 @@ export const fullScreenStyles = {
   }
 };
 
-export function containerStyles(theme: PartialTheme | Theme): any {
-  return {
-    root: {
-      maxWidth: '64rem',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      margin: 'auto',
-      marginTop: '2.375rem',
-      backgroundColor: 'white',
-      borderRadius: theme.effects?.roundedCorner4
-    }
-  };
-}
-
 export const textDecorationNone: CSSProperties = {
   textDecoration: 'none'
 };
@@ -61,25 +46,37 @@ export const innerContainer = {
   }
 };
 
-export const bookAppointmentButtonStyle = {
+export const buttonStyles = {
   root: {
     borderColor: '#E1DFDD',
-    fontSize: '1rem',
-    marginRight: '.5rem',
-    marginBottom: '.5rem'
+    minWidth: '12.175rem',
+    width: '32.33%',
+    fontSize: '.85rem',
+    marginBottom: '.5rem',
+    padding: '0'
   }
 };
 
-export const joinLinkButtonStyles = {
+export const buttonTextStyles = {
   root: {
-    borderColor: '#E1DFDD',
-    fontSize: '1rem'
+    fontSize: '.84rem',
+    fontWeight: '600',
+    marginLeft: '.2rem'
   }
 };
 
 export function calendarIconStyles(theme: PartialTheme | Theme): IIconProps {
   return {
     iconName: 'Calendar',
+    styles: {
+      root: { color: theme.palette?.themePrimary }
+    }
+  };
+}
+
+export function videoIconStyles(theme: PartialTheme | Theme): IIconProps {
+  return {
+    iconName: 'Video',
     styles: {
       root: { color: theme.palette?.themePrimary }
     }
@@ -125,12 +122,6 @@ export const lineHeight28px = {
 
 export const lineHeight22px = {
   root: { fontWeight: '600', fontSize: '1rem', lineHeight: '1.375rem', marginBottom: '1rem' }
-};
-
-export const layerHostStyles: CSSProperties = {
-  position: 'relative',
-  height: '100%',
-  width: '100%'
 };
 
 export function linkIconStyles(theme: PartialTheme | Theme): IIconProps {

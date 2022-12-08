@@ -26,6 +26,6 @@ test.describe("tests:", () => {
 
     // Click text=Visit
     await page.locator("text=Visit").click();
-    await expect(page).toHaveURL("http://localhost:8080/visit");
+    await expect(page).toHaveURL(buildUrl(SERVER_URL, "visit"));
   });
 });

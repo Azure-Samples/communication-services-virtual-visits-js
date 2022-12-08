@@ -112,7 +112,7 @@ describe('roomsController', () => {
   });
 
   describe('test getToken', () => {
-    test('Should send expected response', async () => {
+    test('Should send expected response if called for a presenter', async () => {
       const mockedBody = {
         roomId: expectedRoomId,
         userId: expectedPresenterId
@@ -146,6 +146,53 @@ describe('roomsController', () => {
         participant: {
           id: expectedPresenterId,
           role: RoomParticipantRole.presenter
+        },
+        invitee: {
+          id: expectedAttendeeId,
+          role: RoomParticipantRole.attendee
+        }
+      };
+
+      await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
+
+      expect(response.send).toHaveBeenCalled();
+      expect(response.send).toHaveBeenCalledWith(expectedResponse);
+    });
+
+    test('Should send expected response if called for a attendee', async () => {
+      const mockedBody = {
+        roomId: expectedRoomId,
+        userId: expectedAttendeeId
+      };
+
+      const request: any = { body: mockedBody };
+
+      const mockedIdentityClient = {
+        getToken: async (_user, _scopes) => ({ token: expectedToken })
+      } as CommunicationIdentityClient;
+
+      const mockedRoomsClient = {
+        getParticipants: async (_roomId) => [
+          {
+            id: {
+              communicationUserId: expectedPresenterId
+            },
+            role: RoomParticipantRole.presenter
+          },
+          {
+            id: {
+              communicationUserId: expectedAttendeeId
+            },
+            role: RoomParticipantRole.attendee
+          }
+        ]
+      } as RoomsClient;
+
+      const expectedResponse = {
+        token: expectedToken,
+        participant: {
+          id: expectedAttendeeId,
+          role: RoomParticipantRole.attendee
         }
       };
 

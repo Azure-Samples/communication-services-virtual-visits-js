@@ -6,19 +6,20 @@ import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInf
 import { useEffect, useState, useMemo } from 'react';
 import { createStatefulCallClient, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { Spinner } from '@fluentui/react';
+import { Theme, PartialTheme, Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
+import MobileDetect from 'mobile-detect';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
   token: string;
-  inviteParticipantUrl?: string;
+  fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
 }
 
 export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, onDisplayError } = props;
+  const { roomsInfo, token, fluentTheme, onDisplayError } = props;
   const { userId, userRole, locator } = roomsInfo;
 
   const displayName =
@@ -42,15 +43,18 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     };
 
     _createAdapters();
-  }, [credential, displayName, locator, userId, onDisplayError]);
+  }, [credential]);
 
   if (callAdapter) {
-    //TODO set forFactor to mobile
-    if (userRole === RoomParticipantRole.presenter) {
-      return <CallComposite adapter={callAdapter} callInvitationUrl={props.inviteParticipantUrl} />;
-    } else {
-      return <CallComposite adapter={callAdapter} />;
-    }
+    const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+    return (
+      <CallComposite
+        adapter={callAdapter}
+        fluentTheme={fluentTheme}
+        formFactor={formFactorValue}
+        callInvitationUrl={userRole === RoomParticipantRole.presenter ? roomsInfo.inviteParticipantUrl : undefined}
+      />
+    );
   }
 
   if (credential === undefined) {
