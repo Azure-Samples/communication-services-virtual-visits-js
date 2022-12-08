@@ -24,7 +24,14 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     const attendee = await identityClient.createUser();
 
     // Options payload to create a room
+    const validFrom = new Date(new Date().toISOString());
+    const validUntilDate = new Date(validFrom);
+    validUntilDate.setHours(validFrom.getHours() + 1);
+    const validUntil = new Date(validUntilDate.toISOString());
+
     const createRoomOptions: CreateRoomOptions = {
+      validFrom: validFrom,
+      validUntil: validUntil,
       participants: [
         {
           id: presenter,
@@ -51,7 +58,9 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     // Formulate response
     const response: CreateRoomResponse = {
       roomId: createdRoom.id,
-      participants: participants
+      participants: participants,
+      validFrom: createdRoom.validFrom.toISOString(),
+      validUntil: createdRoom.validUntil.toISOString()
     };
 
     return res.status(201).send(response);
