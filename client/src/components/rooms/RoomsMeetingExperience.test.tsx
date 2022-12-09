@@ -80,7 +80,7 @@ describe('RoomsMeetingExperience', () => {
     expect(callComposite.first().props().callInvitationUrl).toBe('testUrl');
   });
 
-  it('sets display name as Virtual appointments Virtual appointments User and should not have invite url if the participant is a attendee', async () => {
+  it('sets display name as Virtual appointments User and should not have invite url if the participant is a attendee', async () => {
     (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => createMockCallAdapter());
     const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
       <RoomsMeetingExperience
