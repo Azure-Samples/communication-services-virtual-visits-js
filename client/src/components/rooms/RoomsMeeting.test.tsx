@@ -13,6 +13,7 @@ import {
 } from '../../utils/TestUtils';
 import { Spinner } from '@fluentui/react';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -35,6 +36,17 @@ describe('RoomsMeeting', () => {
   const roomCallLocator = {
     roomId: 'mockRoomId'
   };
+  const mockConfig = {
+    communicationEndpoint: 'endpoint=test_endpoint;',
+    microsoftBookingsUrl: '',
+    chatEnabled: true,
+    screenShareEnabled: true,
+    companyName: '',
+    theme: generateTheme('#FFFFFF'),
+    waitingTitle: '',
+    waitingSubtitle: '',
+    logoUrl: ''
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -51,7 +63,12 @@ describe('RoomsMeeting', () => {
     );
 
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockParticipantId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockParticipantId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -65,7 +82,12 @@ describe('RoomsMeeting', () => {
     fetchRoomsResponseSpy.mockReturnValue(Promise.resolve(undefined));
 
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockParticipantId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockParticipantId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -95,7 +117,12 @@ describe('RoomsMeeting', () => {
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockPresenterId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockPresenterId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
@@ -122,7 +149,12 @@ describe('RoomsMeeting', () => {
       })
     );
     const roomsMeeting = mount(
-      <RoomsMeeting locator={roomCallLocator} participantId={'mockAttendeeId'} onDisplayError={jest.fn()} />
+      <RoomsMeeting
+        config={mockConfig}
+        locator={roomCallLocator}
+        participantId={'mockAttendeeId'}
+        onDisplayError={jest.fn()}
+      />
     );
 
     await runFakeTimers();
