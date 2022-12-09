@@ -37,7 +37,7 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
     const _createAdapters = async (): Promise<void> => {
       try {
         const adapter = await _createCustomAdapter({ communicationUserId: userId }, credential, displayName, locator);
-        if (userRole === RoomParticipantRole.attendee && postCall?.survey.type) {
+        if (userRole !== RoomParticipantRole.presenter && postCall?.survey.type) {
           adapter.on('callEnded', () => {
             setRenderPostCall(true);
           });
@@ -64,14 +64,13 @@ export const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.
   if (callAdapter) {
     const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-    if (renderPostCall && postCall && userRole === RoomParticipantRole.attendee) {
+    if (renderPostCall && postCall && userRole !== RoomParticipantRole.presenter) {
       return (
         <Survey
           callId={callId}
           acsUserId={userId}
           meetingLink={locator.roomId}
           theme={fluentTheme}
-          data-testid="Survey"
           postCall={postCall}
           onRejoinCall={async () => {
             await callAdapter.joinCall();
