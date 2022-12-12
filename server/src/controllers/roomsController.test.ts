@@ -4,7 +4,7 @@
 import { RoomsClient } from '@azure/communication-rooms';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { createRoom, getToken } from './roomsController';
-import { RoomParticipantRole } from '../models/roomModel';
+import { CreateRoomResponse, RoomParticipantRole } from '../models/roomModel';
 import { ERROR_NO_USER_FOUND_IN_ROOM } from '../constants';
 
 jest.mock('@azure/communication-identity');
@@ -12,7 +12,11 @@ jest.mock('@azure/communication-identity');
 describe('roomsController', () => {
   let response;
   let next;
-  const currTime = new Date();
+  const validFrom = new Date();
+  const validUntilDate = new Date(validFrom);
+  validUntilDate.setHours(validFrom.getHours() + 1);
+  const validUntil = new Date(validUntilDate);
+
   const expectedRoomId = 'room-id';
   const expectedToken = 'test-token';
   const expectedPresenterId = 'communicationUserId-presenter';
@@ -36,9 +40,9 @@ describe('roomsController', () => {
       const mockedRoomsClient = {
         createRoom: async () => ({
           id: expectedRoomId,
-          createdOn: currTime,
-          validFrom: currTime,
-          validUntil: currTime,
+          createdOn: validFrom,
+          validFrom: validFrom,
+          validUntil: validUntil,
           joinPolicy: 'CommunicationServiceUsers',
           participants: [
             {
@@ -57,7 +61,7 @@ describe('roomsController', () => {
         })
       } as RoomsClient;
 
-      const expectedResponse = {
+      const expectedResponse: CreateRoomResponse = {
         roomId: expectedRoomId,
         participants: [
           {
@@ -68,7 +72,9 @@ describe('roomsController', () => {
             id: expectedAttendeeId,
             role: RoomParticipantRole.attendee
           }
-        ]
+        ],
+        validFrom: validFrom.toISOString(),
+        validUntil: validUntil.toISOString()
       };
 
       await createRoom(mockedIdentityClient, mockedRoomsClient)({} as any, response, next);

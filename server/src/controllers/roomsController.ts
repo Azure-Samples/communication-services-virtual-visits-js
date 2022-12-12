@@ -24,10 +24,10 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     const attendee = await identityClient.createUser();
 
     // Options payload to create a room
-    const validFrom = new Date(new Date().toISOString());
+    const validFrom = new Date();
     const validUntilDate = new Date(validFrom);
     validUntilDate.setHours(validFrom.getHours() + 1);
-    const validUntil = new Date(validUntilDate.toISOString());
+    const validUntil = new Date(validUntilDate);
 
     const createRoomOptions: CreateRoomOptions = {
       validFrom: validFrom,
@@ -45,10 +45,10 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     };
 
     // Create a room with the request payload
-    const createdRoom: Room = await roomsClient.createRoom(createRoomOptions);
+    const room: Room = await roomsClient.createRoom(createRoomOptions);
 
     // Formulating participants
-    const participants = createdRoom.participants.map(
+    const participants: TestAppointmentRoomParticipant[] = room.participants.map(
       (participant: RoomParticipant): TestAppointmentRoomParticipant => ({
         id: (participant.id as CommunicationUserIdentifier).communicationUserId as string,
         role: participant.role as RoomParticipantRole
@@ -57,10 +57,10 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
 
     // Formulate response
     const response: CreateRoomResponse = {
-      roomId: createdRoom.id,
+      roomId: room.id,
       participants: participants,
-      validFrom: createdRoom.validFrom.toISOString(),
-      validUntil: createdRoom.validUntil.toISOString()
+      validFrom: room.validFrom.toISOString(),
+      validUntil: room.validUntil.toISOString()
     };
 
     return res.status(201).send(response);
