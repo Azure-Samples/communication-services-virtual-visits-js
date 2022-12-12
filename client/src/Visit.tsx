@@ -129,6 +129,7 @@ export const Visit = (): JSX.Element => {
           )}
           {!isTeamsMeeting && isRoomsMeeting && (
             <RoomsMeeting
+              config={config}
               locator={roomCallLocator}
               participantId={participantId}
               fluentTheme={config.theme}
