@@ -71,7 +71,7 @@ const HomeButtons = ({ theme, setError }): JSX.Element => {
   return (
     <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-between">
       <HomeButton iconName={'Calendar'} text={'Book an appointment'} onClick={() => window.location.assign('/book')} />
-      <HomeButton iconName={'Video'} text={'Start as Presenter'} onClick={() => callCreateRoom()} />
+      <HomeButton iconName={'Video'} text={'Start as Presenter'} onClick={callCreateRoom} />
       <HomeButton iconName={'Link'} text={'Join from link'} onClick={() => window.location.assign('/visit')} />
     </Stack>
   );
