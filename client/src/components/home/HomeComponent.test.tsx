@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { HomeComponent } from './HomeComponent';
+import HomeComponent from './HomeComponent';
 import renderer from 'react-test-renderer';
 import { generateTheme } from '../../utils/ThemeGenerator';
 
