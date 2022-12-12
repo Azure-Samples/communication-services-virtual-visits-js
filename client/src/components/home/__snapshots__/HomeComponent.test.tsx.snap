@@ -66,55 +66,19 @@ exports[`HomeComponent should render home page 1`] = `
               >
                 <i
                   aria-hidden={true}
-                  className="ms-Button-icon icon-128"
+                  className="ms-Icon root-105 ms-Button-icon icon-123"
                   data-icon-name="Calendar"
-                />
-                <span
-                  className="css-129"
-                >
-                  Book an appointment
-                </span>
-              </span>
-            </button>
-            <button
-              aria-controls={null}
-              aria-expanded={false}
-              aria-haspopup={true}
-              aria-roledescription="split button"
-              className="ms-Button ms-Button--default ms-Button--hasMenu root-120"
-              data-is-focusable={true}
-              onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyPress={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onMouseUp={[Function]}
-              type="button"
-            >
-              <span
-                className="ms-Button-flexContainer flexContainer-121"
-                data-automationid="splitbuttonprimary"
-              >
-                <i
-                  aria-hidden={true}
-                  className="ms-Button-icon icon-128"
-                  data-icon-name="Video"
-                />
-                <span
-                  className="css-129"
-                >
-                  Start a call
-                </span>
-                <i
-                  aria-hidden={true}
-                  className="ms-Icon root-105 ms-Button-menuIcon menuIcon-125"
-                  data-icon-name="ChevronDown"
                   style={
                     Object {
                       "fontFamily": undefined,
                     }
                   }
                 />
+                <span
+                  className="css-128"
+                >
+                  Book an appointment
+                </span>
               </span>
             </button>
             <button
@@ -134,11 +98,48 @@ exports[`HomeComponent should render home page 1`] = `
               >
                 <i
                   aria-hidden={true}
-                  className="ms-Button-icon icon-128"
-                  data-icon-name="Link"
+                  className="ms-Icon root-105 ms-Button-icon icon-123"
+                  data-icon-name="Video"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
+                    }
+                  }
                 />
                 <span
-                  className="css-129"
+                  className="css-128"
+                >
+                  Start as Presenter
+                </span>
+              </span>
+            </button>
+            <button
+              className="ms-Button ms-Button--default root-120"
+              data-is-focusable={true}
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyPress={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+              type="button"
+            >
+              <span
+                className="ms-Button-flexContainer flexContainer-121"
+                data-automationid="splitbuttonprimary"
+              >
+                <i
+                  aria-hidden={true}
+                  className="ms-Icon root-105 ms-Button-icon icon-123"
+                  data-icon-name="Link"
+                  style={
+                    Object {
+                      "fontFamily": undefined,
+                    }
+                  }
+                />
+                <span
+                  className="css-128"
                 >
                   Join from link
                 </span>
@@ -147,25 +148,25 @@ exports[`HomeComponent should render home page 1`] = `
           </div>
         </div>
         <span
-          className="css-130"
+          className="css-129"
         >
           Frequently asked questions
         </span>
         <div
-          className="ms-Stack css-131"
+          className="ms-Stack css-130"
         >
           <a
-            className="ms-Link root-132"
+            className="ms-Link root-131"
             href="https://aka.ms/virtual-appointments-sample-bookings"
             onClick={[Function]}
             tabIndex={0}
             target="_blank"
           >
             <div
-              className="ms-Stack css-133"
+              className="ms-Stack css-132"
             >
               <div
-                className="ms-StackItem css-134"
+                className="ms-StackItem css-133"
                 style={
                   Object {
                     "fontSize": ".9375rem",
@@ -181,7 +182,7 @@ exports[`HomeComponent should render home page 1`] = `
                 How do I change my Microsoft Bookings page URL?
               </div>
               <div
-                className="ms-StackItem css-134"
+                className="ms-StackItem css-133"
                 style={
                   Object {
                     "textDecoration": "none",
@@ -207,21 +208,21 @@ exports[`HomeComponent should render home page 1`] = `
           </a>
         </div>
         <span
-          className="css-130"
+          className="css-129"
         >
           Learn more about Azure Communication Services
         </span>
         <a
-          className="ms-Link root-132"
+          className="ms-Link root-131"
           href="https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-133"
+            className="ms-Stack css-132"
           >
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -235,7 +236,7 @@ exports[`HomeComponent should render home page 1`] = `
               Azure Communication Services virtual appointments
             </div>
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "textDecoration": "none",
@@ -260,21 +261,21 @@ exports[`HomeComponent should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-135"
+          className="css-134"
         >
           This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...
         </span>
         <a
-          className="ms-Link root-132"
+          className="ms-Link root-131"
           href="https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-133"
+            className="ms-Stack css-132"
           >
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -288,7 +289,7 @@ exports[`HomeComponent should render home page 1`] = `
               Azure Communication Services Rooms (Preview)
             </div>
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "textDecoration": "none",
@@ -313,21 +314,21 @@ exports[`HomeComponent should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-135"
+          className="css-134"
         >
           Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...
         </span>
         <a
-          className="ms-Link root-132"
+          className="ms-Link root-131"
           href="https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
           onClick={[Function]}
           target="_blank"
         >
           <div
-            className="ms-Stack css-133"
+            className="ms-Stack css-132"
           >
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "fontSize": ".75rem",
@@ -341,7 +342,7 @@ exports[`HomeComponent should render home page 1`] = `
               Get Started with UI Library
             </div>
             <div
-              className="ms-StackItem css-134"
+              className="ms-StackItem css-133"
               style={
                 Object {
                   "textDecoration": "none",
@@ -366,7 +367,7 @@ exports[`HomeComponent should render home page 1`] = `
           </div>
         </a>
         <span
-          className="css-135"
+          className="css-134"
         >
           Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...
         </span>
