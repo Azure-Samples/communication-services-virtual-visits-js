@@ -27,7 +27,7 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
     setIsSubmittingResponse(true);
     try {
       await submitSurveyResponseUtil(acsUserId, pollResponse, meetingLink, callId);
-      window.location.replace('/book');
+      window.location.replace('/');
     } catch (e) {
       setIsSubmittingResponse(false);
       //Add Error logging here;

@@ -107,7 +107,6 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
             acsUserId={acsUserId}
             meetingLink={locator.meetingLink}
             theme={fluentTheme}
-            data-testid="Survey"
             postCall={postCall}
             onRejoinCall={async () => {
               await callWithChatAdapter.joinCall();
