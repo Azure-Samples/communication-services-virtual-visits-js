@@ -7,7 +7,6 @@ import imageCalendar from '../../assets/lightCalendarSymbol.png';
 import {
   btnStackStyles,
   containerMarginTop2rem,
-  font16pxStyle,
   fullScreenStyles,
   innerContainer,
   lineHeight22px,
@@ -16,7 +15,7 @@ import {
   getButtonStyles
 } from '../../styles/Home.styles';
 import { FrequentlyAskedQuestions } from '../FrequentlyAskedQuestions';
-import { LearnMoreItem } from '../LearnMoreItem';
+import LearnMore from './LearnMore';
 import { createRoomAndRedirectUrl } from '../../utils/CreateRoom';
 
 export interface HomeComponentProps {
@@ -83,37 +82,6 @@ const HomeButton = ({ theme, iconName, text, onClick }): JSX.Element => {
     <DefaultButton styles={buttonStyles} iconProps={{ iconName }} onClick={onClick}>
       <Text styles={buttonTextStyles}>{text}</Text>
     </DefaultButton>
-  );
-};
-
-const LearnMore = (): JSX.Element => {
-  return (
-    <>
-      <Text styles={font16pxStyle}>Learn more about Azure Communication Services</Text>
-      <LearnMoreItem
-        headerText={'Azure Communication Services virtual appointments'}
-        headerLink={'https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits'}
-        description={
-          'This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...'
-        }
-      />
-      <LearnMoreItem
-        headerText={'Azure Communication Services Rooms (Preview)'}
-        headerLink={'https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept'}
-        description={
-          'Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...'
-        }
-      />
-      <LearnMoreItem
-        headerText={'Get Started with UI Library'}
-        headerLink={
-          'https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web'
-        }
-        description={
-          'Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...'
-        }
-      />
-    </>
   );
 };
 

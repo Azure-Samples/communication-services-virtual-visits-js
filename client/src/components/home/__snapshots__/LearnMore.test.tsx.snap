@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LearnMore should match snapshot 1`] = `
+Array [
+  <span
+    className="css-109"
+  >
+    Learn more about Azure Communication Services
+  </span>,
+  <a
+    className="ms-Link root-110"
+    href="https://learn.microsoft.com/azure/communication-services/tutorials/virtual-visits"
+    onClick={[Function]}
+    target="_blank"
+  >
+    <div
+      className="ms-Stack css-111"
+    >
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "fontSize": ".75rem",
+            "fontWeight": "600",
+            "lineHeight": "1rem",
+            "paddingRight": ".5rem",
+            "verticalAlign": "bottom",
+          }
+        }
+      >
+        Azure Communication Services virtual appointments
+      </div>
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "textDecoration": "none",
+          }
+        }
+      >
+        <span
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <i
+            aria-hidden={true}
+            className="root-105"
+            data-icon-name="OpenInNewWindow"
+          />
+        </span>
+      </div>
+    </div>
+  </a>,
+  <span
+    className="css-113"
+  >
+    This tutorial describes concepts for virtual appointment applications. After completing this tutorial and the associated Sample Builder, you will understand common use cases that a virtual appointment delivers...
+  </span>,
+  <a
+    className="ms-Link root-110"
+    href="https://learn.microsoft.com/en-us/azure/communication-services/concepts/rooms/room-concept"
+    onClick={[Function]}
+    target="_blank"
+  >
+    <div
+      className="ms-Stack css-111"
+    >
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "fontSize": ".75rem",
+            "fontWeight": "600",
+            "lineHeight": "1rem",
+            "paddingRight": ".5rem",
+            "verticalAlign": "bottom",
+          }
+        }
+      >
+        Azure Communication Services Rooms (Preview)
+      </div>
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "textDecoration": "none",
+          }
+        }
+      >
+        <span
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <i
+            aria-hidden={true}
+            className="root-105"
+            data-icon-name="OpenInNewWindow"
+          />
+        </span>
+      </div>
+    </div>
+  </a>,
+  <span
+    className="css-113"
+  >
+    Azure Communication Services provides a concept of a room for developers who are building structured conversations such as virtual appointments or virtual events. Rooms currently allow voice and video calling...
+  </span>,
+  <a
+    className="ms-Link root-110"
+    href="https://learn.microsoft.com/azure/communication-services/quickstarts/ui-library/get-started-composites?tabs=kotlin&pivots=platform-web"
+    onClick={[Function]}
+    target="_blank"
+  >
+    <div
+      className="ms-Stack css-111"
+    >
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "fontSize": ".75rem",
+            "fontWeight": "600",
+            "lineHeight": "1rem",
+            "paddingRight": ".5rem",
+            "verticalAlign": "bottom",
+          }
+        }
+      >
+        Get Started with UI Library
+      </div>
+      <div
+        className="ms-StackItem css-112"
+        style={
+          Object {
+            "textDecoration": "none",
+          }
+        }
+      >
+        <span
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <i
+            aria-hidden={true}
+            className="root-105"
+            data-icon-name="OpenInNewWindow"
+          />
+        </span>
+      </div>
+    </div>
+  </a>,
+  <span
+    className="css-113"
+  >
+    Get Started with Azure Communication Services UI Library to quickly integrate communication experiences into your applications. In this quickstart, learn how to integrate UI Library composites into an application and set up...
+  </span>,
+]
+`;
