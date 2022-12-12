@@ -8,9 +8,11 @@ import { Spinner, PartialTheme, Theme } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import { AppConfigModel } from '../../models/ConfigModel';
 import { makeRoomsJoinUrl } from '../../utils/GetMeetingLink';
 
 export interface RoomsMeetingProps {
+  config: AppConfigModel;
   locator: RoomCallLocator;
   participantId: string;
   fluentTheme?: PartialTheme | Theme;
@@ -18,7 +20,7 @@ export interface RoomsMeetingProps {
 }
 
 export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
-  const { locator, participantId, fluentTheme, onDisplayError } = props;
+  const { config, locator, participantId, fluentTheme, onDisplayError } = props;
 
   const [roomsToken, setRoomsToken] = useState<string | undefined>(undefined);
   const [userRole, setUserRole] = useState<RoomParticipantRole | undefined>(undefined);
@@ -60,6 +62,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
       }}
       token={roomsToken}
       fluentTheme={fluentTheme}
+      postCall={config.postCall}
       onDisplayError={(error) => onDisplayError(error)}
     />
   );
