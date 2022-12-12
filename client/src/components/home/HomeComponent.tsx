@@ -49,8 +49,6 @@ const HomeComponent = (props: HomeComponentProps): JSX.Element => {
 };
 
 const HomeButtons = ({ theme, setError }): JSX.Element => {
-  const buttonStyles = getButtonStyles(theme);
-
   const callCreateRoom = async (): Promise<void> => {
     try {
       const redirectUrl = await createRoomAndRedirectUrl();
@@ -60,20 +58,31 @@ const HomeButtons = ({ theme, setError }): JSX.Element => {
     }
   };
 
-  const HomeButton = ({ iconName, text, onClick }): JSX.Element => {
-    return (
-      <DefaultButton styles={buttonStyles} iconProps={{ iconName }} onClick={onClick}>
-        <Text styles={buttonTextStyles}>{text}</Text>
-      </DefaultButton>
-    );
-  };
-
   return (
     <Stack horizontal styles={btnStackStyles} wrap horizontalAlign="space-between">
-      <HomeButton iconName={'Calendar'} text={'Book an appointment'} onClick={() => window.location.assign('/book')} />
-      <HomeButton iconName={'Video'} text={'Start as Presenter'} onClick={callCreateRoom} />
-      <HomeButton iconName={'Link'} text={'Join from link'} onClick={() => window.location.assign('/visit')} />
+      <HomeButton
+        theme={theme}
+        iconName={'Calendar'}
+        text={'Book an appointment'}
+        onClick={() => window.location.assign('/book')}
+      />
+      <HomeButton theme={theme} iconName={'Video'} text={'Start as Presenter'} onClick={callCreateRoom} />
+      <HomeButton
+        theme={theme}
+        iconName={'Link'}
+        text={'Join from link'}
+        onClick={() => window.location.assign('/visit')}
+      />
     </Stack>
+  );
+};
+
+const HomeButton = ({ theme, iconName, text, onClick }): JSX.Element => {
+  const buttonStyles = getButtonStyles(theme);
+  return (
+    <DefaultButton styles={buttonStyles} iconProps={{ iconName }} onClick={onClick}>
+      <Text styles={buttonTextStyles}>{text}</Text>
+    </DefaultButton>
   );
 };
 
