@@ -41,8 +41,7 @@ export const imageStyles = {
 export const innerContainer = {
   root: {
     maxWidth: '37.5rem',
-    width: '100%',
-    margin: '3.8125rem'
+    width: '100%'
   }
 };
 
