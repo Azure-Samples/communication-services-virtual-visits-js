@@ -49,7 +49,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           adapter.on('callEnded', () => setRenderPostCall(true));
         }
 
-        const toggleInviteInstructions = (state: CallAdapterState) => {
+        const toggleInviteInstructions = (state: CallAdapterState): void => {
           const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(
             userRole,
             formFactorValue,

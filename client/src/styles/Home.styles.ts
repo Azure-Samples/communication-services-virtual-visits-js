@@ -42,7 +42,7 @@ export const innerContainer = {
   root: {
     maxWidth: '37.5rem',
     width: '100%',
-    marginTop: '3.8125rem'
+    margin: '3.8125rem'
   }
 };
 
