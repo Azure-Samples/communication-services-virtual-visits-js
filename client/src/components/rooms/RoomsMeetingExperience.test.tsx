@@ -8,12 +8,14 @@ import {
   runFakeTimers
 } from '../../utils/TestUtils';
 import { mount } from 'enzyme';
-import { RoomsMeetingExperience, RoomsMeetingExperienceProps } from './RoomsMeetingExperience';
+import RoomsMeetingExperience, { RoomsMeetingExperienceProps } from './RoomsMeetingExperience';
 import { RoomParticipantRole } from '../../models/RoomModel';
 import { CallComposite, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
 import { PostCallConfig } from '../../models/ConfigModel';
 import { generateTheme } from '../../utils/ThemeGenerator';
 import { Survey } from '../postcall/Survey';
+import * as MeetingExperienceUtil from '../../utils/MeetingExperienceUtil';
+import InviteInstructions from './InviteInstructions';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -102,7 +104,7 @@ describe('RoomsMeetingExperience', () => {
     const callComposite = roomsMeetingExperience.find(CallComposite);
     expect(callComposite.length).toBe(1);
     expect(callComposite.first().props().adapter.getState().displayName?.includes('Virtual appointments User'));
-    expect(callComposite.first().props().callInvitationUrl).toBeUndefined;
+    expect(callComposite.first().props().callInvitationUrl).toBeUndefined();
   });
 
   it('should render Survey component when postcall is defined and valid and user is attendee', async () => {
@@ -159,30 +161,47 @@ describe('RoomsMeetingExperience', () => {
     expect(survey.length).toBe(0);
   });
 
-  it('should render CallComposite component when postcall is undefined', async () => {
-    const mockedAdapter = createMockCallAdapter();
-    mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
-    (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
+  it.each([[true], [false]])(
+    'should render CallComposite component when postcall is undefined',
+    async (renderInviteInstructions: boolean) => {
+      const mockedAdapter = createMockCallAdapter();
+      mockedAdapter.on = jest.fn().mockImplementationOnce((_event, handler) => handler('callEnded'));
+      (createAzureCommunicationCallAdapterFromClient as jest.Mock).mockImplementationOnce(() => mockedAdapter);
 
-    const roomsMeetingExperience = await mount<RoomsMeetingExperienceProps>(
-      <RoomsMeetingExperience
-        fluentTheme={generateTheme('#FFFFFF')}
-        postCall={undefined}
-        roomsInfo={{
-          userId: 'userId',
-          userRole: RoomParticipantRole.attendee,
-          locator: { roomId: 'roomId' }
-        }}
-        token={'token'}
-        onDisplayError={jest.fn()}
-      />
-    );
+      jest
+        .spyOn(MeetingExperienceUtil, 'isRoomsInviteInstructionsEnabled')
+        .mockImplementationOnce(() => renderInviteInstructions);
 
-    await runFakeTimers();
-    roomsMeetingExperience.update();
-    const callComposites = roomsMeetingExperience.find(CallComposite);
-    expect(callComposites.length).toBe(1);
-    const survey = roomsMeetingExperience.find(Survey);
-    expect(survey.length).toBe(0);
-  });
+      const roomsMeetingExperience = mount<RoomsMeetingExperienceProps>(
+        <RoomsMeetingExperience
+          fluentTheme={generateTheme('#FFFFFF')}
+          postCall={undefined}
+          roomsInfo={{
+            userId: 'userId',
+            userRole: RoomParticipantRole.attendee,
+            locator: { roomId: 'roomId' }
+          }}
+          token={'token'}
+          onDisplayError={jest.fn()}
+        />
+      );
+
+      await runFakeTimers();
+      roomsMeetingExperience.update();
+
+      const callComposites = roomsMeetingExperience.find(CallComposite);
+      expect(callComposites.length).toBe(1);
+
+      const survey = roomsMeetingExperience.find(Survey);
+      expect(survey.length).toBe(0);
+
+      const inviteInstructions = roomsMeetingExperience.find(InviteInstructions);
+
+      if (renderInviteInstructions) {
+        expect(inviteInstructions.length).toBe(1);
+      } else {
+        expect(inviteInstructions.length).toBe(0);
+      }
+    }
+  );
 });
