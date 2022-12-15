@@ -106,7 +106,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   return (
     <Stack style={{ height: '100%' }}>
       <CallComposite
-        data-ui-id="CallComposite"
         adapter={callAdapter}
         fluentTheme={fluentTheme}
         formFactor={formFactorValue}
