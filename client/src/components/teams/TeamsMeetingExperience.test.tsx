@@ -185,9 +185,11 @@ describe('TeamsMeetingExperience', () => {
       expect(callOptions?.chatButton).toBe(chatEnabled);
       expect(callOptions?.screenShareButton).toBe(screenShareEnabled);
 
-      const icons = composite.props().icons as CallWithChatCompositeIcons;
-      expect(icons.LobbyScreenWaitingToBeAdmitted).toBe(logoUrl);
-      expect(icons.LobbyScreenConnectingToCall).toBe(logoUrl);
+      const lobbyScreenWaitingToBeAdmitted = composite.props().icons?.LobbyScreenWaitingToBeAdmitted;
+      expect(lobbyScreenWaitingToBeAdmitted?.props().src).toBe(logoUrl);
+
+      const lobbyScreenConnectingToCall = composite.props().icons?.LobbyScreenConnectingToCall;
+      expect(lobbyScreenConnectingToCall?.props().src).toBe(logoUrl);
 
       const locale = composite.props().locale as CompositeLocale;
       expect(locale.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(lobbyTitle);
