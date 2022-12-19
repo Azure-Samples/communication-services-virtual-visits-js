@@ -48,10 +48,6 @@ const mockPostCall: PostCallConfig = {
   }
 };
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
-
 describe('TeamsMeetingExperience', () => {
   const waitingTitle = 'waiting title';
   const waitingSubtitle = 'waiting subtitle';
@@ -63,6 +59,10 @@ describe('TeamsMeetingExperience', () => {
     jest.spyOn(console, 'error').mockImplementation();
     const getChatThreadIdFromTeamsLinkSpy = jest.spyOn(GetTeamsMeetingLink, 'getChatThreadIdFromTeamsLink');
     getChatThreadIdFromTeamsLinkSpy.mockReturnValue('threadId');
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should pass props for customizing the lobby experience to the CallWithChatComposite', async () => {
@@ -138,24 +138,20 @@ describe('TeamsMeetingExperience', () => {
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
   });
 
-  it.each([
-    [true, true],
-    [true, false],
-    [false, true],
-    [false, false]
-  ])(
+  it.each([[true], [false]])(
     'should pass the call settings to CallWithChatComposite as props',
-    async (chatEnabled: boolean, screenShareEnabled: boolean) => {
+    async (screenShareEnabled: boolean) => {
       (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
         createMockCallWithChatAdapter()
       );
 
       const theme = generateTheme('#F18472');
+      const chatEnabled = true;
       const lobbyTitle = 'myLobbyTitle';
       const lobbySubtitle = 'myLobbySubtitle';
       const logoUrl = 'myLogoUrl';
 
-      const meetingExperience = mount<TeamsMeetingExperienceProps>(
+      const meetingExperience = await mount<TeamsMeetingExperienceProps>(
         <TeamsMeetingExperience
           userId={{ communicationUserId: 'test' }}
           token={'token'}
@@ -168,7 +164,7 @@ describe('TeamsMeetingExperience', () => {
           logoUrl={logoUrl}
           chatEnabled={chatEnabled}
           screenShareEnabled={screenShareEnabled}
-          postCall={mockPostCall}
+          postCall={undefined}
           onDisplayError={jest.fn()}
         />
       );
