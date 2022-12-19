@@ -50,7 +50,7 @@ if (surveyDBHandler) {
   surveyDBHandler.init();
 
   app.post('/api/surveyResults', storeSurveyResult(surveyDBHandler));
-} else {
+} else if (config.postCall && config.postCall.survey.type === 'onequestionpoll') {
   config.postCall = undefined;
 }
 

@@ -2,18 +2,13 @@
 // Licensed under the MIT license.
 
 import React from 'react';
-import { Stack, TextField, PrimaryButton, LayerHost, Theme, ThemeContext, createTheme } from '@fluentui/react';
+import { Stack, TextField, PrimaryButton, Theme, ThemeContext, createTheme } from '@fluentui/react';
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
-import { getCurrentMeetingURL, isValidTeamsLink, makeJoinUrl } from '../utils/GetTeamsMeetingLink';
 import { backgroundStyles } from '../styles/Common.styles';
-import {
-  makeJoinTeamsLayerHostStyles,
-  mainJoinTeamsMeetingContainerStyles,
-  mainJoinTeamsMeetingContainerMobileStyles,
-  formStyles
-} from '../styles/JoinTeamsMeeting.Styles';
-import MobileDetect from 'mobile-detect';
+import { formStyles } from '../styles/JoinTeamsMeeting.Styles';
+import { getCurrentMeetingURL, isValidTeamsLink, makeTeamsJoinUrl } from '../utils/GetMeetingLink';
+import GenericContainer from './GenericContainer';
 
 interface JoinTeamsMeetingProps {
   config: AppConfigModel;
@@ -53,7 +48,7 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
   }
 
   render(): JSX.Element {
-    const link = makeJoinUrl(this.state.teamsMeetingLink);
+    const link = makeTeamsJoinUrl(this.state.teamsMeetingLink);
     const enableButton = isValidTeamsLink(this.state.teamsMeetingLink);
     const parentID = 'JoinTeamsMeetingSection';
 
@@ -63,33 +58,26 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
           if (theme === undefined) {
             theme = createTheme();
           }
-
-          const containerStyles = new MobileDetect(window.navigator.userAgent).mobile()
-            ? mainJoinTeamsMeetingContainerMobileStyles(theme)
-            : mainJoinTeamsMeetingContainerStyles(theme);
-
           return (
             <Stack styles={backgroundStyles(theme)}>
               <Header companyName={this.props.config.companyName} parentid={parentID} />
-              <LayerHost id={parentID} style={makeJoinTeamsLayerHostStyles()}>
-                <Stack styles={containerStyles} tokens={{ childrenGap: 15 }}>
-                  <TextField
-                    label="Join a call"
-                    placeholder="Enter a meeting link"
-                    styles={formStyles}
-                    iconProps={{ iconName: 'Link' }}
-                    onChange={this.onTeamsMeetingLinkChange.bind(this)}
-                    onGetErrorMessage={this.onGetErrorMessage.bind(this)}
-                    defaultValue={this.state.teamsMeetingLink}
-                  />
-                  <PrimaryButton
-                    disabled={!enableButton}
-                    styles={formStyles}
-                    text={'Join call'}
-                    onClick={() => this.props.onJoinMeeting(link)}
-                  />
-                </Stack>
-              </LayerHost>
+              <GenericContainer layerHostId={parentID} theme={theme}>
+                <TextField
+                  label="Join a call"
+                  placeholder="Enter a meeting link"
+                  styles={formStyles}
+                  iconProps={{ iconName: 'Link' }}
+                  onChange={this.onTeamsMeetingLinkChange.bind(this)}
+                  onGetErrorMessage={this.onGetErrorMessage.bind(this)}
+                  defaultValue={this.state.teamsMeetingLink}
+                />
+                <PrimaryButton
+                  disabled={!enableButton}
+                  styles={formStyles}
+                  text={'Join call'}
+                  onClick={() => this.props.onJoinMeeting(link)}
+                />
+              </GenericContainer>
             </Stack>
           );
         }}

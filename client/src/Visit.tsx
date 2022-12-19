@@ -1,48 +1,57 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CommunicationUserToken } from '@azure/communication-identity';
+import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
 import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
 import { Header } from './Header';
-import { MeetingExperience } from './components/MeetingExperience';
 import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
-import { fetchToken } from './utils/FetchToken';
-import { getTeamsMeetingLink } from './utils/GetTeamsMeetingLink';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
-import './styles/Common.css';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
-import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
+import { getTeamsMeetingLink, getRoomCallLocator, getRoomsUserId } from './utils/GetMeetingLink';
+import { TeamsMeeting } from './components/teams/TeamsMeeting';
+import { RoomsMeeting } from './components/rooms/RoomsMeeting';
+import './styles/Common.css';
 
 const PARENT_ID = 'VisitSection';
 
 export const Visit = (): JSX.Element => {
-  const _getMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
-    let meetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
+  const _getTeamsMeetingLinkLocator = (meetingLink: string): TeamsMeetingLinkLocator | undefined => {
+    let teamsMeetingLinkModel: TeamsMeetingLinkLocator | undefined = undefined;
 
-    // try extracting Teams link from the url
+    // try extracting Teams meeting link from the url
     try {
-      meetingLinkModel = getTeamsMeetingLink(meetingLink);
+      teamsMeetingLinkModel = getTeamsMeetingLink(meetingLink);
+    } catch (error) {
+      teamsMeetingLinkModel = undefined;
+    }
+
+    return teamsMeetingLinkModel;
+  };
+
+  const _getRoomCallLocator = (meetingLink: string): RoomCallLocator | undefined => {
+    let meetingLinkModel: RoomCallLocator | undefined = undefined;
+    // try extracting rooms meeting link from the url
+    try {
+      meetingLinkModel = getRoomCallLocator(meetingLink);
     } catch (error) {
       meetingLinkModel = undefined;
     }
-
     return meetingLinkModel;
   };
 
-  // handle going to previous/next page of window history
-  window.onpopstate = () => {
-    window.location.assign(window.location.href);
+  const _getParticipantId = (meetingLink: string): string | undefined => {
+    let participantId: string | undefined = undefined;
+    //try extracting rooms participant Id from the url
+    try {
+      participantId = getRoomsUserId(meetingLink);
+    } catch (error) {
+      participantId = undefined;
+    }
+    return participantId;
   };
-
-  const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
-  const [token, setToken] = useState<CommunicationUserToken | undefined>(undefined);
-  const [error, setError] = useState<any | undefined>(undefined);
-  const [meetingLinkLocator, setMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
-    _getMeetingLinkLocator(window.location.search) // case of direct link to visit with meeting link in URL
-  );
 
   const _onJoinMeeting = (link: string): void => {
     const appendMeetingLinkToUrl = (): void => {
@@ -51,36 +60,46 @@ export const Visit = (): JSX.Element => {
 
     appendMeetingLinkToUrl();
 
-    const meetingLinkLocator = _getMeetingLinkLocator(link);
-    setMeetingLinkLocator(meetingLinkLocator);
+    const meetingLinkLocator = _getTeamsMeetingLinkLocator(link);
+    setTeamsMeetingLinkLocator(meetingLinkLocator);
   };
+
+  const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
+  const [error, setError] = useState<any | undefined>(undefined);
+  const [teamsMeetingLinkLocator, setTeamsMeetingLinkLocator] = useState<TeamsMeetingLinkLocator | undefined>(
+    _getTeamsMeetingLinkLocator(window.location.search) // case of direct link to visit with teams meeting link in URL
+  );
+  const [roomCallLocator] = useState<RoomCallLocator | undefined>(
+    _getRoomCallLocator(window.location.search) // case of direct link to visit with rooms meeting link in URL
+  );
+  const [participantId] = useState<string | undefined>(_getParticipantId(window.location.search)); // case of direct link to visit with rooms meeting link in URL
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       try {
         const config = await fetchConfig();
-        const token = await fetchToken();
         setConfig(config);
-        setToken(token);
       } catch (error) {
         console.error(error);
         setError(error);
       }
     };
-
     fetchData();
   }, []);
+
+  const isTeamsMeeting = teamsMeetingLinkLocator && teamsMeetingLinkLocator.meetingLink;
+  const isRoomsMeeting = roomCallLocator && participantId;
 
   if (error) {
     return <GenericError statusCode={error.statusCode} />;
   }
 
-  if (!config || !token) {
-    // config and token not ready yet - show spinning/loading animation
+  if (!config) {
+    // config is not ready yet - show spinning/loading animation
     return <Spinner styles={fullSizeStyles} />;
   }
 
-  if (!meetingLinkLocator || !meetingLinkLocator.meetingLink) {
+  if (!isTeamsMeeting && !isRoomsMeeting) {
     // If we have config and token but don't have a meeting link,
     // show a separate screen with "enter meeting link" textbox
     return (
@@ -89,10 +108,6 @@ export const Visit = (): JSX.Element => {
       </ThemeProvider>
     );
   }
-
-  // If the config and token are loaded and we got a valid teams link - try to start
-  // the meeting experience
-  const locator = meetingLinkLocator;
 
   return (
     <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
@@ -105,20 +120,22 @@ export const Visit = (): JSX.Element => {
             height: '100%'
           }}
         >
-          <MeetingExperience
-            userId={token.user}
-            token={token.token}
-            displayName="Virtual Appointments User"
-            endpointUrl={config.communicationEndpoint}
-            locator={locator}
-            fluentTheme={config.theme}
-            logoUrl={config.logoUrl}
-            waitingTitle={config.waitingTitle}
-            waitingSubtitle={config.waitingSubtitle}
-            chatEnabled={config.chatEnabled}
-            postCall={config.postCall}
-            onDisplayError={(error) => setError(error)}
-          />
+          {isTeamsMeeting && (
+            <TeamsMeeting
+              config={config}
+              locator={teamsMeetingLinkLocator}
+              onDisplayError={(error) => setError(error)}
+            />
+          )}
+          {!isTeamsMeeting && isRoomsMeeting && (
+            <RoomsMeeting
+              config={config}
+              locator={roomCallLocator}
+              participantId={participantId}
+              fluentTheme={config.theme}
+              onDisplayError={(error) => setError(error)}
+            />
+          )}
         </LayerHost>
       </Stack>
     </ThemeProvider>

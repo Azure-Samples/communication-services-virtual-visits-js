@@ -19,3 +19,13 @@ export const fullSizeStyles = {
     height: '100%'
   }
 };
+
+export const getDefaultLayerHostStyles = (): any => {
+  return {
+    position: 'relative',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  };
+};

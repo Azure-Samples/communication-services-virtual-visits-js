@@ -19,4 +19,13 @@ test.describe("tests:", () => {
       page.locator('[id="BookMeetingSection"]').first()
     ).toBeVisible();
   });
+
+  test("navigating to visit using waffle menu", async ({ page }) => {
+    const waffle = page.locator('[data-icon-name="Waffle"]').first();
+    await waffle.click();
+
+    // Click text=Visit
+    await page.locator("text=Visit").click();
+    await expect(page).toHaveURL(buildUrl(SERVER_URL, "visit"));
+  });
 });

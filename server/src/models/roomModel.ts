@@ -23,6 +23,7 @@ export interface JoinRoomRequest {
 }
 
 export interface JoinRoomResponse {
-  participant: RoomParticipant;
   token: string;
+  participant: RoomParticipant;
+  invitee?: RoomParticipant;
 }

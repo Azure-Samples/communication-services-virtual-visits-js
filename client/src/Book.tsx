@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Spinner, Stack, ThemeProvider } from '@fluentui/react';
+import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import { Header } from './Header';
 import './styles/Common.css';
@@ -9,8 +9,9 @@ import { fetchConfig } from './utils/FetchConfig';
 import { AppConfigModel } from './models/ConfigModel';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
-import { BookingsPage } from './components/Book/BookingsPage';
-import { NoSchedulingPage } from './components/Book/NoSchedulingPage';
+import { BookingsPage } from './components/book/BookingsPage';
+import { NoSchedulingPage } from './components/book/NoSchedulingPage';
+import GenericContainer from './components/GenericContainer';
 
 export const Book = (): JSX.Element => {
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
@@ -37,7 +38,21 @@ export const Book = (): JSX.Element => {
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
         <Stack styles={backgroundStyles(config.theme)}>
           <Header companyName={config.companyName} parentid={PARENT_ID} />
-          {config.microsoftBookingsUrl ? <BookingsPage config={config} /> : <NoSchedulingPage config={config} />}
+          {config.microsoftBookingsUrl ? (
+            <LayerHost
+              id={PARENT_ID}
+              style={{
+                position: 'relative',
+                height: '100%'
+              }}
+            >
+              <BookingsPage config={config} />
+            </LayerHost>
+          ) : (
+            <GenericContainer layerHostId={PARENT_ID} theme={config.theme}>
+              <NoSchedulingPage />
+            </GenericContainer>
+          )}
         </Stack>
       </ThemeProvider>
     );

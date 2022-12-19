@@ -12,7 +12,7 @@ import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
 import * as renderer from 'react-test-renderer';
 import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
-import WarningBanner from './components/Book/WarningBanner';
+import WarningBanner from './components/book/WarningBanner';
 
 describe('Book', () => {
   beforeEach(() => {

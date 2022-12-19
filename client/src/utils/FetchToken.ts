@@ -4,7 +4,7 @@
 import { CommunicationUserToken } from '@azure/communication-identity';
 import createError from 'http-errors';
 
-export async function fetchToken(): Promise<CommunicationUserToken> {
+export async function fetchToken(): Promise<CommunicationUserToken | undefined> {
   const response = await fetch('/api/token', { method: 'GET' });
 
   if (response.status !== 200) {
