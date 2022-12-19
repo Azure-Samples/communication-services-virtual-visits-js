@@ -3,7 +3,6 @@
 
 import {
   CallWithChatComposite,
-  CallWithChatCompositeIcons,
   CallWithChatControlOptions,
   CompositeLocale,
   createAzureCommunicationCallWithChatAdapterFromClients
