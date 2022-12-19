@@ -3,6 +3,9 @@
 
 import {
   CallWithChatComposite,
+  CallWithChatCompositeIcons,
+  CallWithChatControlOptions,
+  CompositeLocale,
   createAzureCommunicationCallWithChatAdapterFromClients
 } from '@azure/communication-react';
 import { mount } from 'enzyme';
@@ -17,6 +20,7 @@ import {
 } from '../../utils/TestUtils';
 import { PostCallConfig } from '../../models/ConfigModel';
 import { Survey } from '../postcall/Survey';
+import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -79,6 +83,7 @@ describe('TeamsMeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        screenShareEnabled={true}
         postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
@@ -119,6 +124,7 @@ describe('TeamsMeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        screenShareEnabled={true}
         postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
@@ -132,6 +138,62 @@ describe('TeamsMeetingExperience', () => {
     expect(callWithChatComposites.length).toBe(1);
     expect(callWithChatComposites.first().props().formFactor).toEqual('mobile');
   });
+
+  it.each([
+    [true, true],
+    [true, false],
+    [false, true],
+    [false, false]
+  ])(
+    'should pass the call settings to CallWithChatComposite as props',
+    async (chatEnabled: boolean, screenShareEnabled: boolean) => {
+      (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
+        createMockCallWithChatAdapter()
+      );
+
+      const theme = generateTheme('#F18472');
+      const lobbyTitle = 'myLobbyTitle';
+      const lobbySubtitle = 'myLobbySubtitle';
+      const logoUrl = 'myLogoUrl';
+
+      const meetingExperience = mount<TeamsMeetingExperienceProps>(
+        <TeamsMeetingExperience
+          userId={{ communicationUserId: 'test' }}
+          token={'token'}
+          displayName={'name'}
+          endpointUrl={'endpoint'}
+          locator={{ meetingLink: 'meeting link' }}
+          fluentTheme={theme}
+          waitingTitle={lobbyTitle}
+          waitingSubtitle={lobbySubtitle}
+          logoUrl={logoUrl}
+          chatEnabled={chatEnabled}
+          screenShareEnabled={screenShareEnabled}
+          postCall={mockPostCall}
+          onDisplayError={jest.fn()}
+        />
+      );
+
+      await runFakeTimers();
+      meetingExperience.update();
+
+      const callWithChatComposites = meetingExperience.find(CallWithChatComposite);
+      expect(callWithChatComposites.length).toBe(1);
+
+      const composite = callWithChatComposites.first();
+      const callOptions = composite.props().options?.callControls as CallWithChatControlOptions;
+      expect(callOptions?.chatButton).toBe(chatEnabled);
+      expect(callOptions?.screenShareButton).toBe(screenShareEnabled);
+
+      const icons = composite.props().icons as CallWithChatCompositeIcons;
+      expect(icons.LobbyScreenWaitingToBeAdmitted).toBe(logoUrl);
+      expect(icons.LobbyScreenConnectingToCall).toBe(logoUrl);
+
+      const locale = composite.props().locale as CompositeLocale;
+      expect(locale.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(lobbyTitle);
+      expect(locale.strings.call.lobbyScreenWaitingToBeAdmittedMoreDetails).toBe(lobbySubtitle);
+    }
+  );
 
   it('should render CallWithChatComposite when renderPostCall is false', async () => {
     (createAzureCommunicationCallWithChatAdapterFromClients as jest.Mock).mockImplementationOnce(() =>
@@ -150,6 +212,7 @@ describe('TeamsMeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        screenShareEnabled={true}
         postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />
@@ -183,6 +246,7 @@ describe('TeamsMeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        screenShareEnabled={true}
         postCall={undefined}
         onDisplayError={jest.fn()}
       />
@@ -218,6 +282,7 @@ describe('TeamsMeetingExperience', () => {
         waitingSubtitle={waitingSubtitle}
         logoUrl={logoUrl}
         chatEnabled={true}
+        screenShareEnabled={true}
         postCall={mockPostCall}
         onDisplayError={jest.fn()}
       />

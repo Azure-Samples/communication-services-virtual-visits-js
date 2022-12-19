@@ -33,6 +33,7 @@ export interface TeamsMeetingExperienceProps {
   waitingSubtitle: string;
   logoUrl: string;
   chatEnabled: boolean;
+  screenShareEnabled: boolean;
   postCall: PostCallConfig | undefined;
   onDisplayError(error: any): void;
 }
@@ -40,6 +41,7 @@ export interface TeamsMeetingExperienceProps {
 export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.Element => {
   const {
     chatEnabled,
+    screenShareEnabled,
     displayName,
     endpointUrl,
     fluentTheme,
@@ -120,7 +122,8 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
             fluentTheme={fluentTheme}
             options={{
               callControls: {
-                chatButton: chatEnabled
+                chatButton: chatEnabled,
+                screenShareButton: screenShareEnabled
               }
             }}
             locale={{
