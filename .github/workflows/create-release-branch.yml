@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Check-out repo
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
           # Use a service account when checking out. This is to workaround the issue were GitHub
@@ -63,7 +63,7 @@ jobs:
           serverVer=$(jq -r .version server/package.json)
           echo serverversion: $serverVer
           if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
-          echo "::set-output name=newProjectVersion::$clientVer"
+          echo "newProjectVersion=$clientVer" >> $GITHUB_OUTPUT
 
       # Update package-lock.json
       - name: Install client dependencies
