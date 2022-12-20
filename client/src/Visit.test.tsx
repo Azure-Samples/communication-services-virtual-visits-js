@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 import { Header } from './Header';
 import { Visit } from './Visit';
 import { GenericError } from './components/GenericError';
-import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
+import { JoinMeeting } from './components/JoinMeeting';
 import { AppConfigModel } from './models/ConfigModel';
 import * as FetchConfig from './utils/FetchConfig';
 import * as FetchRoomsResponse from './utils/FetchRoomsResponse';
@@ -140,12 +140,12 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const joinMeeting = visit.find(JoinMeeting);
     const roomsMeeting = visit.find(RoomsMeeting);
     const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(joinTeamsMeeting.length).toBe(1);
+    expect(joinMeeting.length).toBe(1);
     expect(roomsMeeting.length).toBe(0);
     expect(teamsMeeting.length).toBe(0);
   });
@@ -168,12 +168,12 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const joinMeeting = visit.find(JoinMeeting);
     const roomsMeeting = visit.find(RoomsMeeting);
     const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(joinTeamsMeeting.length).toBe(0);
+    expect(joinMeeting.length).toBe(0);
     expect(roomsMeeting.length).toBe(0);
     expect(teamsMeeting.length).toBe(1);
   });
@@ -201,12 +201,12 @@ describe('Visit', () => {
     visit.update();
 
     const spinners = visit.find(Spinner);
-    const joinTeamsMeeting = visit.find(JoinTeamsMeeting);
+    const joinMeeting = visit.find(JoinMeeting);
     const roomsMeeting = visit.find(RoomsMeeting);
     const teamsMeeting = visit.find(TeamsMeeting);
 
     expect(spinners.length).toBe(0);
-    expect(joinTeamsMeeting.length).toBe(0);
+    expect(joinMeeting.length).toBe(0);
     expect(teamsMeeting.length).toBe(0);
     expect(roomsMeeting.length).toBe(1);
   });
