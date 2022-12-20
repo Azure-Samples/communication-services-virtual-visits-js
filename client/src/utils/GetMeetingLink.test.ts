@@ -177,8 +177,8 @@ describe('isValidRoomsLink', () => {
     expect(window.location.origin).toEqual(url);
     const mockUrl = 'http://localhost:8080/visit?roomId=mockRoomId&userId=mockUserId';
 
-    const isRoomsLInk = isValidRoomsLink(mockUrl);
-    expect(isRoomsLInk).toBe(true);
+    const isRoomsLink = isValidRoomsLink(mockUrl);
+    expect(isRoomsLink).toBe(true);
   });
 
   test('should return false if RoomsMeetingUrl does not have roomId query parameter', () => {
@@ -192,8 +192,8 @@ describe('isValidRoomsLink', () => {
     expect(window.location.origin).toEqual(url);
     const mockUrl = 'http://localhost:8080/visit?userId=mockUserId';
 
-    const isRoomsLInk = isValidRoomsLink(mockUrl);
-    expect(isRoomsLInk).toBe(false);
+    const isRoomsLink = isValidRoomsLink(mockUrl);
+    expect(isRoomsLink).toBe(false);
   });
 
   test('should return false if RoomsMeetingUrl does not have userId query parameter', () => {
@@ -207,8 +207,8 @@ describe('isValidRoomsLink', () => {
     expect(window.location.origin).toEqual(url);
     const mockUrl = 'http://localhost:8080/visit?roomId=mockRoomId';
 
-    const isRoomsLInk = isValidRoomsLink(mockUrl);
-    expect(isRoomsLInk).toBe(false);
+    const isRoomsLink = isValidRoomsLink(mockUrl);
+    expect(isRoomsLink).toBe(false);
   });
 
   test('should return false if RoomsMeetingUrl does not start with correct path', () => {
@@ -222,13 +222,13 @@ describe('isValidRoomsLink', () => {
     expect(window.location.origin).toEqual(url);
     const mockUrl = 'https://example.org/visit?roomId=mockRoomId&userId=mockUserId';
 
-    const isRoomsLInk = isValidRoomsLink(mockUrl);
-    expect(isRoomsLInk).toBe(false);
+    const isRoomsLink = isValidRoomsLink(mockUrl);
+    expect(isRoomsLink).toBe(false);
   });
 
   test('should return false an error is thrown', () => {
     const invalidUrl = 'not a real url';
-    const isRoomsLInk = isValidRoomsLink(invalidUrl);
-    expect(isRoomsLInk).toBe(false);
+    const isRoomsLink = isValidRoomsLink(invalidUrl);
+    expect(isRoomsLink).toBe(false);
   });
 });
