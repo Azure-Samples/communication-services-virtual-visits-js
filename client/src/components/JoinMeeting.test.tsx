@@ -12,6 +12,8 @@ const validTeamsMeetingLink = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
 ).meetingLink;
 
+const validMockRoomsLink = 'http://localhost:8080/visit?roomId=mockRoomId&userId=mockUserId';
+
 describe('JoinMeeting', () => {
   it('should render header when page is loaded', async () => {
     const meeting = mount(
@@ -60,56 +62,76 @@ describe('JoinMeeting', () => {
     expect(buttonState).toBe(true);
   });
 
-  it('should enable join button when meeting link is added', async () => {
-    const meeting = mount(
-      <JoinMeeting
-        config={{
-          communicationEndpoint: 'enpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        }}
-        onJoinMeeting={jest.fn()}
-      />
-    );
+  it.each([[validTeamsMeetingLink], [validMockRoomsLink]])(
+    'should enable join button when meeting link is added',
+    async (meetingLink: string) => {
+      global.window = Object.create(window);
+      const url = 'http://localhost:8080';
+      Object.defineProperty(window, 'location', {
+        value: {
+          origin: url
+        }
+      });
+      expect(window.location.origin).toEqual(url);
+      const meeting = mount(
+        <JoinMeeting
+          config={{
+            communicationEndpoint: 'enpoint=test_endpoint;',
+            microsoftBookingsUrl: '',
+            chatEnabled: true,
+            screenShareEnabled: true,
+            companyName: '',
+            theme: generateTheme('#FFFFFF'),
+            waitingTitle: '',
+            waitingSubtitle: '',
+            logoUrl: ''
+          }}
+          onJoinMeeting={jest.fn()}
+        />
+      );
 
-    meeting.setState({ meetingLink: validTeamsMeetingLink });
-    const joinButton = meeting.find(PrimaryButton);
-    const buttonState = joinButton.prop('disabled');
+      meeting.setState({ meetingLink: meetingLink });
+      const joinButton = meeting.find(PrimaryButton);
+      const buttonState = joinButton.prop('disabled');
 
-    expect(buttonState).toBe(false);
-  });
+      expect(buttonState).toBe(false);
+    }
+  );
 
-  it('should call onJoinMeeting prop when join button is clicked', async () => {
-    const meeting = mount(
-      <JoinMeeting
-        config={{
-          communicationEndpoint: 'enpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        }}
-        onJoinMeeting={jest.fn()}
-      />
-    );
+  it.each([[validTeamsMeetingLink], [validMockRoomsLink]])(
+    'should call onJoinMeeting prop when join button is clicked',
+    async (meetingLink: string) => {
+      global.window = Object.create(window);
+      const url = 'http://localhost:8080';
+      Object.defineProperty(window, 'location', {
+        value: {
+          origin: url
+        }
+      });
+      const meeting = mount(
+        <JoinMeeting
+          config={{
+            communicationEndpoint: 'enpoint=test_endpoint;',
+            microsoftBookingsUrl: '',
+            chatEnabled: true,
+            screenShareEnabled: true,
+            companyName: '',
+            theme: generateTheme('#FFFFFF'),
+            waitingTitle: '',
+            waitingSubtitle: '',
+            logoUrl: ''
+          }}
+          onJoinMeeting={jest.fn()}
+        />
+      );
 
-    meeting.setState({ meetingLink: validTeamsMeetingLink });
-    const joinButton = meeting.find(PrimaryButton);
+      meeting.setState({ meetingLink: meetingLink });
+      const joinButton = meeting.find(PrimaryButton);
+      await joinButton.simulate('click');
 
-    await joinButton.simulate('click');
-
-    expect(meeting.props().onJoinMeeting).toBeCalled();
-  });
+      expect(meeting.props().onJoinMeeting).toBeCalled();
+    }
+  );
 });
 
 describe('Error handling', () => {
@@ -155,28 +177,38 @@ describe('Error handling', () => {
     expect(allText).toContain(errorMessage);
   });
 
-  it('must not show error message when meeting link is valid', async () => {
-    const meeting = mount(
-      <JoinMeeting
-        config={{
-          communicationEndpoint: 'enpoint=test_endpoint;',
-          microsoftBookingsUrl: '',
-          chatEnabled: true,
-          screenShareEnabled: true,
-          companyName: '',
-          theme: generateTheme('#FFFFFF'),
-          waitingTitle: '',
-          waitingSubtitle: '',
-          logoUrl: ''
-        }}
-        onJoinMeeting={jest.fn()}
-      />
-    );
+  it.each([[validTeamsMeetingLink], [validMockRoomsLink]])(
+    'must not show error message when meeting link is valid',
+    async (meetingLink: string) => {
+      global.window = Object.create(window);
+      const url = 'http://localhost:8080';
+      Object.defineProperty(window, 'location', {
+        value: {
+          origin: url
+        }
+      });
+      const meeting = mount(
+        <JoinMeeting
+          config={{
+            communicationEndpoint: 'enpoint=test_endpoint;',
+            microsoftBookingsUrl: '',
+            chatEnabled: true,
+            screenShareEnabled: true,
+            companyName: '',
+            theme: generateTheme('#FFFFFF'),
+            waitingTitle: '',
+            waitingSubtitle: '',
+            logoUrl: ''
+          }}
+          onJoinMeeting={jest.fn()}
+        />
+      );
 
-    const textField = meeting.find(TextField).find('input');
-    textField.simulate('change', { target: { value: validTeamsMeetingLink } });
-    jest.runAllTimers();
-    const allText = meeting.text();
-    expect(allText).not.toContain(errorMessage);
-  });
+      const textField = meeting.find(TextField).find('input');
+      textField.simulate('change', { target: { value: meetingLink } });
+      jest.runAllTimers();
+      const allText = meeting.text();
+      expect(allText).not.toContain(errorMessage);
+    }
+  );
 });
