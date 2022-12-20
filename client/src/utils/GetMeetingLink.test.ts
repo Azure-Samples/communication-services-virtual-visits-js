@@ -10,10 +10,11 @@ import {
   getTeamsMeetingLink,
   makeRoomsJoinUrl,
   makeTeamsJoinUrl,
-  isValidRoomsLink
+  isValidRoomsLink,
+  isValidTeamsLink
 } from './GetMeetingLink';
 
-describe('getMeetingLink', () => {
+describe('getTeamsMeetingLink', () => {
   test('should correctly parse valid teams url', () => {
     const result = getTeamsMeetingLink(
       '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
@@ -60,7 +61,9 @@ describe('getMeetingLink', () => {
       expect(error).toBeDefined();
     }
   });
+});
 
+describe('getCurrentMeetingUrl', () => {
   test('should get teams meeting url as input by user from current query string', () => {
     const result = getCurrentMeetingURL('?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join');
 
@@ -72,7 +75,9 @@ describe('getMeetingLink', () => {
 
     expect(result).toBe('');
   });
+});
 
+describe('getChatThreadIdFromTeamsLink', () => {
   test('should get threadId from teams link', () => {
     const meetingLink =
       'https://teams.microsoft.com/l/meetup-join/19%3ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%40thread.v2/0?context=%7b%22Tid%22%3a%2200000000-0000-0000-0000-000000000000%22%2c%22Oid%22%3a%2200000000-0000-0000-0000-000000000000%22%7d';
@@ -97,7 +102,9 @@ describe('getMeetingLink', () => {
 
     expect(() => getChatThreadIdFromTeamsLink(meetingLink)).toThrowError('Could not get chat thread from teams link');
   });
+});
 
+describe('getRoomCallLocator', () => {
   test('should get the roomCallLocator from valid rooms url', () => {
     const result = getRoomCallLocator('roomId=mockRoomId&userId=mockUserId');
     const mockRoomsLocator: RoomCallLocator = {
@@ -113,7 +120,9 @@ describe('getMeetingLink', () => {
       expect(error).toBeDefined();
     }
   });
+});
 
+describe('getRoomsUserId', () => {
   test('should get the participantId from valid rooms url', () => {
     const result = getRoomsUserId('roomId=mockRoomId&userId=mockUserId');
     expect(result).toBe('mockUserId');
@@ -126,7 +135,9 @@ describe('getMeetingLink', () => {
       expect(error).toBeDefined();
     }
   });
+});
 
+describe('makeTeamsJoinUrl', () => {
   test('should make correct teams join url', () => {
     const result = makeTeamsJoinUrl('mockTeamsMeetingUrl');
     expect(result).toBe('?meetingURL=mockTeamsMeetingUrl');
@@ -136,7 +147,25 @@ describe('getMeetingLink', () => {
     const result = makeRoomsJoinUrl('mockRoomId', 'mockUserId');
     expect(result).toBe('/visit?roomId=mockRoomId&userId=mockUserId');
   });
+});
 
+describe('isValidTeamsLink', () => {
+  test('should return true if link starts with correct path', () => {
+    const meetingLink =
+      'https://teams.microsoft.com/l/meetup-join/19%3a123%40threa123d.v2/0?context=%7b%22Tid%22%3a%2200000000-0000-0000-0000-000000000000%22%2c%22Oid%22%3a%2200000000-0000-0000-0000-000000000000%22%7d';
+    const result = isValidTeamsLink(meetingLink);
+    expect(result).toBe(true);
+  });
+
+  test('should return false if link does not start with correct path', () => {
+    const meetingLink =
+      'https://example.org/l/meetup-join/19%3a123%40threa123d.v2/0?context=%7b%22Tid%22%3a%2200000000-0000-0000-0000-000000000000%22%2c%22Oid%22%3a%2200000000-0000-0000-0000-000000000000%22%7d';
+    const result = isValidTeamsLink(meetingLink);
+    expect(result).toBe(false);
+  });
+});
+
+describe('isValidRoomsLink', () => {
   test('should return true if RoomsMeetingUrl is valid', () => {
     global.window = Object.create(window);
     const url = 'http://localhost:8080';
@@ -149,6 +178,57 @@ describe('getMeetingLink', () => {
     const mockUrl = 'http://localhost:8080/visit?roomId=mockRoomId&userId=mockUserId';
 
     const isRoomsLInk = isValidRoomsLink(mockUrl);
-    expect(isRoomsLInk).toBeTruthy();
+    expect(isRoomsLInk).toBe(true);
+  });
+
+  test('should return false if RoomsMeetingUrl does not have roomId query parameter', () => {
+    global.window = Object.create(window);
+    const url = 'http://localhost:8080';
+    Object.defineProperty(window, 'location', {
+      value: {
+        origin: url
+      }
+    });
+    expect(window.location.origin).toEqual(url);
+    const mockUrl = 'http://localhost:8080/visit?userId=mockUserId';
+
+    const isRoomsLInk = isValidRoomsLink(mockUrl);
+    expect(isRoomsLInk).toBe(false);
+  });
+
+  test('should return false if RoomsMeetingUrl does not have userId query parameter', () => {
+    global.window = Object.create(window);
+    const url = 'http://localhost:8080';
+    Object.defineProperty(window, 'location', {
+      value: {
+        origin: url
+      }
+    });
+    expect(window.location.origin).toEqual(url);
+    const mockUrl = 'http://localhost:8080/visit?roomId=mockRoomId';
+
+    const isRoomsLInk = isValidRoomsLink(mockUrl);
+    expect(isRoomsLInk).toBe(false);
+  });
+
+  test('should return false if RoomsMeetingUrl does not start with correct path', () => {
+    global.window = Object.create(window);
+    const url = 'http://localhost:8080';
+    Object.defineProperty(window, 'location', {
+      value: {
+        origin: url
+      }
+    });
+    expect(window.location.origin).toEqual(url);
+    const mockUrl = 'https://example.org/visit?roomId=mockRoomId&userId=mockUserId';
+
+    const isRoomsLInk = isValidRoomsLink(mockUrl);
+    expect(isRoomsLInk).toBe(false);
+  });
+
+  test('should return false an error is thrown', () => {
+    const invalidUrl = 'not a real url';
+    const isRoomsLInk = isValidRoomsLink(invalidUrl);
+    expect(isRoomsLInk).toBe(false);
   });
 });
