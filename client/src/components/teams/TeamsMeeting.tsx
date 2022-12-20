@@ -50,6 +50,7 @@ export const TeamsMeeting = (props: TeamsMeetingProps): JSX.Element => {
       waitingTitle={config.waitingTitle}
       waitingSubtitle={config.waitingSubtitle}
       chatEnabled={config.chatEnabled}
+      screenShareEnabled={config.screenShareEnabled}
       postCall={config.postCall}
       onDisplayError={(error) => onDisplayError(error)}
     />
