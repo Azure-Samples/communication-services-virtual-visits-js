@@ -15,6 +15,8 @@ export interface RoomParticipant {
 export interface CreateRoomResponse {
   roomId: string;
   participants: Array<RoomParticipant>;
+  validFrom: string;
+  validUntil: string;
 }
 
 export interface JoinRoomRequest {
