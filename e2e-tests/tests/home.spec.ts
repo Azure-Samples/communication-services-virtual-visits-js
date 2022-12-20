@@ -23,7 +23,7 @@ test("root page test", async ({ page }) => {
   // Click button:has-text("Start call")
   await expect(page.locator('[data-icon-name="Waffle"]').first()).toBeVisible();
   await expect(page.locator('text="Start call"').first()).toBeVisible();
-  await page.locator('button:has-text("Start call")').isEnabled;
+  await page.locator('button:has-text("Start call")').isEnabled();
   await delay(DELAY_MS);
   expect(await page.screenshot()).toMatchSnapshot(
     "roomsStartCallScreenshot.png"

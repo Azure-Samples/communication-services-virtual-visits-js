@@ -26,7 +26,7 @@ export const getGenericContainerStyles = (theme: Theme, mobile: string | null): 
     root: {
       maxWidth: '64rem',
       width: '100%',
-      height: '80vmin',
+      minHeight: '80vmin',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

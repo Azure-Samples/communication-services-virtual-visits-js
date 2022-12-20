@@ -7,7 +7,7 @@ import { fetchRoomsResponse } from '../../utils/FetchRoomsResponse';
 import { Spinner, PartialTheme, Theme } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole } from '../../models/RoomModel';
-import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import RoomsMeetingExperience from './RoomsMeetingExperience';
 import { AppConfigModel } from '../../models/ConfigModel';
 import { makeRoomsJoinUrl } from '../../utils/GetMeetingLink';
 

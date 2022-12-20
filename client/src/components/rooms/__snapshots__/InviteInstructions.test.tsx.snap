@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InviteInstructions matches snapshot 1`] = `
+<div
+  className="ms-Stack css-109"
+>
+  <div
+    className="ms-MessageBar ms-MessageBar-multiline root-110"
+  >
+    <div
+      className="ms-MessageBar-content content-111"
+    >
+      <div
+        aria-hidden={true}
+        className="ms-MessageBar-icon iconContainer-112"
+      >
+        <i
+          aria-hidden={true}
+          className="icon-119"
+          data-icon-name="Info"
+        />
+      </div>
+      <div
+        aria-live="polite"
+        className="ms-MessageBar-text text-114"
+        id="MessageBar0"
+        role="status"
+      >
+        <span
+          className="ms-MessageBar-innerText innerText-115"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`InviteInstructionsText matches snapshot 1`] = `
+<span
+  className="css-120"
+>
+  Invite people to join the virtual appointment after starting the call by using "Copy invite link" under "People" &gt; "Add People".
+</span>
+`;
