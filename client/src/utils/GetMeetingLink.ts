@@ -67,13 +67,8 @@ export const getChatThreadIdFromTeamsLink = (teamsMeetingLink: string): string =
   return threadId;
 };
 
-export const isValidTeamsLink = (teamsMeetingLink: string): boolean => {
-  //If teams link does not have a specific pattern at start, it is invalid
-  if (!teamsMeetingLink.startsWith('https://teams.microsoft.com/l/meetup-join/')) {
-    return false;
-  }
-  return true;
-};
+export const isValidTeamsLink = (teamsMeetingLink: string): boolean =>
+  teamsMeetingLink.startsWith('https://teams.microsoft.com/l/meetup-join/');
 
 export const isValidRoomsLink = (roomsMeetingLink: string): boolean => {
   try {
