@@ -57,8 +57,8 @@ export const Visit = (): JSX.Element => {
     const appendMeetingLinkToUrl = (): void => {
       window.history.pushState({}, document.title, window.location.href + link);
     };
-    const boolValidRoomsLink = isValidRoomsLink(link);
-    if (boolValidRoomsLink) window.location.assign(link);
+
+    if (isValidRoomsLink(link)) window.location.assign(link);
     else {
       appendMeetingLinkToUrl();
       const meetingLinkLocator = _getTeamsMeetingLinkLocator(link);
