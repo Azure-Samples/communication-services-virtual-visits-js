@@ -22,7 +22,7 @@ jobs:
           node-version: "14.19.x"
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -35,7 +35,7 @@ jobs:
           serverVer=$(jq -r .version server/package.json)
           echo serverversion: $serverVer
           if [ $clientVer != $serverVer ]; then (echo "client and server versions do not match"; exit 1;); fi
-          echo "::set-output name=newProjectVersion::$clientVer"
+          echo "newProjectVersion=$clientVer" >> $GITHUB_OUTPUT
 
       - name: Update packageUrl in ARM templates
         run: node scripts/set-arm-package-url.js Release/${{ steps.version.outputs.newProjectVersion }}
@@ -71,7 +71,7 @@ jobs:
 
       # Create a new Release and publish artifacts
       - name: Upload Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ steps.version.outputs.newProjectVersion }}
           tag_name: Release/${{ steps.version.outputs.newProjectVersion }}
