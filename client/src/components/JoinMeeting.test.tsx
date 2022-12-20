@@ -4,7 +4,7 @@
 import { PrimaryButton, TextField } from '@fluentui/react';
 import { mount } from 'enzyme';
 import { generateTheme } from '../utils/ThemeGenerator';
-import { JoinTeamsMeeting } from './JoinTeamsMeeting';
+import { JoinMeeting } from './JoinMeeting';
 import { Header } from '../Header';
 import { getTeamsMeetingLink } from '../utils/GetMeetingLink';
 
@@ -12,10 +12,10 @@ const validTeamsMeetingLink = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
 ).meetingLink;
 
-describe('JoinTeamsMeeting', () => {
+describe('JoinMeeting', () => {
   it('should render header when page is loaded', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',
@@ -38,7 +38,7 @@ describe('JoinTeamsMeeting', () => {
 
   it('join button should be disabled when meeting link does not exist', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',
@@ -62,7 +62,7 @@ describe('JoinTeamsMeeting', () => {
 
   it('should enable join button when meeting link is added', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',
@@ -78,7 +78,7 @@ describe('JoinTeamsMeeting', () => {
       />
     );
 
-    meeting.setState({ teamsMeetingLink: validTeamsMeetingLink });
+    meeting.setState({ meetingLink: validTeamsMeetingLink });
     const joinButton = meeting.find(PrimaryButton);
     const buttonState = joinButton.prop('disabled');
 
@@ -87,7 +87,7 @@ describe('JoinTeamsMeeting', () => {
 
   it('should call onJoinMeeting prop when join button is clicked', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',
@@ -103,10 +103,10 @@ describe('JoinTeamsMeeting', () => {
       />
     );
 
-    meeting.setState({ teamsMeetingLink: validTeamsMeetingLink });
+    meeting.setState({ meetingLink: validTeamsMeetingLink });
     const joinButton = meeting.find(PrimaryButton);
 
-    joinButton.simulate('click');
+    await joinButton.simulate('click');
 
     expect(meeting.props().onJoinMeeting).toBeCalled();
   });
@@ -132,7 +132,7 @@ describe('Error handling', () => {
 
   it('must show error message when meeting link is invalid', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',
@@ -157,7 +157,7 @@ describe('Error handling', () => {
 
   it('must not show error message when meeting link is valid', async () => {
     const meeting = mount(
-      <JoinTeamsMeeting
+      <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
           microsoftBookingsUrl: '',

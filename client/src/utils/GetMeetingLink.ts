@@ -75,6 +75,17 @@ export const isValidTeamsLink = (teamsMeetingLink: string): boolean => {
   return true;
 };
 
+export const isValidRoomsLink = (roomsMeetingLink: string): boolean => {
+  if (
+    !roomsMeetingLink.startsWith(window.location.origin + '/visit') ||
+    !roomsMeetingLink.includes('roomId') ||
+    !roomsMeetingLink.includes('userId')
+  ) {
+    return false;
+  }
+  return true;
+};
+
 export const makeTeamsJoinUrl = (teamsMeetingLink: string): string =>
   '?' + MEETING_URL_PARAMNAME + '=' + encodeURIComponent(teamsMeetingLink);
 

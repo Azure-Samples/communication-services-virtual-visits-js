@@ -9,7 +9,8 @@ import {
   getRoomsUserId,
   getTeamsMeetingLink,
   makeRoomsJoinUrl,
-  makeTeamsJoinUrl
+  makeTeamsJoinUrl,
+  isValidRoomsLink
 } from './GetMeetingLink';
 
 describe('getMeetingLink', () => {
@@ -134,5 +135,20 @@ describe('getMeetingLink', () => {
   test('should make correct rooms join url', () => {
     const result = makeRoomsJoinUrl('mockRoomId', 'mockUserId');
     expect(result).toBe('/visit?roomId=mockRoomId&userId=mockUserId');
+  });
+
+  test('should return true if RoomsMeetingUrl is valid', () => {
+    global.window = Object.create(window);
+    const url = 'http://localhost:8080';
+    Object.defineProperty(window, 'location', {
+      value: {
+        origin: url
+      }
+    });
+    expect(window.location.origin).toEqual(url);
+    const mockUrl = 'http://localhost:8080/visit?roomId=mockRoomId&userId=mockUserId';
+
+    const isRoomsLInk = isValidRoomsLink(mockUrl);
+    expect(isRoomsLInk).toBeTruthy();
   });
 });

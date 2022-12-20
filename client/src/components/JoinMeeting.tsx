@@ -6,25 +6,25 @@ import { Stack, TextField, PrimaryButton, Theme, ThemeContext, createTheme } fro
 import { Header } from '../Header';
 import { AppConfigModel } from '../models/ConfigModel';
 import { backgroundStyles } from '../styles/Common.styles';
-import { formStyles } from '../styles/JoinTeamsMeeting.Styles';
-import { getCurrentMeetingURL, isValidTeamsLink, makeTeamsJoinUrl } from '../utils/GetMeetingLink';
+import { formStyles } from '../styles/JoinMeeting.Styles';
+import { getCurrentMeetingURL, isValidRoomsLink, isValidTeamsLink, makeTeamsJoinUrl } from '../utils/GetMeetingLink';
 import GenericContainer from './GenericContainer';
 
-interface JoinTeamsMeetingProps {
+interface JoinMeetingProps {
   config: AppConfigModel;
   onJoinMeeting(urlToJoin: string): void;
 }
 
-interface JoinTeamsMeetingState {
-  teamsMeetingLink: string;
+interface JoinMeetingState {
+  meetingLink: string;
 }
 
-export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, JoinTeamsMeetingState> {
-  public constructor(props: JoinTeamsMeetingProps) {
+export class JoinMeeting extends React.Component<JoinMeetingProps, JoinMeetingState> {
+  public constructor(props: JoinMeetingProps) {
     super(props);
 
     this.state = {
-      teamsMeetingLink: getCurrentMeetingURL(window.location.search)
+      meetingLink: getCurrentMeetingURL(window.location.search)
     };
   }
 
@@ -33,14 +33,14 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
     newValue?: string
   ): void {
     if (newValue) {
-      this.setState({ teamsMeetingLink: newValue });
+      this.setState({ meetingLink: newValue });
     } else {
-      this.setState({ teamsMeetingLink: '' });
+      this.setState({ meetingLink: '' });
     }
   }
 
   private onGetErrorMessage(value: string): string {
-    if (isValidTeamsLink(value) || value === '') {
+    if (isValidTeamsLink(value) || value === '' || isValidRoomsLink(value)) {
       return '';
     }
 
@@ -48,8 +48,11 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
   }
 
   render(): JSX.Element {
-    const link = makeTeamsJoinUrl(this.state.teamsMeetingLink);
-    const enableButton = isValidTeamsLink(this.state.teamsMeetingLink);
+    const link = isValidTeamsLink(this.state.meetingLink)
+      ? makeTeamsJoinUrl(this.state.meetingLink)
+      : this.state.meetingLink;
+
+    const enableButton = isValidTeamsLink(this.state.meetingLink) || isValidRoomsLink(this.state.meetingLink);
     const parentID = 'JoinTeamsMeetingSection';
 
     return (
@@ -69,7 +72,7 @@ export class JoinTeamsMeeting extends React.Component<JoinTeamsMeetingProps, Joi
                   iconProps={{ iconName: 'Link' }}
                   onChange={this.onTeamsMeetingLinkChange.bind(this)}
                   onGetErrorMessage={this.onGetErrorMessage.bind(this)}
-                  defaultValue={this.state.teamsMeetingLink}
+                  defaultValue={this.state.meetingLink}
                 />
                 <PrimaryButton
                   disabled={!enableButton}

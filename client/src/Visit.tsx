@@ -4,13 +4,13 @@
 import { TeamsMeetingLinkLocator, RoomCallLocator } from '@azure/communication-calling';
 import { LayerHost, Spinner, Stack, ThemeProvider } from '@fluentui/react';
 import { Header } from './Header';
-import { JoinTeamsMeeting } from './components/JoinTeamsMeeting';
+import { JoinMeeting } from './components/JoinMeeting';
 import { AppConfigModel } from './models/ConfigModel';
 import { fetchConfig } from './utils/FetchConfig';
 import { backgroundStyles, fullSizeStyles } from './styles/Common.styles';
 import { GenericError } from './components/GenericError';
 import { useEffect, useState } from 'react';
-import { getTeamsMeetingLink, getRoomCallLocator, getRoomsUserId } from './utils/GetMeetingLink';
+import { getTeamsMeetingLink, getRoomCallLocator, getRoomsUserId, isValidRoomsLink } from './utils/GetMeetingLink';
 import { TeamsMeeting } from './components/teams/TeamsMeeting';
 import { RoomsMeeting } from './components/rooms/RoomsMeeting';
 import './styles/Common.css';
@@ -57,11 +57,13 @@ export const Visit = (): JSX.Element => {
     const appendMeetingLinkToUrl = (): void => {
       window.history.pushState({}, document.title, window.location.href + link);
     };
-
-    appendMeetingLinkToUrl();
-
-    const meetingLinkLocator = _getTeamsMeetingLinkLocator(link);
-    setTeamsMeetingLinkLocator(meetingLinkLocator);
+    const boolValidRoomsLink = isValidRoomsLink(link);
+    if (boolValidRoomsLink) window.location.assign(link);
+    else {
+      appendMeetingLinkToUrl();
+      const meetingLinkLocator = _getTeamsMeetingLinkLocator(link);
+      setTeamsMeetingLinkLocator(meetingLinkLocator);
+    }
   };
 
   const [config, setConfig] = useState<AppConfigModel | undefined>(undefined);
@@ -104,7 +106,7 @@ export const Visit = (): JSX.Element => {
     // show a separate screen with "enter meeting link" textbox
     return (
       <ThemeProvider theme={config.theme} style={{ height: '100%' }}>
-        <JoinTeamsMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
+        <JoinMeeting config={config} onJoinMeeting={(link) => _onJoinMeeting(link)} />
       </ThemeProvider>
     );
   }
