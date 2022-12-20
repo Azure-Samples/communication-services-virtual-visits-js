@@ -12,7 +12,7 @@ import {
   runFakeTimers
 } from '../../utils/TestUtils';
 import { Spinner } from '@fluentui/react';
-import { RoomsMeetingExperience } from './RoomsMeetingExperience';
+import RoomsMeetingExperience from './RoomsMeetingExperience';
 import { generateTheme } from '../../utils/ThemeGenerator';
 
 jest.mock('@azure/communication-react', () => {
