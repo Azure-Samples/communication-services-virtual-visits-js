@@ -71,7 +71,7 @@ jobs:
 
       # Create a new Release and publish artifacts
       - name: Upload Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           name: Release ${{ steps.version.outputs.newProjectVersion }}
           tag_name: Release/${{ steps.version.outputs.newProjectVersion }}
