@@ -4,4 +4,3 @@ A key component of a Virtual Appointment is the ability to schedule an appointme
 
 - [Use Microsoft Bookings](./microsoft-bookings.md)
 - [Use Azure Communication Services Rooms to start an appointment now](./appointment-using-rooms.md#use-rooms-to-start-an-appointment-now)
-- Use Azure Communication Services Rooms to schedule an appointment for later (Coming soon...)
