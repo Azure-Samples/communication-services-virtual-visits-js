@@ -18,7 +18,6 @@ on:
         required: false
         default: "main"
 env:
-  VV_COMMUNICATION_SERVICES_CONNECTION_STRING: ${{ secrets.COMMUNICATION_SERVICES_CONNECTION_STRING_E2E }}
   VV_COSMOS_DB_NAME: "myDB"
   VV_COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING_E2E }}
 
@@ -64,6 +63,8 @@ jobs:
 
       # Build and run e2e
       - name: Build and run e2e tests
+        env:
+          VV_COMMUNICATION_SERVICES_CONNECTION_STRING: ${{ secrets.COMMUNICATION_SERVICES_CONNECTION_STRING_E2E }}
         working-directory: ./e2e-tests
         id: e2eTests
         run: |
