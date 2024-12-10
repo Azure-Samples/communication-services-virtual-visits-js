@@ -4,7 +4,7 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
 <div
   className="body-118"
   style={
-    Object {
+    {
       "height": "100%",
     }
   }
@@ -14,6 +14,7 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
   >
     <div
       className="ms-Stack css-120"
+      data-testid="header"
     >
       <div>
         <button
@@ -38,7 +39,7 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
               className="ms-Icon root-105 ms-Button-icon icon-124"
               data-icon-name="Waffle"
               style={
-                Object {
+                {
                   "fontFamily": undefined,
                 }
               }
@@ -48,15 +49,13 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
       </div>
       <span
         className="css-128"
-      >
-        
-      </span>
+      />
     </div>
     <div
       className="ms-LayerHost"
       id="BookMeetingSection"
       style={
-        Object {
+        {
           "alignItems": "center",
           "display": "flex",
           "height": "100%",
@@ -105,7 +104,7 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
                   <div
                     className="ms-StackItem css-138"
                     style={
-                      Object {
+                      {
                         "fontSize": ".9375rem",
                         "fontWeight": "400",
                         "letterSpacing": "-0.015rem",
@@ -121,14 +120,14 @@ exports[`Book should match snapshot when bookings link is empty 1`] = `
                   <div
                     className="ms-StackItem css-138"
                     style={
-                      Object {
+                      {
                         "textDecoration": "none",
                       }
                     }
                   >
                     <span
                       style={
-                        Object {
+                        {
                           "alignItems": "center",
                           "display": "flex",
                         }

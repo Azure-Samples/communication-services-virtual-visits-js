@@ -35,7 +35,7 @@ export const TeamsMeeting = (props: TeamsMeetingProps): JSX.Element => {
 
   if (!token) {
     // token not ready yet - show spinning/loading animation
-    return <Spinner styles={fullSizeStyles} />;
+    return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
   return (

@@ -1,13 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Survey, SurveyProps } from './Survey';
+import { Survey } from './Survey';
 import { MSFormsSurveyOptions, PostCallConfig } from '../../models/ConfigModel';
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
-
-configure({ adapter: new Adapter() });
+import { render } from '@testing-library/react';
 
 describe('Survey', () => {
   it('should render iframe with correct url', async () => {
@@ -19,7 +15,7 @@ describe('Survey', () => {
         }
       }
     };
-    const survey = await mount<SurveyProps>(
+    const survey = await render(
       <Survey
         callId="mockCallId"
         acsUserId="mockAcsUserId"
@@ -28,10 +24,10 @@ describe('Survey', () => {
         onRejoinCall={jest.fn()}
       />
     );
-    const iframe = survey.find('iframe');
+    const iframe = survey.getAllByRole('iframe');
     const options: MSFormsSurveyOptions = mockPostCall.survey?.options as MSFormsSurveyOptions;
     expect(iframe.length).toBe(1);
-    expect(iframe.props().src).toEqual(options.surveyUrl);
+    expect(iframe[0].getAttribute('src')).toEqual(options.surveyUrl);
   });
 
   it('should render PostCallOneQuestionPoll component', async () => {
@@ -47,7 +43,7 @@ describe('Survey', () => {
         }
       }
     };
-    const survey = await mount<SurveyProps>(
+    const survey = await render(
       <Survey
         callId="mockCallId"
         acsUserId="mockAcsUserId"
@@ -56,7 +52,7 @@ describe('Survey', () => {
         onRejoinCall={jest.fn()}
       />
     );
-    const postCallOneQuestionPoll = survey.find(PostCallOneQuestionPoll);
+    const postCallOneQuestionPoll = survey.queryAllByTestId('post-call-poll');
     expect(postCallOneQuestionPoll.length).toBe(1);
   });
 });

@@ -45,7 +45,8 @@ export const createMockCallWithChatAdapter = (): CallWithChatAdapter => {
       call: undefined,
       chat: undefined,
       latestCallErrors: { test: new Error() as AdapterError },
-      latestChatErrors: { test: new Error() as AdapterError }
+      latestChatErrors: { test: new Error() as AdapterError },
+      isTeamsMeeting: false
     })
   );
   return callWithChatAdapter;
@@ -76,7 +77,9 @@ export const createMockCallAdapter = (): CallAdapter => {
         unparentedViews: []
       },
       isTeamsCall: false,
-      latestErrors: { test: new Error() as AdapterError }
+      latestErrors: { test: new Error() as AdapterError },
+      isTeamsMeeting: false,
+      isRoomsCall: false
     })
   );
   return callAdapter;

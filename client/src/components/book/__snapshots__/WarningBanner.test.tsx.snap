@@ -13,7 +13,7 @@ exports[`WarningBanner matches snapshot 1`] = `
     >
       <i
         aria-hidden={true}
-        className="icon-118"
+        className="icon-119"
         data-icon-name="Info"
       />
     </div>
@@ -25,6 +25,7 @@ exports[`WarningBanner matches snapshot 1`] = `
     >
       <span
         className="ms-MessageBar-innerText innerText-114"
+        data-testid="warning-banner"
       />
     </div>
   </div>
@@ -32,20 +33,20 @@ exports[`WarningBanner matches snapshot 1`] = `
 `;
 
 exports[`WarningMessage matches snapshot 1`] = `
-Array [
+[
   <span
-    className="css-119"
+    className="css-120"
   >
     This Booking page is a specimen and will not create appointments or send reminders.
   </span>,
   <a
-    className="ms-Link root-120"
+    className="ms-Link root-121"
     href="https://aka.ms/virtual-appointments-sample-bookings"
     onClick={[Function]}
     target="_blank"
   >
     <span
-      className="css-119"
+      className="css-120"
     >
       Check out the sample readme.
     </span>

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-import { OneQuestionPollInput, OneQuestionPollInputProps } from './OneQuestionPollInput';
-import { mount } from 'enzyme';
-import { IconButton, Rating, TextField } from '@fluentui/react';
+import { fireEvent, render } from '@testing-library/react';
+import { OneQuestionPollInput } from './OneQuestionPollInput';
+import React from 'react';
 
 describe('OneQuestionPollInput', () => {
   it('should trigger setPollResponse when like selected', async () => {
@@ -10,16 +10,18 @@ describe('OneQuestionPollInput', () => {
     const mockTextInputPlaceholder = 'mock';
     const mockSetPollResponse = jest.fn();
 
-    const onQuestionPollInput = await mount<OneQuestionPollInputProps>(
+    const onQuestionPollInput = await render(
       <OneQuestionPollInput
         pollType={mockPollType}
         textInputPlaceholder={mockTextInputPlaceholder}
         setPollResponse={mockSetPollResponse}
       />
     );
-    const iconButton = onQuestionPollInput.find(IconButton);
+    const iconButton = onQuestionPollInput.getAllByRole('button');
     expect(iconButton.length).toBe(2);
-    iconButton.first().simulate('click');
+    React.act(() => {
+      fireEvent.click(iconButton[0]);
+    });
     expect(mockSetPollResponse).toBeCalledWith(true);
   });
 
@@ -28,16 +30,18 @@ describe('OneQuestionPollInput', () => {
     const mockTextInputPlaceholder = 'mock';
     const mockSetPollResponse = jest.fn();
 
-    const onQuestionPollInput = await mount<OneQuestionPollInputProps>(
+    const onQuestionPollInput = await render(
       <OneQuestionPollInput
         pollType={mockPollType}
         textInputPlaceholder={mockTextInputPlaceholder}
         setPollResponse={mockSetPollResponse}
       />
     );
-    const rating = onQuestionPollInput.find(Rating);
+    const rating = onQuestionPollInput.queryAllByTestId("rating");
     expect(rating.length).toBe(1);
-    rating.simulate('change');
+    React.act(() => {
+      fireEvent.change(rating[0]);
+    });
     expect(mockSetPollResponse).toBeCalled();
   });
 
@@ -46,19 +50,18 @@ describe('OneQuestionPollInput', () => {
     const mockTextInputPlaceholder = 'mock';
     const mockSetPollResponse = jest.fn();
 
-    const onQuestionPollInput = await mount<OneQuestionPollInputProps>(
+    const onQuestionPollInput = await render(
       <OneQuestionPollInput
         pollType={mockPollType}
         textInputPlaceholder={mockTextInputPlaceholder}
         setPollResponse={mockSetPollResponse}
       />
     );
-    const textField = onQuestionPollInput.find(TextField);
+    const textField = onQuestionPollInput.getAllByRole('textbox');
     expect(textField.length).toBe(1);
-    textField
-      .first()
-      .find('textarea')
-      .simulate('change', { target: { value: 'Changed' } });
+    React.act(() => {
+      fireEvent.change(textField[0]);
+    });
     expect(mockSetPollResponse).toBeCalledWith('Changed');
   });
 });

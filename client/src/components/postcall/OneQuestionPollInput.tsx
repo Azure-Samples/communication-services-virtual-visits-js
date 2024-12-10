@@ -42,6 +42,7 @@ export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Elem
     return (
       <Stack horizontal>
         <IconButton
+          data-testid="poll-input-icon-button"
           toggle
           checked={likeOrDislike === LikeOrDislikeSelection.Like}
           iconProps={likeOrDislike === LikeOrDislikeSelection.Like ? likeSolidIcon : likeIcon}
@@ -52,6 +53,7 @@ export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Elem
           tabIndex={-1}
         />
         <IconButton
+          data-testid="poll-input-icon-button"
           toggle
           checked={likeOrDislike === LikeOrDislikeSelection.Dislike}
           iconProps={likeOrDislike === LikeOrDislikeSelection.Dislike ? dislikeSolidIcon : dislikeIcon}
@@ -69,6 +71,7 @@ export const OneQuestionPollInput = (props: OneQuestionPollInputProps): JSX.Elem
     return (
       <FocusZone disabled={true}>
         <Rating
+          data-testid="rating"
           tabIndex={-1}
           allowZeroStars={true}
           max={RATING_MAX}

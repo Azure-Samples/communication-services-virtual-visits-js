@@ -25,7 +25,7 @@ export const Header = (props: HeaderProps): JSX.Element => {
           theme = createTheme();
         }
         return (
-          <Stack styles={headerContainerStyles(theme)} verticalAlign="center" horizontal>
+          <Stack data-testid="header" styles={headerContainerStyles(theme)} verticalAlign="center" horizontal>
             <WaffleMenu parentid={parentid} />
             <Text styles={headerTextStyles(theme)}>{companyName}</Text>
           </Stack>

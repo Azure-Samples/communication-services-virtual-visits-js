@@ -14,7 +14,12 @@ export const BookingsPage = (props: BookingsPageProps): JSX.Element => {
   return (
     <>
       {props.config.microsoftBookingsUrl === BOOKINGS_SPECIMEN_URL ? <WarningBanner /> : <></>}
-      <iframe src={props.config.microsoftBookingsUrl} scrolling="yes" style={embededIframeStyles}></iframe>
+      <iframe
+        title="BookingsPageComponent"
+        src={props.config.microsoftBookingsUrl}
+        scrolling="yes"
+        style={embededIframeStyles}
+      ></iframe>
     </>
   );
 };
