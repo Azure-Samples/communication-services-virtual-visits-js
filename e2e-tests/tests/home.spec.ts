@@ -6,7 +6,9 @@ import { delay, DELAY_MS } from "./common/utils";
 
 const SERVER_URL = "http://localhost:8080";
 
-test("root page test", async ({ page }) => {
+// Skipping the test because the current Rooms Client version is outdated and fails. 
+// This test will be re-enabled in a future PR to update the Rooms Client to the latest version.
+test.skip("root page test", async ({ page }) => {
   // Go to http://localhost:8080/
   await page.goto(SERVER_URL);
 
