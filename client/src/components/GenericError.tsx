@@ -13,7 +13,7 @@ export const GenericError = (props: GenericErrorProps): JSX.Element => {
   const error = genericErrors[statusCode] || genericErrors['default'];
 
   return (
-    <Stack id="generic-error">
+    <Stack data-testid="generic-error" id="generic-error">
       <Text as={'h2'} className={errorIconStackStyle}>
         <Icon iconName="error" />
       </Text>

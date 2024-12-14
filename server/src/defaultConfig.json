@@ -1,5 +1,5 @@
 {
-  "communicationServicesConnectionString": "endpoint=your_endpoint;accesskey=secret",
+  "communicationServicesConnectionString": "endpoint=https://acs-ui-dev.unitedstates.communication.azure.com/;accesskey=CEATBYMuKn+C5aFiRVU0Mz4byh1tV7I58k+C8nPbhFHKzW1Pfg4TIbf2eOrYIsLeVG8v/rA3vXNkw0IiENJiuQ==",
   "microsoftBookingsUrl": "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US",
   "chatEnabled": true,
   "screenShareEnabled": true,

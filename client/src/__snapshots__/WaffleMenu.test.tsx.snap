@@ -2,38 +2,39 @@
 
 exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
 <div
-  className="ms-FocusZone css-151"
+  className="ms-FocusZone css-135"
   data-focuszone-id="FocusZone8"
+  data-tabster="{"uncontrolled": {}}"
   onFocus={[Function]}
   onKeyDown={[Function]}
   onMouseDownCapture={[Function]}
 >
   <nav
     aria-label="Navigate to expected page"
-    className="ms-Nav root-134"
+    className="ms-Nav root-118"
     role="navigation"
   >
     <div
       className="ms-Nav-group is-expanded"
     >
       <div
-        className="ms-Nav-groupContent groupContent-142"
+        className="ms-Nav-groupContent groupContent-126"
       >
         <ul
-          className="ms-Nav-navItems navItems-141"
+          className="ms-Nav-navItems navItems-125"
           role="list"
         >
           <li
-            className="ms-Nav-navItem navItem-140"
+            className="ms-Nav-navItem navItem-124"
             role="listitem"
           >
             <div
-              className="ms-Nav-compositeLink is-selected compositeLink-136"
+              className="ms-Nav-compositeLink is-selected compositeLink-120"
               name="Home"
             >
               <a
                 aria-current="page"
-                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-152"
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-136"
                 data-is-focusable={true}
                 href="./"
                 onClick={[Function]}
@@ -45,11 +46,11 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
                 title="Home"
               >
                 <span
-                  className="ms-Button-flexContainer flexContainer-153"
+                  className="ms-Button-flexContainer flexContainer-137"
                   data-automationid="splitbuttonprimary"
                 >
                   <div
-                    className="ms-Nav-linkText linkText-135"
+                    className="ms-Nav-linkText linkText-119"
                   >
                     Home
                   </div>
@@ -58,15 +59,15 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
             </div>
           </li>
           <li
-            className="ms-Nav-navItem navItem-140"
+            className="ms-Nav-navItem navItem-124"
             role="listitem"
           >
             <div
-              className="ms-Nav-compositeLink compositeLink-136"
+              className="ms-Nav-compositeLink compositeLink-120"
               name="Book"
             >
               <a
-                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-158"
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-142"
                 data-is-focusable={true}
                 href="./book"
                 onClick={[Function]}
@@ -78,11 +79,11 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
                 title="Book"
               >
                 <span
-                  className="ms-Button-flexContainer flexContainer-153"
+                  className="ms-Button-flexContainer flexContainer-137"
                   data-automationid="splitbuttonprimary"
                 >
                   <div
-                    className="ms-Nav-linkText linkText-135"
+                    className="ms-Nav-linkText linkText-119"
                   >
                     Book
                   </div>
@@ -91,15 +92,15 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
             </div>
           </li>
           <li
-            className="ms-Nav-navItem navItem-140"
+            className="ms-Nav-navItem navItem-124"
             role="listitem"
           >
             <div
-              className="ms-Nav-compositeLink compositeLink-136"
+              className="ms-Nav-compositeLink compositeLink-120"
               name="Visit"
             >
               <a
-                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-158"
+                className="ms-Button ms-Button--action ms-Button--command ms-Nav-link link-142"
                 data-is-focusable={true}
                 href="./visit"
                 onClick={[Function]}
@@ -111,11 +112,11 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
                 title="Visit"
               >
                 <span
-                  className="ms-Button-flexContainer flexContainer-153"
+                  className="ms-Button-flexContainer flexContainer-137"
                   data-automationid="splitbuttonprimary"
                 >
                   <div
-                    className="ms-Nav-linkText linkText-135"
+                    className="ms-Nav-linkText linkText-119"
                   >
                     Visit
                   </div>

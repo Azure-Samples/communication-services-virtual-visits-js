@@ -3,6 +3,7 @@
 exports[`InviteInstructions matches snapshot 1`] = `
 <div
   className="ms-Stack css-109"
+  data-testid="invite-instructions"
 >
   <div
     className="ms-MessageBar ms-MessageBar-multiline root-110"
@@ -16,7 +17,7 @@ exports[`InviteInstructions matches snapshot 1`] = `
       >
         <i
           aria-hidden={true}
-          className="icon-119"
+          className="icon-120"
           data-icon-name="Info"
         />
       </div>
@@ -37,7 +38,7 @@ exports[`InviteInstructions matches snapshot 1`] = `
 
 exports[`InviteInstructionsText matches snapshot 1`] = `
 <span
-  className="css-120"
+  className="css-121"
 >
   Invite people to join the virtual appointment after starting the call by using "Copy invite link" under "People" &gt; "Add People".
 </span>

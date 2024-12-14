@@ -62,5 +62,5 @@ export const Book = (): JSX.Element => {
     return <GenericError statusCode={error.statusCode} />;
   }
 
-  return <Spinner styles={fullSizeStyles} />;
+  return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
 };

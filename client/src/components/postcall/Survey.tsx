@@ -30,6 +30,8 @@ export interface SurveyProps {
 const SURVEY = 'SurveyComponent';
 
 export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps) => {
+  console.log('DEBUG survey: ', props.postCall);
+
   const surveyType = props.postCall.survey?.type;
   let postcallSurveyUrl = '';
   if (surveyType === 'msforms') {

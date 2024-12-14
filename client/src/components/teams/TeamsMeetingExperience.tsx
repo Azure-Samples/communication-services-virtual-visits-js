@@ -7,18 +7,14 @@ import {
   CallWithChatComposite,
   CallWithChatAdapter,
   COMPOSITE_LOCALE_EN_US,
-  createStatefulCallClient,
-  createAzureCommunicationCallWithChatAdapterFromClients,
-  createStatefulChatClient
+  CallAdapter,
+  useAzureCommunicationCallWithChatAdapter
 } from '@azure/communication-react';
 import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
-import { useEffect, useMemo, useState } from 'react';
-import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInfo';
-import { getChatThreadIdFromTeamsLink } from '../../utils/GetMeetingLink';
+import { useCallback, useMemo, useState } from 'react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { callWithChatComponentStyles, meetingExperienceLogoStyles } from '../../styles/MeetingExperience.styles';
-import { createStubChatClient } from '../../utils/stubs/chat';
 import { Survey } from '../postcall/Survey';
 
 import { PostCallConfig } from '../../models/ConfigModel';
@@ -51,46 +47,56 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
     userId,
     waitingSubtitle,
     waitingTitle,
-    postCall,
+    postCall = {
+      survey: {
+        type: 'onequestionpoll',
+        options: {
+          title: 'Tell us how we did',
+          prompt: "How satisfied are you with this virtual appointment's audio and video quality?",
+          pollType: 'rating',
+          saveButtonText: 'Continue'
+        }
+      }
+    },
     onDisplayError
   } = props;
 
-  const [callWithChatAdapter, setCallWithChatAdapter] = useState<CallWithChatAdapter | undefined>(undefined);
   const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
   const [callId, setCallId] = useState<string>();
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
-  useEffect(() => {
-    const _createAdapters = async (): Promise<void> => {
-      try {
-        const adapter = await _createCustomAdapter(
-          { communicationUserId: userId.communicationUserId },
-          credential,
-          displayName,
-          locator,
-          endpointUrl,
-          chatEnabled
-        );
-        if (postCall?.survey.type) {
-          adapter.on('callEnded', () => {
-            setRenderPostCall(true);
-          });
-        }
-        adapter.onStateChange((state) => {
-          if (state.call?.id !== undefined && state.call?.id !== callId) {
-            setCallId(adapter.getState().call?.id);
-          }
-        });
-        setCallWithChatAdapter(adapter);
-      } catch (err) {
-        // todo: error logging
-        console.log(err);
-        onDisplayError(err);
+  const afterAdapterCreate = useCallback(async (adapter: CallAdapter): Promise<CallAdapter> => {
+    adapter.on('callEnded', () => {
+      setRenderPostCall(true);
+    });
+    adapter.onStateChange((state) => {
+      if (state.call?.id !== undefined && state.call?.id !== callId) {
+        setCallId(adapter.getState().call?.id);
       }
-    };
+    });
+    return adapter;
+  }, []);
 
-    _createAdapters();
-  }, [credential, displayName, endpointUrl, locator, userId, onDisplayError]);
+  const args = useMemo(
+    () => ({
+      userId,
+      displayName,
+      endpoint: endpointUrl,
+      credential,
+      locator
+    }),
+    [userId, displayName, endpointUrl, credential, locator]
+  );
+
+  let callWithChatAdapter;
+  try {
+    callWithChatAdapter = _createCustomAdapter(args, afterAdapterCreate);
+  } catch (err) {
+    // todo: error logging
+    console.log(err);
+    onDisplayError(err);
+  }
+
   if (callWithChatAdapter) {
     const logo = logoUrl ? <img style={meetingExperienceLogoStyles} src={logoUrl} /> : <></>;
     const locale = COMPOSITE_LOCALE_EN_US;
@@ -116,7 +122,10 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
             }}
           />
         )}
-        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
+        <div
+          data-testid="meeting-composite"
+          style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}
+        >
           <CallWithChatComposite
             adapter={callWithChatAdapter}
             fluentTheme={fluentTheme}
@@ -155,49 +164,6 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
   return <Spinner styles={fullSizeStyles} />;
 };
 
-const _createCustomAdapter = async (
-  userId,
-  credential,
-  displayName,
-  locator,
-  endpoint,
-  chatEnabled
-): Promise<CallWithChatAdapter> => {
-  const appName = getApplicationName();
-  const appVersion = getApplicationVersion();
-  const callClient = createStatefulCallClient(
-    { userId },
-    {
-      callClientOptions: {
-        diagnostics: {
-          appName,
-          appVersion
-        }
-      }
-    }
-  );
-
-  const threadId = getChatThreadIdFromTeamsLink(locator.meetingLink);
-
-  const chatClient = chatEnabled
-    ? createStatefulChatClient({
-        userId,
-        displayName,
-        endpoint,
-        credential
-      })
-    : createStubChatClient(userId, threadId);
-
-  const callAgent = await callClient.createCallAgent(credential, { displayName });
-  const chatThreadClient = await chatClient.getChatThreadClient(threadId);
-
-  await chatClient.startRealtimeNotifications();
-
-  return createAzureCommunicationCallWithChatAdapterFromClients({
-    callClient,
-    callAgent,
-    callLocator: locator,
-    chatClient,
-    chatThreadClient
-  });
+const _createCustomAdapter = (args, afterAdapterCreate): CallWithChatAdapter | undefined => {
+  return useAzureCommunicationCallWithChatAdapter(args, afterAdapterCreate);
 };

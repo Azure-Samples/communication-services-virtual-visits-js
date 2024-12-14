@@ -41,7 +41,7 @@ export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
     return (
       <>
         <IconButton
-          id="waffle-menu-panel"
+          data-testid="waffle-panel-icon-button"
           iconProps={{ iconName: 'Waffle' }}
           aria-label="Menu Button"
           styles={theme ? panelMenuIconStyles(theme) : undefined}
@@ -67,6 +67,7 @@ export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
               onClick={() => _openPanel()}
             />
             <Panel
+              data-testid="waffle-panel"
               styles={wafflePanelStyles(theme)}
               isLightDismiss={true}
               isOpen={isOpen}
@@ -108,5 +109,12 @@ const navLinkGroups: INavLinkGroup[] = [
 ];
 
 export const WaffleNavigation = (): JSX.Element => {
-  return <Nav ariaLabel="Navigate to expected page" styles={wafflePanelNavigationStyles} groups={navLinkGroups} />;
+  return (
+    <Nav
+      data-testid="waffle-nav"
+      ariaLabel="Navigate to expected page"
+      styles={wafflePanelNavigationStyles}
+      groups={navLinkGroups}
+    />
+  );
 };

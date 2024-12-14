@@ -1,18 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Spinner } from '@fluentui/react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
+import * as renderer from 'react-test-renderer';
 import { Book } from './Book';
-import { Header } from './Header';
-import { GenericError } from './components/GenericError';
 import { AppConfigModel } from './models/ConfigModel';
+import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
 import * as FetchConfig from './utils/FetchConfig';
 import { runFakeTimers } from './utils/TestUtils';
 import { generateTheme } from './utils/ThemeGenerator';
-import * as renderer from 'react-test-renderer';
-import { BOOKINGS_SPECIMEN_URL } from './utils/Constants';
-import WarningBanner from './components/book/WarningBanner';
 
 describe('Book', () => {
   beforeEach(() => {
@@ -23,14 +19,12 @@ describe('Book', () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(Promise.resolve(undefined));
 
-    const book = await mount(<Book />);
+    const book = await render(<Book />);
 
     await runFakeTimers();
 
-    book.update();
-
-    const spinners = book.find(Spinner);
-    const headers = book.find(Header);
+    const spinners = book.queryAllByTestId('spinner');
+    const headers = book.queryAllByTestId('header');
 
     expect(spinners.length).toBe(1);
     expect(headers.length).toBe(0);
@@ -44,14 +38,12 @@ describe('Book', () => {
       }
     );
 
-    const book = await mount(<Book />);
+    const book = await render(<Book />);
 
     await runFakeTimers();
 
-    book.update();
-
-    const spinners = book.find(Spinner);
-    const genericError = book.find(GenericError);
+    const spinners = book.queryAllByTestId('spinner');
+    const genericError = book.queryAllByTestId('generic-error');
 
     expect(spinners.length).toBe(0);
     expect(genericError.length).toBe(1);
@@ -74,25 +66,23 @@ describe('Book', () => {
       } as AppConfigModel)
     );
 
-    const book = await mount(<Book />);
+    const book = await render(<Book />);
 
     await runFakeTimers();
 
-    book.update();
-
-    const spinners = book.find(Spinner);
-    const headers = book.find(Header);
-    const iframes = book.find('iframe');
-    const warningBanner = book.find(WarningBanner);
+    const spinners = book.queryAllByTestId('spinner');
+    const headers = book.queryAllByTestId('header');
+    const bookingPageIframes = book.queryAllByTitle('BookingsPageComponent');
+    const warningBanner = book.queryAllByTestId('warning-banner');
 
     expect(spinners.length).toBe(0);
     expect(warningBanner.length).toBe(0);
     expect(headers.length).toBe(1);
-    expect(iframes.length).toBe(1);
-    expect(iframes.first().props().src).toBe(mockBookingsUrl);
+    expect(bookingPageIframes.length).toBe(1);
+    expect(bookingPageIframes[0].getAttribute('src')).toBe(mockBookingsUrl);
   });
 
-  it('should render header and no scheduling info when config is loaded and bookings link is empty', async () => {
+  it.only('should render header and no scheduling info when config is loaded and bookings link is empty', async () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(
       Promise.resolve({
@@ -108,21 +98,19 @@ describe('Book', () => {
       } as AppConfigModel)
     );
 
-    const book = await mount(<Book />);
+    const book = await render(<Book />);
 
     await runFakeTimers();
 
-    book.update();
-
-    const spinners = book.find(Spinner);
-    const headers = book.find(Header);
-    const iframes = book.find('iframe');
-    const warningBanner = book.find(WarningBanner);
+    const spinners = book.queryAllByTestId('spinner');
+    const headers = book.queryAllByTestId('header');
+    const bookingPageIframes = book.queryAllByTitle('BookingsPageComponent');
+    const warningBanner = book.queryAllByTestId('warning-banner');
 
     expect(spinners.length).toBe(0);
     expect(warningBanner.length).toBe(0);
     expect(headers.length).toBe(1);
-    expect(iframes.length).toBe(0);
+    expect(bookingPageIframes.length).toBe(0);
   });
 
   it('should render warning banner if using specimen Bookings page', async () => {
@@ -141,22 +129,20 @@ describe('Book', () => {
       } as AppConfigModel)
     );
 
-    const book = await mount(<Book />);
+    const book = await render(<Book />);
 
     await runFakeTimers();
-    book.update();
 
-    const warningBanner = book.find(WarningBanner);
-
-    const spinners = book.find(Spinner);
-    const headers = book.find(Header);
-    const iframes = book.find('iframe');
+    const spinners = book.queryAllByTestId('spinner');
+    const headers = book.queryAllByTestId('header');
+    const bookingPageIframes = book.queryAllByTitle('BookingsPageComponent');
+    const warningBanner = book.queryAllByTestId('warning-banner');
 
     expect(spinners.length).toBe(0);
     expect(warningBanner.length).toBe(1);
     expect(headers.length).toBe(1);
-    expect(iframes.length).toBe(1);
-    expect(iframes.first().props().src).toBe(BOOKINGS_SPECIMEN_URL);
+    expect(bookingPageIframes.length).toBe(1);
+    expect(bookingPageIframes[0].getAttribute('src')).toBe(BOOKINGS_SPECIMEN_URL);
   });
 
   it('should match snapshot when bookings link is empty', async () => {

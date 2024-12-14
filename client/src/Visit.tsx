@@ -98,7 +98,7 @@ export const Visit = (): JSX.Element => {
 
   if (!config) {
     // config is not ready yet - show spinning/loading animation
-    return <Spinner styles={fullSizeStyles} />;
+    return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
   if (!isTeamsMeeting && !isRoomsMeeting) {
