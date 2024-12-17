@@ -8,7 +8,10 @@ import {
   CallWithChatAdapter,
   COMPOSITE_LOCALE_EN_US,
   CallAdapter,
-  useAzureCommunicationCallWithChatAdapter
+  useAzureCommunicationCallWithChatAdapter,
+  onResolveVideoEffectDependencyLazy,
+  onResolveDeepNoiseSuppressionDependencyLazy,
+  AzureCommunicationCallAdapterOptions
 } from '@azure/communication-react';
 import { Theme, Spinner, PartialTheme } from '@fluentui/react';
 import MobileDetect from 'mobile-detect';
@@ -77,13 +80,33 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
     return adapter;
   }, []);
 
+  const callAdapterOptions: AzureCommunicationCallAdapterOptions = useMemo(() => {
+    return {
+      videoBackgroundOptions: {
+        videoBackgroundImages,
+        onResolveDependency: onResolveVideoEffectDependencyLazy
+      },
+      deepNoiseSuppressionOptions: {
+        onResolveDependency: onResolveDeepNoiseSuppressionDependencyLazy
+      },
+      reactionResources: {
+        likeReaction: { url: 'assets/reactions/likeEmoji.png', frameCount: 102 },
+        heartReaction: { url: 'assets/reactions/heartEmoji.png', frameCount: 102 },
+        laughReaction: { url: 'assets/reactions/laughEmoji.png', frameCount: 102 },
+        applauseReaction: { url: 'assets/reactions/clapEmoji.png', frameCount: 102 },
+        surprisedReaction: { url: 'assets/reactions/surprisedEmoji.png', frameCount: 102 }
+      }
+    };
+  }, []);
+
   const args = useMemo(
     () => ({
       userId,
       displayName,
       endpoint: endpointUrl,
       credential,
-      locator
+      locator,
+      callAdapterOptions
     }),
     [userId, displayName, endpointUrl, credential, locator]
   );
@@ -167,3 +190,41 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
 const _createCustomAdapter = (args, afterAdapterCreate): CallWithChatAdapter | undefined => {
   return useAzureCommunicationCallWithChatAdapter(args, afterAdapterCreate);
 };
+
+const videoBackgroundImages = [
+  {
+    key: 'contoso',
+    url: 'assets/backgrounds/contoso.png',
+    tooltipText: 'Contoso Background'
+  },
+  {
+    key: 'pastel',
+    url: 'assets/backgrounds/abstract2.jpg',
+    tooltipText: 'Pastel Background'
+  },
+  {
+    key: 'rainbow',
+    url: 'assets/backgrounds/abstract3.jpg',
+    tooltipText: 'Rainbow Background'
+  },
+  {
+    key: 'office',
+    url: 'assets/backgrounds/room1.jpg',
+    tooltipText: 'Office Background'
+  },
+  {
+    key: 'plant',
+    url: 'assets/backgrounds/room2.jpg',
+    tooltipText: 'Plant Background'
+  },
+  {
+    key: 'bedroom',
+    url: 'assets/backgrounds/room3.jpg',
+    tooltipText: 'Bedroom Background'
+  },
+  {
+    key: 'livingroom',
+    url: 'assets/backgrounds/room4.jpg',
+    tooltipText: 'Living Room Background'
+  }
+];
