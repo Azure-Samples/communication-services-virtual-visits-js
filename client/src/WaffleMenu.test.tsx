@@ -1,39 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Panel } from '@fluentui/react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
 import * as renderer from 'react-test-renderer';
 import { WaffleMenu, WaffleNavigation } from './WaffleMenu';
 import { runFakeTimers } from './utils/TestUtils';
 
 describe('WaffleMenu', () => {
   it('should have a Waffle icon and a closed Panel', async () => {
-    const waffleMenu = mount(<WaffleMenu parentid="test" />);
+    const waffleMenu = render(<WaffleMenu parentid="test" />);
 
-    const menuIcon = waffleMenu.find({ iconName: 'Waffle' });
-    const panel = waffleMenu.find(Panel);
+    const menuButton = waffleMenu.getByTestId('waffle-menu-button');
 
-    expect(menuIcon.length).toBe(1);
-    expect(panel.length).toBe(1);
-    expect(panel.first().prop('isOpen')).toBe(false);
+    // Panel should be closed
+    expect(menuButton.nextSibling).toBeNull();
   });
 
   it('should open its Panel when Waffle icon is clicked on', async () => {
-    const waffleMenu = mount(<WaffleMenu parentid="test" />);
+    const waffleMenu = render(<WaffleMenu parentid="test" />);
 
-    const menuIcon = waffleMenu.find({ iconName: 'Waffle' });
+    const menuButton = waffleMenu.getByTestId('waffle-menu-button');
 
-    menuIcon.simulate('click');
+    React.act(() => {
+      fireEvent.click(menuButton);
+    });
 
     await runFakeTimers();
 
-    waffleMenu.update();
-
-    const panel = waffleMenu.find(Panel);
-
-    expect(panel.length).toBe(1);
-    expect(panel.first().prop('isOpen')).toBe(true);
+    // Panel should be open
+    expect(menuButton.nextSibling).not.toBeNull();
   });
 
   it('panel should have links to the book and visit page', () => {

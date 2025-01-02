@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LearnMore should match snapshot 1`] = `
-Array [
+[
   <span
     className="css-109"
   >
@@ -19,7 +19,7 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "fontSize": ".75rem",
             "fontWeight": "600",
             "lineHeight": "1rem",
@@ -33,14 +33,14 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "textDecoration": "none",
           }
         }
       >
         <span
           style={
-            Object {
+            {
               "alignItems": "center",
               "display": "flex",
             }
@@ -72,7 +72,7 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "fontSize": ".75rem",
             "fontWeight": "600",
             "lineHeight": "1rem",
@@ -86,14 +86,14 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "textDecoration": "none",
           }
         }
       >
         <span
           style={
-            Object {
+            {
               "alignItems": "center",
               "display": "flex",
             }
@@ -125,7 +125,7 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "fontSize": ".75rem",
             "fontWeight": "600",
             "lineHeight": "1rem",
@@ -139,14 +139,14 @@ Array [
       <div
         className="ms-StackItem css-112"
         style={
-          Object {
+          {
             "textDecoration": "none",
           }
         }
       >
         <span
           style={
-            Object {
+            {
               "alignItems": "center",
               "display": "flex",
             }

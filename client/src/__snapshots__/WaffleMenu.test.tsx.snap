@@ -4,6 +4,7 @@ exports[`WaffleMenu panel should have links to the book and visit page 1`] = `
 <div
   className="ms-FocusZone css-151"
   data-focuszone-id="FocusZone8"
+  data-tabster="{"uncontrolled": {}}"
   onFocus={[Function]}
   onKeyDown={[Function]}
   onMouseDownCapture={[Function]}

@@ -35,7 +35,7 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
   };
 
   return (
-    <Stack horizontalAlign="center" verticalAlign="center">
+    <Stack data-testid="post-call-poll" horizontalAlign="center" verticalAlign="center">
       <Text styles={pollTitleStyle}>{props.oneQuestionPollOptions.title}</Text>
       <Text styles={pollPromptStyle}>{props.oneQuestionPollOptions.prompt}</Text>
       <OneQuestionPollInput
@@ -47,7 +47,9 @@ export const PostCallOneQuestionPoll: React.FunctionComponent<PostCallOneQuestio
         style={surveySubmitButtonStyles}
         onClick={() => submitSurveyResponse()}
         onRenderIcon={
-          isSubmittingResponse ? () => <Spinner size={SpinnerSize.xSmall} styles={spinnerStyle} /> : undefined
+          isSubmittingResponse
+            ? () => <Spinner data-testid="spinner" size={SpinnerSize.xSmall} styles={spinnerStyle} />
+            : undefined
         }
         disabled={isSubmittingResponse}
       >

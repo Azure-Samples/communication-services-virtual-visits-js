@@ -17,6 +17,7 @@ interface JoinMeetingProps {
 
 interface JoinMeetingState {
   meetingLink: string;
+  errorMessage?: string;
 }
 
 export class JoinMeeting extends React.Component<JoinMeetingProps, JoinMeetingState> {
@@ -33,18 +34,14 @@ export class JoinMeeting extends React.Component<JoinMeetingProps, JoinMeetingSt
     newValue?: string
   ): void {
     if (newValue) {
-      this.setState({ meetingLink: newValue });
+      let errorMessage;
+      if (!isValidTeamsLink(newValue) && newValue !== '' && !isValidRoomsLink(newValue)) {
+        errorMessage = 'This meeting link is invalid. Verify your meeting link URL.';
+      }
+      this.setState({ meetingLink: newValue, errorMessage });
     } else {
       this.setState({ meetingLink: '' });
     }
-  }
-
-  private onGetErrorMessage(value: string): string {
-    if (isValidTeamsLink(value) || value === '' || isValidRoomsLink(value)) {
-      return '';
-    }
-
-    return 'This meeting link is invalid. Verify your meeting link URL.';
   }
 
   render(): JSX.Element {
@@ -66,19 +63,23 @@ export class JoinMeeting extends React.Component<JoinMeetingProps, JoinMeetingSt
               <Header companyName={this.props.config.companyName} parentid={parentID} />
               <GenericContainer layerHostId={parentID} theme={theme}>
                 <TextField
+                  data-testid="meeting-link-textfield"
                   label="Join a call"
                   placeholder="Enter a meeting link"
                   styles={formStyles}
                   iconProps={{ iconName: 'Link' }}
                   onChange={this.onTeamsMeetingLinkChange.bind(this)}
-                  onGetErrorMessage={this.onGetErrorMessage.bind(this)}
+                  errorMessage={this.state.errorMessage}
                   defaultValue={this.state.meetingLink}
                 />
                 <PrimaryButton
+                  data-testid="join-call-button"
                   disabled={!enableButton}
                   styles={formStyles}
-                  text={'Join call'}
-                  onClick={() => this.props.onJoinMeeting(link)}
+                  text={'Join call!'}
+                  onClick={() => {
+                    this.props.onJoinMeeting(link);
+                  }}
                 />
               </GenericContainer>
             </Stack>

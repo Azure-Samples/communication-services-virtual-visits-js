@@ -1,30 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { mount } from 'enzyme';
 import * as FetchConfig from './utils/FetchConfig';
 import * as CreateRoom from './utils/FetchRoomsResponse';
 import { runFakeTimers } from './utils/TestUtils';
-import { Header } from './Header';
-import { Spinner } from '@fluentui/react';
 import { Home } from './Home';
 import { AppConfigModel } from './models/ConfigModel';
-import { GenericError } from './components/GenericError';
 import { CreateRoomResponse } from './models/RoomModel';
+import { render } from '@testing-library/react';
 
 describe('Home', () => {
   it('should render loading spinner when config is not loaded', async () => {
     const fetchConfigSpy = jest.spyOn(FetchConfig, 'fetchConfig');
     fetchConfigSpy.mockReturnValue(Promise.resolve(undefined));
 
-    const home = mount(<Home />);
+    const home = render(<Home />);
 
     await runFakeTimers();
 
-    home.update();
-
-    const spinners = home.find(Spinner);
-    const headers = home.find(Header);
+    const spinners = home.queryAllByTestId('spinner');
+    const headers = home.queryAllByTestId('header');
 
     expect(spinners.length).toBe(1);
     expect(headers.length).toBe(0);
@@ -38,14 +33,12 @@ describe('Home', () => {
       }
     );
 
-    const home = mount(<Home />);
+    const home = render(<Home />);
 
     await runFakeTimers();
 
-    home.update();
-
-    const spinners = home.find(Spinner);
-    const genericErrors = home.find(GenericError);
+    const spinners = home.queryAllByTestId('spinner');
+    const genericErrors = home.queryAllByTestId('generic-error');
 
     expect(spinners.length).toBe(0);
     expect(genericErrors.length).toBe(1);
@@ -59,14 +52,12 @@ describe('Home', () => {
       }
     );
 
-    const home = mount(<Home />);
+    const home = render(<Home />);
 
     await runFakeTimers();
 
-    home.update();
-
-    const spinners = home.find(Spinner);
-    const genericErrors = home.find(GenericError);
+    const spinners = home.queryAllByTestId('spinner');
+    const genericErrors = home.queryAllByTestId('generic-error');
 
     expect(spinners.length).toBe(0);
     expect(genericErrors.length).toBe(1);
@@ -80,14 +71,12 @@ describe('Home', () => {
       }
     );
 
-    const home = mount(<Home />);
+    const home = render(<Home />);
 
     await runFakeTimers();
 
-    home.update();
-
-    const spinners = home.find(Spinner);
-    const genericErrors = home.find(GenericError);
+    const spinners = home.queryAllByTestId('spinner');
+    const genericErrors = home.queryAllByTestId('generic-error');
 
     expect(spinners.length).toBe(0);
     expect(genericErrors.length).toBe(1);

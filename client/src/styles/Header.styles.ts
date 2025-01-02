@@ -44,10 +44,10 @@ export function panelMenuIconStyles(theme: Theme): IButtonStyles {
   };
 }
 
-export function headerMenuIconStyles(theme: Theme): IButtonStyles {
+export function headerMenuIconStyles(theme: Theme | undefined): IButtonStyles {
   return {
     icon: {
-      color: theme.semanticColors.primaryButtonText,
+      color: theme?.semanticColors.primaryButtonText,
       fontSize: '24px'
     },
     root: {
@@ -55,7 +55,7 @@ export function headerMenuIconStyles(theme: Theme): IButtonStyles {
       height: HEADER_HEIGHT,
       selectors: {
         ':hover .ms-Button-icon': {
-          color: theme.palette.themePrimary
+          color: theme?.palette.themePrimary
         }
       }
     }

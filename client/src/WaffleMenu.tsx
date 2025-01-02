@@ -41,7 +41,6 @@ export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
     return (
       <>
         <IconButton
-          id="waffle-menu-panel"
           iconProps={{ iconName: 'Waffle' }}
           aria-label="Menu Button"
           styles={theme ? panelMenuIconStyles(theme) : undefined}
@@ -60,7 +59,7 @@ export const WaffleMenu = (props: WaffleMenuProps): JSX.Element => {
         return (
           <div>
             <IconButton
-              id="waffle-menu"
+              data-testid="waffle-menu-button"
               iconProps={{ iconName: 'Waffle' }}
               aria-label="Menu Button"
               styles={headerMenuIconStyles(theme)}

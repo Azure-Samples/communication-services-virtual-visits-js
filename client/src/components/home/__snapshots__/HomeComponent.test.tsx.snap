@@ -16,7 +16,7 @@ exports[`HomeComponent should render home page 1`] = `
         <div
           className="ms-Image root-113"
           style={
-            Object {
+            {
               "height": undefined,
               "width": undefined,
             }
@@ -69,7 +69,7 @@ exports[`HomeComponent should render home page 1`] = `
                   className="ms-Icon root-105 ms-Button-icon icon-123"
                   data-icon-name="Calendar"
                   style={
-                    Object {
+                    {
                       "fontFamily": undefined,
                     }
                   }
@@ -101,7 +101,7 @@ exports[`HomeComponent should render home page 1`] = `
                   className="ms-Icon root-105 ms-Button-icon icon-123"
                   data-icon-name="Video"
                   style={
-                    Object {
+                    {
                       "fontFamily": undefined,
                     }
                   }
@@ -133,7 +133,7 @@ exports[`HomeComponent should render home page 1`] = `
                   className="ms-Icon root-105 ms-Button-icon icon-123"
                   data-icon-name="Link"
                   style={
-                    Object {
+                    {
                       "fontFamily": undefined,
                     }
                   }
@@ -168,7 +168,7 @@ exports[`HomeComponent should render home page 1`] = `
               <div
                 className="ms-StackItem css-133"
                 style={
-                  Object {
+                  {
                     "fontSize": ".9375rem",
                     "fontWeight": "400",
                     "letterSpacing": "-0.015rem",
@@ -184,14 +184,14 @@ exports[`HomeComponent should render home page 1`] = `
               <div
                 className="ms-StackItem css-133"
                 style={
-                  Object {
+                  {
                     "textDecoration": "none",
                   }
                 }
               >
                 <span
                   style={
-                    Object {
+                    {
                       "alignItems": "center",
                       "display": "flex",
                     }
@@ -224,7 +224,7 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "fontSize": ".75rem",
                   "fontWeight": "600",
                   "lineHeight": "1rem",
@@ -238,14 +238,14 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "textDecoration": "none",
                 }
               }
             >
               <span
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "display": "flex",
                   }
@@ -277,7 +277,7 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "fontSize": ".75rem",
                   "fontWeight": "600",
                   "lineHeight": "1rem",
@@ -291,14 +291,14 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "textDecoration": "none",
                 }
               }
             >
               <span
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "display": "flex",
                   }
@@ -330,7 +330,7 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "fontSize": ".75rem",
                   "fontWeight": "600",
                   "lineHeight": "1rem",
@@ -344,14 +344,14 @@ exports[`HomeComponent should render home page 1`] = `
             <div
               className="ms-StackItem css-133"
               style={
-                Object {
+                {
                   "textDecoration": "none",
                 }
               }
             >
               <span
                 style={
-                  Object {
+                  {
                     "alignItems": "center",
                     "display": "flex",
                   }

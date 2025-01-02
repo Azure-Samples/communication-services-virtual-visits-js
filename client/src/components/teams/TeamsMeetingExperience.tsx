@@ -116,7 +116,10 @@ export const TeamsMeetingExperience = (props: TeamsMeetingExperienceProps): JSX.
             }}
           />
         )}
-        <div style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}>
+        <div
+          data-testid="meeting-composite"
+          style={callWithChatComponentStyles(renderPostCall && postCall ? true : false)}
+        >
           <CallWithChatComposite
             adapter={callWithChatAdapter}
             fluentTheme={fluentTheme}
