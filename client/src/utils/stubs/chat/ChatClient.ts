@@ -72,10 +72,10 @@ export class StubChatClient implements IChatClient {
   stopRealtimeNotifications(): Promise<void> {
     return Promise.resolve();
   }
-  downloadResourceToCache(threadId: string, messageId: string, resourceUrl: string): void{
+  downloadResourceToCache(threadId: string, messageId: string, resourceUrl: string): void {
     /* Stub state never changes */
   }
-  removeResourceFromCache(threadId: string, messageId: string, resourceUrl: string): void{
+  removeResourceFromCache(threadId: string, messageId: string, resourceUrl: string): void {
     /* Stub state never changes */
   }
   dispose(): void {
