@@ -50,9 +50,9 @@ describe('PostCallOneQuestionPoll', () => {
         meetingLink={mockMeetingLink}
       />
     );
-    const likeButtons = await postCallOneQuestionPoll.queryAllByTestId("poll-input-like-button");
+    const likeButtons = await postCallOneQuestionPoll.queryAllByTestId('poll-input-like-button');
     expect(likeButtons.length).toBe(1);
-    const dislikeButtons = await postCallOneQuestionPoll.queryAllByTestId("poll-input-dislike-button");
+    const dislikeButtons = await postCallOneQuestionPoll.queryAllByTestId('poll-input-dislike-button');
     expect(dislikeButtons.length).toBe(1);
   });
 

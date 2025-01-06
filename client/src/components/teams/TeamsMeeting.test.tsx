@@ -88,9 +88,7 @@ describe('TeamsMeeting', () => {
     );
 
     const testFn = jest.fn();
-    render(
-      <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={testFn} />
-    );
+    render(<TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={testFn} />);
 
     await runFakeTimers();
 

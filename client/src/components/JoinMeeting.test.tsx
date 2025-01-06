@@ -81,7 +81,7 @@ describe('JoinMeeting', () => {
             theme: generateTheme('#FFFFFF'),
             waitingTitle: '',
             waitingSubtitle: '',
-            logoUrl: '',
+            logoUrl: ''
           }}
           onJoinMeeting={jest.fn()}
         />
@@ -173,7 +173,7 @@ describe('Error handling', () => {
     await React.act(() => {
       fireEvent.change(textField, { target: { value: 'bad meeting link' } });
     });
-    const errorMessages = meeting.queryAllByRole('alert');;
+    const errorMessages = meeting.queryAllByRole('alert');
     expect(errorMessages.length).toBe(1);
   });
 
