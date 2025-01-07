@@ -17,6 +17,7 @@ import { ERROR_PAYLOAD_500 } from './constants';
 const app = express();
 
 app.use(express.static('public'));
+
 app.disable('x-powered-by');
 
 app.use((req, res, next) => {
@@ -41,6 +42,10 @@ app.get('/', (_, res) => {
 
 app.get('/visit', (_, res) => {
   res.sendFile(path.join(__dirname, 'public/visit.html'));
+});
+
+app.get('/.well-known/apple-app-site-association', (_, res) => {
+  res.sendFile(path.join(__dirname, 'public/apple-app-site-association.json'));
 });
 
 const config = getServerConfig();
