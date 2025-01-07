@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { RoomsClient } from '@azure/communication-rooms';
+import { RoomParticipant, RoomsClient } from '@azure/communication-rooms';
+import { PagedAsyncIterableIterator } from '@azure/core-paging';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { createRoom, getToken } from './roomsController';
 import { CreateRoomResponse, RoomParticipantRole } from '../models/roomModel';
@@ -22,6 +23,37 @@ describe('roomsController', () => {
   const expectedPresenterId = 'communicationUserId-presenter';
   const expectedAttendeeId = 'communicationUserId-attendee';
 
+  function createPartipantsIterator() {
+    let nextIndex = 0;
+    const participants = [
+      {
+        id: {
+          communicationUserId: expectedPresenterId
+        },
+        role: RoomParticipantRole.presenter
+      },
+      {
+        id: {
+          communicationUserId: expectedAttendeeId
+        },
+        role: RoomParticipantRole.attendee
+      }
+    ]
+  
+    const rangeIterator = {
+      next: async () => {
+        let result;
+        if (nextIndex < participants.length) {
+          result = { value: participants[nextIndex], done: false };
+          nextIndex++;
+          return result;
+        }
+        return { value: undefined, done: true };
+      }
+    };
+    return rangeIterator;
+  }
+
   beforeEach(() => {
     jest.resetAllMocks();
     response = {
@@ -37,28 +69,39 @@ describe('roomsController', () => {
         createUser: async () => ({ communicationUserId: 'testing-communication-user-id' })
       } as CommunicationIdentityClient;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
         createRoom: async () => ({
           id: expectedRoomId,
           createdOn: validFrom,
           validFrom: validFrom,
           validUntil: validUntil,
-          joinPolicy: 'CommunicationServiceUsers',
-          participants: [
-            {
-              id: {
-                communicationUserId: expectedPresenterId
-              },
-              role: RoomParticipantRole.presenter
+          pstnDialOutEnabled: false
+        }),
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            {
-              id: {
-                communicationUserId: expectedAttendeeId
-              },
-              role: RoomParticipantRole.attendee
+            next: async () => {
+              return participantsIterator.next();
+            },
+            [Symbol.asyncIterator]() {
+              return this;
             }
-          ]
-        })
+          };
+        }
       } as RoomsClient;
 
       const expectedResponse: CreateRoomResponse = {
@@ -130,21 +173,32 @@ describe('roomsController', () => {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
       } as CommunicationIdentityClient;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
-        getParticipants: async (_roomId) => [
-          {
-            id: {
-              communicationUserId: expectedPresenterId
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            role: RoomParticipantRole.presenter
-          },
-          {
-            id: {
-              communicationUserId: expectedAttendeeId
+            next: async () => {
+              return participantsIterator.next();
             },
-            role: RoomParticipantRole.attendee
-          }
-        ]
+            [Symbol.asyncIterator]() {
+              return this;
+            }
+          };
+        }
       } as RoomsClient;
 
       const expectedResponse = {
@@ -177,21 +231,33 @@ describe('roomsController', () => {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
       } as CommunicationIdentityClient;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
-        getParticipants: async (_roomId) => [
-          {
-            id: {
-              communicationUserId: expectedPresenterId
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            role: RoomParticipantRole.presenter
-          },
-          {
-            id: {
-              communicationUserId: expectedAttendeeId
+            next: async () => {
+              const g = participantsIterator.next();
+              return g;
             },
-            role: RoomParticipantRole.attendee
-          }
-        ]
+            [Symbol.asyncIterator]() {
+              return this;
+            }
+          };
+        }
       } as RoomsClient;
 
       const expectedResponse = {
@@ -221,21 +287,32 @@ describe('roomsController', () => {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
       } as CommunicationIdentityClient;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
-        getParticipants: async (_roomId) => [
-          {
-            id: {
-              communicationUserId: expectedPresenterId
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            role: RoomParticipantRole.presenter
-          },
-          {
-            id: {
-              communicationUserId: expectedAttendeeId
+            next: async () => {
+              return participantsIterator.next();
             },
-            role: RoomParticipantRole.attendee
-          }
-        ]
+            [Symbol.asyncIterator]() {
+              return this;
+            }
+          };
+        }
       } as RoomsClient;
 
       await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
@@ -257,21 +334,32 @@ describe('roomsController', () => {
         getToken: async (_user, _scopes) => ({ token: expectedToken })
       } as CommunicationIdentityClient;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
-        getParticipants: async (_roomId) => [
-          {
-            id: {
-              communicationUserId: expectedPresenterId
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            role: RoomParticipantRole.presenter
-          },
-          {
-            id: {
-              communicationUserId: expectedAttendeeId
+            next: async () => {
+              return participantsIterator.next();
             },
-            role: RoomParticipantRole.attendee
-          }
-        ]
+            [Symbol.asyncIterator]() {
+              return this;
+            }
+          };
+        }
       } as RoomsClient;
 
       await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
@@ -295,7 +383,7 @@ describe('roomsController', () => {
       } as CommunicationIdentityClient;
 
       const mockedRoomsClient = {
-        getParticipants: jest.fn().mockRejectedValueOnce(expectedError)
+        listParticipants: jest.fn().mockRejectedValueOnce(expectedError)
       } as any;
 
       await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);
@@ -317,21 +405,32 @@ describe('roomsController', () => {
         getToken: jest.fn().mockRejectedValueOnce(expectedError)
       } as any;
 
+      const participantsIterator = createPartipantsIterator();
+
       const mockedRoomsClient = {
-        getParticipants: async (_roomId) => [
-          {
-            id: {
-              communicationUserId: expectedPresenterId
+        listParticipants: (_roomId): PagedAsyncIterableIterator<RoomParticipant> => {
+          return {
+            byPage: (): AsyncIterableIterator<RoomParticipant[]> => {
+              return {
+                next: async () => {
+                  return {
+                    done: true,
+                    value: []
+                  };
+                },
+                [Symbol.asyncIterator]() {
+                  return this;
+                }
+              };
             },
-            role: RoomParticipantRole.presenter
-          },
-          {
-            id: {
-              communicationUserId: expectedAttendeeId
+            next: async () => {
+              return participantsIterator.next();
             },
-            role: RoomParticipantRole.attendee
-          }
-        ]
+            [Symbol.asyncIterator]() {
+              return this;
+            }
+          };
+        }
       } as RoomsClient;
 
       await getToken(mockedIdentityClient, mockedRoomsClient)(request, response, next);

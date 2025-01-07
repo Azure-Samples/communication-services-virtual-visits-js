@@ -142,8 +142,13 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
 
 async function toArray(asyncIterator) {
   const arr: RoomParticipant[] = [];
-  for await (const i of asyncIterator) {
-    arr.push(i);
+  let result = await asyncIterator.next();
+  while (result.value) {
+    arr.push(result.value);
+    if (result.done) {
+      break;
+    }
+    result = await asyncIterator.next();
   }
   return arr;
 }
