@@ -86,8 +86,10 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
 
     const { roomId, userId } = requestData;
 
+    console.log('TESTX 1');
     // Retrieve participants list
     const participantsList = await roomsClient.getParticipants(roomId as string);
+    console.log('TESTX 2');
 
     // Check if the user is part of participants
     const foundUserParticipant: RoomParticipant | undefined = participantsList.find(
@@ -97,6 +99,7 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
     if (!foundUserParticipant) {
       return res.status(404).send(ERROR_NO_USER_FOUND_IN_ROOM);
     }
+    console.log('TESTX 3');
 
     let invitee: TestAppointmentRoomParticipant | undefined;
 
@@ -118,7 +121,9 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
       communicationUserId: userId as string
     };
 
+    console.log('TESTX 4');
     const tokenResponse: CommunicationAccessToken = await identityClient.getToken(user, scopes);
+    console.log('TESTX 5');
 
     // Formulating response
     const response: JoinRoomResponse = {
@@ -132,6 +137,7 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
 
     return res.send(response);
   } catch (error) {
+    console.log('TESTX 9');
     return next(error);
   }
 };

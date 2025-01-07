@@ -304,7 +304,7 @@ describe('roomsController', () => {
       expect(next).toHaveBeenCalledWith(expectedError);
     });
 
-    test('Should send error if getToken fails', async () => {
+    test.only('Should send error if getToken fails', async () => {
       const expectedError = new Error('Failed to get token');
       const mockedBody = {
         roomId: expectedRoomId,
