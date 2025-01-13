@@ -36,7 +36,7 @@ There are two ways to start using this app:
 
 - Create an Azure account with an active subscription. For details, see [Create an account for free](https://azure.microsoft.com/free/).
 - An active Communication Services resource. [Create a Communication Services resource](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
-- [Node.js (14.19.0 and above)](https://nodejs.org/en/download/)
+- [Node.js (20.17.0 and above)](https://nodejs.org/en/download/)
 
 ### Install Dependencies
 

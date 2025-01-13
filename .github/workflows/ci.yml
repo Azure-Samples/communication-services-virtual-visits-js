@@ -30,10 +30,10 @@ jobs:
           fetch-depth: 0
 
       # Ensure node version is great enough
-      - name: Use Node.js v14.19.x
+      - name: Use Node.js v20.17.x
         uses: actions/setup-node@v3
         with:
-          node-version: "14.19.x"
+          node-version: "20.17.x"
 
       # Install client dependencies
       - name: Install client dependencies
@@ -67,10 +67,10 @@ jobs:
           fetch-depth: 0
 
       # Ensure node version is great enough
-      - name: Use Node.js v14.19.x
+      - name: Use Node.js v20.17.x
         uses: actions/setup-node@v3
         with:
-          node-version: "14.19.x"
+          node-version: "20.17.x"
 
       # Install server dependencies
       - name: Install server dependencies
