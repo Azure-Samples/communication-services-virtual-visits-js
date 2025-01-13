@@ -38,8 +38,8 @@ describe('roomsController', () => {
         },
         role: RoomParticipantRole.attendee
       }
-    ]
-  
+    ];
+
     const rangeIterator = {
       next: async () => {
         let result;
