@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { CallAdapter, CallAdapterState, CallComposite } from '@azure/communication-react';
-import { getApplicationName, getApplicationVersion } from '../../utils/GetAppInfo';
-import { useEffect, useState, useMemo } from 'react';
-import { createStatefulCallClient, createAzureCommunicationCallAdapterFromClient } from '@azure/communication-react';
+import {
+  CallAdapter,
+  CallAdapterState,
+  CallComposite,
+  useAzureCommunicationCallAdapter
+} from '@azure/communication-react';
+import { useState, useMemo, useCallback } from 'react';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { Theme, PartialTheme, Stack, Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
@@ -32,64 +35,71 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
   const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-  const [callAdapter, setCallAdapter] = useState<CallAdapter | undefined>(undefined);
   const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
   const [renderInviteInstructions, setRenderInviteInstructions] = useState<boolean>(false);
   const [callId, setCallId] = useState<string>();
 
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
-  useEffect(() => {
-    const createAdapters = async (): Promise<void> => {
-      try {
-        const adapter = await _createCustomAdapter({ communicationUserId: userId }, credential, displayName, locator);
-
-        const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
-        if (postCallEnabled) {
-          adapter.on('callEnded', () => setRenderPostCall(true));
-        }
-
-        const toggleInviteInstructions = (state: CallAdapterState): void => {
-          const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(
-            userRole,
-            formFactorValue,
-            state?.page
-          );
-          setRenderInviteInstructions(roomsInviteInstructionsEnabled);
-        };
-
-        toggleInviteInstructions(adapter.getState());
-
-        adapter.onStateChange((state) => {
-          if (state.call?.id !== undefined && state.call?.id !== callId) {
-            setCallId(adapter.getState().call?.id);
-          }
-
-          toggleInviteInstructions(state);
-        });
-
-        setCallAdapter(adapter);
-      } catch (err) {
-        // todo: error logging
-        console.log(err);
-        onDisplayError(err);
+  const afterAdapterCreate = useCallback(async (adapter: CallAdapter): Promise<CallAdapter> => {
+    const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
+    if (postCallEnabled) {
+      adapter.on('callEnded', () => setRenderPostCall(true));
+    }
+    adapter.onStateChange((state) => {
+      if (state.call?.id !== undefined && state.call?.id !== callId) {
+        setCallId(adapter.getState().call?.id);
       }
+    });
+    const toggleInviteInstructions = (state: CallAdapterState): void => {
+      const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(userRole, formFactorValue, state?.page);
+      setRenderInviteInstructions(roomsInviteInstructionsEnabled);
     };
 
-    createAdapters();
-  }, [credential]);
+    toggleInviteInstructions(adapter.getState());
+
+    adapter.onStateChange((state) => {
+      if (state.call?.id !== undefined && state.call?.id !== callId) {
+        setCallId(adapter.getState().call?.id);
+      }
+
+      toggleInviteInstructions(state);
+    });
+
+    return adapter;
+  }, []);
+
+  const args = useMemo(
+    () => ({
+      userId: { communicationUserId: userId },
+      displayName,
+      credential,
+      locator
+    }),
+    [userId, displayName, credential, locator]
+  );
+
+  let callAdapter;
+  try {
+    callAdapter = _createCustomAdapter(args, afterAdapterCreate);
+  } catch (err) {
+    // todo: error logging
+    console.log(err);
+    onDisplayError(err);
+  }
 
   if (credential === undefined) {
     return <>Failed to construct credential. Provided token is malformed.</>;
   }
 
   if (!callAdapter) {
-    return <Spinner styles={fullSizeStyles} />;
+    return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
   if (renderPostCall && postCall && userRole !== RoomParticipantRole.presenter) {
     return (
       <Survey
+        data-testid="survey"
         callId={callId}
         acsUserId={userId}
         meetingLink={locator.roomId}
@@ -104,7 +114,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }
 
   return (
-    <Stack style={{ height: '100%' }}>
+    <Stack data-testid="rooms-composite" style={{ height: '100%' }}>
       <CallComposite
         adapter={callAdapter}
         fluentTheme={fluentTheme}
@@ -116,23 +126,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   );
 };
 
-const _createCustomAdapter = async (userId, credential, displayName, locator): Promise<CallAdapter> => {
-  const appName = getApplicationName();
-  const appVersion = getApplicationVersion();
-  const callClient = createStatefulCallClient(
-    { userId },
-    {
-      callClientOptions: {
-        diagnostics: {
-          appName,
-          appVersion
-        }
-      }
-    }
-  );
-
-  const callAgent = await callClient.createCallAgent(credential, { displayName });
-  return createAzureCommunicationCallAdapterFromClient(callClient, callAgent, locator);
+const _createCustomAdapter = (args, afterAdapterCreate): CallAdapter | undefined => {
+  return useAzureCommunicationCallAdapter(args, afterAdapterCreate);
 };
 
 export default RoomsMeetingExperience;

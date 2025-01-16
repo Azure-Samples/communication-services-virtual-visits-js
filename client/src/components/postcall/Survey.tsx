@@ -42,7 +42,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
 
   if (surveyType === 'msforms' || surveyType === 'custom') {
     return (
-      <Stack styles={surveyStyle}>
+      <Stack data-testid="survey" styles={surveyStyle}>
         <iframe title={SURVEY} style={surveyIframeStyle} src={postcallSurveyUrl} scrolling="yes"></iframe>
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
           <RejoinLink onRejoinCall={props.onRejoinCall} />
@@ -52,7 +52,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
   } else if (surveyType === 'onequestionpoll') {
     const oneQuestionPollOptions: OneQuestionPollOptions = props.postCall.survey.options as OneQuestionPollOptions;
     return (
-      <Stack styles={fullScreenStyles}>
+      <Stack data-testid="survey" styles={fullScreenStyles}>
         <Stack styles={oneQuestionPollStyle(props.theme)} tokens={{ childrenGap: 15 }}>
           <PostCallOneQuestionPoll
             theme={props.theme}

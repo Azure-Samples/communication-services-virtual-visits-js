@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { PrimaryButton, TextField } from '@fluentui/react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
+import { getTeamsMeetingLink } from '../utils/GetMeetingLink';
 import { generateTheme } from '../utils/ThemeGenerator';
 import { JoinMeeting } from './JoinMeeting';
-import { Header } from '../Header';
-import { getTeamsMeetingLink } from '../utils/GetMeetingLink';
 
 const validTeamsMeetingLink = getTeamsMeetingLink(
   '?meetingURL=https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F19%253ameeting_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%2540thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%252c%2522Oid%2522%253a%252200000000-0000-0000-0000-000000000000%2522%257d'
@@ -16,7 +15,7 @@ const validMockRoomsLink = 'http://localhost:8080/visit?roomId=mockRoomId&userId
 
 describe('JoinMeeting', () => {
   it('should render header when page is loaded', async () => {
-    const meeting = mount(
+    const meeting = render(
       <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
@@ -33,13 +32,13 @@ describe('JoinMeeting', () => {
       />
     );
 
-    const headers = meeting.find(Header);
+    const headers = meeting.queryAllByTestId('header');
 
     expect(headers.length).toBe(1);
   });
 
   it('join button should be disabled when meeting link does not exist', async () => {
-    const meeting = mount(
+    const meeting = render(
       <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
@@ -56,10 +55,8 @@ describe('JoinMeeting', () => {
       />
     );
 
-    const joinButton = meeting.find(PrimaryButton);
-    const buttonState = joinButton.prop('disabled');
-
-    expect(buttonState).toBe(true);
+    const joinButton = meeting.getByTestId('join-call-button');
+    expect(joinButton).toBeDefined();
   });
 
   it.each([[validTeamsMeetingLink], [validMockRoomsLink]])(
@@ -73,7 +70,7 @@ describe('JoinMeeting', () => {
         }
       });
       expect(window.location.origin).toEqual(url);
-      const meeting = mount(
+      const meeting = render(
         <JoinMeeting
           config={{
             communicationEndpoint: 'enpoint=test_endpoint;',
@@ -90,11 +87,9 @@ describe('JoinMeeting', () => {
         />
       );
 
-      meeting.setState({ meetingLink: meetingLink });
-      const joinButton = meeting.find(PrimaryButton);
-      const buttonState = joinButton.prop('disabled');
+      const joinButton = meeting.getByTestId('join-call-button');
 
-      expect(buttonState).toBe(false);
+      expect(joinButton?.getAttribute('disabled')).toBeFalsy();
     }
   );
 
@@ -108,10 +103,11 @@ describe('JoinMeeting', () => {
           origin: url
         }
       });
-      const meeting = mount(
+      const testFn = jest.fn();
+      const meeting = render(
         <JoinMeeting
           config={{
-            communicationEndpoint: 'enpoint=test_endpoint;',
+            communicationEndpoint: 'endpoint=test_endpoint;',
             microsoftBookingsUrl: '',
             chatEnabled: true,
             screenShareEnabled: true,
@@ -121,15 +117,18 @@ describe('JoinMeeting', () => {
             waitingSubtitle: '',
             logoUrl: ''
           }}
-          onJoinMeeting={jest.fn()}
+          onJoinMeeting={testFn}
         />
       );
 
-      meeting.setState({ meetingLink: meetingLink });
-      const joinButton = meeting.find(PrimaryButton);
-      await joinButton.simulate('click');
+      const textField = meeting.getByTestId('meeting-link-textfield');
+      const joinButton = meeting.getByTestId('join-call-button');
+      React.act(() => {
+        fireEvent.change(textField, { target: { value: meetingLink } });
+        fireEvent.click(joinButton);
+      });
 
-      expect(meeting.props().onJoinMeeting).toBeCalled();
+      expect(testFn).toBeCalled();
     }
   );
 });
@@ -153,7 +152,7 @@ describe('Error handling', () => {
   const errorMessage = 'This meeting link is invalid. Verify your meeting link URL.';
 
   it('must show error message when meeting link is invalid', async () => {
-    const meeting = mount(
+    const meeting = render(
       <JoinMeeting
         config={{
           communicationEndpoint: 'enpoint=test_endpoint;',
@@ -170,11 +169,12 @@ describe('Error handling', () => {
       />
     );
 
-    const textField = meeting.find(TextField).find('input');
-    textField.simulate('change', { target: { value: 'bad meeting link' } });
-    jest.runAllTimers();
-    const allText = meeting.text();
-    expect(allText).toContain(errorMessage);
+    const textField = meeting.getByTestId('meeting-link-textfield');
+    await React.act(() => {
+      fireEvent.change(textField, { target: { value: 'bad meeting link' } });
+    });
+    const errorMessages = meeting.queryAllByRole('alert');
+    expect(errorMessages.length).toBe(1);
   });
 
   it.each([[validTeamsMeetingLink], [validMockRoomsLink]])(
@@ -187,7 +187,7 @@ describe('Error handling', () => {
           origin: url
         }
       });
-      const meeting = mount(
+      const meeting = render(
         <JoinMeeting
           config={{
             communicationEndpoint: 'enpoint=test_endpoint;',
@@ -204,11 +204,13 @@ describe('Error handling', () => {
         />
       );
 
-      const textField = meeting.find(TextField).find('input');
-      textField.simulate('change', { target: { value: meetingLink } });
+      const textField = meeting.getByRole('textbox');
+      React.act(() => {
+        fireEvent.change(textField, { target: { value: meetingLink } });
+      });
       jest.runAllTimers();
-      const allText = meeting.text();
-      expect(allText).not.toContain(errorMessage);
+      const allText = meeting.queryAllByText(errorMessage);
+      expect(allText.length).toBe(0);
     }
   );
 });

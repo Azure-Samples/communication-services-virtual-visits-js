@@ -6,7 +6,12 @@ import { BOOKINGS_README_URL } from '../../utils/Constants';
 
 const WarningBanner = (): JSX.Element => {
   return (
-    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false} dismissButtonAriaLabel="Close">
+    <MessageBar
+      data-testid="warning-banner"
+      messageBarType={MessageBarType.warning}
+      isMultiline={false}
+      dismissButtonAriaLabel="Close"
+    >
       <WarningMessage />
     </MessageBar>
   );

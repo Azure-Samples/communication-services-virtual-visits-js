@@ -37,7 +37,7 @@ export const Home = (): JSX.Element => {
 
   if (!config) {
     // config and token not ready yet - show spinning/loading animation
-    return <Spinner styles={fullSizeStyles} />;
+    return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
   return (
