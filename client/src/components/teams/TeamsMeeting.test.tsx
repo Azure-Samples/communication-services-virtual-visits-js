@@ -19,7 +19,7 @@ import { render } from '@testing-library/react';
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
-    createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
+    useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
     CallWithChatComposite: () => createMockCallWithChatComposite()

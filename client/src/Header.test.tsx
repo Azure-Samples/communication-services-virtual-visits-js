@@ -6,7 +6,7 @@ import React from 'react';
 import { Header } from './Header';
 
 describe('Header', () => {
-  it.only('should render icon, waffle menu with panel, and company name', () => {
+  it('should render icon, waffle menu with panel, and company name', () => {
     const header = render(<Header companyName="company name" parentid="test" />);
 
     const waffleButton = header.getByTestId('waffle-menu-button');

@@ -17,6 +17,7 @@ jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
+    useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     CallComposite: () => createMockCallComposite()
   };
@@ -123,8 +124,6 @@ describe('RoomsMeeting', () => {
     );
 
     await runFakeTimers();
-
-    roomsMeeting.debug();
 
     const spinners = roomsMeeting.queryAllByTestId('spinner');
     const roomsMeetingExperience = roomsMeeting.queryAllByTestId('rooms-composite');

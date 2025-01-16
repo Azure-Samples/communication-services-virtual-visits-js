@@ -20,13 +20,14 @@ import {
 } from './utils/TestUtils';
 import { CommunicationUserToken } from '@azure/communication-identity';
 import { RoomParticipantRole } from './models/RoomModel';
-import { prettyDOM, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 jest.mock('@azure/communication-react', () => {
   return {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
-    createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
+    useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
+    useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
     CallWithChatComposite: () => createMockCallWithChatComposite(),
@@ -36,6 +37,7 @@ jest.mock('@azure/communication-react', () => {
 
 jest.mock('@azure/communication-common', () => {
   return {
+    ...jest.requireActual('@azure/communication-common'),
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
     }
@@ -183,8 +185,6 @@ describe('Visit', () => {
     const visit = render(<Visit />);
 
     await runFakeTimers();
-
-    console.log(prettyDOM(visit.container));
 
     const spinners = visit.queryAllByTestId('spinner');
     const joinMeeting = visit.queryAllByTestId('join-meeting');
