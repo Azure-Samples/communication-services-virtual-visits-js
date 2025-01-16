@@ -4,7 +4,6 @@
 import * as FetchToken from '../../utils/FetchToken';
 import * as GetMeetingLink from '../../utils/GetMeetingLink';
 import { CommunicationUserToken } from '@azure/communication-identity';
-import { mount } from 'enzyme';
 import { TeamsMeeting } from './TeamsMeeting';
 import { generateTheme } from '../../utils/ThemeGenerator';
 import {
@@ -14,9 +13,8 @@ import {
   createMockStatefulChatClient,
   runFakeTimers
 } from '../../utils/TestUtils';
-import { Spinner } from '@fluentui/react';
-import { TeamsMeetingExperience } from './TeamsMeetingExperience';
 import { TeamsMeetingLinkLocator } from '@azure/communication-calling';
+import { render } from '@testing-library/react';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -89,46 +87,42 @@ describe('TeamsMeeting', () => {
       }
     );
 
-    const teamsMeeting = mount(
-      <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={jest.fn()} />
+    const testFn = jest.fn();
+    render(
+      <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={testFn} />
     );
 
     await runFakeTimers();
 
-    teamsMeeting.update();
-    expect(teamsMeeting.props().onDisplayError).toHaveBeenCalled();
+    expect(testFn).toHaveBeenCalled();
   });
 
   it('should render loading spinner when token is not loaded', async () => {
     const fetchTokenSpy = jest.spyOn(FetchToken, 'fetchToken');
     fetchTokenSpy.mockReturnValue(Promise.resolve(undefined));
 
-    const teamsMeeting = mount(
+    const teamsMeeting = render(
       <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={jest.fn()} />
     );
 
     await runFakeTimers();
 
-    teamsMeeting.update();
-
-    const spinners = teamsMeeting.find(Spinner);
-    const teamsMeetingExperience = teamsMeeting.find(TeamsMeetingExperience);
+    const spinners = teamsMeeting.queryAllByTestId('spinner');
+    const teamsMeetingExperience = teamsMeeting.queryAllByTestId('meeting-composite');
 
     expect(spinners.length).toBe(1);
     expect(teamsMeetingExperience.length).toBe(0);
   });
 
   it('should load TeamsMeetingExperience when token is loaded', async () => {
-    const teamsMeeting = mount(
+    const teamsMeeting = render(
       <TeamsMeeting config={mockConfig} locator={mockTeamsMeetingLinkLocator} onDisplayError={jest.fn()} />
     );
 
     await runFakeTimers();
 
-    teamsMeeting.update();
-
-    const spinners = teamsMeeting.find(Spinner);
-    const teamsMeetingExperience = teamsMeeting.find(TeamsMeetingExperience);
+    const spinners = teamsMeeting.queryAllByTestId('spinner');
+    const teamsMeetingExperience = teamsMeeting.queryAllByTestId('meeting-composite');
 
     expect(spinners.length).toBe(0);
     expect(teamsMeetingExperience.length).toBe(1);

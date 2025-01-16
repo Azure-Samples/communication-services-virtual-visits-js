@@ -84,7 +84,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }
 
   if (!callAdapter) {
-    return <Spinner styles={fullSizeStyles} />;
+    return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
   if (renderPostCall && postCall && userRole !== RoomParticipantRole.presenter) {
@@ -104,7 +104,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }
 
   return (
-    <Stack style={{ height: '100%' }}>
+    <Stack data-testid="rooms-composite" style={{ height: '100%' }}>
       <CallComposite
         adapter={callAdapter}
         fluentTheme={fluentTheme}

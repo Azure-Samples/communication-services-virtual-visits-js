@@ -5,7 +5,7 @@ exports[`DefaultContainer uses correct styles if form factor is desktop 1`] = `
   className="ms-LayerHost"
   id="layerHost"
   style={
-    Object {
+    {
       "alignItems": "center",
       "display": "flex",
       "height": "100%",
@@ -29,7 +29,7 @@ exports[`DefaultContainer uses correct styles if form factor is mobile 1`] = `
   className="ms-LayerHost"
   id="layerHost"
   style={
-    Object {
+    {
       "alignItems": "center",
       "display": "flex",
       "height": "100%",

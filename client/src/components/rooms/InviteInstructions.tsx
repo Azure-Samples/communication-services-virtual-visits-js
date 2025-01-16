@@ -15,7 +15,12 @@ interface InviteInstructionsProps {
 const InviteInstructions = (props: InviteInstructionsProps): JSX.Element => {
   const { fluentTheme } = props;
   return (
-    <Stack horizontalAlign="center" verticalAlign="center" styles={inviteInstructionsContainerStyles}>
+    <Stack
+      data-testid="invite-instructions"
+      horizontalAlign="center"
+      verticalAlign="center"
+      styles={inviteInstructionsContainerStyles}
+    >
       <MessageBar styles={getInviteInstructionsMessageBarStyles(fluentTheme as ITheme)}>
         <InviteInstructionsText />
       </MessageBar>

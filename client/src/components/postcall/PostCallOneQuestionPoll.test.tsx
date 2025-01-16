@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { PostCallOneQuestionPollProps, PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
-import { mount } from 'enzyme';
+import { getTheme } from '@fluentui/react';
 import { Theme } from '@fluentui/theme';
-import { getTheme, IconButton, Rating, TextField, PrimaryButton, Spinner } from '@fluentui/react';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
 import { OneQuestionPollOptions } from '../../models/ConfigModel';
 import * as PostCallUtil from '../../utils/PostCallUtil';
+import { PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
 
 const mockAcsUserId = 'mockAcsUserId';
 const mockCallId = 'mockCallId';
@@ -40,7 +41,7 @@ describe('PostCallOneQuestionPoll', () => {
       answerPlaceholder: '',
       saveButtonText: ''
     };
-    const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
+    const postCallOneQuestionPoll = await render(
       <PostCallOneQuestionPoll
         theme={mockTheme}
         oneQuestionPollOptions={mockOneQuestionPollInfo}
@@ -49,8 +50,10 @@ describe('PostCallOneQuestionPoll', () => {
         meetingLink={mockMeetingLink}
       />
     );
-    const iconButton = postCallOneQuestionPoll.find(IconButton);
-    expect(iconButton.length).toBe(2);
+    const likeButtons = await postCallOneQuestionPoll.queryAllByTestId("poll-input-like-button");
+    expect(likeButtons.length).toBe(1);
+    const dislikeButtons = await postCallOneQuestionPoll.queryAllByTestId("poll-input-dislike-button");
+    expect(dislikeButtons.length).toBe(1);
   });
 
   it('should render correct input type when polltype is rating', async () => {
@@ -61,7 +64,7 @@ describe('PostCallOneQuestionPoll', () => {
       answerPlaceholder: '',
       saveButtonText: ''
     };
-    const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
+    const postCallOneQuestionPoll = await render(
       <PostCallOneQuestionPoll
         theme={mockTheme}
         oneQuestionPollOptions={mockOneQuestionPollInfo}
@@ -70,7 +73,7 @@ describe('PostCallOneQuestionPoll', () => {
         meetingLink={mockMeetingLink}
       />
     );
-    const rating = postCallOneQuestionPoll.find(Rating);
+    const rating = postCallOneQuestionPoll.queryAllByTestId('rating');
     expect(rating.length).toBe(1);
   });
 
@@ -82,7 +85,7 @@ describe('PostCallOneQuestionPoll', () => {
       answerPlaceholder: '',
       saveButtonText: ''
     };
-    const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
+    const postCallOneQuestionPoll = await render(
       <PostCallOneQuestionPoll
         theme={mockTheme}
         oneQuestionPollOptions={mockOneQuestionPollInfo}
@@ -91,7 +94,7 @@ describe('PostCallOneQuestionPoll', () => {
         meetingLink={mockMeetingLink}
       />
     );
-    const textField = postCallOneQuestionPoll.find(TextField);
+    const textField = postCallOneQuestionPoll.queryAllByRole('textbox');
     expect(textField.length).toBe(1);
   });
 
@@ -103,7 +106,7 @@ describe('PostCallOneQuestionPoll', () => {
       answerPlaceholder: '',
       saveButtonText: ''
     };
-    const postCallOneQuestionPoll = await mount<PostCallOneQuestionPollProps>(
+    const postCallOneQuestionPoll = await render(
       <PostCallOneQuestionPoll
         theme={mockTheme}
         oneQuestionPollOptions={mockOneQuestionPollInfo}
@@ -117,9 +120,11 @@ describe('PostCallOneQuestionPoll', () => {
       .spyOn(PostCallUtil, 'submitSurveyResponseUtil')
       .mockImplementationOnce(jest.fn());
 
-    const button = postCallOneQuestionPoll.find(PrimaryButton);
-    await button.simulate('click');
-    const spinner = postCallOneQuestionPoll.find(Spinner);
+    const button = postCallOneQuestionPoll.getByRole('button');
+    React.act(() => {
+      fireEvent.click(button);
+    });
+    const spinner = postCallOneQuestionPoll.getByTestId('spinner');
     expect(spinner).toBeDefined();
     expect(mockSubmitSurveyResponseUtil).toHaveBeenCalled();
   });

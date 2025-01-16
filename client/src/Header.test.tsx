@@ -1,23 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { IconButton, Text, Panel } from '@fluentui/react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
 import { Header } from './Header';
-import { WaffleMenu } from './WaffleMenu';
 
 describe('Header', () => {
-  it('should render icon, waffle menu with panel, and company name', () => {
-    const header = mount(<Header companyName="test" parentid="test" />);
+  it.only('should render icon, waffle menu with panel, and company name', () => {
+    const header = render(<Header companyName="company name" parentid="test" />);
 
-    const waffleButton = header.find(IconButton);
-    const companyText = header.find(Text);
-    const waffleMenu = header.find(WaffleMenu);
-    const panel = header.find(Panel);
+    const waffleButton = header.getByTestId('waffle-menu-button');
+    header.getByText('company name');
 
-    expect(waffleButton.length).toBe(1);
-    expect(companyText.length).toBe(1);
-    expect(waffleMenu.length).toBe(1);
-    expect(panel.length).toBe(1);
+    React.act(() => {
+      fireEvent.click(waffleButton);
+    });
+
+    // Panel should be open
+    expect(waffleButton.nextSibling).not.toBeNull();
   });
 });

@@ -4,7 +4,7 @@
 import express from 'express';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import { CommunicationAccessToken, CommunicationIdentityClient, TokenScope } from '@azure/communication-identity';
-import { Room, RoomsClient, RoomParticipant, CreateRoomOptions } from '@azure/communication-rooms';
+import { CommunicationRoom, RoomsClient, RoomParticipant, CreateRoomOptions } from '@azure/communication-rooms';
 import { joinRoomRequestValidator } from '../utils/validators';
 import {
   CreateRoomResponse,
@@ -45,10 +45,14 @@ export const createRoom = (identityClient: CommunicationIdentityClient, roomsCli
     };
 
     // Create a room with the request payload
-    const room: Room = await roomsClient.createRoom(createRoomOptions);
+    const room: CommunicationRoom = await roomsClient.createRoom(createRoomOptions);
+
+    // Retrieve participants list
+    const participantsIterator = await roomsClient.listParticipants(room.id);
+    const participantsList = await toArray(participantsIterator);
 
     // Formulating participants
-    const participants: TestAppointmentRoomParticipant[] = room.participants.map(
+    const participants: TestAppointmentRoomParticipant[] = participantsList.map(
       (participant: RoomParticipant): TestAppointmentRoomParticipant => ({
         id: (participant.id as CommunicationUserIdentifier).communicationUserId as string,
         role: participant.role as RoomParticipantRole
@@ -87,7 +91,7 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
     const { roomId, userId } = requestData;
 
     // Retrieve participants list
-    const participantsList = await roomsClient.getParticipants(roomId as string);
+    const participantsList = await toArray(await roomsClient.listParticipants(roomId as string));
 
     // Check if the user is part of participants
     const foundUserParticipant: RoomParticipant | undefined = participantsList.find(
@@ -135,3 +139,11 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
     return next(error);
   }
 };
+
+async function toArray(asyncIterator) {
+  const arr: RoomParticipant[] = [];
+  for await (const i of asyncIterator) {
+    arr.push(i);
+  }
+  return arr;
+}

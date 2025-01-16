@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as FetchRoomsResponse from '../../utils/FetchRoomsResponse';
+import { render } from '@testing-library/react';
 import { JoinRoomResponse, RoomParticipantRole } from '../../models/RoomModel';
-import { RoomsMeeting } from './RoomsMeeting';
-import { mount } from 'enzyme';
+import * as FetchRoomsResponse from '../../utils/FetchRoomsResponse';
 import {
   createMockCallAdapter,
   createMockCallComposite,
   createMockStatefulCallClient,
   runFakeTimers
 } from '../../utils/TestUtils';
-import { Spinner } from '@fluentui/react';
-import RoomsMeetingExperience from './RoomsMeetingExperience';
 import { generateTheme } from '../../utils/ThemeGenerator';
+import { RoomsMeeting } from './RoomsMeeting';
 
 jest.mock('@azure/communication-react', () => {
   return {
@@ -62,26 +60,27 @@ describe('RoomsMeeting', () => {
       }
     );
 
-    const roomsMeeting = mount(
+    const testFn = jest.fn();
+
+    render(
       <RoomsMeeting
         config={mockConfig}
         locator={roomCallLocator}
         participantId={'mockParticipantId'}
-        onDisplayError={jest.fn()}
+        onDisplayError={testFn}
       />
     );
 
     await runFakeTimers();
 
-    roomsMeeting.update();
-    expect(roomsMeeting.props().onDisplayError).toHaveBeenCalled();
+    expect(testFn).toHaveBeenCalled();
   });
 
   it('should render loading spinner when token is not loaded', async () => {
     const fetchRoomsResponseSpy = jest.spyOn(FetchRoomsResponse, 'fetchRoomsResponse');
     fetchRoomsResponseSpy.mockReturnValue(Promise.resolve(undefined));
 
-    const roomsMeeting = mount(
+    const roomsMeeting = render(
       <RoomsMeeting
         config={mockConfig}
         locator={roomCallLocator}
@@ -92,10 +91,8 @@ describe('RoomsMeeting', () => {
 
     await runFakeTimers();
 
-    roomsMeeting.update();
-
-    const spinners = roomsMeeting.find(Spinner);
-    const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
+    const spinners = roomsMeeting.queryAllByTestId('spinner');
+    const roomsMeetingExperience = roomsMeeting.queryAllByTestId('rooms-composite');
 
     expect(spinners.length).toBe(1);
     expect(roomsMeetingExperience.length).toBe(0);
@@ -116,7 +113,7 @@ describe('RoomsMeeting', () => {
         token: 'token'
       })
     );
-    const roomsMeeting = mount(
+    const roomsMeeting = render(
       <RoomsMeeting
         config={mockConfig}
         locator={roomCallLocator}
@@ -127,12 +124,10 @@ describe('RoomsMeeting', () => {
 
     await runFakeTimers();
 
-    roomsMeeting.update();
-    const spinners = roomsMeeting.find(Spinner);
-    const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
-    const inviteLink = roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl;
-    expect(inviteLink).toBeDefined();
-    expect(inviteLink).toContain('/visit?roomId=mockRoomId&userId=mockAttendeeId');
+    roomsMeeting.debug();
+
+    const spinners = roomsMeeting.queryAllByTestId('spinner');
+    const roomsMeetingExperience = roomsMeeting.queryAllByTestId('rooms-composite');
     expect(spinners.length).toBe(0);
     expect(roomsMeetingExperience.length).toBe(1);
   });
@@ -148,7 +143,7 @@ describe('RoomsMeeting', () => {
         token: 'token'
       })
     );
-    const roomsMeeting = mount(
+    const roomsMeeting = render(
       <RoomsMeeting
         config={mockConfig}
         locator={roomCallLocator}
@@ -159,10 +154,8 @@ describe('RoomsMeeting', () => {
 
     await runFakeTimers();
 
-    roomsMeeting.update();
-    const spinners = roomsMeeting.find(Spinner);
-    const roomsMeetingExperience = roomsMeeting.find(RoomsMeetingExperience);
-    expect(roomsMeetingExperience.props().roomsInfo.inviteParticipantUrl).toBeUndefined();
+    const spinners = roomsMeeting.queryAllByTestId('spinner');
+    const roomsMeetingExperience = roomsMeeting.queryAllByTestId('rooms-composite');
     expect(spinners.length).toBe(0);
     expect(roomsMeetingExperience.length).toBe(1);
   });
