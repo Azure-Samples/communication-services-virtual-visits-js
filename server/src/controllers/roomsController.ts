@@ -140,7 +140,7 @@ export const getToken = (identityClient: CommunicationIdentityClient, roomsClien
   }
 };
 
-async function toArray(asyncIterator) {
+async function toArray(asyncIterator): Promise<RoomParticipant[]> {
   const arr: RoomParticipant[] = [];
   let result = await asyncIterator.next();
   while (result.value) {

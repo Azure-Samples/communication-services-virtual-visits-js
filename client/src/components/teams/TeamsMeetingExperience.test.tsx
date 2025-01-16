@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { createAzureCommunicationCallWithChatAdapterFromClients } from '@azure/communication-react';
-import { prettyDOM, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { PostCallConfig } from '../../models/ConfigModel';
 import * as GetTeamsMeetingLink from '../../utils/GetMeetingLink';
 import {
@@ -87,15 +87,6 @@ describe('TeamsMeetingExperience', () => {
     await runFakeTimers();
     const callWithChatComposites = meetingExperience.queryAllByTestId('meeting-composite');
     expect(callWithChatComposites.length).toBe(1);
-    // expect(callWithChatComposites[0].props().locale?.strings.call.lobbyScreenWaitingToBeAdmittedTitle).toBe(
-    //   waitingTitle
-    // );
-    // expect(callWithChatComposites.first().props().locale?.strings.call.lobbyScreenWaitingToBeAdmittedMoreDetails).toBe(
-    //   waitingSubtitle
-    // );
-    // expect(callWithChatComposites.first().props().icons?.LobbyScreenConnectingToCall).toBeDefined();
-    // expect(callWithChatComposites.first().props().icons?.LobbyScreenWaitingToBeAdmitted).toBeDefined();
-    // expect(callWithChatComposites.first().props().formFactor).toEqual('desktop');
   });
 
   it('sets the formFactor to mobile in the CallWithChatComposite', async () => {

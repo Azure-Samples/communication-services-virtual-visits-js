@@ -23,7 +23,7 @@ describe('roomsController', () => {
   const expectedPresenterId = 'communicationUserId-presenter';
   const expectedAttendeeId = 'communicationUserId-attendee';
 
-  function createPartipantsIterator() {
+  function createPartipantsIterator(): Iterator<RoomParticipant> {
     let nextIndex = 0;
     const participants = [
       {
@@ -40,8 +40,8 @@ describe('roomsController', () => {
       }
     ];
 
-    const rangeIterator = {
-      next: async () => {
+    const iterator = {
+      next: () => {
         let result;
         if (nextIndex < participants.length) {
           result = { value: participants[nextIndex], done: false };
@@ -51,7 +51,7 @@ describe('roomsController', () => {
         return { value: undefined, done: true };
       }
     };
-    return rangeIterator;
+    return iterator;
   }
 
   beforeEach(() => {
