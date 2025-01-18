@@ -15,6 +15,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish Release
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Use Node.js v20.17.x
         uses: actions/setup-node@v3
@@ -68,6 +71,8 @@ jobs:
         run: |
           git tag ${{ steps.version.outputs.newProjectVersion }}
           git push --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Create a new Release and publish artifacts
       - name: Upload Release
