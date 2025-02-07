@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Check-out repo
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # Use a service account when checking out. This is to workaround the issue were GitHub
@@ -42,7 +42,7 @@ jobs:
 
       # Ensure node version is great enough
       - name: Use Node.js v20.17.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20.17.x"
 
