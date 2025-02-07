@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Check-out repo
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Check if any changes have been pushed to main since last release
       - name: Check latest commit age
@@ -61,12 +61,12 @@ jobs:
       id-token: write
     steps:
       - name: Install Node.js v20.17.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20.17.x"
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
