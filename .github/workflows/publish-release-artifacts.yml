@@ -15,6 +15,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish Release
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Use Node.js v20.17.x
         uses: actions/setup-node@v3
