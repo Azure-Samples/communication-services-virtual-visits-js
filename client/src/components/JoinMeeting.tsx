@@ -76,7 +76,7 @@ export class JoinMeeting extends React.Component<JoinMeetingProps, JoinMeetingSt
                   data-testid="join-call-button"
                   disabled={!enableButton}
                   styles={formStyles}
-                  text={'Join call!'}
+                  text={'Join call'}
                   onClick={() => {
                     this.props.onJoinMeeting(link);
                   }}
