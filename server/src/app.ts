@@ -3,6 +3,8 @@
 
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
+import WebSocket from 'ws';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
@@ -13,6 +15,14 @@ import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import { createSurveyDBHandler } from './databaseHandlers/surveyDBHandler';
 import { ERROR_PAYLOAD_500 } from './constants';
+import connectRoomsCall from './routes/connectToRoomsCall';
+import startTranscription from './routes/startTranscription';
+import stopTranscriptionForCall from './routes/stopTranscription';
+import fetchTranscript from './routes/fetchTranscript';
+import startCallWithTranscription from './routes/startRoomsCallWithTranscription';
+import callAutomationEvent from './routes/callAutomationEvent';
+import summarizeTranscript from './routes/summarizeTranscript';
+import { CALLCONNECTION_ID_TO_CORRELATION_ID, handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
 
@@ -43,6 +53,46 @@ app.get('/visit', (_, res) => {
   res.sendFile(path.join(__dirname, 'public/visit.html'));
 });
 
+/**
+ * route: /connectToRoom
+ * purpose: Calling: connect to an existing room
+ */
+app.use('/connectRoomsCall', cors(), connectRoomsCall);
+/**
+ * route: /startTranscription
+ * purpose: Start transcription for an established call
+ */
+app.use('/startTranscription', cors(), startTranscription);
+
+/**
+ * route: /stopTranscription
+ * purpose: Stop transcription for an established call
+ */
+app.use('/stopTranscription', cors(), stopTranscriptionForCall);
+
+/**
+ * route: /fetchTranscript
+ * purpose: Fetch an existing transcription
+ */
+app.use('/fetchTranscript', cors(), fetchTranscript);
+
+/**
+ * route: /startCallWithTranscription
+ * purpose: Start a new group call with transcription
+ */
+app.use('/startCallWithTranscription', cors(), startCallWithTranscription);
+/**
+ * route: /callAutomationEvent
+ * purpose: Call Automation: receive call automation events
+ */
+app.use('/callAutomationEvent', cors(), callAutomationEvent);
+
+/**
+ * route: /summarizeTranscript
+ * purpose: Sends transcript to AI summarization service
+ */
+app.use('/summarizeTranscript', cors(), summarizeTranscript);
+
 const config = getServerConfig();
 
 const surveyDBHandler = createSurveyDBHandler(config);
@@ -65,6 +115,73 @@ const roomsClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
+
+/**
+ * route: wss://<host>/
+ * purpose: WebSocket endpoint to receive transcription events
+ *
+ * Don't forget to secure this endpoint in production
+ * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ */
+let wss: WebSocket.Server;
+if (config.callAutomation?.ServerWebSocketPort) {
+  wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
+  wss.on('connection', (ws) => {
+    let transcriptionCorrelationId: string | undefined;
+
+    ws.on('open', () => {
+      console.log('WebSocket opened');
+    });
+
+    ws.on('message', (message) => {
+      const decoder = new TextDecoder();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const messageData = JSON.parse(decoder.decode(message as any));
+      console.log('Received message:', messageData);
+      if (messageData.type === 'ping') {
+        ws.send(JSON.stringify({ type: 'pong' }));
+        return;
+      } else if (messageData.type === 'join') {
+        const transcriptionStatus = !!Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
+          CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(messageData.serverCallId)
+        );
+        sendMessageToWebSocket(
+          JSON.stringify({
+            kind: 'TranscriptionStatus',
+            transcriptionStatus: transcriptionStatus,
+            serverCallId: messageData.serverCallId
+          })
+        );
+      } else if (
+        ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
+        ('kind' in messageData && messageData.kind === 'TranscriptionData')
+      ) {
+        transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
+      }
+    });
+
+    ws.on('close', () => {
+      console.log('WebSocket closed');
+    });
+  });
+}
+
+export const sendMessageToWebSocket = (message: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message, (error) => {
+          if (error) {
+            console.error('Error sending message:', error);
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      }
+    });
+  });
+};
 
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
