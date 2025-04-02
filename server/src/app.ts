@@ -22,9 +22,11 @@ import fetchTranscript from './routes/fetchTranscript';
 import startCallWithTranscription from './routes/startRoomsCallWithTranscription';
 import callAutomationEvent from './routes/callAutomationEvent';
 import summarizeTranscript from './routes/summarizeTranscript';
+import events from './routes/events';
 import { CALLCONNECTION_ID_TO_CORRELATION_ID, handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
+export const clients: express.Response[] = []; // Store connected clients
 
 app.use(express.static('public'));
 app.disable('x-powered-by');
@@ -57,41 +59,43 @@ app.get('/visit', (_, res) => {
  * route: /connectToRoom
  * purpose: Calling: connect to an existing room
  */
-app.use('/connectRoomsCall', cors(), connectRoomsCall);
+app.use('/api/connectRoomsCall', cors(), connectRoomsCall);
 /**
  * route: /startTranscription
  * purpose: Start transcription for an established call
  */
-app.use('/startTranscription', cors(), startTranscription);
+app.use('/api/startTranscription', cors(), startTranscription);
 
 /**
  * route: /stopTranscription
  * purpose: Stop transcription for an established call
  */
-app.use('/stopTranscription', cors(), stopTranscriptionForCall);
+app.use('/api/stopTranscription', cors(), stopTranscriptionForCall);
 
 /**
  * route: /fetchTranscript
  * purpose: Fetch an existing transcription
  */
-app.use('/fetchTranscript', cors(), fetchTranscript);
+app.use('/api/fetchTranscript', cors(), fetchTranscript);
 
 /**
  * route: /startCallWithTranscription
  * purpose: Start a new group call with transcription
  */
-app.use('/startCallWithTranscription', cors(), startCallWithTranscription);
+app.use('/api/startCallWithTranscription', cors(), startCallWithTranscription);
 /**
  * route: /callAutomationEvent
  * purpose: Call Automation: receive call automation events
  */
-app.use('/callAutomationEvent', cors(), callAutomationEvent);
+app.use('/api/callAutomationEvent', cors(), callAutomationEvent);
 
 /**
  * route: /summarizeTranscript
  * purpose: Sends transcript to AI summarization service
  */
-app.use('/summarizeTranscript', cors(), summarizeTranscript);
+app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
+
+app.use('/api/events', cors(), events);
 
 const config = getServerConfig();
 
@@ -137,22 +141,7 @@ if (config.callAutomation?.ServerWebSocketPort) {
       const decoder = new TextDecoder();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const messageData = JSON.parse(decoder.decode(message as any));
-      console.log('Received message:', messageData);
-      if (messageData.type === 'ping') {
-        ws.send(JSON.stringify({ type: 'pong' }));
-        return;
-      } else if (messageData.type === 'join') {
-        const transcriptionStatus = !!Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-          CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(messageData.serverCallId)
-        );
-        sendMessageToWebSocket(
-          JSON.stringify({
-            kind: 'TranscriptionStatus',
-            transcriptionStatus: transcriptionStatus,
-            serverCallId: messageData.serverCallId
-          })
-        );
-      } else if (
+      if (
         ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
         ('kind' in messageData && messageData.kind === 'TranscriptionData')
       ) {
@@ -166,21 +155,10 @@ if (config.callAutomation?.ServerWebSocketPort) {
   });
 }
 
-export const sendMessageToWebSocket = (message: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message, (error) => {
-          if (error) {
-            console.error('Error sending message:', error);
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      }
-    });
-  });
+// Function to send events to all connected clients
+export const sendEventToClients = (event: string, data: Record<string, unknown>): void => {
+  const message = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+  clients.forEach((client) => client.write(message));
 };
 
 app.use((req, res, next) => {
