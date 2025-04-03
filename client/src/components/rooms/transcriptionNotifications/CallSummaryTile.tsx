@@ -3,15 +3,12 @@
 
 import { DefaultButton, Icon, IStyle, mergeStyles, Spinner, Stack, Text, useTheme } from '@fluentui/react';
 import { containerStyle, containerItemGap } from '../../../styles/SummaryEndCall.styles';
-import { CallCompositeIcons } from '@azure/communication-react';
 import { SlideText20Regular } from '@fluentui/react-icons';
 import { fetchTranscript } from '../../../utils/CallAutomationUtils';
 /**
  * @private
  */
-export interface SummaryEndCallScreenProps {
-  iconName?: keyof CallCompositeIcons;
-  disableStartCallButton?: boolean;
+export interface CallSummaryTileProps {
   pageStyle?: IStyle;
   serverCallId?: string;
   summary?: string;
@@ -23,14 +20,14 @@ export interface SummaryEndCallScreenProps {
  *
  * @private
  */
-export const SummaryEndCallScreen = (props: SummaryEndCallScreenProps): JSX.Element => {
-  const { serverCallId, summarizationStatus, summary } = props;
+export const CallSummaryTile = (props: CallSummaryTileProps): JSX.Element => {
+  const { serverCallId, summarizationStatus, summary, pageStyle } = props;
 
   const theme = useTheme();
 
   return (
     <Stack
-      className={mergeStyles(props.pageStyle)}
+      className={mergeStyles(pageStyle)}
       verticalFill
       styles={{ root: { width: '100%' } }}
       verticalAlign="center"

@@ -24,6 +24,7 @@
     "@azure/communication-identity": "^1.0.0",
     "@azure/communication-react": "^1.23.0",
     "@fluentui/theme": "^2.6.6",
+    "@fluentui/react-icons": "2.0.294",
     "bfj": "^7.0.2",
     "camelcase": "^6.2.1",
     "http-errors": "1.8.1",

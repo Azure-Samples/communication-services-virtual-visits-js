@@ -103,6 +103,40 @@ app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
 app.use('/api/notificationEvents', cors(), notificationEvents);
 
 const config = getServerConfig();
+/**
+ * route: wss://<host>/
+ * purpose: WebSocket endpoint to receive transcription events
+ *
+ * Don't forget to secure this endpoint in production
+ * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ */
+console.log('WebSocket server port:', config.callAutomation?.ServerWebSocketPort);
+
+const wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
+
+wss.on('connection', (ws) => {
+  let transcriptionCorrelationId: string | undefined;
+
+  ws.on('open', () => {
+    console.log('WebSocket opened');
+  });
+
+  ws.on('message', (message: WebSocket.RawData) => {
+    const decoder = new TextDecoder();
+    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
+    if (
+      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
+      ('kind' in messageData && messageData.kind === 'TranscriptionData')
+    ) {
+      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket closed');
+  });
+  console.log('websocket server running on port', config.callAutomation?.ServerWebSocketPort);
+});
 
 const surveyDBHandler = createSurveyDBHandler(config);
 if (surveyDBHandler) {
@@ -124,40 +158,6 @@ const roomsClient =
 app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
-
-/**
- * route: wss://<host>/
- * purpose: WebSocket endpoint to receive transcription events
- *
- * Don't forget to secure this endpoint in production
- * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
- */
-let wss: WebSocket.Server;
-if (config.callAutomation?.ServerWebSocketPort) {
-  wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
-  wss.on('connection', (ws) => {
-    let transcriptionCorrelationId: string | undefined;
-
-    ws.on('open', () => {
-      console.log('WebSocket opened');
-    });
-
-    ws.on('message', (message: WebSocket.RawData) => {
-      const decoder = new TextDecoder();
-      const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
-      if (
-        ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
-        ('kind' in messageData && messageData.kind === 'TranscriptionData')
-      ) {
-        transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
-      }
-    });
-
-    ws.on('close', () => {
-      console.log('WebSocket closed');
-    });
-  });
-}
 
 // Function to send events to all connected clients
 export const sendEventToClients = (event: string, data: Record<string, unknown>): void => {

@@ -57,7 +57,7 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
     transcriptionOptions: transcriptionOptions
   };
 
-  const callbackUri = callAutomationConfig?.ServerHttpUrl;
+  const callbackUri = `${callAutomationConfig?.ServerHttpUrl}/api/callAutomationEvent`;
 
   /**
    * Call automation needs to create the call.
@@ -110,7 +110,7 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
       kind: 'serverCallLocator',
       id: serverCallId
     },
-    callAutomationConfig?.ServerHttpUrl ?? '',
+    `${callAutomationConfig?.ServerHttpUrl}/api/callAutomationEvent`,
     options
   );
   console.log('Connect call result', res);

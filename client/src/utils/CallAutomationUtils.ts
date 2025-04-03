@@ -21,7 +21,7 @@ export type CallTranscription = {
 }[];
 
 export const fetchTranscript = async (serverCallId: string): Promise<CallTranscription> => {
-  const response = await fetch(`/fetchTranscript`, {
+  const response = await fetch(`/api/fetchTranscript`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export const fetchTranscript = async (serverCallId: string): Promise<CallTranscr
 };
 
 export const fetchTranscriptionStatus = async (serverCallId: string): Promise<void> => {
-  const response = await fetch(`/fetchTranscriptionState`, {
+  const response = await fetch(`/api/fetchTranscriptionState`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export const startTranscription = async (
   }
 ): Promise<boolean> => {
   console.log('Starting transcription for call:', serverCallId);
-  const response = await fetch('/startTranscription', {
+  const response = await fetch('/api/startTranscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ export const startTranscription = async (
 export const stopTranscription = async (serverCallId: string): Promise<boolean> => {
   console.log('Stopping transcription for call:', serverCallId);
 
-  const response = await fetch('/stopTranscription', {
+  const response = await fetch('/api/stopTranscription', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ export const connectToCallAutomation = async (callAdaterState: CallAdapterState)
   if (callAdaterState.call?.info !== undefined && callAdaterState.call?.state === 'Connected') {
     const serverCallID = await callAdaterState.call.info.getServerCallId();
     console.log('Server call ID:', serverCallID);
-    const response = await fetch('/connectRoomsCall', {
+    const response = await fetch('/api/connectRoomsCall', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -135,7 +135,7 @@ export const getCallSummaryFromServer = async (
       throw new Error('Call ID not found');
     }
 
-    const response = await fetch('/summarizeTranscript', {
+    const response = await fetch('/api/summarizeTranscript', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -183,7 +183,7 @@ export const updateRemoteParticipants = async (
     }
   });
 
-  const response = await fetch('/updateRemoteParticipants', {
+  const response = await fetch('/api/updateRemoteParticipants', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ export const updateLocalParticipant = async (callAdapter: CallAdapter): Promise<
     displayName: localParticipant.displayName
   };
 
-  const response = await fetch('/updateLocalParticipant', {
+  const response = await fetch('/api/updateLocalParticipant', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
