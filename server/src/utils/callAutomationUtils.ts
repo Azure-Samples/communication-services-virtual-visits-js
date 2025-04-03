@@ -12,6 +12,7 @@ import {
 import { ConversationSummaryInput } from './summarizationUtils';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import { getServerConfig } from './getConfig';
+import { TranscriptionManager } from './TranscriptionManager';
 
 export interface CallTranscription {
   metadata: TranscriptionMetadata;
@@ -32,10 +33,14 @@ if (!callAutomationConfig) {
   console.warn('Call automation config is not set');
 }
 
+let transcriptionManager: TranscriptionManager | undefined = undefined;
 let callAutomationClient: CallAutomationClient | undefined = undefined;
 export const getCallAutomationClient = (): CallAutomationClient =>
   callAutomationClient ??
   (callAutomationClient = new CallAutomationClient(getServerConfig().communicationServicesConnectionString));
+
+export const getTranscriptionManager = (): TranscriptionManager =>
+  transcriptionManager ?? (transcriptionManager = new TranscriptionManager());
 
 export const connectRoomsCallWithTranscription = async (roomId: string): Promise<void> => {
   const transcriptionOptions = {
@@ -183,14 +188,8 @@ export const getTranscriptionData = (serverCallId: string): CallTranscription | 
  */
 export const checkIfTranscriptionStarted = (serverCallId: string): boolean => {
   console.log('Checking if transcription started for call:', serverCallId);
-  const connectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
-  if (!connectionId) {
-    return false;
-  }
-  const correlationId = CALLCONNECTION_ID_TO_CORRELATION_ID[connectionId]?.correlationId;
-  return correlationId ? !!TRANSCRIPTION_STORE[correlationId] : false;
+
+  return getTranscriptionManager().hasTranscriptions(serverCallId);
 };
 
 /**
