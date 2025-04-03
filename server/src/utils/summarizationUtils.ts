@@ -10,7 +10,7 @@ if (!callAutomationConfig) {
 }
 
 /**
- * Information on how this URL is contructued here: https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization
+ * Information on how this URL is constructued here: https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization
  */
 const API_URL = `${callAutomationConfig?.CognitionAPIEndpoint}/language/analyze-conversations/jobs?api-version=2023-11-15-preview`;
 
@@ -127,7 +127,6 @@ const requestConversationSummary = async (
    *     - summaryAspects: An array of strings that represent the aspects of the summary to be generated.
    * The response will contain the operation location URL, which can be used to poll for the job status.
    */
-  console.log('localeCode:', localeCode);
   const requestData = JSON.stringify({
     displayName: 'Conversation Task Example',
     analysisInput: {

@@ -61,7 +61,6 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
   const automationClient = getCallAutomationClient();
   const roomsLocator: CallLocator = { kind: 'roomCallLocator', id: roomId };
   const connectedCallResult = await automationClient.connectCall(roomsLocator, callbackUri ?? '', options);
-  console.log((await connectedCallResult.callConnection.getCallConnectionProperties()).serverCallId);
   const serverCallId = (await connectedCallResult.callConnection.getCallConnectionProperties()).serverCallId;
   if (!serverCallId) {
     throw new Error('Server call id not found');
@@ -110,8 +109,6 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
     options
   );
   console.log('Connect call result', res);
-  const callConnection = res.callConnection;
-  console.log('Call connection', callConnection);
 };
 
 export const startTranscriptionForCall = async (
@@ -127,7 +124,6 @@ export const startTranscriptionForCall = async (
 
 export const stopTranscriptionForCall = async (callConnectionId: string): Promise<void> => {
   console.log('Stopping transcription for call:', callConnectionId);
-  console.log(CALLCONNECTION_ID_TO_CORRELATION_ID);
   const callConnection = await getCallAutomationClient().getCallConnection(callConnectionId);
   return await callConnection.getCallMedia().stopTranscription();
 };
@@ -138,14 +134,12 @@ export const stopTranscriptionForCall = async (callConnectionId: string): Promis
  * because all of the clients that join can have different callId's and we need to make sure we are
  * pulling the correct transcription data.
  */
-export const TRANSCRIPTION_STORE: { [key: string]: Partial<CallTranscription> } = {};
+export const TRANSCRIPTION_STORE = new Map<string, CallTranscription>();
 /**
  * Used to map between the call connection id and the correlation id from both transcription and
  * call automation events.
  */
-export const CALLCONNECTION_ID_TO_CORRELATION_ID: {
-  [key: string]: { correlationId?: string; serverCallId: string };
-} = {};
+export const CALLCONNECTION_ID_TO_CORRELATION_ID = new Map<string, { correlationId?: string; serverCallId: string }>();
 
 /**
  * used to store the remote participants in the call
@@ -153,9 +147,10 @@ export const CALLCONNECTION_ID_TO_CORRELATION_ID: {
  *
  * Keeps track of all participants who have ever joined the call so we can show their display name in the transcription and summary.
  */
-export const REMOTE_PARTICIPANTS_IN_CALL: {
-  [key: string]: { communicationUserId: string; displayName: string }[];
-} = {};
+export const REMOTE_PARTICIPANTS_IN_CALL = new Map<
+  string,
+  Array<{ communicationUserId: string; displayName: string }>
+>();
 
 /**
  * used to store the local participant in the call
@@ -163,6 +158,8 @@ export const REMOTE_PARTICIPANTS_IN_CALL: {
  *
  * This is important because the server can track the user across multiple calls if they change their display name so we can show
  * the correct display name in the transcription and summary.
+ *
+ * TODO: this should be removed and we should be processing all the participants together.
  */
 export const LOCAL_PARTICIPANT: { [key: string]: { communicationUserId?: string; displayName?: string } } = {};
 
@@ -178,7 +175,7 @@ export const getTranscriptionData = (serverCallId: string): CallTranscription | 
   if (!correlationId) {
     return undefined;
   }
-  return TRANSCRIPTION_STORE[correlationId] as CallTranscription;
+  return TRANSCRIPTION_STORE[correlationId];
 };
 
 /**
