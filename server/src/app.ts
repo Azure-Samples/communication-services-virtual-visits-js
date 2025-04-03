@@ -22,8 +22,8 @@ import fetchTranscript from './routes/fetchTranscript';
 import startCallWithTranscription from './routes/startRoomsCallWithTranscription';
 import callAutomationEvent from './routes/callAutomationEvent';
 import summarizeTranscript from './routes/summarizeTranscript';
-import events from './routes/events';
-import { CALLCONNECTION_ID_TO_CORRELATION_ID, handleTranscriptionEvent } from './utils/callAutomationUtils';
+import notificationEvents from './routes/notificationEvents';
+import { handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
 export const clients: express.Response[] = []; // Store connected clients
@@ -95,7 +95,12 @@ app.use('/api/callAutomationEvent', cors(), callAutomationEvent);
  */
 app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
 
-app.use('/api/events', cors(), events);
+/**
+ * route: /api/notificationEvents
+ * purpose: endpoint to hit to open a server sent events (SSE) connection to
+ * recieve events from the server
+ */
+app.use('/api/notificationEvents', cors(), notificationEvents);
 
 const config = getServerConfig();
 
@@ -137,10 +142,9 @@ if (config.callAutomation?.ServerWebSocketPort) {
       console.log('WebSocket opened');
     });
 
-    ws.on('message', (message) => {
+    ws.on('message', (message: WebSocket.RawData) => {
       const decoder = new TextDecoder();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const messageData = JSON.parse(decoder.decode(message as any));
+      const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
       if (
         ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
         ('kind' in messageData && messageData.kind === 'TranscriptionData')
