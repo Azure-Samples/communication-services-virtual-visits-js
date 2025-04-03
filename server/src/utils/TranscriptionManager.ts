@@ -31,10 +31,8 @@ export class TranscriptionManager {
     this.participantsInCallMap = new Map<string, Array<{ communicationUserId: string; displayName: string }>>();
   }
 
-  public hasTranscriptions(serverCallid: string): boolean {
-    const connectionId = Object.keys(this.CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-      this.CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallid)
-    );
+  public hasTranscriptions(serverCallId: string): boolean {
+    const connectionId = this.getCallConnectionIDFromServerCallId(serverCallId);
     if (!connectionId) {
       return false;
     }
@@ -42,9 +40,7 @@ export class TranscriptionManager {
   }
 
   public getTranscriptionData(serverCallId: string): CallTranscription | undefined {
-    const connectionId = Object.keys(this.CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-      this.CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-    );
+    const connectionId = this.getCallConnectionIDFromServerCallId(serverCallId);
     if (!connectionId) {
       return undefined;
     }
@@ -88,5 +84,37 @@ export class TranscriptionManager {
     participants: Array<{ communicationUserId: string; displayName: string }>
   ): void {
     this.participantsInCallMap.set(serverCallId, participants);
+  }
+
+  public getCallConnectionIDFromServerCallId(serverCallId: string): string | undefined {
+    const callConnectionId = Object.keys(this.CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
+      this.CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
+    );
+    return callConnectionId;
+  }
+
+  public getCallConnection(callConnectionId: string): { correlationId?: string; serverCallId: string } | undefined {
+    return this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+  }
+
+  public setCallConnection(callConnectionId: string, serverCallId: string, correlationId?: string): void {
+    this.CALLCONNECTION_ID_TO_CORRELATION_ID.set(callConnectionId, {
+      correlationId: correlationId,
+      serverCallId: serverCallId
+    });
+  }
+
+  public updateCallConnectionCorrelationId(callConnectionId: string, correlationId: string): void {
+    const callConnection = this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+    if (callConnection) {
+      callConnection.correlationId = correlationId;
+    }
+  }
+
+  public updateCallConnectionServerCallId(callConnectionId: string, serverCallId: string): void {
+    const callConnection = this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+    if (callConnection) {
+      callConnection.serverCallId = serverCallId;
+    }
   }
 }
