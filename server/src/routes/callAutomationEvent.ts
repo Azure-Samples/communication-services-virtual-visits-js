@@ -7,7 +7,8 @@ import { CALLCONNECTION_ID_TO_CORRELATION_ID, getTranscriptionManager } from '..
 const router = express.Router();
 
 router.post('/', async function (req, res) {
-  const { callConnectionId, serverCallId, type } = req.body[0]?.data || {};
+  const { callConnectionId, serverCallId } = req.body[0]?.data || {};
+  const { type } = req.body[0];
   try {
     if (type === 'Microsoft.Communication.CallConnected') {
       const hasConnection = getTranscriptionManager().getCallConnection(callConnectionId);

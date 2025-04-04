@@ -80,6 +80,7 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
  * Call info object.
  */
 export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
+  console.log(callAutomationConfig?.ServerWebSocketUrl);
   const transcriptionOptions = {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
