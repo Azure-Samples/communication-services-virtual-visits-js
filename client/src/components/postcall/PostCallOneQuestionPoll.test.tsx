@@ -17,7 +17,7 @@ const mockTheme: Theme = getTheme();
 const mockReplace = jest.fn();
 
 describe('PostCallOneQuestionPoll', () => {
-  const originalwindowLocation = window.location;
+  const originalwindowLocation = window.location.origin;
 
   beforeEach(() => {
     Object.defineProperty(window, 'location', {
@@ -30,7 +30,7 @@ describe('PostCallOneQuestionPoll', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-    window.location = originalwindowLocation;
+    window.location.assign(originalwindowLocation);
   });
 
   it('should render correct input type when polltype is likeOrDislike', async () => {
