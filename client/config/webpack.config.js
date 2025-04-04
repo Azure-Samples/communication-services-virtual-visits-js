@@ -312,7 +312,7 @@ module.exports = function (webpackEnv) {
       level: 'none'
     },
     optimization: {
-      minimize: false,
+      minimize: isEnvDevelopment,
       minimizer: [
         new TerserPlugin({
           terserOptions: {
