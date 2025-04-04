@@ -80,17 +80,14 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
  * Call info object.
  */
 export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
-  console.log(callAutomationConfig?.ServerWebSocketUrl);
   const transcriptionOptions = {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
     locale: 'en-US',
-    startTranscription: false
+    startTranscription: callAutomationConfig?.AutoStartTranscription ?? false
   };
 
-  const connectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
 
   /**
    * Check if the call automation client and connection for the call already exists. If it does, we don't need to create a new one.
@@ -118,12 +115,11 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
 };
 
 export const startTranscriptionForCall = async (
-  callConnectionId: string,
+  serverCallId: string,
   options?: TranscriptionOptions
 ): Promise<void> => {
-  console.log('Starting transcription for call:', callConnectionId);
-  console.log(CALLCONNECTION_ID_TO_CORRELATION_ID);
-  const callConnection = await getCallAutomationClient().getCallConnection(callConnectionId);
+  console.log('Starting transcription for call:', serverCallId);
+  const callConnection = await getCallAutomationClient().getCallConnection(serverCallId);
 
   return await callConnection.getCallMedia().startTranscription(options);
 };

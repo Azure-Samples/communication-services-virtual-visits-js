@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import { CALLCONNECTION_ID_TO_CORRELATION_ID, getTranscriptionManager } from '../utils/callAutomationUtils';
+import { getTranscriptionManager } from '../utils/callAutomationUtils';
 
 const router = express.Router();
 
@@ -19,7 +19,6 @@ router.post('/', async function (req, res) {
        */
       if (hasConnection) {
         console.log('CallConnectionId already exists in mapping');
-
         res.status(200).end();
         return;
       }
@@ -29,11 +28,13 @@ router.post('/', async function (req, res) {
        * is from the calling SDK and the callConnectionId is mapped to the correlationId from the transcription
        * service. We need to store this mapping so that we can fetch the transcription later.
        */
-      CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId] = {
-        serverCallId: serverCallId,
-        correlationId: CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId as string]?.correlationId
-      };
+      // CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId] = {
+      //   serverCallId: serverCallId,
+      //   correlationId: CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId as string]?.correlationId
+      // };
       getTranscriptionManager().setCallConnection(callConnectionId, serverCallId);
+      // THIS IS BROKEN AND NEEDS TO BE FIXED
+      console.log(getTranscriptionManager().getCallConnection(serverCallId));
     }
   } catch (e) {
     console.error('Error processing automation event:', e);

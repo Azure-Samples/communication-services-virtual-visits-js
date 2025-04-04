@@ -23,6 +23,7 @@ import startCallWithTranscription from './routes/startRoomsCallWithTranscription
 import callAutomationEvent from './routes/callAutomationEvent';
 import summarizeTranscript from './routes/summarizeTranscript';
 import notificationEvents from './routes/notificationEvents';
+import fetchTranscriptState from './routes/fetchTranscriptState';
 import { handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
@@ -101,6 +102,12 @@ app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
  * recieve events from the server
  */
 app.use('/api/notificationEvents', cors(), notificationEvents);
+
+/**
+ * route:/fetchTranscriptionState
+ * purpose: Fetch the transcription state for a call
+ */
+app.use('/api/fetchTranscriptionState', cors(), fetchTranscriptState);
 
 const config = getServerConfig();
 /**

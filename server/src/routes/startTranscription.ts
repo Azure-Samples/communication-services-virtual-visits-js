@@ -17,7 +17,7 @@ router.post('/', async function (req, res, next) {
 
   console.log('Starting transcription for call:', serverCallId);
   const callConnectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
-
+  console.log('Call connection ID:', callConnectionId);
   if (!callConnectionId) {
     res.status(404).send('Call not found');
     return;

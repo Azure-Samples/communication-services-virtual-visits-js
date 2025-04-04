@@ -109,6 +109,85 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     };
   }, [serverCallId]);
 
+  useEffect(() => {
+    if (!eventSourceRef.current) {
+      return;
+    }
+    eventSourceRef.current.addEventListener('TranscriptionStarted', (event) => {
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId === serverCallId) {
+        console.log('Transcription started', event.data);
+        setTranscriptionStarted(true);
+        setCustomNotifications(
+          customNotications
+            .filter((notification) => notification.type !== 'transcriptionStarted')
+            .filter((notification) => notification.type !== 'transcriptionStopped')
+            .concat([
+              {
+                type: 'transcriptionStarted',
+                autoDismiss: false,
+                onDismiss: () => {
+                  setCustomNotifications((prev) =>
+                    prev.filter((notification) => notification.type !== 'transcriptionStarted')
+                  );
+                }
+              }
+            ])
+        );
+      }
+    });
+
+    eventSourceRef.current.addEventListener('TranscriptionStopped', (event) => {
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId === serverCallId) {
+        console.log('Transcription stopped', event.data);
+        setTranscriptionStarted(false);
+        const newCustomNotifcaitons = customNotications
+          .filter((notification) => notification.type !== 'transcriptionStarted')
+          .filter((notification) => notification.type !== 'transcriptionStopped')
+          .concat([
+            {
+              type: 'transcriptionStopped',
+              autoDismiss: false,
+              onDismiss: () => {
+                setCustomNotifications((prev) =>
+                  prev.filter((notification) => notification.type !== 'transcriptionStopped')
+                );
+              }
+            }
+          ]);
+        setCustomNotifications(newCustomNotifcaitons);
+      }
+    });
+    eventSourceRef.current.addEventListener('TranscriptionStatus', (event) => {
+      console.log('TranscriptionStatus event:', event);
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId === serverCallId) {
+        const transcriptionStarted = parsedData.transcriptStarted;
+        console.log('TranscriptionStatus:', transcriptionStarted);
+        if (transcriptionStarted) {
+          setTranscriptionStarted(true);
+          if (customNotications.find((notification) => notification.type === 'transcriptionStarted')) {
+            return;
+          }
+          setCustomNotifications(
+            customNotications.concat([
+              {
+                type: 'transcriptionStarted',
+                autoDismiss: false,
+                onDismiss: () => {
+                  setCustomNotifications((prev) =>
+                    prev.filter((notification) => notification.type !== 'transcriptionStarted')
+                  );
+                }
+              }
+            ])
+          );
+        }
+      }
+    });
+  }, [serverCallId, customNotications]);
+
   const displayName =
     userRole === RoomParticipantRole.presenter ? 'Virtual appointments Host' : 'Virtual appointments User';
 
@@ -327,6 +406,9 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                 options={{
                   callControls: {
                     onFetchCustomButtonProps: customButtonOptions
+                  },
+                  notificationOptions: {
+                    hideAllNotifications: true
                   }
                 }}
                 callInvitationUrl={
