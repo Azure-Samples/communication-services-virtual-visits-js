@@ -10,12 +10,12 @@ export class TranscriptionManager {
    *
    * This is keyed off the correlationId from the transcription service and contains the metadata and data
    */
-  private TRANSCRIPTION_STORE: Map<string, CallTranscription>;
+  private transcriptionStore: Map<string, CallTranscription>;
   /**
-   * Used to map between the call connection id and the correlation id from both transcription and
+   * Used to map between the serverCallId and the correlation id from both transcription and
    * call automation events. This is keyed off the callConnectionId
    */
-  private CALLCONNECTION_ID_TO_CORRELATION_ID: Map<string, { correlationId?: string; serverCallId: string }>;
+  private callConnectionIdToCorrelationId: Map<string, { correlationId?: string; serverCallId: string }>;
 
   /**
    * Used to store the remote participants in the call
@@ -26,17 +26,19 @@ export class TranscriptionManager {
   private participantsInCallMap: Map<string, Array<{ communicationUserId: string; displayName: string }>>;
 
   constructor() {
-    this.TRANSCRIPTION_STORE = new Map<string, CallTranscription>();
-    this.CALLCONNECTION_ID_TO_CORRELATION_ID = new Map<string, { correlationId?: string; serverCallId: string }>();
+    this.transcriptionStore = new Map<string, CallTranscription>();
+    this.callConnectionIdToCorrelationId = new Map<string, { correlationId?: string; serverCallId: string }>();
     this.participantsInCallMap = new Map<string, Array<{ communicationUserId: string; displayName: string }>>();
   }
 
   public hasTranscriptions(serverCallId: string): boolean {
     const connectionId = this.getCallConnectionIDFromServerCallId(serverCallId);
+    console.log('Connection ID:', connectionId);
     if (!connectionId) {
       return false;
     }
-    return this.TRANSCRIPTION_STORE.has(this.CALLCONNECTION_ID_TO_CORRELATION_ID[connectionId].correlationId);
+    const correlationId = this.callConnectionIdToCorrelationId.get(connectionId)?.correlationId;
+    return !!correlationId;
   }
 
   public getTranscriptionData(serverCallId: string): CallTranscription | undefined {
@@ -44,11 +46,11 @@ export class TranscriptionManager {
     if (!connectionId) {
       return undefined;
     }
-    const correlationId = this.CALLCONNECTION_ID_TO_CORRELATION_ID[connectionId]?.correlationId;
+    const correlationId = this.callConnectionIdToCorrelationId[connectionId]?.correlationId;
     if (!correlationId) {
       return undefined;
     }
-    return this.TRANSCRIPTION_STORE.get(correlationId);
+    return this.transcriptionStore.get(correlationId);
   }
 
   public storeTranscriptionMetaData(data: TranscriptionMetadata): void {
@@ -57,14 +59,10 @@ export class TranscriptionManager {
       console.error('No correlation id found in transcription data');
       return;
     }
-    if (!this.TRANSCRIPTION_STORE.has(correlationId)) {
-      this.TRANSCRIPTION_STORE.set(correlationId, { metadata: data, data: [] });
+    if (!this.transcriptionStore.has(correlationId)) {
+      this.transcriptionStore.set(correlationId, { metadata: data, data: [] });
     }
-
-    this.CALLCONNECTION_ID_TO_CORRELATION_ID.set(data.callConnectionId, {
-      correlationId: correlationId,
-      serverCallId: this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(data.callConnectionId)?.serverCallId ?? ''
-    });
+    this.updateCallConnectionCorrelationId(data.callConnectionId, correlationId);
   }
 
   public storeTranscriptionData(data: TranscriptionData, eventId: string): void {
@@ -72,11 +70,11 @@ export class TranscriptionManager {
       console.error('No correlation id found in transcription data');
       return;
     }
-    if (!this.TRANSCRIPTION_STORE.has(eventId)) {
+    if (!this.transcriptionStore.has(eventId)) {
       console.error('No transcription data found for event id:', eventId);
       return;
     }
-    this.TRANSCRIPTION_STORE.get(eventId)?.data.push(data);
+    this.transcriptionStore.get(eventId)?.data.push(data);
   }
 
   public storeParticipantsInCall(
@@ -87,32 +85,37 @@ export class TranscriptionManager {
   }
 
   public getCallConnectionIDFromServerCallId(serverCallId: string): string | undefined {
-    const callConnectionId = Object.keys(this.CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-      this.CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-    );
+    let callConnectionId: string | undefined;
+    for (const [key, value] of this.callConnectionIdToCorrelationId.entries()) {
+      console.log('Item:', value);
+      if (value.serverCallId.includes(serverCallId)) {
+        callConnectionId = key;
+        break;
+      }
+    }
     return callConnectionId;
   }
 
   public getCallConnection(callConnectionId: string): { correlationId?: string; serverCallId: string } | undefined {
-    return this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+    return this.callConnectionIdToCorrelationId.get(callConnectionId);
   }
 
   public setCallConnection(callConnectionId: string, serverCallId: string, correlationId?: string): void {
-    this.CALLCONNECTION_ID_TO_CORRELATION_ID.set(callConnectionId, {
+    this.callConnectionIdToCorrelationId.set(callConnectionId, {
       correlationId: correlationId,
       serverCallId: serverCallId
     });
   }
 
   public updateCallConnectionCorrelationId(callConnectionId: string, correlationId: string): void {
-    const callConnection = this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+    const callConnection = this.callConnectionIdToCorrelationId.get(callConnectionId);
     if (callConnection) {
       callConnection.correlationId = correlationId;
     }
   }
 
   public updateCallConnectionServerCallId(callConnectionId: string, serverCallId: string): void {
-    const callConnection = this.CALLCONNECTION_ID_TO_CORRELATION_ID.get(callConnectionId);
+    const callConnection = this.callConnectionIdToCorrelationId.get(callConnectionId);
     if (callConnection) {
       callConnection.serverCallId = serverCallId;
     }

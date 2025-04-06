@@ -119,7 +119,11 @@ export const startTranscriptionForCall = async (
   options?: TranscriptionOptions
 ): Promise<void> => {
   console.log('Starting transcription for call:', serverCallId);
-  const callConnection = await getCallAutomationClient().getCallConnection(serverCallId);
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
+  if (!connectionId) {
+    throw new Error('Call connection id not found');
+  }
+  const callConnection = await getCallAutomationClient().getCallConnection(connectionId);
 
   return await callConnection.getCallMedia().startTranscription(options);
 };

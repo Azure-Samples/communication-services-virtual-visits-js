@@ -110,10 +110,10 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }, [serverCallId]);
 
   useEffect(() => {
-    if (!eventSourceRef.current) {
+    if (!eventSourceRef.current && !callConnected) {
       return;
     }
-    eventSourceRef.current.addEventListener('TranscriptionStarted', (event) => {
+    eventSourceRef.current?.addEventListener('TranscriptionStarted', (event) => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId === serverCallId) {
         console.log('Transcription started', event.data);
@@ -137,7 +137,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       }
     });
 
-    eventSourceRef.current.addEventListener('TranscriptionStopped', (event) => {
+    eventSourceRef.current?.addEventListener('TranscriptionStopped', (event) => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId === serverCallId) {
         console.log('Transcription stopped', event.data);
@@ -159,7 +159,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         setCustomNotifications(newCustomNotifcaitons);
       }
     });
-    eventSourceRef.current.addEventListener('TranscriptionStatus', (event) => {
+    eventSourceRef.current?.addEventListener('TranscriptionStatus', (event) => {
       console.log('TranscriptionStatus event:', event);
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId === serverCallId) {
@@ -186,7 +186,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         }
       }
     });
-  }, [serverCallId, customNotications]);
+  }, [serverCallId, customNotications, callConnected]);
 
   const displayName =
     userRole === RoomParticipantRole.presenter ? 'Virtual appointments Host' : 'Virtual appointments User';
@@ -199,72 +199,74 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
-  const afterAdapterCreate = useCallback(async (adapter: CallAdapter): Promise<CallAdapter> => {
-    const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
+  const afterAdapterCreate = useCallback(
+    async (adapter: CallAdapter): Promise<CallAdapter> => {
+      const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
 
-    if (postCallEnabled) {
-      adapter.on('callEnded', () => setRenderPostCall(true));
-    }
-    adapter.on('callEnded', async (event) => {
-      if (callAutomationStarted.current) {
-        setCallConnected(false);
+      if (postCallEnabled) {
+        adapter.on('callEnded', () => setRenderPostCall(true));
       }
-      if (callAutomationStarted) {
-        console.log(summarizationLanguage);
-        setCallConnected(false);
-        setSummary(undefined);
-        setSummarizationStatus('InProgress');
-        setSummary(
-          await getCallSummaryFromServer(adapter, summarizationLanguage).finally(() =>
-            setSummarizationStatus('Complete')
-          )
-        );
-      }
-    });
-    adapter.onStateChange(async (state) => {
-      if (state.call?.id !== undefined && state.call?.id !== callId) {
-        setCallId(adapter.getState().call?.id);
-      }
-      if (state?.call?.state === 'Connected') {
-        setCallConnected(true);
-        setServerCallId(await state.call.info?.getServerCallId());
-      }
-
-      if (state.call && callAgent) {
-        const call = callAgent?.calls.find((call) => call.id === state.call?.id);
-        if (call) {
-          setCall(call);
+      adapter.on('callEnded', async (event) => {
+        if (callAutomationStarted.current) {
+          setCallConnected(false);
         }
-      }
-
-      if (!callAutomationStarted.current && state.call?.state === 'Connected') {
-        callAutomationStarted.current = true;
-        try {
-          console.log('Connecting to call automation...');
-          await connectToCallAutomation(state);
-        } catch (e) {
-          console.error('Error connecting to call automation:', e);
-          callAutomationStarted.current = false;
+        if (callAutomationStarted) {
+          console.log(summarizationLanguage);
+          setCallConnected(false);
+          setSummary(undefined);
+          setSummarizationStatus('InProgress');
+          setSummary(
+            await getCallSummaryFromServer(adapter, summarizationLanguage).finally(() =>
+              setSummarizationStatus('Complete')
+            )
+          );
         }
-      }
-    });
-    const toggleInviteInstructions = (state: CallAdapterState): void => {
-      const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(userRole, formFactorValue, state?.page);
-      setRenderInviteInstructions(roomsInviteInstructionsEnabled);
-    };
+      });
+      adapter.onStateChange(async (state) => {
+        if (state.call?.id !== undefined && state.call?.id !== callId) {
+          setCallId(adapter.getState().call?.id);
+        }
+        if (state?.call?.state === 'Connected') {
+          setCallConnected(true);
+          setServerCallId(await state.call.info?.getServerCallId());
+        }
+        if (state.call && callAgent) {
+          const call = callAgent?.calls.find((call) => call.id === state.call?.id);
+          if (call) {
+            setCall(call);
+          }
+        }
 
-    toggleInviteInstructions(adapter.getState());
+        if (!callAutomationStarted.current && state.call?.state === 'Connected') {
+          callAutomationStarted.current = true;
+          try {
+            console.log('Connecting to call automation...');
+            await connectToCallAutomation(state);
+          } catch (e) {
+            console.error('Error connecting to call automation:', e);
+            callAutomationStarted.current = false;
+          }
+        }
+      });
+      const toggleInviteInstructions = (state: CallAdapterState): void => {
+        const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(userRole, formFactorValue, state?.page);
+        setRenderInviteInstructions(roomsInviteInstructionsEnabled);
+      };
 
-    adapter.onStateChange((state) => {
-      if (state.call?.id !== undefined && state.call?.id !== callId) {
-        setCallId(adapter.getState().call?.id);
-      }
+      toggleInviteInstructions(adapter.getState());
 
-      toggleInviteInstructions(state);
-    });
+      adapter.onStateChange((state) => {
+        if (state.call?.id !== undefined && state.call?.id !== callId) {
+          setCallId(adapter.getState().call?.id);
+        }
 
-    return adapter;
-  }, []);
+        toggleInviteInstructions(state);
+      });
+
+      return adapter;
+    },
+    [callAgent]
+  );
 
   const args = useMemo(
     () => ({
