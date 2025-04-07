@@ -46,7 +46,7 @@ export class TranscriptionManager {
     if (!connectionId) {
       return undefined;
     }
-    const correlationId = this.callConnectionIdToCorrelationId[connectionId]?.correlationId;
+    const correlationId = this.callConnectionIdToCorrelationId.get(connectionId)?.correlationId;
     if (!correlationId) {
       return undefined;
     }

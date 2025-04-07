@@ -219,6 +219,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         if (callAutomationStarted.current) {
           setCallConnected(false);
         }
+        setCustomNotifications([]);
         if (callAutomationStarted) {
           console.log(summarizationLanguage);
           setCallConnected(false);
