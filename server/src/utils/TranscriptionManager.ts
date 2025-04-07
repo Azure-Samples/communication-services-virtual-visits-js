@@ -87,7 +87,6 @@ export class TranscriptionManager {
   public getCallConnectionIDFromServerCallId(serverCallId: string): string | undefined {
     let callConnectionId: string | undefined;
     for (const [key, value] of this.callConnectionIdToCorrelationId.entries()) {
-      console.log('Item:', value);
       if (value.serverCallId.includes(serverCallId)) {
         callConnectionId = key;
         break;

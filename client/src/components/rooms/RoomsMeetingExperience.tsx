@@ -67,6 +67,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [customNotications, setCustomNotifications] = useState<ActiveNotification[]>([]);
   const [callConnected, setCallConnected] = useState(false);
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
+  const [transcriptionStartedByYou, setTranscriptionStartedByYou] = useState(false);
 
   const theme = useTheme();
   const callAutomationStarted = useRef(false);
@@ -118,17 +119,20 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       if (parsedData.serverCallId === serverCallId) {
         console.log('Transcription started', event.data);
         setTranscriptionStarted(true);
+        console.log(transcriptionStartedByYou);
         setCustomNotifications(
           customNotications
             .filter((notification) => notification.type !== 'transcriptionStarted')
             .filter((notification) => notification.type !== 'transcriptionStopped')
             .concat([
               {
-                type: 'transcriptionStarted',
+                type: transcriptionStartedByYou ? 'transcriptionStartedByYou' : 'transcriptionStarted',
                 autoDismiss: false,
                 onDismiss: () => {
                   setCustomNotifications((prev) =>
-                    prev.filter((notification) => notification.type !== 'transcriptionStarted')
+                    prev
+                      .filter((notification) => notification.type !== 'transcriptionStarted')
+                      .filter((notification) => notification.type !== 'transcriptionStartedByYou')
                   );
                 }
               }
@@ -145,6 +149,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         const newCustomNotifcaitons = customNotications
           .filter((notification) => notification.type !== 'transcriptionStarted')
           .filter((notification) => notification.type !== 'transcriptionStopped')
+          .filter((notification) => notification.type !== 'transcriptionStartedByYou')
           .concat([
             {
               type: 'transcriptionStopped',
@@ -157,6 +162,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             }
           ]);
         setCustomNotifications(newCustomNotifcaitons);
+        setTranscriptionStartedByYou(false);
       }
     });
     eventSourceRef.current?.addEventListener('TranscriptionStatus', (event) => {
@@ -167,7 +173,10 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         console.log('TranscriptionStatus:', transcriptionStarted);
         if (transcriptionStarted) {
           setTranscriptionStarted(true);
-          if (customNotications.find((notification) => notification.type === 'transcriptionStarted')) {
+          if (
+            customNotications.find((notification) => notification.type === 'transcriptionStarted') ||
+            customNotications.find((notification) => notification.type === 'transcriptionStartedByYou')
+          ) {
             return;
           }
           setCustomNotifications(
@@ -186,7 +195,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         }
       }
     });
-  }, [serverCallId, customNotications, callConnected]);
+  }, [serverCallId, customNotications, callConnected, transcriptionStartedByYou]);
 
   const displayName =
     userRole === RoomParticipantRole.presenter ? 'Virtual appointments Host' : 'Virtual appointments User';
@@ -291,6 +300,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         if (serverCallId && !transcriptionStarted) {
           console.log('Starting transcription');
           setShowTranscriptionModal(true);
+          setTranscriptionStartedByYou(true);
         } else if (serverCallId && transcriptionStarted) {
           console.log('Stopping transcription');
           setTranscriptionStarted(await !stopTranscription(serverCallId));
