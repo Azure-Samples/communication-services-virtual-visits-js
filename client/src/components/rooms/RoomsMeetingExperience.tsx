@@ -54,7 +54,6 @@ export interface RoomsMeetingExperienceProps {
 const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
   const { roomsInfo, token, postCall, fluentTheme, onDisplayError } = props;
   const { userId, userRole, locator } = roomsInfo;
-
   const [transcriptionStarted, setTranscriptionStarted] = useState(false);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [summarizationLanguage, setSummarizationLanguage] = useState<LocaleCode>('en-US');
@@ -78,7 +77,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     if (serverCallId) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
-      eventSource = new EventSource(`http://localhost:8080/api/notificationEvents`);
+      eventSource = new EventSource(`${window.origin}/api/notificationEvents`);
       console.log(eventSource);
       eventSourceRef.current = eventSource; // Store reference for cleanup
 
@@ -195,6 +194,38 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         }
       }
     });
+    eventSourceRef.current?.addEventListener('TranscriptionError', (event) => {
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId === serverCallId) {
+        console.log('Transcription error', event.data);
+        setTranscriptionStarted(false);
+        setCustomNotifications(
+          customNotications
+            .filter((notification) => notification.type !== 'transcriptionStarted')
+            .filter((notification) => notification.type !== 'transcriptionStopped')
+            .filter((notification) => notification.type !== 'transcriptionStartedByYou')
+            .concat([
+              {
+                type: 'transcriptionError',
+                autoDismiss: false,
+                onDismiss: () => {
+                  setCustomNotifications((prev) =>
+                    prev.filter((notification) => notification.type !== 'transcriptionError')
+                  );
+                }
+              }
+            ])
+        );
+        setTranscriptionStartedByYou(false);
+      }
+    });
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+        setCustomNotifications([]);
+      }
+    };
   }, [serverCallId, customNotications, callConnected, transcriptionStartedByYou]);
 
   const displayName =
@@ -231,6 +262,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             )
           );
         }
+        setRenderPostCall(true);
       });
       adapter.onStateChange(async (state) => {
         if (state.call?.id !== undefined && state.call?.id !== callId) {

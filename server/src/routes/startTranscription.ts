@@ -22,6 +22,9 @@ router.post('/', async function (req, res, next) {
   } catch (e) {
     console.error('Error starting transcription:', e);
     res.status(500).send('Error starting transcription');
+    sendEventToClients('TranscriptionError', {
+      serverCallId
+    });
     return;
   }
 

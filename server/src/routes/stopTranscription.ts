@@ -24,6 +24,9 @@ router.post('/', async function (req, res, next) {
   } catch (e) {
     console.error('Error stopping transcription:', e);
     res.status(500).send('Error stopping transcription');
+    sendEventToClients('TranscriptionError', {
+      serverCallId
+    });
     return;
   }
 
