@@ -77,7 +77,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     if (serverCallId) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
-      eventSource = new EventSource(`${window.origin}/api/notificationEvents`);
+      eventSource = new EventSource(`http://localhost:8080/api/notificationEvents`);
       console.log(eventSource);
       eventSourceRef.current = eventSource; // Store reference for cleanup
 
