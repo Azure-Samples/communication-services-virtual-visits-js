@@ -84,6 +84,7 @@ app.use('/api/fetchTranscript', cors(), fetchTranscript);
  * purpose: Start a new group call with transcription
  */
 app.use('/api/startCallWithTranscription', cors(), startCallWithTranscription);
+
 /**
  * route: /callAutomationEvent
  * purpose: Call Automation: receive call automation events

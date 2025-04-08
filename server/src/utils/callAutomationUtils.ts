@@ -184,7 +184,12 @@ export const stopTranscriptionForCall = async (callConnectionId: string): Promis
  */
 export const getTranscriptionData = (serverCallId: string): CallTranscription | undefined => {
   console.log('Getting transcription data for call:', serverCallId);
-  return getTranscriptionManager().getTranscriptionData(serverCallId);
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
+  if (!connectionId) {
+    console.error('Call connection id not found');
+    return undefined;
+  }
+  return getTranscriptionManager().getTranscriptionData(connectionId);
 };
 
 /**
@@ -196,8 +201,11 @@ export const getTranscriptionData = (serverCallId: string): CallTranscription | 
  */
 export const checkIfTranscriptionStarted = (serverCallId: string): boolean => {
   console.log('Checking if transcription started for call:', serverCallId);
-
-  return getTranscriptionManager().hasTranscriptions(serverCallId);
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
+  if (!connectionId) {
+    return false;
+  }
+  return getTranscriptionManager().hasTranscriptions(connectionId);
 };
 
 /**

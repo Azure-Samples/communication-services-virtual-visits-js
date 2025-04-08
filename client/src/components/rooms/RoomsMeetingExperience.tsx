@@ -41,7 +41,6 @@ import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
 import { TranscriptionOptionsModal } from './transcriptionNotifications/TranscriptionOptionsModal';
 import { CustomNotifications } from './transcriptionNotifications/CustomNotifications';
-import { CallSummaryTile } from './transcriptionNotifications/CallSummaryTile';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
@@ -219,13 +218,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         setTranscriptionStartedByYou(false);
       }
     });
-    return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-        setCustomNotifications([]);
-      }
-    };
   }, [serverCallId, customNotications, callConnected, transcriptionStartedByYou]);
 
   const displayName =
@@ -397,18 +389,14 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           meetingLink={locator.roomId}
           theme={fluentTheme}
           postCall={postCall}
+          serverCallId={serverCallId}
+          summarizationStatus={summarizationStatus}
+          summary={summary}
           onRejoinCall={async () => {
             await callAdapter.joinCall();
             setRenderPostCall(false);
           }}
         />
-        {summarizationStatus && serverCallId && (
-          <CallSummaryTile
-            serverCallId={serverCallId}
-            summarizationStatus={summarizationStatus}
-            summary={summary?.recap}
-          />
-        )}
       </Stack>
     );
   }
@@ -450,7 +438,10 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                 formFactor={formFactorValue}
                 options={{
                   callControls: {
-                    onFetchCustomButtonProps: customButtonOptions
+                    onFetchCustomButtonProps: customButtonOptions,
+                    endCallButton: {
+                      hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
+                    }
                   },
                   notificationOptions: {
                     hideAllNotifications: true

@@ -21,15 +21,14 @@ export interface CallSummaryTileProps {
  * @private
  */
 export const CallSummaryTile = (props: CallSummaryTileProps): JSX.Element => {
-  const { serverCallId, summarizationStatus, summary, pageStyle } = props;
+  const { serverCallId, summarizationStatus, summary } = props;
 
   const theme = useTheme();
 
   return (
     <Stack
-      className={mergeStyles(pageStyle)}
+      style={{ width: 'auto', height: 'auto' }}
       verticalFill
-      styles={{ root: { width: '100%' } }}
       verticalAlign="center"
       horizontalAlign="center"
       aria-atomic

@@ -49,12 +49,7 @@ export class TranscriptionManager {
    * @param serverCallId
    * @returns
    */
-  public hasTranscriptions(serverCallId: string): boolean {
-    const connectionId = this.getCallConnectionIDFromServerCallId(serverCallId);
-    console.log('Connection ID:', connectionId);
-    if (!connectionId) {
-      return false;
-    }
+  public hasTranscriptions(connectionId: string): boolean {
     const correlationId = this.callConnectionIdToCorrelationId.get(connectionId)?.correlationId;
     return !!correlationId;
   }
@@ -64,11 +59,7 @@ export class TranscriptionManager {
    * @param serverCallId
    * @returns
    */
-  public getTranscriptionData(serverCallId: string): CallTranscription | undefined {
-    const connectionId = this.getCallConnectionIDFromServerCallId(serverCallId);
-    if (!connectionId) {
-      return undefined;
-    }
+  public getTranscriptionData(connectionId: string): CallTranscription | undefined {
     const correlationId = this.callConnectionIdToCorrelationId.get(connectionId)?.correlationId;
     if (!correlationId) {
       return undefined;
