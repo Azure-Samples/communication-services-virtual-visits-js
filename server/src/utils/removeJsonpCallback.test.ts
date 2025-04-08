@@ -16,6 +16,9 @@ describe('removeJsonpCallback middleware', () => {
         callback: callbackFunctionName
       }
     };
+    mockResponse = {
+      json: jest.fn()
+    };
 
     removeJsonpCallback(mockRequest as Request, mockResponse as Response, nextFunction);
 

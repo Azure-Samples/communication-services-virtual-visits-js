@@ -16,7 +16,7 @@ import { pagedAsyncIterator } from './chatUtils';
 /**
  * A public interface compatible stub for ChatThreadClient.
  */
-export class StubChtThreadClient implements IChatThreadClient {
+export class StubChatThreadClient implements IChatThreadClient {
   private createdOn: Date;
   constructor(public threadId: string) {
     this.createdOn = new Date();
