@@ -33,6 +33,15 @@ export interface CosmosDBConfig {
   dbName: string;
 }
 
+export interface CallAutomationConfig {
+  CognitionAPIEndpoint: string;
+  CognitionAPIKey: string;
+  ServerHttpUrl: string;
+  ServerWebSocketPort: number;
+  ServerWebSocketUrl: string;
+  AutoStartTranscription: boolean;
+}
+
 export interface ServerConfigModel {
   communicationServicesConnectionString: string;
   microsoftBookingsUrl: string;
@@ -45,6 +54,7 @@ export interface ServerConfigModel {
   logoUrl: string;
   postCall?: PostCallConfig;
   cosmosDb?: CosmosDBConfig;
+  callAutomation?: CallAutomationConfig;
 }
 
 export interface ClientConfigModel {
@@ -58,4 +68,5 @@ export interface ClientConfigModel {
   waitingSubtitle: string;
   logoUrl: string;
   postCall?: PostCallConfig;
+  ServerWebSocketUrl?: string;
 }
