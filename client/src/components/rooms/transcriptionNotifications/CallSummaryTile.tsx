@@ -77,7 +77,7 @@ export const CallSummaryTile = (props: CallSummaryTileProps): JSX.Element => {
                 <DefaultButton
                   text="Transcript"
                   onClick={async () => {
-                    if (summary && serverCallId) {
+                    if (serverCallId) {
                       const transcript = await fetchTranscript(serverCallId);
                       if (!transcript) {
                         console.error('Failed to fetch transcript');

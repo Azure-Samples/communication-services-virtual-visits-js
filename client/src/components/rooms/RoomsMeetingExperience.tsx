@@ -49,13 +49,20 @@ export interface RoomsMeetingExperienceProps {
   postCall?: PostCallConfig;
   fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
-  // this needs to be re-thought. we need a way for the config to say we are not using transcription, but also
-  // auto start, and transcription only
   transcriptionClientOptions?: TranscriptionClientOptions;
+  notificationEventsUrl?: string;
 }
 
 const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, postCall, fluentTheme, onDisplayError, transcriptionClientOptions } = props;
+  const {
+    roomsInfo,
+    token,
+    postCall,
+    fluentTheme,
+    onDisplayError,
+    transcriptionClientOptions,
+    notificationEventsUrl
+  } = props;
   const { userId, userRole, locator } = roomsInfo;
   const [transcriptionStarted, setTranscriptionStarted] = useState(false);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
@@ -89,7 +96,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     if (serverCallId && transcriptionFeatureEnabled) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
-      eventSource = new EventSource(`http://localhost:8080/api/notificationEvents`);
+      eventSource = new EventSource(`${notificationEventsUrl}/api/notificationEvents`);
       console.log(eventSource);
       eventSourceRef.current = eventSource; // Store reference for cleanup
 

@@ -44,4 +44,5 @@ export interface AppConfigModel {
   logoUrl: string;
   postCall?: PostCallConfig;
   transcriptionClientOptions?: TranscriptionClientOptions;
+  notificationEventsUrl?: string;
 }

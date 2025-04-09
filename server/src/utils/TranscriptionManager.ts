@@ -32,7 +32,7 @@ export class TranscriptionManager {
 
   /**
    * Used to store the remote participants in the call
-   * This object is keyed off the callId and contains the communicationUserId and displayName of the remote participants
+   * This object is keyed off the serverCallId and contains the communicationUserId and displayName of the remote participants
    *
    * Keeps track of all participants who have ever joined the call so we can show their display name in the transcription and summary.
    */
@@ -110,13 +110,30 @@ export class TranscriptionManager {
    * @param participants - Participants that just joined the call. We only add to them as they can leave from the call but
    * we want to keep track of all participants who have ever joined the call so we can map names to everyone in the transcript.
    */
-  public storeParticipantsInCall(
+  public storeParticipantInCall(
     serverCallId: string,
-    participants: Array<{ communicationUserId: string; displayName: string }>
+    participant: { communicationUserId: string; displayName: string }
   ): void {
     const currentParticipants = this.participantsInCallMap.get(serverCallId);
-    const newParticipants = participants.filter((participant) => currentParticipants?.includes(participant) === false);
-    this.participantsInCallMap.set(serverCallId, participants.concat(newParticipants));
+    if (!currentParticipants) {
+      this.participantsInCallMap.set(serverCallId, [participant]);
+      return;
+    }
+    this.participantsInCallMap.set(serverCallId, currentParticipants.concat([participant]));
+  }
+
+  /**
+   * Fetch the participants in the call
+   * @param serverCallId - call the participants are in
+   * @returns list of participants in the call
+   */
+  public getParticipantsInCall(serverCallId: string): Array<{ communicationUserId: string; displayName: string }> {
+    const participants = this.participantsInCallMap.get(serverCallId);
+    if (!participants) {
+      console.error('No participants found for server call id:', serverCallId);
+      return [];
+    }
+    return participants;
   }
 
   /**
