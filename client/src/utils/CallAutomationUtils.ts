@@ -126,7 +126,6 @@ export const getCallSummaryFromServer = async (
   locale: LocaleCode
 ): Promise<SummarizeResult> => {
   console.log('Getting summary from server...');
-  console.log('Locale:', locale);
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const serverCallId = await adapter.getState().call?.info?.getServerCallId();

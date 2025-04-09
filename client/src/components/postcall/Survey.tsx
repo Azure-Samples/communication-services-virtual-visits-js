@@ -41,7 +41,6 @@ const SURVEY = 'SurveyComponent';
 export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps) => {
   const { serverCallId, summarizationStatus, summary, transcriptionClientOptions } = props;
   const transcriptionFeatureEnabled = transcriptionClientOptions?.transcription !== 'none';
-  console.log(transcriptionFeatureEnabled);
   const surveyType = props.postCall.survey?.type;
   let postcallSurveyUrl = '';
   if (surveyType === 'msforms') {
