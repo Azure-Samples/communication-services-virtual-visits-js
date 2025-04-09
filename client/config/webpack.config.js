@@ -312,18 +312,16 @@ module.exports = function (webpackEnv) {
       level: 'none'
     },
     optimization: {
-      minimize: isEnvProduction,
+      minimize: false,
       minimizer: [
-        // This is only used in production mode
         new TerserPlugin({
           terserOptions: {
-            parse: {
-              // We want terser to parse ecma 8 code. However, we don't want it
-              // to apply any minification steps that turns valid ecma 5 code
+            ecma: 2020,
+            compress: {
               // into invalid ecma 5 code. This is why the 'compress' and 'output'
               // sections only apply transformations that are ecma 5 safe
               // https://github.com/facebook/create-react-app/pull/4234
-              ecma: 8
+              ecma: 11
             },
             compress: {
               ecma: 5,
