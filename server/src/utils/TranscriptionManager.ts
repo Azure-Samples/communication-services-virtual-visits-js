@@ -107,13 +107,16 @@ export class TranscriptionManager {
    * Store the participants in the call
    * This is used to keep track of the participants in the call so we can show their display name in the transcription and summary.
    * @param serverCallId
-   * @param participants
+   * @param participants - Participants that just joined the call. We only add to them as they can leave from the call but
+   * we want to keep track of all participants who have ever joined the call so we can map names to everyone in the transcript.
    */
   public storeParticipantsInCall(
     serverCallId: string,
     participants: Array<{ communicationUserId: string; displayName: string }>
   ): void {
-    this.participantsInCallMap.set(serverCallId, participants);
+    const currentParticipants = this.participantsInCallMap.get(serverCallId);
+    const newParticipants = participants.filter((participant) => currentParticipants?.includes(participant) === false);
+    this.participantsInCallMap.set(serverCallId, participants.concat(newParticipants));
   }
 
   /**

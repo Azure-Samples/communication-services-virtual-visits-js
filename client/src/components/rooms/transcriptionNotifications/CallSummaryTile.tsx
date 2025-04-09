@@ -4,7 +4,7 @@
 import { DefaultButton, Icon, IStyle, mergeStyles, Spinner, Stack, Text, useTheme } from '@fluentui/react';
 import { containerStyle, containerItemGap } from '../../../styles/SummaryEndCall.styles';
 import { SlideText20Regular } from '@fluentui/react-icons';
-import { fetchTranscript } from '../../../utils/CallAutomationUtils';
+import { fetchParticipants, fetchTranscript } from '../../../utils/CallAutomationUtils';
 /**
  * @private
  */
@@ -83,9 +83,15 @@ export const CallSummaryTile = (props: CallSummaryTileProps): JSX.Element => {
                         console.error('Failed to fetch transcript');
                         return;
                       }
-                      const transcriptionSentences = transcript.map(
-                        (sentence) => sentence.participant.communicationUserId + ': ' + sentence.text + '\n'
-                      );
+                      const participants = await fetchParticipants(serverCallId);
+                      const transcriptionSentences = transcript.map((sentence) => {
+                        const displayName = participants.find(
+                          (p) => p.userId === sentence.participant.communicationUserId
+                        )?.displayName;
+                        return displayName
+                          ? displayName + ': ' + sentence.text + '\n'
+                          : sentence.participant.communicationUserId + ': ' + sentence.text + '\n';
+                      });
                       const blob = new Blob(transcriptionSentences, { type: 'text/plain' });
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement('a');

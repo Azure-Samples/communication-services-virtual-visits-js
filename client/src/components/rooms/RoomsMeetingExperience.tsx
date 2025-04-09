@@ -35,7 +35,8 @@ import {
   LocaleCode,
   startTranscription,
   stopTranscription,
-  SummarizeResult
+  SummarizeResult,
+  updateParticipants
 } from '../../utils/CallAutomationUtils';
 import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
@@ -75,6 +76,13 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const theme = useTheme();
   const callAutomationStarted = useRef(false);
   const eventSourceRef = useRef<EventSource | null>(null);
+
+  const displayName = userRole === RoomParticipantRole.presenter ? 'Presenter' : 'Attendee';
+  const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
+
+  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
+  const [renderInviteInstructions, setRenderInviteInstructions] = useState<boolean>(false);
+  const [callId, setCallId] = useState<string>();
 
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -225,15 +233,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     });
   }, [serverCallId, customNotications, callConnected, transcriptionStartedByYou]);
 
-  const displayName =
-    userRole === RoomParticipantRole.presenter ? 'Virtual appointments Host' : 'Virtual appointments User';
-
-  const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
-
-  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
-  const [renderInviteInstructions, setRenderInviteInstructions] = useState<boolean>(false);
-  const [callId, setCallId] = useState<string>();
-
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
   const afterAdapterCreate = useCallback(
@@ -269,7 +268,9 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         }
         if (state?.call?.state === 'Connected') {
           setCallConnected(true);
-          setServerCallId(await state.call.info?.getServerCallId());
+          const serverCallId = await state.call.info?.getServerCallId();
+          setServerCallId(serverCallId);
+          updateParticipants({ displayName, userId: userId }, serverCallId);
         }
         if (state.call && callAgent) {
           const call = callAgent?.calls.find((call) => call.id === state.call?.id);
@@ -289,6 +290,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           }
         }
       });
+
       const toggleInviteInstructions = (state: CallAdapterState): void => {
         const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(userRole, formFactorValue, state?.page);
         setRenderInviteInstructions(roomsInviteInstructionsEnabled);
@@ -349,7 +351,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   useEffect(() => {
     const createCallAgent = async (): Promise<void> => {
       if (statefulClient && !callAgent) {
-        const callAgent = await statefulClient.createCallAgent(args.credential);
+        const callAgent = await statefulClient.createCallAgent(args.credential, { displayName });
         setCallAgent(callAgent);
       }
     };
