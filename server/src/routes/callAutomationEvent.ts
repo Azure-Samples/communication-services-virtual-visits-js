@@ -3,6 +3,7 @@
 
 import * as express from 'express';
 import { getTranscriptionManager } from '../utils/callAutomationUtils';
+import { sendEventToClients } from '../app';
 
 const router = express.Router();
 
@@ -11,8 +12,8 @@ router.post('/', async function (req, res) {
   const { type } = req.body[0];
   try {
     if (type === 'Microsoft.Communication.CallConnected') {
-      const hasConnection = getTranscriptionManager().getCallConnection(callConnectionId);
       console.log('/automationEvent received', req.body);
+      const hasConnection = getTranscriptionManager().getCallConnection(callConnectionId);
       /**
        * if the call already exists in the mapping exit early to avoid overwriting the mapping and making
        * a new connection through callAutomation.
@@ -28,13 +29,14 @@ router.post('/', async function (req, res) {
        * is from the calling SDK and the callConnectionId is mapped to the correlationId from the transcription
        * service. We need to store this mapping so that we can fetch the transcription later.
        */
-      // CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId] = {
-      //   serverCallId: serverCallId,
-      //   correlationId: CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId as string]?.correlationId
-      // };
       getTranscriptionManager().setCallConnection(callConnectionId, serverCallId);
-      // THIS IS BROKEN AND NEEDS TO BE FIXED
       console.log(getTranscriptionManager().getCallConnection(serverCallId));
+    } else if (type === 'Microsoft.Communication.TranscriptionStarted') {
+      console.log('/automationEvent received', req.body);
+      sendEventToClients('TranscriptionStarted', { serverCallId });
+    } else if (type === 'Microsoft.Communication.TranscriptionStopped') {
+      console.log('/automationEvent received', req.body);
+      sendEventToClients('TranscriptionStopped', { serverCallId });
     }
   } catch (e) {
     console.error('Error processing automation event:', e);

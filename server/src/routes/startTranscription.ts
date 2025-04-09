@@ -31,7 +31,6 @@ router.post('/', async function (req, res, next) {
   res.status(200).end();
 
   // Send SSE event to clients
-  sendEventToClients('TranscriptionStarted', { serverCallId });
 });
 
 export default router;

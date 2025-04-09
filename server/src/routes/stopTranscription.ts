@@ -31,7 +31,6 @@ router.post('/', async function (req, res, next) {
   }
 
   res.status(200).end();
-  sendEventToClients('TranscriptionStopped', { serverCallId });
 });
 
 export default router;

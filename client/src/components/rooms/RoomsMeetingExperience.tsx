@@ -23,7 +23,7 @@ import { AzureCommunicationTokenCredential, CommunicationUserIdentifier } from '
 import { Theme, PartialTheme, Stack, Spinner } from '@fluentui/react';
 import { fullSizeStyles } from '../../styles/Common.styles';
 import { RoomParticipantRole, RoomsInfo } from '../../models/RoomModel';
-import { PostCallConfig } from '../../models/ConfigModel';
+import { PostCallConfig, TranscriptionClientOptions } from '../../models/ConfigModel';
 import { Survey } from '../postcall/Survey';
 import MobileDetect from 'mobile-detect';
 import InviteInstructions from './InviteInstructions';
@@ -48,10 +48,13 @@ export interface RoomsMeetingExperienceProps {
   postCall?: PostCallConfig;
   fluentTheme?: PartialTheme | Theme;
   onDisplayError(error: any): void;
+  // this needs to be re-thought. we need a way for the config to say we are not using transcription, but also
+  // auto start, and transcription only
+  transcriptionClientOptions?: TranscriptionClientOptions;
 }
 
 const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element => {
-  const { roomsInfo, token, postCall, fluentTheme, onDisplayError } = props;
+  const { roomsInfo, token, postCall, fluentTheme, onDisplayError, transcriptionClientOptions } = props;
   const { userId, userRole, locator } = roomsInfo;
   const [transcriptionStarted, setTranscriptionStarted] = useState(false);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
@@ -67,6 +70,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
   const [transcriptionStartedByYou, setTranscriptionStartedByYou] = useState(false);
 
+  const transcriptionFeatureEnabled = transcriptionClientOptions?.transcription !== 'none';
+  const summarizationFeatureEnabled = transcriptionClientOptions?.summarization;
   const theme = useTheme();
   const callAutomationStarted = useRef(false);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -74,7 +79,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   useEffect(() => {
     let eventSource: EventSource | null = null;
 
-    if (serverCallId) {
+    if (serverCallId && transcriptionFeatureEnabled) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
       eventSource = new EventSource(`http://localhost:8080/api/notificationEvents`);
       console.log(eventSource);
@@ -109,12 +114,12 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }, [serverCallId]);
 
   useEffect(() => {
-    if (!eventSourceRef.current && !callConnected) {
+    if (!eventSourceRef.current && !callConnected && transcriptionFeatureEnabled) {
       return;
     }
     eventSourceRef.current?.addEventListener('TranscriptionStarted', (event) => {
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId === serverCallId) {
+      if (parsedData.serverCallId.includes(serverCallId)) {
         console.log('Transcription started', event.data);
         setTranscriptionStarted(true);
         console.log(transcriptionStartedByYou);
@@ -141,7 +146,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     eventSourceRef.current?.addEventListener('TranscriptionStopped', (event) => {
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId === serverCallId) {
+      if (parsedData.serverCallId.includes(serverCallId)) {
         console.log('Transcription stopped', event.data);
         setTranscriptionStarted(false);
         const newCustomNotifcaitons = customNotications
@@ -166,7 +171,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     eventSourceRef.current?.addEventListener('TranscriptionStatus', (event) => {
       console.log('TranscriptionStatus event:', event);
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId === serverCallId) {
+      if (parsedData.serverCallId.includes(serverCallId)) {
         const transcriptionStarted = parsedData.transcriptStarted;
         console.log('TranscriptionStatus:', transcriptionStarted);
         if (transcriptionStarted) {
@@ -246,13 +251,15 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         if (callAutomationStarted) {
           console.log(summarizationLanguage);
           setCallConnected(false);
-          setSummary(undefined);
-          setSummarizationStatus('InProgress');
-          setSummary(
-            await getCallSummaryFromServer(adapter, summarizationLanguage).finally(() =>
-              setSummarizationStatus('Complete')
-            )
-          );
+          if (summarizationFeatureEnabled) {
+            setSummary(undefined);
+            setSummarizationStatus('InProgress');
+            setSummary(
+              await getCallSummaryFromServer(adapter, summarizationLanguage).finally(() =>
+                setSummarizationStatus('Complete')
+              )
+            );
+          }
         }
         setRenderPostCall(true);
       });
@@ -271,7 +278,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           }
         }
 
-        if (!callAutomationStarted.current && state.call?.state === 'Connected') {
+        if (!callAutomationStarted.current && state.call?.state === 'Connected' && transcriptionFeatureEnabled) {
           callAutomationStarted.current = true;
           try {
             console.log('Connecting to call automation...');
@@ -391,7 +398,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           postCall={postCall}
           serverCallId={serverCallId}
           summarizationStatus={summarizationStatus}
-          summary={summary}
+          summary={summarizationFeatureEnabled ? summary : undefined}
+          transcriptionClientOptions={transcriptionClientOptions}
           onRejoinCall={async () => {
             await callAdapter.joinCall();
             setRenderPostCall(false);
@@ -438,7 +446,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                 formFactor={formFactorValue}
                 options={{
                   callControls: {
-                    onFetchCustomButtonProps: customButtonOptions,
+                    onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
                     endCallButton: {
                       hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
                     }

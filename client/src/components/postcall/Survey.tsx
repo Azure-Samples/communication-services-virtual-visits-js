@@ -29,13 +29,19 @@ export interface SurveyProps {
   acsUserId: string;
   meetingLink: string;
   serverCallId?: string;
+  transcriptionClientOptions?: {
+    transcription: 'auto' | 'manual' | 'none';
+    summarization: boolean;
+  };
   summarizationStatus?: 'InProgress' | 'Complete' | 'None';
   summary?: SummarizeResult;
 }
 const SURVEY = 'SurveyComponent';
 
 export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps) => {
-  const { serverCallId, summarizationStatus, summary } = props;
+  const { serverCallId, summarizationStatus, summary, transcriptionClientOptions } = props;
+  const transcriptionFeatureEnabled = transcriptionClientOptions?.transcription !== 'none';
+  console.log(transcriptionFeatureEnabled);
   const surveyType = props.postCall.survey?.type;
   let postcallSurveyUrl = '';
   if (surveyType === 'msforms') {
@@ -53,11 +59,11 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
           <RejoinLink onRejoinCall={props.onRejoinCall} />
         </Stack>
-        {summarizationStatus && serverCallId && (
+        {summarizationStatus && transcriptionFeatureEnabled && serverCallId && (
           <CallSummaryTile
             serverCallId={serverCallId}
             summarizationStatus={summarizationStatus}
-            summary={summary?.recap}
+            summary={transcriptionClientOptions?.summarization ? summary?.recap : undefined}
           />
         )}
       </Stack>
@@ -77,11 +83,11 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
           <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
             <RejoinLink onRejoinCall={props.onRejoinCall} />
           </Stack>
-          {summarizationStatus && serverCallId && (
+          {summarizationStatus && transcriptionFeatureEnabled && serverCallId && (
             <CallSummaryTile
               serverCallId={serverCallId}
               summarizationStatus={summarizationStatus}
-              summary={summary?.recap}
+              summary={transcriptionClientOptions?.summarization ? summary?.recap : undefined}
             />
           )}
         </Stack>

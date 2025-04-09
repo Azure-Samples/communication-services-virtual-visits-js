@@ -113,7 +113,7 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
     locale: 'en-US',
-    startTranscription: callAutomationConfig?.AutoStartTranscription ?? false
+    startTranscription: callAutomationConfig?.clientOptions?.transcription === 'auto' ? true : false
   };
 
   const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
