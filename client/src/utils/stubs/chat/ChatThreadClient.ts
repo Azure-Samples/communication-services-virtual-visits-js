@@ -7,7 +7,9 @@ import {
   ChatMessageReadReceipt,
   ChatParticipant,
   ChatThreadProperties,
-  SendChatMessageResult
+  DeleteImageOptions,
+  SendChatMessageResult,
+  UpdateChatThreadPropertiesOptions
 } from '@azure/communication-chat';
 import { PagedAsyncIterableIterator } from '@azure/core-paging';
 import { IChatThreadClient } from './types';
@@ -71,6 +73,20 @@ export class StubChatThreadClient implements IChatThreadClient {
     throw new Error('Stub: unimplemented');
   }
   removeParticipant(): Promise<void> {
+    throw new Error('Stub: unimplemented');
+  }
+  updateProperties(options?: UpdateChatThreadPropertiesOptions): Promise<void> {
+    throw new Error('Stub: unimplemented');
+  }
+  uploadImage(
+    image: unknown,
+    imageFileName: unknown,
+    imageBytesLength?: unknown,
+    options?: unknown
+  ): Promise<import('@azure/communication-chat').UploadChatImageResult> {
+    throw new Error('Stub: unimplemented');
+  }
+  deleteImage(imageId: string, options?: DeleteImageOptions): Promise<void> {
     throw new Error('Stub: unimplemented');
   }
 }

@@ -5,6 +5,7 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import WebSocket from 'ws';
+import http from 'http';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
@@ -125,40 +126,6 @@ app.use('/api/fetchParticipants', cors(), fetchParticipants);
 app.use('/api/updateParticipants', cors(), updateParicipants);
 
 const config = getServerConfig();
-/**
- * route: wss://<host>/
- * purpose: WebSocket endpoint to receive transcription events
- *
- * Don't forget to secure this endpoint in production
- * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
- */
-console.log('WebSocket server port:', config.callAutomation?.ServerWebSocketPort);
-
-const wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
-
-wss.on('connection', (ws) => {
-  let transcriptionCorrelationId: string | undefined;
-
-  ws.on('open', () => {
-    console.log('WebSocket opened');
-  });
-
-  ws.on('message', (message: WebSocket.RawData) => {
-    const decoder = new TextDecoder();
-    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
-    if (
-      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
-      ('kind' in messageData && messageData.kind === 'TranscriptionData')
-    ) {
-      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
-    }
-  });
-
-  ws.on('close', () => {
-    console.log('WebSocket closed');
-  });
-  console.log('websocket server running on port', config.callAutomation?.ServerWebSocketPort);
-});
 
 const surveyDBHandler = createSurveyDBHandler(config);
 if (surveyDBHandler) {
@@ -199,4 +166,46 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 
-export default app;
+const port = parseInt(process.env.PORT ?? '8080');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * route: wss://<host>/
+ * purpose: WebSocket endpoint to receive transcription events
+ *
+ * Don't forget to secure this endpoint in production
+ * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ */
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  let transcriptionCorrelationId: string | undefined;
+
+  ws.on('open', () => {
+    console.log('WebSocket opened');
+  });
+
+  ws.on('message', (message: WebSocket.RawData) => {
+    const decoder = new TextDecoder();
+    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
+    if (
+      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
+      ('kind' in messageData && messageData.kind === 'TranscriptionData')
+    ) {
+      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket closed');
+  });
+});
+
+export default server;
