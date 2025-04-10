@@ -63,6 +63,7 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
       token={roomsToken}
       fluentTheme={fluentTheme}
       postCall={config.postCall}
+      transcriptionClientOptions={config.transcriptionClientOptions}
       onDisplayError={(error) => onDisplayError(error)}
     />
   );

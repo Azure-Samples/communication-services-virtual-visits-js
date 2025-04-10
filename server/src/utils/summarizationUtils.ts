@@ -12,7 +12,7 @@ if (!callAutomationConfig) {
 /**
  * Information on how this URL is constructued here: https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization
  */
-const API_URL = `${callAutomationConfig?.CognitionAPIEndpoint}/language/analyze-conversations/jobs?api-version=2023-11-15-preview`;
+const API_URL = `${callAutomationConfig?.CognitionAPIEndpoint}/language/analyze-conversations/jobs?api-version=2024-11-15-preview`;
 
 const apiHeaders = (): HeadersInit => ({
   'Content-Type': 'application/json',

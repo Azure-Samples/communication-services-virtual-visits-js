@@ -62,7 +62,7 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
     waitingSubtitle: serverConfig.waitingSubtitle,
     logoUrl: serverConfig.logoUrl,
     postCall: serverConfig.postCall,
-    ServerWebSocketUrl: serverConfig.callAutomation?.ServerWebSocketUrl
+    transcriptionClientOptions: serverConfig.callAutomation?.clientOptions
   } as ClientConfigModel;
 
   return config;

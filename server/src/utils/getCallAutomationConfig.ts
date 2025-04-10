@@ -2,14 +2,15 @@
 // Licensed under the MIT license.
 
 import {
-  VV_AUTO_START_TRANSCRIPTION,
   VV_COGNITIONAPI_ENDPOINT,
   VV_COGNITIONAPI_KEY,
   VV_SERVER_HTTP_URL,
   VV_SERVER_WEBSOCKET_PORT,
-  VV_SERVER_WEBSOCKET_URL
+  VV_SERVER_WEBSOCKET_URL,
+  VV_TRANSCRIPTION_BEHAVIOR,
+  VV_USE_SUMMARIZATION
 } from '../constants';
-import { CallAutomationConfig, ServerConfigModel } from '../models/configModel';
+import { CallAutomationConfig, ServerConfigModel, TranscriptionBehavior } from '../models/configModel';
 
 export const getCallAutomationConfig = (defaultConfig: ServerConfigModel): CallAutomationConfig | undefined => {
   const cognitionAPIEndpoint =
@@ -20,9 +21,15 @@ export const getCallAutomationConfig = (defaultConfig: ServerConfigModel): CallA
     process.env[VV_SERVER_WEBSOCKET_PORT] ?? defaultConfig.callAutomation?.ServerWebSocketPort;
   const serverWebSocketUrl =
     process.env[VV_SERVER_WEBSOCKET_URL] ?? (defaultConfig.callAutomation?.ServerWebSocketUrl as string);
+  const useSummarization =
+    process.env[VV_USE_SUMMARIZATION] ?? defaultConfig.callAutomation?.clientOptions?.summarization ?? false;
   const autoStartTranscription =
-    (process.env[VV_AUTO_START_TRANSCRIPTION] as string) ?? defaultConfig.callAutomation?.AutoStartTranscription;
+    process.env[VV_TRANSCRIPTION_BEHAVIOR] ?? defaultConfig.callAutomation?.clientOptions?.transcription;
 
+  const clientOptions = {
+    transcription: autoStartTranscription as TranscriptionBehavior,
+    summarization: Boolean(useSummarization)
+  };
   if (!cognitionAPIEndpoint || !cognitionAPIKey || !serverHttpUrl || !serverWebSocketPort || !serverWebSocketUrl) {
     return undefined;
   }
@@ -32,8 +39,7 @@ export const getCallAutomationConfig = (defaultConfig: ServerConfigModel): CallA
     ServerHttpUrl: serverHttpUrl,
     ServerWebSocketPort: typeof serverWebSocketPort === 'string' ? parseInt(serverWebSocketPort) : serverWebSocketPort,
     ServerWebSocketUrl: serverWebSocketUrl,
-    AutoStartTranscription:
-      typeof autoStartTranscription === 'string' ? Boolean(autoStartTranscription) : autoStartTranscription
+    clientOptions
   };
 
   return callAutomationConfig;
