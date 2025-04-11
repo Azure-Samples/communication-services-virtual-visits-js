@@ -2,7 +2,7 @@
 
 # Azure Communication Services Virtual Appointments
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fcommunication-services-virtual-visits-js%2Fdmceachernmsft/update-arm-templates%2Fdeploy%2Feditableazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fcommunication-services-virtual-visits-js%2Fdmceachernmsft%2Fupdate-arm-templates%2Fdeploy%2Feditableazuredeploy.json)
 
 Azure Communication Services Virtual Appointments is a web app you can host to provide your customers with a branded virtual consultation experience.
 
