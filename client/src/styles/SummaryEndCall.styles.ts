@@ -8,7 +8,7 @@ import { IStyle, IStackTokens, IStackStyles } from '@fluentui/react';
 export const containerStyle: IStyle = {
   maxWidth: '22.5rem',
   // Ensure some space around the text on a narrow viewport.
-  margin: '1rem'
+  margin: '1rem 0rem'
 };
 
 /**
@@ -41,4 +41,11 @@ export const titleStyles: IStyle = {
  */
 export const moreDetailsStyles: IStyle = {
   fontSize: '1rem'
+};
+
+/**
+ * @private
+ */
+export const presenterEndCallContainerStyles: IStackStyles = {
+  root: { maxWidth: '64rem', width: '100%', background: '#ffffff', margin: 'auto', padding: '2rem 0' }
 };

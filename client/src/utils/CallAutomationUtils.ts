@@ -182,7 +182,6 @@ export const updateParticipants = async (
   if (!response.ok) {
     console.error('Failed to update participants:', response);
   }
-  console.log('Updated participants:', participant);
 };
 
 export const fetchParticipants = async (serverCallId: string): Promise<{ userId: string; displayName: string }[]> => {
