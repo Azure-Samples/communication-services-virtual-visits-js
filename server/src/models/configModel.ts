@@ -76,4 +76,5 @@ export interface ClientConfigModel {
   logoUrl: string;
   postCall?: PostCallConfig;
   transcriptionClientOptions?: TranscriptionClientOptions;
+  notificationEventsUrl?: string;
 }

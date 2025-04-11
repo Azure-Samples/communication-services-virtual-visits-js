@@ -29,6 +29,10 @@
     "ServerHttpUrl": "Url for the server to send the call automation events",
     "ServerWebSocketPort": 8081,
     "ServerWebSocketUrl": "wss://<URL for the websocket>",
-    "AutoStartTranscription": false
+    "AutoStartTranscription": false,
+    "clientOptions": {
+      "transcription": "manual",
+      "summarization": false
+    }
   }
 }
