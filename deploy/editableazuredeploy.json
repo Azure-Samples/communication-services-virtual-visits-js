@@ -118,7 +118,8 @@
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
     "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip",
     "postCallSurveyOptionsSurveyUrl": "",
-    "postCallSurveyOneQuestionPollAnswerPlaceholder": ""
+    "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
+    "cognitiveServiceName": "[concat('cognitive-', uniqueString(parameters('cognitiveServiceName')))]"
   },
   "resources": [
     {
