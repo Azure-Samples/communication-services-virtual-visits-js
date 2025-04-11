@@ -44,7 +44,6 @@ export interface CallAutomationConfig {
   CognitionAPIEndpoint: string;
   CognitionAPIKey: string;
   ServerHttpUrl: string;
-  ServerWebSocketPort: number;
   ServerWebSocketUrl: string;
   clientOptions?: TranscriptionClientOptions;
 }
