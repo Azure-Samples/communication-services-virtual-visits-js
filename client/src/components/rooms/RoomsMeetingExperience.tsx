@@ -40,8 +40,9 @@ import {
 } from '../../utils/CallAutomationUtils';
 import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
-import { TranscriptionOptionsModal } from './transcriptionNotifications/TranscriptionOptionsModal';
-import { CustomNotifications } from './transcriptionNotifications/CustomNotifications';
+import { TranscriptionOptionsModal } from './transcription/TranscriptionOptionsModal';
+import { CustomNotifications } from './transcription/CustomNotifications';
+import { PresenterEndCallScreen } from './transcription/PresenterEndCall';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
@@ -250,6 +251,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         adapter.on('callEnded', () => setRenderPostCall(true));
       }
       adapter.on('callEnded', async (event) => {
+        setRenderPostCall(true);
         if (callAutomationStarted.current) {
           setCallConnected(false);
         }
@@ -267,7 +269,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             );
           }
         }
-        setRenderPostCall(true);
       });
       adapter.onStateChange(async (state) => {
         if (state.call?.id !== undefined && state.call?.id !== callId) {
@@ -413,6 +414,22 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             await callAdapter.joinCall();
             setRenderPostCall(false);
           }}
+        />
+      </Stack>
+    );
+  }
+
+  if (userRole === RoomParticipantRole.presenter && renderPostCall && transcriptionFeatureEnabled) {
+    return (
+      <Stack>
+        <PresenterEndCallScreen
+          reJoinCall={() => {
+            callAdapter.joinCall({});
+            setRenderPostCall(false);
+          }}
+          summarizationStatus={summarizationStatus}
+          serverCallId={serverCallId}
+          summary={summary?.recap}
         />
       </Stack>
     );

@@ -19,7 +19,7 @@ import {
 import { RejoinLink } from './RejoinLink';
 import { PostCallOneQuestionPoll } from './PostCallOneQuestionPoll';
 import { SummarizeResult } from '../../utils/CallAutomationUtils';
-import { CallSummaryTile } from '../rooms/transcriptionNotifications/CallSummaryTile';
+import { CallSummaryTile } from '../rooms/transcription/CallSummaryTile';
 
 export interface SurveyProps {
   theme?: PartialTheme | Theme;
