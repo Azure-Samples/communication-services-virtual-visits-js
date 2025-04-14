@@ -257,7 +257,7 @@
       "name": "[guid(resourceGroup().id, parameters('communicationServiceName'), variables('cognitiveServicesUserRoleId'))]",
       "properties": {
         "roleDefinitionId": "[variables('cognitiveServicesUserRoleId')]",
-        "principalId": "[reference(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2023-04-01', 'full').principalId]",
+        "principalId": "[reference(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2023-04-01', 'full').identity.principalId]",
         "principalType": "ServicePrincipal"
       },
       "dependsOn": [
