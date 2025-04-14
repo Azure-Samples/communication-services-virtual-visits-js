@@ -140,7 +140,7 @@
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
-      "apiVersion": "2023-05-01",
+      "apiVersion": "2023-04-01",
       "location": "global",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
@@ -156,9 +156,6 @@
       "name": "[parameters('cosmosDbAccountName')]",
       "location": "[resourceGroup().location]",
       "kind": "GlobalDocumentDB",
-      "sku": {
-        "name": "[parameters('sku')]"
-      },
       "properties": {
         "databaseAccountOfferType": "Standard"
       },
