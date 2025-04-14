@@ -56,7 +56,7 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "F0",
+      "defaultValue": "F1",
       "metadata": {
         "description": "The resource offers different pricing SKUs to fit your needs. The SKU you select determines how much you will be billed each month."
       }
@@ -128,7 +128,7 @@
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "name": "[parameters('sku')]"
+        "name": "S0"
       },
       "kind": "CognitiveServices",
       "properties": {
