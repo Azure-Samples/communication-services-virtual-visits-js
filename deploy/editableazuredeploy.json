@@ -140,14 +140,18 @@
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
-      "apiVersion": "2020-08-20",
+      "apiVersion": "2023-05-01",
       "location": "global",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
       ],
       "tags": {},
       "properties": {
-        "dataLocation": "[parameters('communicationServiceDataLocation')]"
+        "dataLocation": "[parameters('communicationServiceDataLocation')]",
+        "SystemAssignedIdentity": {
+          "principalId": "[reference(concat('Microsoft.ManagedIdentity/identities/', parameters('communicationServiceName')), '2018-11-30').principalId]",
+          "tenantId": "[subscription().tenantId]"
+        }
       }
     },
     {
