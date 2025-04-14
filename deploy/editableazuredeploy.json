@@ -142,8 +142,7 @@
         "apiProperties": {
           "statisticsEnabled": false
         }
-      },
-      "condition": "[parameters('transcriptionAndSummaryEnabled')]"
+      }
     },
     {
       "name": "[parameters('communicationServiceName')]",
@@ -226,7 +225,7 @@
             "VV_COGNITIONAPI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').key1]",
             "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
             "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
-            "VV_USE_SUMMARIZATION": "true",
+            "VV_USE_SUMMARIZATION": "[parameters('transcriptionAndSummaryEnabled')]",
             "VV_USE_TRANSCRIPTION": "manual"
           }
         },
