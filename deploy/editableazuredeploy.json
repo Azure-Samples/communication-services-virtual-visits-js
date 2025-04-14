@@ -154,9 +154,6 @@
       "apiVersion": "2020-08-20",
       "location": "global",
       "tags": {},
-      "identity": {
-        "type": "SystemAssigned"
-      },
       "properties": {
         "dataLocation": "[parameters('communicationServiceDataLocation')]"
       }
