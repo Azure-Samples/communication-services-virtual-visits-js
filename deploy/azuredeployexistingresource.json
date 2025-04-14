@@ -37,7 +37,9 @@
     "postCallSurveyOneQuestionPollSaveButtonText": "Continue",
     "cosmosDbAccountName": "[concat('db-account-', uniqueString(parameters('appServiceName')))]",
     "cosmosDbName": "[concat('cosmos-db-', uniqueString(parameters('appServiceName')))]",
-    "cognitiveServiceName": "[concat('azure-ai-',parameters('appServiceName'))]"
+    "cognitiveServiceName": "[concat('azure-ai-',parameters('appServiceName'))]",
+    "cognitiveServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]",
+    "cognitiveServicesUserRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')]"
   },
   "resources": [
     {
