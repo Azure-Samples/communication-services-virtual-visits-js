@@ -128,7 +128,7 @@
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "name": "[parameters('sku')]"
+        "name": "F1"
       },
       "kind": "CognitiveServices",
       "properties": {
