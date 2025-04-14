@@ -141,9 +141,6 @@
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
       "apiVersion": "2020-08-20",
-      "sku": {
-        "name": "[parameters('sku')]"
-      },
       "location": "global",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
