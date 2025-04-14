@@ -73,6 +73,13 @@
       "type": "bool",
       "defaultValue": "true"
     },
+    "transcriptionAndSummaryEnabled": {
+      "type": "bool",
+      "defaultValue": "true",
+      "metadata": {
+        "description": "Enable transcription and summary"
+      }
+    },
     "companyName": {
       "type": "string",
       "defaultValue": "Lamna Healthcare"
@@ -135,16 +142,14 @@
         "apiProperties": {
           "statisticsEnabled": false
         }
-      }
+      },
+      "condition": "[parameters('transcriptionAndSummaryEnabled')]"
     },
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
       "apiVersion": "2023-04-01",
       "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
-      ],
       "tags": {},
       "properties": {
         "dataLocation": "[parameters('communicationServiceDataLocation')]"
