@@ -73,6 +73,15 @@
       "type": "bool",
       "defaultValue": "true"
     },
+    "transcriptionBehavior": {
+      "type": "string",
+      "allowedValues": ["manual", "auto", "none"],
+      "defaultValue": "manual"
+    },
+    "summarizationEnabled": {
+      "type": "bool",
+      "defaultValue": "true"
+    },
     "companyName": {
       "type": "string",
       "defaultValue": "Lamna Healthcare"
@@ -218,8 +227,8 @@
             "VV_COGNITIONAPI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').key1]",
             "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
             "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
-            "VV_USE_SUMMARIZATION": "true",
-            "VV_USE_TRANSCRIPTION": "manual"
+            "VV_USE_SUMMARIZATION": "[parameters('summarizationEnabled')]",
+            "VV_USE_TRANSCRIPTION": "[parameters('transcriptionBehavior')]"
           }
         },
         {
