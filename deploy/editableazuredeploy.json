@@ -56,7 +56,7 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "F0",
       "metadata": {
         "description": "The resource offers different pricing SKUs to fit your needs. The SKU you select determines how much you will be billed each month."
       }
@@ -150,12 +150,7 @@
       ],
       "tags": {},
       "properties": {
-        "dataLocation": "[parameters('communicationServiceDataLocation')]",
-        "linkedDomains": [],
-        "voiceIntegrationsOptions": {
-          "azureCognitiveServicesEndpoint": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').endpoint]",
-          "cognitiveServicesEndpoint": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').endpoint]"
-        }
+        "dataLocation": "[parameters('communicationServiceDataLocation')]"
       }
     },
     {
