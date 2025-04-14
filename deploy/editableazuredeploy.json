@@ -127,9 +127,6 @@
       "apiVersion": "2023-05-01",
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "S0"
-      },
       "kind": "CognitiveServices",
       "properties": {
         "apiProperties": {
