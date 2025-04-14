@@ -151,8 +151,11 @@
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
-      "apiVersion": "2020-08-20",
+      "apiVersion": "2024-09-01-preview",
       "location": "global",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "tags": {},
       "properties": {
         "dataLocation": "[parameters('communicationServiceDataLocation')]"
@@ -254,7 +257,7 @@
       "name": "[guid(resourceGroup().id, parameters('communicationServiceName'), variables('cognitiveServicesUserRoleId'))]",
       "properties": {
         "roleDefinitionId": "[variables('cognitiveServicesUserRoleId')]",
-        "principalId": "[reference(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2023-04-01', 'full').identity.principalId]",
+        "principalId": "[reference(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2023-04-01', 'full').principalId]",
         "principalType": "ServicePrincipal"
       },
       "dependsOn": [
