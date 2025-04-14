@@ -128,7 +128,7 @@
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "name": "F1"
+        "name": "[parameters('sku')]"
       },
       "kind": "CognitiveServices",
       "properties": {
@@ -141,6 +141,9 @@
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
       "apiVersion": "2020-08-20",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
       "location": "global",
       "dependsOn": [
         "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
@@ -161,6 +164,9 @@
       "name": "[parameters('cosmosDbAccountName')]",
       "location": "[resourceGroup().location]",
       "kind": "GlobalDocumentDB",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
       "properties": {
         "databaseAccountOfferType": "Standard"
       },
