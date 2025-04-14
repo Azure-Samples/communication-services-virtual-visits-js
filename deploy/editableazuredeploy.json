@@ -23,6 +23,12 @@
     "communicationServiceName": {
       "type": "string"
     },
+    "cognitiveServiceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Cognitive Services resource. This must be a new unique name."
+      }
+    },
     "communicationServiceDataLocation": {
       "type": "string",
       "allowedValues": [
@@ -112,9 +118,25 @@
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
     "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip",
     "postCallSurveyOptionsSurveyUrl": "",
-    "postCallSurveyOneQuestionPollAnswerPlaceholder": ""
+    "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
+    "cognitiveServiceName": "[parameters('cognitiveServiceName')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('cognitiveServiceName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "S0"
+      },
+      "kind": "CognitiveServices",
+      "properties": {
+        "apiProperties": {
+          "statisticsEnabled": false
+        }
+      }
+    },
     {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
@@ -154,7 +176,8 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]",
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName'))]",
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
