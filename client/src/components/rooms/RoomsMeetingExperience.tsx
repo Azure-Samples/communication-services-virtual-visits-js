@@ -33,10 +33,10 @@ import {
   fetchTranscriptionStatus,
   getCallSummaryFromServer,
   LocaleCode,
+  sendParticipantInfoToServer,
   startTranscription,
   stopTranscription,
-  SummarizeResult,
-  updateParticipants
+  SummarizeResult
 } from '../../utils/CallAutomationUtils';
 import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
@@ -65,18 +65,18 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     notificationEventsUrl
   } = props;
   const { userId, userRole, locator } = roomsInfo;
-  const [transcriptionStarted, setTranscriptionStarted] = useState(false);
-  const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
-  const [summarizationLanguage, setSummarizationLanguage] = useState<LocaleCode>('en-US');
-  const [summary, setSummary] = useState<SummarizeResult>();
-  const [summarizationStatus, setSummarizationStatus] = useState<'None' | 'InProgress' | 'Complete'>('None');
-  const [statefulClient, setStatefulClient] = useState<StatefulCallClient>();
-  const [callAgent, setCallAgent] = useState<DeclarativeCallAgent>();
   const [call, setCall] = useState<Call | TeamsCall | undefined>();
   const [callAdapter, setCallAdapter] = useState<CommonCallAdapter>();
-  const [customNotications, setCustomNotifications] = useState<ActiveNotification[]>([]);
+  const [callAgent, setCallAgent] = useState<DeclarativeCallAgent>();
   const [callConnected, setCallConnected] = useState(false);
+  const [customNotications, setCustomNotifications] = useState<ActiveNotification[]>([]);
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
+  const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
+  const [statefulClient, setStatefulClient] = useState<StatefulCallClient>();
+  const [summary, setSummary] = useState<SummarizeResult>();
+  const [summarizationLanguage, setSummarizationLanguage] = useState<LocaleCode>('en-US');
+  const [summarizationStatus, setSummarizationStatus] = useState<'None' | 'InProgress' | 'Complete'>('None');
+  const [transcriptionStarted, setTranscriptionStarted] = useState(false);
   const [transcriptionStartedByYou, setTranscriptionStartedByYou] = useState(false);
 
   const transcriptionFeatureEnabled = transcriptionClientOptions?.transcription !== 'none';
@@ -136,9 +136,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     eventSourceRef.current?.addEventListener('TranscriptionStarted', (event) => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
-        console.log('Transcription started', event.data);
         setTranscriptionStarted(true);
-        console.log(transcriptionStartedByYou);
         setCustomNotifications(
           customNotications
             .filter((notification) => notification.type !== 'transcriptionStarted')
@@ -163,7 +161,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     eventSourceRef.current?.addEventListener('TranscriptionStopped', (event) => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
-        console.log('Transcription stopped', event.data);
         setTranscriptionStarted(false);
         const newCustomNotifcaitons = customNotications
           .filter((notification) => notification.type !== 'transcriptionStarted')
@@ -185,7 +182,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       }
     });
     eventSourceRef.current?.addEventListener('TranscriptionStatus', (event) => {
-      console.log('TranscriptionStatus event:', event);
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
         const transcriptionStarted = parsedData.transcriptStarted;
@@ -278,7 +274,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           setCallConnected(true);
           const serverCallId = await state.call.info?.getServerCallId();
           setServerCallId(serverCallId);
-          updateParticipants({ displayName, userId: userId }, serverCallId);
+          // The server needs to store the information of participants in the call for later mapping participantIds to display names in the transcription
+          sendParticipantInfoToServer({ displayName, userId: userId }, serverCallId);
         }
         if (state.call && callAgent) {
           const call = callAgent?.calls.find((call) => call.id === state.call?.id);
