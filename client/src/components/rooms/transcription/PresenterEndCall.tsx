@@ -50,7 +50,7 @@ export const PresenterEndCallScreen = (props: PresenterEndCallScreenProps): JSX.
             {'You left the call'}
           </Text>
           <Text className={mergeStyles(moreDetailsStyles)} aria-live="assertive">
-            {'If this was a mistake , re-join the call.'}
+            {'If this was a mistake , rejoin the call.'}
           </Text>
           {!props.disableStartCallButton && (
             <Stack styles={rejoinCallButtonContainerStyles}>
@@ -94,7 +94,7 @@ const StartCallButton = (props: StartCallButtonProps): JSX.Element => {
       data-ui-id="call-composite-start-call-button"
       className={mergeStyles(props.className)}
       styles={buttonWithIconStyles}
-      text={rejoinCall ? 'Re-join call' : 'Start call'}
+      text={rejoinCall ? 'Rejoin call' : 'Start call'}
       onRenderIcon={props.hideIcon ? undefined : () => <Video20Filled className={videoCameraIconStyle} />}
     />
   );
