@@ -118,7 +118,6 @@ const config = getServerConfig();
  * Don't forget to secure this endpoint in production
  * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
  */
-console.log('WebSocket server port:', config.callAutomation?.ServerWebSocketPort);
 
 const wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
 
@@ -143,7 +142,7 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     console.log('WebSocket closed');
   });
-  console.log('websocket server running on port', config.callAutomation?.ServerWebSocketPort);
+  console.log('WebSocket server running on port', config.callAutomation?.ServerWebSocketPort);
 });
 
 const surveyDBHandler = createSurveyDBHandler(config);

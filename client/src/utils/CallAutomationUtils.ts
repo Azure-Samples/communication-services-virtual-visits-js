@@ -103,7 +103,6 @@ export const stopTranscription = async (serverCallId: string): Promise<boolean> 
 export const connectToCallAutomation = async (callAdaterState: CallAdapterState): Promise<boolean> => {
   if (callAdaterState.call?.info !== undefined && callAdaterState.call?.state === 'Connected') {
     const serverCallID = await callAdaterState.call.info.getServerCallId();
-    console.log('Server call ID:', serverCallID);
     const response = await fetch('/api/connectRoomsCall', {
       method: 'POST',
       headers: {
@@ -141,7 +140,6 @@ export const getCallSummaryFromServer = async (
       },
       body: JSON.stringify({ serverCallId: serverCallId, locale: locale })
     });
-    console.log('/summarizeTranscript response', response);
 
     if (!response.ok) {
       alert('Summarization request failed');
