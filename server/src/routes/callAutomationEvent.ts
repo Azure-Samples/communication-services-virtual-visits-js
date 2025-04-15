@@ -30,7 +30,6 @@ router.post('/', async function (req, res) {
        * service. We need to store this mapping so that we can fetch the transcription later.
        */
       getTranscriptionManager().setCallConnection(callConnectionId, serverCallId);
-      console.log(getTranscriptionManager().getCallConnection(serverCallId));
     } else if (type === 'Microsoft.Communication.TranscriptionStarted') {
       console.log('/automationEvent received', req.body);
       sendEventToClients('TranscriptionStarted', { serverCallId });
