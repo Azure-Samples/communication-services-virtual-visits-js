@@ -273,6 +273,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           setCallConnected(true);
           const serverCallId = await state.call.info?.getServerCallId();
           setServerCallId(serverCallId);
+          // The server needs to store the information of participants in the call for later mapping participantIds to display names in the transcription
           sendParticipantInfoToServer({ displayName, userId: userId }, serverCallId);
         }
         if (state.call && callAgent) {
