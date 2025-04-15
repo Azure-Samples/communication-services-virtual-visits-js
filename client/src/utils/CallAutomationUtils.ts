@@ -161,7 +161,7 @@ export const getCallSummaryFromServer = async (
  * Update the participants in the call record for transcription.
  * @param participant - The participant to add to the call record.
  */
-export const updateParticipants = async (
+export const sendParticipantInfoToServer = async (
   participant: { userId: string; displayName: string },
   serverCallId?: string
 ): Promise<void> => {

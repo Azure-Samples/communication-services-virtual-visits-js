@@ -33,10 +33,10 @@ import {
   fetchTranscriptionStatus,
   getCallSummaryFromServer,
   LocaleCode,
+  sendParticipantInfoToServer,
   startTranscription,
   stopTranscription,
-  SummarizeResult,
-  updateParticipants
+  SummarizeResult
 } from '../../utils/CallAutomationUtils';
 import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
@@ -277,7 +277,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           setCallConnected(true);
           const serverCallId = await state.call.info?.getServerCallId();
           setServerCallId(serverCallId);
-          updateParticipants({ displayName, userId: userId }, serverCallId);
+          sendParticipantInfoToServer({ displayName, userId: userId }, serverCallId);
         }
         if (state.call && callAgent) {
           const call = callAgent?.calls.find((call) => call.id === state.call?.id);
