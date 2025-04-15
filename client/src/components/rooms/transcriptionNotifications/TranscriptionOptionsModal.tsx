@@ -38,7 +38,7 @@ export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.E
       onDismiss={() => {
         setIsOpen(false);
       }}
-      styles={{ main: { width: '27.5rem', height: '16.75rem' } }}
+      styles={{ main: { maxWidth: '27.5rem', height: '16.75rem' } }}
     >
       <Stack tokens={{ childrenGap: '1.5rem' }} styles={{ root: { margin: '1.5rem' } }}>
         <Stack horizontal verticalAlign="center" style={{ position: 'relative' }}>
