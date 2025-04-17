@@ -2,23 +2,24 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import { CALLCONNECTION_ID_TO_CORRELATION_ID, getTranscriptionManager } from '../utils/callAutomationUtils';
+import { getTranscriptionManager } from '../utils/callAutomationUtils';
+import { sendEventToClients } from '../app';
 
 const router = express.Router();
 
 router.post('/', async function (req, res) {
-  const { callConnectionId, serverCallId, type } = req.body[0]?.data || {};
+  const { callConnectionId, serverCallId } = req.body[0]?.data || {};
+  const { type } = req.body[0];
   try {
     if (type === 'Microsoft.Communication.CallConnected') {
-      const hasConnection = getTranscriptionManager().getCallConnection(callConnectionId);
       console.log('/automationEvent received', req.body);
+      const hasConnection = getTranscriptionManager().getCallConnection(callConnectionId);
       /**
        * if the call already exists in the mapping exit early to avoid overwriting the mapping and making
        * a new connection through callAutomation.
        */
       if (hasConnection) {
         console.log('CallConnectionId already exists in mapping');
-
         res.status(200).end();
         return;
       }
@@ -28,11 +29,13 @@ router.post('/', async function (req, res) {
        * is from the calling SDK and the callConnectionId is mapped to the correlationId from the transcription
        * service. We need to store this mapping so that we can fetch the transcription later.
        */
-      CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId] = {
-        serverCallId: serverCallId,
-        correlationId: CALLCONNECTION_ID_TO_CORRELATION_ID[callConnectionId as string]?.correlationId
-      };
       getTranscriptionManager().setCallConnection(callConnectionId, serverCallId);
+    } else if (type === 'Microsoft.Communication.TranscriptionStarted') {
+      console.log('/automationEvent received', req.body);
+      sendEventToClients('TranscriptionStarted', { serverCallId });
+    } else if (type === 'Microsoft.Communication.TranscriptionStopped') {
+      console.log('/automationEvent received', req.body);
+      sendEventToClients('TranscriptionStopped', { serverCallId });
     }
   } catch (e) {
     console.error('Error processing automation event:', e);

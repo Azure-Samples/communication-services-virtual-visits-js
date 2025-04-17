@@ -34,6 +34,7 @@ export const createMockCallWithChatAdapter = (): CallWithChatAdapter => {
       isLocalPreviewMicrophoneEnabled: false,
       userId: { kind: 'communicationUser', communicationUserId: 'test' },
       displayName: 'test',
+      latestCallNotifications: {},
       devices: {
         isSpeakerSelectionAvailable: false,
         cameras: [],
@@ -68,6 +69,7 @@ export const createMockCallAdapter = (): CallAdapter => {
       isLocalPreviewMicrophoneEnabled: false,
       userId: { kind: 'communicationUser', communicationUserId: 'test' },
       displayName: 'test',
+      latestNotifications: {},
       call: undefined,
       devices: {
         isSpeakerSelectionAvailable: false,

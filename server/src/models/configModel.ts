@@ -33,13 +33,19 @@ export interface CosmosDBConfig {
   dbName: string;
 }
 
+export type TranscriptionBehavior = 'auto' | 'manual' | 'none';
+
+export interface TranscriptionClientOptions {
+  transcription: TranscriptionBehavior;
+  summarization: boolean;
+}
+
 export interface CallAutomationConfig {
   CognitionAPIEndpoint: string;
   CognitionAPIKey: string;
   ServerHttpUrl: string;
-  ServerWebSocketPort: number;
   ServerWebSocketUrl: string;
-  AutoStartTranscription: boolean;
+  clientOptions?: TranscriptionClientOptions;
 }
 
 export interface ServerConfigModel {
@@ -68,5 +74,6 @@ export interface ClientConfigModel {
   waitingSubtitle: string;
   logoUrl: string;
   postCall?: PostCallConfig;
-  ServerWebSocketUrl?: string;
+  transcriptionClientOptions?: TranscriptionClientOptions;
+  notificationEventsUrl?: string;
 }
