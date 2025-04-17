@@ -363,6 +363,21 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       tooltipText: 'Start Transcription'
     })
   ];
+
+  const callCompositeOptions = useMemo((): CallCompositeOptions => {
+    return {
+      callControls: {
+        onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
+        endCallButton: {
+          hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
+        }
+      },
+      notificationOptions: {
+        hideAllNotifications: true
+      }
+    };
+  }, [customButtonOptions, transcriptionFeatureEnabled, userRole]);
+
   /**
    * We want to set up the call adapter through the usage of the create from clients method
    * this allows us to use the usePropsFor hook to access the notifications from state
@@ -415,20 +430,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   if (!callAdapter) {
     return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
-
-  const callCompositeOptions = useMemo((): CallCompositeOptions => {
-    return {
-      callControls: {
-        onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
-        endCallButton: {
-          hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
-        }
-      },
-      notificationOptions: {
-        hideAllNotifications: true
-      }
-    };
-  }, [customButtonOptions, transcriptionFeatureEnabled, userRole]);
 
   if (renderEndCallScreen && postCall && userRole !== RoomParticipantRole.presenter) {
     return (
