@@ -16,7 +16,9 @@ import {
   useTheme,
   CallAgentProvider,
   CallClientProvider,
-  CallProvider
+  CallProvider,
+  CallAdapterCallEndedEvent,
+  CallCompositeOptions
 } from '@azure/communication-react';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AzureCommunicationTokenCredential, CommunicationUserIdentifier } from '@azure/communication-common';
@@ -69,7 +71,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [callAdapter, setCallAdapter] = useState<CommonCallAdapter>();
   const [callAgent, setCallAgent] = useState<DeclarativeCallAgent>();
   const [callConnected, setCallConnected] = useState(false);
-  const [customNotications, setCustomNotifications] = useState<ActiveNotification[]>([]);
+  const [transcriptionNotifications, setCustomNotifications] = useState<ActiveNotification[]>([]);
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [statefulClient, setStatefulClient] = useState<StatefulCallClient>();
@@ -79,8 +81,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [transcriptionStarted, setTranscriptionStarted] = useState(false);
   const [transcriptionStartedByYou, setTranscriptionStartedByYou] = useState(false);
 
-  const transcriptionFeatureEnabled = transcriptionClientOptions?.transcription !== 'none';
-  const summarizationFeatureEnabled = transcriptionClientOptions?.summarization;
+  const transcriptionFeatureEnabled = useRef(transcriptionClientOptions?.transcription !== 'none');
+  const summarizationFeatureEnabled = useRef(transcriptionClientOptions?.summarization);
   const theme = useTheme();
   const callAutomationStarted = useRef(false);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -88,7 +90,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const displayName = userRole === RoomParticipantRole.presenter ? 'Presenter' : 'Attendee';
   const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-  const [renderEndCallScreen, setrenderEndCallScreen] = useState<boolean>(false);
+  const [renderEndCallScreen, setRenderEndCallScreen] = useState<boolean>(false);
   const [renderInviteInstructions, setRenderInviteInstructions] = useState<boolean>(false);
   const [callId, setCallId] = useState<string>();
 
@@ -98,7 +100,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     if (serverCallId && transcriptionFeatureEnabled) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
       eventSource = new EventSource(`${notificationEventsUrl}/api/notificationEvents`);
-      console.log(eventSource);
       eventSourceRef.current = eventSource; // Store reference for cleanup
 
       // Connection opened so we want to have the status of the transcription sent from the server to push the notification
@@ -130,15 +131,16 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }, [serverCallId]);
 
   useEffect(() => {
-    if (!eventSourceRef.current && !callConnected && transcriptionFeatureEnabled) {
+    if (!eventSourceRef.current && !callConnected) {
       return;
     }
-    eventSourceRef.current?.addEventListener('TranscriptionStarted', (event) => {
+
+    const transcriptionStartedhandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
         setTranscriptionStarted(true);
-        setCustomNotifications(
-          customNotications
+        setCustomNotifications((prev) =>
+          prev
             .filter((notification) => notification.type !== 'transcriptionStarted')
             .filter((notification) => notification.type !== 'transcriptionStopped')
             .concat([
@@ -156,77 +158,25 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             ])
         );
       }
-    });
+    };
+    eventSourceRef.current?.addEventListener('TranscriptionStarted', transcriptionStartedhandler);
 
-    eventSourceRef.current?.addEventListener('TranscriptionStopped', (event) => {
+    const transcriptionStoppedHandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
         setTranscriptionStarted(false);
-        const newCustomNotifcaitons = customNotications
-          .filter((notification) => notification.type !== 'transcriptionStarted')
-          .filter((notification) => notification.type !== 'transcriptionStopped')
-          .filter((notification) => notification.type !== 'transcriptionStartedByYou')
-          .concat([
-            {
-              type: 'transcriptionStopped',
-              autoDismiss: false,
-              onDismiss: () => {
-                setCustomNotifications((prev) =>
-                  prev.filter((notification) => notification.type !== 'transcriptionStopped')
-                );
-              }
-            }
-          ]);
-        setCustomNotifications(newCustomNotifcaitons);
-        setTranscriptionStartedByYou(false);
-      }
-    });
-    eventSourceRef.current?.addEventListener('TranscriptionStatus', (event) => {
-      const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId.includes(serverCallId)) {
-        const transcriptionStarted = parsedData.transcriptStarted;
-        console.log('TranscriptionStatus:', transcriptionStarted);
-        if (transcriptionStarted) {
-          setTranscriptionStarted(true);
-          if (
-            customNotications.find((notification) => notification.type === 'transcriptionStarted') ||
-            customNotications.find((notification) => notification.type === 'transcriptionStartedByYou')
-          ) {
-            return;
-          }
-          setCustomNotifications(
-            customNotications.concat([
-              {
-                type: 'transcriptionStarted',
-                autoDismiss: false,
-                onDismiss: () => {
-                  setCustomNotifications((prev) =>
-                    prev.filter((notification) => notification.type !== 'transcriptionStarted')
-                  );
-                }
-              }
-            ])
-          );
-        }
-      }
-    });
-    eventSourceRef.current?.addEventListener('TranscriptionError', (event) => {
-      const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId === serverCallId) {
-        console.log('Transcription error', event.data);
-        setTranscriptionStarted(false);
-        setCustomNotifications(
-          customNotications
+        setCustomNotifications((prev) =>
+          prev
             .filter((notification) => notification.type !== 'transcriptionStarted')
             .filter((notification) => notification.type !== 'transcriptionStopped')
             .filter((notification) => notification.type !== 'transcriptionStartedByYou')
             .concat([
               {
-                type: 'transcriptionError',
+                type: 'transcriptionStopped',
                 autoDismiss: false,
                 onDismiss: () => {
                   setCustomNotifications((prev) =>
-                    prev.filter((notification) => notification.type !== 'transcriptionError')
+                    prev.filter((notification) => notification.type !== 'transcriptionStopped')
                   );
                 }
               }
@@ -234,8 +184,71 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         );
         setTranscriptionStartedByYou(false);
       }
-    });
-  }, [serverCallId, customNotications, callConnected, transcriptionStartedByYou]);
+    };
+
+    eventSourceRef.current?.addEventListener('TranscriptionStopped', transcriptionStoppedHandler);
+    const transcriptionStatusHandler = (event: MessageEvent): void => {
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId.includes(serverCallId)) {
+        const transcriptionStarted = parsedData.transcriptStarted;
+        console.log('TranscriptionStatus:', transcriptionStarted);
+        if (transcriptionStarted) {
+          setTranscriptionStarted(true);
+          if (
+            transcriptionNotifications.find((notification) => notification.type === 'transcriptionStarted') ||
+            transcriptionNotifications.find((notification) => notification.type === 'transcriptionStartedByYou')
+          ) {
+            return;
+          }
+          setCustomNotifications((prev) =>
+            prev
+              .filter((notification) => notification.type !== 'transcriptionStarted')
+              .filter((notification) => notification.type !== 'transcriptionStopped')
+              .filter((notification) => notification.type !== 'transcriptionStartedByYou')
+              .concat([
+                {
+                  type: 'transcriptionStarted',
+                  autoDismiss: false,
+                  onDismiss: () => {
+                    setCustomNotifications((prev) =>
+                      prev.filter((notification) => notification.type !== 'transcriptionStarted')
+                    );
+                  }
+                }
+              ])
+          );
+        }
+      }
+    };
+    eventSourceRef.current?.addEventListener('TranscriptionStatus', transcriptionStatusHandler);
+
+    const transcriptionErrorHandler = (event: MessageEvent): void => {
+      const parsedData = JSON.parse(event.data);
+      if (parsedData.serverCallId === serverCallId) {
+        console.log('Transcription error', event.data);
+        setTranscriptionStarted(false);
+        setCustomNotifications([
+          {
+            type: 'transcriptionError',
+            autoDismiss: false,
+            onDismiss: () => {
+              setCustomNotifications((prev) =>
+                prev.filter((notification) => notification.type !== 'transcriptionError')
+              );
+            }
+          }
+        ]);
+        setTranscriptionStartedByYou(false);
+      }
+    };
+    eventSourceRef.current?.addEventListener('TranscriptionError', transcriptionErrorHandler);
+    return () => {
+      eventSourceRef.current?.removeEventListener('TranscriptionStarted', transcriptionStartedhandler);
+      eventSourceRef.current?.removeEventListener('TranscriptionStopped', transcriptionStoppedHandler);
+      eventSourceRef.current?.removeEventListener('TranscriptionStatus', transcriptionStatusHandler);
+      eventSourceRef.current?.removeEventListener('TranscriptionError', transcriptionErrorHandler);
+    };
+  }, [serverCallId, callConnected, transcriptionStartedByYou]);
 
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
@@ -244,18 +257,17 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
 
       if (postCallEnabled) {
-        adapter.on('callEnded', () => setrenderEndCallScreen(true));
+        adapter.on('callEnded', () => setRenderEndCallScreen(true));
       }
-      adapter.on('callEnded', async (event) => {
-        setrenderEndCallScreen(true);
-        if (callAutomationStarted.current) {
-          setCallConnected(false);
-        }
+
+      const onCallEndedHandler = async (event: CallAdapterCallEndedEvent): Promise<void> => {
+        setRenderEndCallScreen(true);
+        setCallConnected(false);
         setCustomNotifications([]);
-        if (callAutomationStarted) {
-          console.log(summarizationLanguage);
+        if (callAutomationStarted.current) {
+          console.log('Summarization to be provided in language - ', summarizationLanguage);
           setCallConnected(false);
-          if (summarizationFeatureEnabled) {
+          if (summarizationFeatureEnabled.current) {
             setSummary(undefined);
             setSummarizationStatus('InProgress');
             setSummary(
@@ -265,12 +277,14 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             );
           }
         }
-      });
-      adapter.onStateChange(async (state) => {
+      };
+      adapter.on('callEnded', onCallEndedHandler);
+
+      const onStateChangedHandler = async (state: CallAdapterState): Promise<void> => {
         if (state.call?.id !== undefined && state.call?.id !== callId) {
           setCallId(adapter.getState().call?.id);
         }
-        if (state?.call?.state === 'Connected') {
+        if (state?.call?.state === 'Connected' && !callConnected) {
           setCallConnected(true);
           const serverCallId = await state.call.info?.getServerCallId();
           setServerCallId(serverCallId);
@@ -294,7 +308,8 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             callAutomationStarted.current = false;
           }
         }
-      });
+      };
+      adapter.onStateChange(onStateChangedHandler);
 
       const toggleInviteInstructions = (state: CallAdapterState): void => {
         const roomsInviteInstructionsEnabled = isRoomsInviteInstructionsEnabled(userRole, formFactorValue, state?.page);
@@ -383,6 +398,14 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     if (callAgent && statefulClient && locator) {
       createAdapter();
     }
+    return () => {
+      if (callAdapter) {
+        callAdapter.dispose();
+      }
+      if (callAgent) {
+        callAgent.dispose();
+      }
+    };
   }, [args.credential, afterAdapterCreate, callAgent, locator, statefulClient, userId]);
 
   if (credential === undefined) {
@@ -392,6 +415,20 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   if (!callAdapter) {
     return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
+
+  const callCompositeOptions = useMemo((): CallCompositeOptions => {
+    return {
+      callControls: {
+        onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
+        endCallButton: {
+          hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
+        }
+      },
+      notificationOptions: {
+        hideAllNotifications: true
+      }
+    };
+  }, [customButtonOptions, transcriptionFeatureEnabled, userRole]);
 
   if (renderEndCallScreen && postCall && userRole !== RoomParticipantRole.presenter) {
     return (
@@ -409,7 +446,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           transcriptionClientOptions={transcriptionClientOptions}
           onRejoinCall={async () => {
             await callAdapter.joinCall();
-            setrenderEndCallScreen(false);
+            setRenderEndCallScreen(false);
           }}
         />
       </Stack>
@@ -422,7 +459,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         <PresenterEndCallScreen
           reJoinCall={() => {
             callAdapter.joinCall({});
-            setrenderEndCallScreen(false);
+            setRenderEndCallScreen(false);
           }}
           summarizationStatus={summarizationStatus}
           serverCallId={serverCallId}
@@ -449,7 +486,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             >
               {call && (
                 <CallProvider call={call as Call}>
-                  <CustomNotifications customNotifications={customNotications} />
+                  <CustomNotifications customNotifications={transcriptionNotifications} />
                 </CallProvider>
               )}
               <TranscriptionOptionsModal
@@ -467,17 +504,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                 adapter={callAdapter}
                 fluentTheme={fluentTheme}
                 formFactor={formFactorValue}
-                options={{
-                  callControls: {
-                    onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
-                    endCallButton: {
-                      hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
-                    }
-                  },
-                  notificationOptions: {
-                    hideAllNotifications: true
-                  }
-                }}
+                options={callCompositeOptions}
                 callInvitationUrl={
                   userRole === RoomParticipantRole.presenter ? roomsInfo.inviteParticipantUrl : undefined
                 }

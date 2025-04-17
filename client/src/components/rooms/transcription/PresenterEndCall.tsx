@@ -50,7 +50,7 @@ export const PresenterEndCallScreen = (props: PresenterEndCallScreenProps): JSX.
             {'You left the call'}
           </Text>
           <Text className={mergeStyles(moreDetailsStyles)} aria-live="assertive">
-            {'If this was a mistake , rejoin the call.'}
+            {'If this was a mistake, rejoin the call.'}
           </Text>
           {!props.disableStartCallButton && (
             <Stack styles={rejoinCallButtonContainerStyles}>

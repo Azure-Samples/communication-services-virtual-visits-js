@@ -19,6 +19,11 @@ export type CallTranscription = {
   resultState: 'intermediate' | 'final';
 }[];
 
+/**
+ * Fetches the transcription for the given server call ID.
+ * @param serverCallId - The server call ID to fetch the transcription for.
+ * @returns - the CallTranscription object containing the transcription data.
+ */
 export const fetchTranscript = async (serverCallId: string): Promise<CallTranscription> => {
   const response = await fetch(`/api/fetchTranscript`, {
     method: 'POST',
@@ -30,13 +35,17 @@ export const fetchTranscript = async (serverCallId: string): Promise<CallTranscr
     })
   });
   if (!response.ok) {
-    console.error('Failed to fetch transcript:', response);
-    return [];
+    throw new Error('Failed to fetch transcript: ' + response.statusText);
   }
 
   return ((await response.json()) as { transcript: CallTranscription }).transcript;
 };
 
+/**
+ * fetches the transcription status for the given server call ID. This is called when
+ * the user first joins the call to check if transcription is already started.
+ * @param serverCallId - The server call ID to fetch the transcription status for.
+ */
 export const fetchTranscriptionStatus = async (serverCallId: string): Promise<void> => {
   const response = await fetch(`/api/fetchTranscriptionState`, {
     method: 'POST',
@@ -48,12 +57,18 @@ export const fetchTranscriptionStatus = async (serverCallId: string): Promise<vo
     })
   });
   if (!response.ok) {
-    console.error('Failed to fetch transcription status:', response);
+    throw new Error('Failed to fetch transcription status: ' + response.statusText);
     return;
   }
   return;
 };
 
+/**
+ * Starts the transcription for the call.
+ * @param serverCallId - The server call ID to start transcription for.
+ * @param transcriptionOptions - The options for transcription, including locale.
+ * @returns - True if the transcription was started successfully, false otherwise.
+ */
 export const startTranscription = async (
   serverCallId: string,
   transcriptionOptions?: {
@@ -79,6 +94,11 @@ export const startTranscription = async (
   return true;
 };
 
+/**
+ * Stops the transcription for the call.
+ * @param serverCallId - The server call ID to stop transcription for.
+ * @returns {boolean} - True if the transcription was stopped successfully, false otherwise.
+ */
 export const stopTranscription = async (serverCallId: string): Promise<boolean> => {
   console.log('Stopping transcription for call:', serverCallId);
 
@@ -99,6 +119,11 @@ export const stopTranscription = async (serverCallId: string): Promise<boolean> 
   return true;
 };
 
+/**
+ * Connect the Call Automation service to the call.
+ * @param callAdaterState - The call adapter state to check for the call.
+ * @returns
+ */
 export const connectToCallAutomation = async (callAdaterState: CallAdapterState): Promise<boolean> => {
   if (callAdaterState.call?.info !== undefined && callAdaterState.call?.state === 'Connected') {
     const serverCallID = await callAdaterState.call.info.getServerCallId();
@@ -119,6 +144,12 @@ export const connectToCallAutomation = async (callAdaterState: CallAdapterState)
   return false;
 };
 
+/**
+ * Fetch the call summary from the server.
+ * @param adapter - The call adapter to get the call ID from.
+ * @param locale - locale code for the language to be used in the summary.
+ * @returns summary result if there is a summary available.
+ */
 export const getCallSummaryFromServer = async (
   adapter: CommonCallAdapter,
   locale: LocaleCode
@@ -182,6 +213,11 @@ export const sendParticipantInfoToServer = async (
   }
 };
 
+/**
+ * Fetches the participants in the call. This is needed for when we are computing the transcript for download.
+ * @param serverCallId - The server call ID to fetch the participants for.
+ * @returns display name and user ID of the participants in the call.
+ */
 export const fetchParticipants = async (serverCallId: string): Promise<{ userId: string; displayName: string }[]> => {
   const response = await fetch('/api/fetchParticipants', {
     method: 'POST',

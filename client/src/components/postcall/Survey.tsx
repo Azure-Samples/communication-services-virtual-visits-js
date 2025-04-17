@@ -58,7 +58,7 @@ export const Survey: React.FunctionComponent<SurveyProps> = (props: SurveyProps)
         <Stack horizontalAlign="center" verticalAlign="center" styles={rejoinLinkStyle}>
           <RejoinLink onRejoinCall={props.onRejoinCall} />
         </Stack>
-        {summarizationStatus && transcriptionFeatureEnabled && serverCallId && (
+        {summarizationStatus && serverCallId && (
           <CallSummaryTile
             serverCallId={serverCallId}
             summarizationStatus={summarizationStatus}
