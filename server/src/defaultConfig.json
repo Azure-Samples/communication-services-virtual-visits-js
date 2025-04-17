@@ -25,10 +25,13 @@
   },
   "callAutomation": {
     "CognitionAPIEndpoint": "Endpoint of the Azure Communication Service",
-    "LanguageAPIKey": "Key of the Azure Communication Cognitive Service",
+    "CognitionAPIKey": "Key of the Azure Communication Cognitive Service",
     "ServerHttpUrl": "Url for the server to send the call automation events",
-    "ServerWebSocketPort": 8081,
     "ServerWebSocketUrl": "wss://<URL for the websocket>",
-    "AutoStartTranscription": false
+    "AutoStartTranscription": false,
+    "clientOptions": {
+      "transcription": "manual",
+      "summarization": false
+    }
   }
 }

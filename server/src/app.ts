@@ -5,6 +5,7 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import WebSocket from 'ws';
+import http from 'http';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
@@ -24,6 +25,8 @@ import callAutomationEvent from './routes/callAutomationEvent';
 import summarizeTranscript from './routes/summarizeTranscript';
 import notificationEvents from './routes/notificationEvents';
 import fetchTranscriptState from './routes/fetchTranscriptState';
+import fetchParticipants from './routes/fetchParticipants';
+import updateParicipants from './routes/updateParticipants';
 import { handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
@@ -57,36 +60,36 @@ app.get('/visit', (_, res) => {
 });
 
 /**
- * route: /connectToRoom
+ * route: /api/connectToRoom
  * purpose: Calling: connect to an existing room
  */
 app.use('/api/connectRoomsCall', cors(), connectRoomsCall);
 /**
- * route: /startTranscription
+ * route: /api/startTranscription
  * purpose: Start transcription for an established call
  */
 app.use('/api/startTranscription', cors(), startTranscription);
 
 /**
- * route: /stopTranscription
+ * route: /api/stopTranscription
  * purpose: Stop transcription for an established call
  */
 app.use('/api/stopTranscription', cors(), stopTranscriptionForCall);
 
 /**
- * route: /fetchTranscript
+ * route: /api/fetchTranscript
  * purpose: Fetch an existing transcription
  */
 app.use('/api/fetchTranscript', cors(), fetchTranscript);
 
 /**
- * route: /startCallWithTranscription
+ * route: /api/startCallWithTranscription
  * purpose: Start a new group call with transcription
  */
 app.use('/api/startCallWithTranscription', cors(), startCallWithTranscription);
 
 /**
- * route: /callAutomationEvent
+ * route: /api/callAutomationEvent
  * purpose: Call Automation: receive call automation events
  */
 app.use('/api/callAutomationEvent', cors(), callAutomationEvent);
@@ -105,45 +108,24 @@ app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
 app.use('/api/notificationEvents', cors(), notificationEvents);
 
 /**
- * route:/fetchTranscriptionState
+ * route:/api/fetchTranscriptionState
  * purpose: Fetch the transcription state for a call
  */
 app.use('/api/fetchTranscriptionState', cors(), fetchTranscriptState);
 
-const config = getServerConfig();
 /**
- * route: wss://<host>/
- * purpose: WebSocket endpoint to receive transcription events
- *
- * Don't forget to secure this endpoint in production
- * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ * route:/api/fetchParticipants
+ * purpose: Fetch the participants in a call
  */
+app.use('/api/fetchParticipants', cors(), fetchParticipants);
 
-const wss = new WebSocket.Server({ port: config.callAutomation?.ServerWebSocketPort });
+/**
+ * route:/api/updateParticipants
+ * purpose: Update the participants in a call
+ */
+app.use('/api/updateParticipants', cors(), updateParicipants);
 
-wss.on('connection', (ws) => {
-  let transcriptionCorrelationId: string | undefined;
-
-  ws.on('open', () => {
-    console.log('WebSocket opened');
-  });
-
-  ws.on('message', (message: WebSocket.RawData) => {
-    const decoder = new TextDecoder();
-    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
-    if (
-      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
-      ('kind' in messageData && messageData.kind === 'TranscriptionData')
-    ) {
-      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
-    }
-  });
-
-  ws.on('close', () => {
-    console.log('WebSocket closed');
-  });
-  console.log('WebSocket server running on port', config.callAutomation?.ServerWebSocketPort);
-});
+const config = getServerConfig();
 
 const surveyDBHandler = createSurveyDBHandler(config);
 if (surveyDBHandler) {
@@ -184,4 +166,46 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 
-export default app;
+const port = parseInt(process.env.PORT ?? '8080');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * route: wss://<host>/
+ * purpose: WebSocket endpoint to receive transcription events
+ *
+ * Don't forget to secure this endpoint in production
+ * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ */
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  let transcriptionCorrelationId: string | undefined;
+
+  ws.on('open', () => {
+    console.log('WebSocket opened');
+  });
+
+  ws.on('message', (message: WebSocket.RawData) => {
+    const decoder = new TextDecoder();
+    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
+    if (
+      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
+      ('kind' in messageData && messageData.kind === 'TranscriptionData')
+    ) {
+      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket closed');
+  });
+});
+
+export default server;

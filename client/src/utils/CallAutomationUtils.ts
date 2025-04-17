@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { RemoteParticipant } from '@azure/communication-calling';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
-import { CallAdapter, CallAdapterState, CommonCallAdapter, RemoteParticipantState } from '@azure/communication-react';
+import { CallAdapterState, CommonCallAdapter } from '@azure/communication-react';
 
 export type SummarizeResult = {
   recap: string;
@@ -157,73 +156,47 @@ export const getCallSummaryFromServer = async (
 };
 
 /**
- * updateRemoteParticipants - This function is used to update the remote participants in the call. to be
- * stored in the server to be used in the transcription and summary.
- * @param callAdapter - The call adapter instance.
+ * Update the participants in the call record for transcription.
+ * @param participant - The participant to add to the call record.
  */
-export const updateRemoteParticipants = async (
-  remoteParticipants: RemoteParticipant[],
-  callId: string
+export const sendParticipantInfoToServer = async (
+  participant: { userId: string; displayName: string },
+  serverCallId?: string
 ): Promise<void> => {
-  if (!remoteParticipants) {
-    console.warn('no remote participants found');
+  if (!serverCallId) {
+    console.error('Server call ID not found');
     return;
   }
-  const remoteParticipantsDisplayInfo = remoteParticipants.map((participant: RemoteParticipantState) => {
-    if ('communicationUserId' in participant.identifier) {
-      return {
-        communicationUserId: participant.identifier.communicationUserId,
-        displayName: participant.displayName
-      };
-    } else {
-      return {};
-    }
-  });
-
-  const response = await fetch('/api/updateRemoteParticipants', {
+  const response = await fetch('/api/updateParticipants', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      callCorrelationId: callId,
-      remoteParticipants: remoteParticipantsDisplayInfo
+      serverCallId: serverCallId,
+      participant: participant
     })
   });
   if (!response.ok) {
-    console.error('Failed to update remote participants:', response);
+    console.error('Failed to update participants:', response);
   }
-  console.log('Updated remote participants:', remoteParticipantsDisplayInfo);
 };
 
-export const updateLocalParticipant = async (callAdapter: CallAdapter): Promise<void> => {
-  const localParticipant = {
-    communicationUserId: (callAdapter.getState().userId as CommunicationUserIdentifier).communicationUserId,
-    displayName: callAdapter.getState().displayName
-  };
-  if (!localParticipant) {
-    console.warn('no local participant found');
-    return;
-  }
-  const localParticipantDisplayInfo = {
-    communicationUserId: localParticipant.communicationUserId,
-    displayName: localParticipant.displayName
-  };
-
-  const response = await fetch('/api/updateLocalParticipant', {
+export const fetchParticipants = async (serverCallId: string): Promise<{ userId: string; displayName: string }[]> => {
+  const response = await fetch('/api/fetchParticipants', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      callCorrelationId: callAdapter.getState().call?.id,
-      localParticipant: localParticipantDisplayInfo
+      serverCallId: serverCallId
     })
   });
   if (!response.ok) {
-    console.error('Failed to update local participant:', response);
+    console.error('Failed to fetch participants:', response);
+    return [];
   }
-  console.log('Updated local participant:', localParticipantDisplayInfo);
+  return ((await response.json()) as { participants: { userId: string; displayName: string }[] }).participants;
 };
 
 /**
