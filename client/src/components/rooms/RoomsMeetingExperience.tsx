@@ -40,8 +40,9 @@ import {
 } from '../../utils/CallAutomationUtils';
 import { Call, TeamsCall } from '@azure/communication-calling';
 import { SlideTextEdit20Regular } from '@fluentui/react-icons';
-import { TranscriptionOptionsModal } from './transcriptionNotifications/TranscriptionOptionsModal';
-import { CustomNotifications } from './transcriptionNotifications/CustomNotifications';
+import { TranscriptionOptionsModal } from './transcription/TranscriptionOptionsModal';
+import { CustomNotifications } from './transcription/CustomNotifications';
+import { PresenterEndCallScreen } from './transcription/PresenterEndCall';
 
 export interface RoomsMeetingExperienceProps {
   roomsInfo: RoomsInfo;
@@ -87,7 +88,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const displayName = userRole === RoomParticipantRole.presenter ? 'Presenter' : 'Attendee';
   const formFactorValue = new MobileDetect(window.navigator.userAgent).mobile() ? 'mobile' : 'desktop';
 
-  const [renderPostCall, setRenderPostCall] = useState<boolean>(false);
+  const [renderEndCallScreen, setrenderEndCallScreen] = useState<boolean>(false);
   const [renderInviteInstructions, setRenderInviteInstructions] = useState<boolean>(false);
   const [callId, setCallId] = useState<string>();
 
@@ -243,9 +244,10 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       const postCallEnabled = isRoomsPostCallEnabled(userRole, postCall);
 
       if (postCallEnabled) {
-        adapter.on('callEnded', () => setRenderPostCall(true));
+        adapter.on('callEnded', () => setrenderEndCallScreen(true));
       }
       adapter.on('callEnded', async (event) => {
+        setrenderEndCallScreen(true);
         if (callAutomationStarted.current) {
           setCallConnected(false);
         }
@@ -263,7 +265,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             );
           }
         }
-        setRenderPostCall(true);
       });
       adapter.onStateChange(async (state) => {
         if (state.call?.id !== undefined && state.call?.id !== callId) {
@@ -392,7 +393,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
   }
 
-  if (renderPostCall && postCall && userRole !== RoomParticipantRole.presenter) {
+  if (renderEndCallScreen && postCall && userRole !== RoomParticipantRole.presenter) {
     return (
       <Stack>
         <Survey
@@ -408,8 +409,24 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           transcriptionClientOptions={transcriptionClientOptions}
           onRejoinCall={async () => {
             await callAdapter.joinCall();
-            setRenderPostCall(false);
+            setrenderEndCallScreen(false);
           }}
+        />
+      </Stack>
+    );
+  }
+
+  if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled) {
+    return (
+      <Stack>
+        <PresenterEndCallScreen
+          reJoinCall={() => {
+            callAdapter.joinCall({});
+            setrenderEndCallScreen(false);
+          }}
+          summarizationStatus={summarizationStatus}
+          serverCallId={serverCallId}
+          summary={summary?.recap}
         />
       </Stack>
     );
