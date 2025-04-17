@@ -12,12 +12,17 @@ import {
 import { ConversationSummaryInput } from './summarizationUtils';
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import { getServerConfig } from './getConfig';
+import { TranscriptionManager } from './TranscriptionManager';
 
 export interface CallTranscription {
   metadata: TranscriptionMetadata;
   data: TranscriptionData[];
 }
 
+/**
+ * Call automation config is used to configure the call automation client.
+ * This is used to connect to the call automation service and start transcription.
+ */
 const callAutomationConfig = getServerConfig().callAutomation;
 
 /**
@@ -32,11 +37,40 @@ if (!callAutomationConfig) {
   console.warn('Call automation config is not set');
 }
 
+/**
+ * Manager for the transcription service.
+ * This is used to store the transcription data and metadata for each call.
+ */
+let transcriptionManager: TranscriptionManager | undefined = undefined;
+
+/**
+ * Call automation client is used to connect to the call automation service.
+ * This is used to start and stop transcription.
+ */
 let callAutomationClient: CallAutomationClient | undefined = undefined;
+
+/**
+ * Function to get the call automation client.
+ * This is used to connect to the call automation service and start transcription.
+ * @returns the call automation client
+ */
 export const getCallAutomationClient = (): CallAutomationClient =>
   callAutomationClient ??
   (callAutomationClient = new CallAutomationClient(getServerConfig().communicationServicesConnectionString));
 
+/**
+ * Function to get the transcription manager.
+ * This is used to store the transcription data and metadata for each call.
+ * @returns the transcription manager
+ */
+export const getTranscriptionManager = (): TranscriptionManager =>
+  transcriptionManager ?? (transcriptionManager = new TranscriptionManager());
+
+/**
+ * Function to connect to a room call with transcription automatically started.
+ * @param roomId - the id of the room to connect to
+ * @returns void
+ */
 export const connectRoomsCallWithTranscription = async (roomId: string): Promise<void> => {
   const transcriptionOptions = {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
@@ -52,7 +86,7 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
     transcriptionOptions: transcriptionOptions
   };
 
-  const callbackUri = callAutomationConfig?.ServerHttpUrl;
+  const callbackUri = `${callAutomationConfig?.ServerHttpUrl}/api/callAutomationEvent`;
 
   /**
    * Call automation needs to create the call.
@@ -79,12 +113,10 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
     locale: 'en-US',
-    startTranscription: false
+    startTranscription: callAutomationConfig?.clientOptions?.transcription === 'auto' ? true : false
   };
 
-  const connectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
 
   /**
    * Check if the call automation client and connection for the call already exists. If it does, we don't need to create a new one.
@@ -105,23 +137,39 @@ export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
       kind: 'serverCallLocator',
       id: serverCallId
     },
-    callAutomationConfig?.ServerHttpUrl ?? '',
+    `${callAutomationConfig?.ServerHttpUrl}/api/callAutomationEvent`,
     options
   );
   console.log('Connect call result', res);
 };
 
+/**
+ * Function to start transcription for a call.
+ * @param serverCallId - this can be fetched from the client call object with the handler in the '
+ * Call info object.
+ * @param options Options for the transcription
+ * @param options.locale - The locale for the transcription. This is used to set the language for the transcription.
+ * @returns
+ */
 export const startTranscriptionForCall = async (
-  callConnectionId: string,
+  serverCallId: string,
   options?: TranscriptionOptions
 ): Promise<void> => {
-  console.log('Starting transcription for call:', callConnectionId);
-  console.log(CALLCONNECTION_ID_TO_CORRELATION_ID);
-  const callConnection = await getCallAutomationClient().getCallConnection(callConnectionId);
+  console.log('Starting transcription for call:', serverCallId);
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
+  if (!connectionId) {
+    throw new Error('Call connection id not found');
+  }
+  const callConnection = await getCallAutomationClient().getCallConnection(connectionId);
 
   return await callConnection.getCallMedia().startTranscription(options);
 };
 
+/**
+ *
+ * @param callConnectionId
+ * @returns
+ */
 export const stopTranscriptionForCall = async (callConnectionId: string): Promise<void> => {
   console.log('Stopping transcription for call:', callConnectionId);
   const callConnection = await getCallAutomationClient().getCallConnection(callConnectionId);
@@ -129,72 +177,42 @@ export const stopTranscriptionForCall = async (callConnectionId: string): Promis
 };
 
 /**
- * We should be storing this based on the connectionId and not the correlationId
- * We should re-write all the fetches based on the callId to use the serverCallId. This is
- * because all of the clients that join can have different callId's and we need to make sure we are
- * pulling the correct transcription data.
+ * Fetch the transcription data for a call.
+ * @param serverCallId - this can be fetched from the client call object with the handler in the '
+ * Call info object.
+ * @returns
  */
-export const TRANSCRIPTION_STORE = new Map<string, CallTranscription>();
-/**
- * Used to map between the call connection id and the correlation id from both transcription and
- * call automation events.
- */
-export const CALLCONNECTION_ID_TO_CORRELATION_ID = new Map<string, { correlationId?: string; serverCallId: string }>();
-
-/**
- * used to store the remote participants in the call
- * This object is keyed off the callId and contains the communicationUserId and displayName of the remote participants
- *
- * Keeps track of all participants who have ever joined the call so we can show their display name in the transcription and summary.
- */
-export const REMOTE_PARTICIPANTS_IN_CALL = new Map<
-  string,
-  Array<{ communicationUserId: string; displayName: string }>
->();
-
-/**
- * used to store the local participant in the call
- * This is keyed off the callId and contains the communicationUserId and displayName of the local participant
- *
- * This is important because the server can track the user across multiple calls if they change their display name so we can show
- * the correct display name in the transcription and summary.
- *
- * TODO: this should be removed and we should be processing all the participants together.
- */
-export const LOCAL_PARTICIPANT: { [key: string]: { communicationUserId?: string; displayName?: string } } = {};
-
 export const getTranscriptionData = (serverCallId: string): CallTranscription | undefined => {
   console.log('Getting transcription data for call:', serverCallId);
-  const connectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
   if (!connectionId) {
+    console.error('Call connection id not found');
     return undefined;
   }
-  const correlationId = CALLCONNECTION_ID_TO_CORRELATION_ID[connectionId]?.correlationId;
-  if (!correlationId) {
-    return undefined;
-  }
-  return TRANSCRIPTION_STORE[correlationId];
+  return getTranscriptionManager().getTranscriptionData(connectionId);
 };
 
 /**
  * Check if transcription has started for the call
+ * @param serverCallId - this can be fetched from the client call object with the handler in the '
+ * Call info object.
+ * @returns true if transcription has started for the call
+ * @returns false if transcription has not started for the call
  */
 export const checkIfTranscriptionStarted = (serverCallId: string): boolean => {
   console.log('Checking if transcription started for call:', serverCallId);
-  const connectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
+  const connectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
   if (!connectionId) {
     return false;
   }
-  const correlationId = CALLCONNECTION_ID_TO_CORRELATION_ID[connectionId]?.correlationId;
-  return correlationId ? !!TRANSCRIPTION_STORE[correlationId] : false;
+  return getTranscriptionManager().hasTranscriptions(connectionId);
 };
 
 /**
+ * This function handles the transcription event and parses the data.
  * @returns id to correlate future transcription data
+ * @param packetData - the data from the transcription event
+ * @param packetId - the id of the transcription event
  */
 export const handleTranscriptionEvent = (packetData: unknown, packetId: string | undefined): string | undefined => {
   const decoder = new TextDecoder();
@@ -215,6 +233,9 @@ export const handleTranscriptionEvent = (packetData: unknown, packetId: string |
 };
 
 /**
+ * This function handles the transcription metadata event and parses the data.
+ * @param eventData - the data from the transcription event
+ * @param eventId - the id of the transcription event
  * @returns id to correlate future transcription data
  */
 export const handleTranscriptionMetadataEvent = (eventData: TranscriptionMetadata): string => {
@@ -226,22 +247,16 @@ export const handleTranscriptionMetadataEvent = (eventData: TranscriptionMetadat
   console.log('SUBSCRIPTION ID:-->' + eventData.subscriptionId);
   console.log('--------------------------------------------');
 
-  TRANSCRIPTION_STORE[eventData.correlationId] = {
-    metadata: eventData
-  };
-
-  /**
-   * Set the correlation ID for the call from the transcription event
-   * This is the id that we will use to fetch the transcription data later.
-   */
-  CALLCONNECTION_ID_TO_CORRELATION_ID[eventData.callConnectionId] = {
-    serverCallId: CALLCONNECTION_ID_TO_CORRELATION_ID[eventData.callConnectionId]?.serverCallId,
-    correlationId: eventData.correlationId
-  };
+  getTranscriptionManager().storeTranscriptionMetaData(eventData);
 
   return eventData.correlationId;
 };
 
+/**
+ * Handle the transcription data event and parse the data.
+ * @param eventData - the data from the transcription event
+ * @param eventId - the id of the transcription event
+ */
 export const handleTranscriptionDataEvent = (eventData: TranscriptionData, eventId: string): void => {
   console.log('--------------------------------------------');
   console.log('Transcription Data');
@@ -265,13 +280,7 @@ export const handleTranscriptionDataEvent = (eventData: TranscriptionData, event
   });
   console.log('--------------------------------------------');
 
-  const transcriptionStore = TRANSCRIPTION_STORE[eventId];
-  if (transcriptionStore) {
-    if (!transcriptionStore.data) {
-      transcriptionStore.data = [];
-    }
-    transcriptionStore.data.push(eventData);
-  }
+  getTranscriptionManager().storeTranscriptionData(eventData, eventId);
 };
 
 /**

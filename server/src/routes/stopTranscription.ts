@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import * as express from 'express';
-import { CALLCONNECTION_ID_TO_CORRELATION_ID, stopTranscriptionForCall } from '../utils/callAutomationUtils';
+import { getTranscriptionManager, stopTranscriptionForCall } from '../utils/callAutomationUtils';
 import { sendEventToClients } from '../app';
 
 const router = express.Router();
@@ -13,9 +13,7 @@ interface StartTranscriptionRequest {
 router.post('/', async function (req, res, next) {
   const { serverCallId }: StartTranscriptionRequest = req.body;
 
-  const callConnectionId = Object.keys(CALLCONNECTION_ID_TO_CORRELATION_ID).find((key) =>
-    CALLCONNECTION_ID_TO_CORRELATION_ID[key].serverCallId.includes(serverCallId)
-  );
+  const callConnectionId = getTranscriptionManager().getCallConnectionIDFromServerCallId(serverCallId);
   if (!callConnectionId) {
     res.status(404).send('Call not found');
     return;
@@ -26,11 +24,13 @@ router.post('/', async function (req, res, next) {
   } catch (e) {
     console.error('Error stopping transcription:', e);
     res.status(500).send('Error stopping transcription');
+    sendEventToClients('TranscriptionError', {
+      serverCallId
+    });
     return;
   }
 
   res.status(200).end();
-  sendEventToClients('TranscriptionStopped', { serverCallId });
 });
 
 export default router;
