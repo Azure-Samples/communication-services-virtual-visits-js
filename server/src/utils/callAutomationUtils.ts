@@ -247,7 +247,7 @@ export const handleTranscriptionMetadataEvent = (eventData: TranscriptionMetadat
   console.log('SUBSCRIPTION ID:-->' + eventData.subscriptionId);
   console.log('--------------------------------------------');
 
-  getTranscriptionManager().storeTranscriptionMetaData(eventData);
+  getTranscriptionManager().storeTranscriptionMetadata(eventData);
 
   return eventData.correlationId;
 };

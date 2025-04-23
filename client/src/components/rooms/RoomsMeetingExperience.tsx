@@ -72,6 +72,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [callAgent, setCallAgent] = useState<DeclarativeCallAgent>();
   const [callConnected, setCallConnected] = useState(false);
   const [transcriptionNotifications, setCustomNotifications] = useState<ActiveNotification[]>([]);
+  const [dismissedTranscriptionNotificationTypes, setDismissedTrancsriptionNotificationTypes] = useState<string[]>([]);
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [statefulClient, setStatefulClient] = useState<StatefulCallClient>();
@@ -137,7 +138,13 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     const transcriptionStartedhandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId.includes(serverCallId)) {
+      if (
+        parsedData.serverCallId.includes(serverCallId) &&
+        !(
+          dismissedTranscriptionNotificationTypes.includes('transcriptionStarted') ||
+          dismissedTranscriptionNotificationTypes.includes('transcriptionStartedByYou')
+        )
+      ) {
         setTranscriptionStarted(true);
         setCustomNotifications((prev) =>
           prev
@@ -153,6 +160,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                       .filter((notification) => notification.type !== 'transcriptionStarted')
                       .filter((notification) => notification.type !== 'transcriptionStartedByYou')
                   );
+                  setDismissedTrancsriptionNotificationTypes(['transcriptionStarted', 'transcriptionStartedByYou']);
                 }
               }
             ])
@@ -183,10 +191,11 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             ])
         );
         setTranscriptionStartedByYou(false);
+        setDismissedTrancsriptionNotificationTypes([]);
       }
     };
-
     eventSourceRef.current?.addEventListener('TranscriptionStopped', transcriptionStoppedHandler);
+
     const transcriptionStatusHandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
       if (parsedData.serverCallId.includes(serverCallId)) {
@@ -291,7 +300,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           // The server needs to store the information of participants in the call for later mapping participantIds to display names in the transcription
           sendParticipantInfoToServer({ displayName, userId: userId }, serverCallId);
         }
-        if (state.call && callAgent) {
+        if (state.call && callAgent && !call) {
           const call = callAgent?.calls.find((call) => call.id === state.call?.id);
           if (call) {
             setCall(call);

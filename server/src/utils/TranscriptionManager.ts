@@ -72,7 +72,7 @@ export class TranscriptionManager {
    * @param data - meta data to create the record for the transcription
    * @returns
    */
-  public storeTranscriptionMetaData(data: TranscriptionMetadata): void {
+  public storeTranscriptionMetadata(data: TranscriptionMetadata): void {
     const { correlationId } = data;
     if (!correlationId) {
       console.error('No correlation id found in transcription data');

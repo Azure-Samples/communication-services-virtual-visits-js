@@ -20,7 +20,6 @@ import connectRoomsCall from './routes/connectToRoomsCall';
 import startTranscription from './routes/startTranscription';
 import stopTranscriptionForCall from './routes/stopTranscription';
 import fetchTranscript from './routes/fetchTranscript';
-import startCallWithTranscription from './routes/startRoomsCallWithTranscription';
 import callAutomationEvent from './routes/callAutomationEvent';
 import summarizeTranscript from './routes/summarizeTranscript';
 import notificationEvents from './routes/notificationEvents';
@@ -81,12 +80,6 @@ app.use('/api/stopTranscription', cors(), stopTranscriptionForCall);
  * purpose: Fetch an existing transcription
  */
 app.use('/api/fetchTranscript', cors(), fetchTranscript);
-
-/**
- * route: /api/startCallWithTranscription
- * purpose: Start a new group call with transcription
- */
-app.use('/api/startCallWithTranscription', cors(), startCallWithTranscription);
 
 /**
  * route: /api/callAutomationEvent

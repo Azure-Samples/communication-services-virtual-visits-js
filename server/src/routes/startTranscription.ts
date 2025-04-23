@@ -3,7 +3,7 @@
 
 import * as express from 'express';
 import { startTranscriptionForCall } from '../utils/callAutomationUtils';
-import { TranscriptionOptions } from '@azure/communication-call-automation/types/communication-call-automation';
+import { TranscriptionOptions } from '@azure/communication-call-automation';
 import { sendEventToClients } from '../app';
 
 const router = express.Router();
@@ -29,8 +29,6 @@ router.post('/', async function (req, res, next) {
   }
 
   res.status(200).end();
-
-  // Send SSE event to clients
 });
 
 export default router;
