@@ -151,7 +151,7 @@
           },
           "properties": {
             "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2020-08-20').primaryConnectionString]",
-            "WEBSITE_NODE_DEFAULT_VERSION": "21.14.0",
+            "WEBSITE_NODE_DEFAULT_VERSION": "22.14.0",
             "VV_MICROSOFT_BOOKINGS_URL": "[variables('microsoftBookingsUrl')]",
             "VV_CHAT_ENABLED": "[variables('chatEnabled')]",
             "VV_SCREENSHARE_ENABLED": "[variables('screenShareEnabled')]",
