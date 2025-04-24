@@ -22,5 +22,16 @@
   "cosmosDb": {
     "connectionString": "Connection string of your Cosmos DB account",
     "dbName": "Name of the Cosmos Database"
+  },
+  "callAutomation": {
+    "CognitionAPIEndpoint": "Endpoint of the Azure AI Service",
+    "CognitionAPIKey": "Key of the Azure Communication AI Service",
+    "ServerHttpUrl": "Url for the server to send the call automation events",
+    "ServerWebSocketUrl": "wss://<URL for the websocket>",
+    "AutoStartTranscription": false,
+    "clientOptions": {
+      "transcription": "manual",
+      "summarization": true
+    }
   }
 }

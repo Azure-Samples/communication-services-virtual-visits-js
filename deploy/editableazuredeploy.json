@@ -23,6 +23,12 @@
     "communicationServiceName": {
       "type": "string"
     },
+    "cognitiveServiceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Cognitive Services resource. This must be a new unique name."
+      }
+    },
     "communicationServiceDataLocation": {
       "type": "string",
       "allowedValues": [
@@ -64,6 +70,15 @@
       "defaultValue": "true"
     },
     "screenShareEnabled": {
+      "type": "bool",
+      "defaultValue": "true"
+    },
+    "transcriptionBehavior": {
+      "type": "string",
+      "allowedValues": ["manual", "auto", "none"],
+      "defaultValue": "manual"
+    },
+    "summarizationEnabled": {
       "type": "bool",
       "defaultValue": "true"
     },
@@ -112,14 +127,35 @@
     "appServicePlanPortalName": "[concat('AppServicePlan-', parameters('appServiceName'))]",
     "packageUrl": "https://github.com/Azure-Samples/communication-services-virtual-visits-js/releases/latest/download/sample.zip",
     "postCallSurveyOptionsSurveyUrl": "",
-    "postCallSurveyOneQuestionPollAnswerPlaceholder": ""
+    "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
+    "cognitiveServiceName": "[parameters('cognitiveServiceName')]",
+    "cognitiveServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cognitiveServiceName'))]",
+    "cognitiveServicesUserRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')]"
   },
   "resources": [
     {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('cognitiveServiceName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "S0"
+      },
+      "kind": "CognitiveServices",
+      "properties": {
+        "apiProperties": {
+          "statisticsEnabled": false
+        }
+      }
+    },
+    {
       "name": "[parameters('communicationServiceName')]",
       "type": "Microsoft.Communication/communicationServices",
-      "apiVersion": "2020-08-20",
+      "apiVersion": "2024-09-01-preview",
       "location": "global",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "tags": {},
       "properties": {
         "dataLocation": "[parameters('communicationServiceDataLocation')]"
@@ -154,7 +190,8 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
         "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]",
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName'))]"
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName'))]",
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
@@ -190,7 +227,13 @@
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER": "[variables('postCallSurveyOneQuestionPollAnswerPlaceholder')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT": "[parameters('postCallSurveyOneQuestionPollSaveButtonText')]",
             "VV_COSMOS_DB_CONNECTION_STRING": "[if(equals(parameters('postCallSurveyType'),'onequestionpoll'), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbAccountName')), '2019-12-12').connectionStrings[0].connectionString, '')]",
-            "VV_COSMOS_DB_NAME": "[parameters('cosmosDbName')]"
+            "VV_COSMOS_DB_NAME": "[parameters('cosmosDbName')]",
+            "VV_COGNITIONAPI_ENDPOINT": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').endpoint]",
+            "VV_COGNITIONAPI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').key1]",
+            "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
+            "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
+            "VV_USE_SUMMARIZATION": "[parameters('summarizationEnabled')]",
+            "VV_USE_TRANSCRIPTION": "[parameters('transcriptionBehavior')]"
           }
         },
         {
@@ -207,6 +250,21 @@
           }
         }
       ]
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(resourceGroup().id, parameters('communicationServiceName'), variables('cognitiveServicesUserRoleId'))]",
+      "properties": {
+        "roleDefinitionId": "[variables('cognitiveServicesUserRoleId')]",
+        "principalId": "[reference(resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName')), '2023-04-01', 'full').identity.principalId]",
+        "principalType": "ServicePrincipal"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Communication/communicationServices', parameters('communicationServiceName'))]",
+        "[variables('cognitiveServiceId')]"
+      ],
+      "scope": "[variables('cognitiveServiceId')]"
     }
   ]
 }

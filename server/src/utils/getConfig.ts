@@ -19,6 +19,7 @@ import { ServerConfigModel, ClientConfigModel } from '../models/configModel';
 import { getDefaultConfig } from './getDefaultConfig';
 import getCosmosDbConfig from './getCosmosDbConfig';
 import getPostCallConfig from './getPostCallConfig';
+import { getCallAutomationConfig } from './getCallAutomationConfig';
 
 export const getServerConfig = (): ServerConfigModel => {
   const defaultConfig = getDefaultConfig();
@@ -41,9 +42,9 @@ export const getServerConfig = (): ServerConfigModel => {
     waitingSubtitle: process.env[VV_WAITING_SUBTITLE_ENV_NAME] ?? defaultConfig.waitingSubtitle,
     logoUrl: process.env[VV_LOGO_URL_ENV_NAME] ?? defaultConfig.logoUrl,
     postCall: getPostCallConfig(defaultConfig),
-    cosmosDb: getCosmosDbConfig(defaultConfig)
+    cosmosDb: getCosmosDbConfig(defaultConfig),
+    callAutomation: getCallAutomationConfig(defaultConfig)
   } as ServerConfigModel;
-
   return config;
 };
 
@@ -60,7 +61,9 @@ export const getClientConfig = (serverConfig: ServerConfigModel): ClientConfigMo
     waitingTitle: serverConfig.waitingTitle,
     waitingSubtitle: serverConfig.waitingSubtitle,
     logoUrl: serverConfig.logoUrl,
-    postCall: serverConfig.postCall
+    postCall: serverConfig.postCall,
+    transcriptionClientOptions: serverConfig.callAutomation?.clientOptions,
+    notificationEventsUrl: serverConfig.callAutomation?.ServerHttpUrl
   } as ClientConfigModel;
 
   return config;
