@@ -80,11 +80,11 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [summarizationLanguage, setSummarizationLanguage] = useState<LocaleCode>('en-US');
   const [summarizationStatus, setSummarizationStatus] = useState<'None' | 'InProgress' | 'Complete'>('None');
   const [transcriptionStarted, setTranscriptionStarted] = useState(false);
-  const [transcriptionStartedByYou, setTranscriptionStartedByYou] = useState(false);
 
   const transcriptionFeatureEnabled = useRef(transcriptionClientOptions?.transcription !== 'none');
   const summarizationFeatureEnabled = useRef(transcriptionClientOptions?.summarization);
   const theme = useTheme();
+  const transcriptionStartedByYou = useRef(false);
   const callAutomationStarted = useRef(false);
   const eventSourceRef = useRef<EventSource | null>(null);
 
@@ -132,10 +132,9 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   }, [serverCallId]);
 
   useEffect(() => {
-    if (!eventSourceRef.current && !callConnected) {
+    if (!eventSourceRef.current || !callConnected) {
       return;
     }
-
     const transcriptionStartedhandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
       if (
@@ -152,7 +151,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             .filter((notification) => notification.type !== 'transcriptionStopped')
             .concat([
               {
-                type: transcriptionStartedByYou ? 'transcriptionStartedByYou' : 'transcriptionStarted',
+                type: transcriptionStartedByYou.current ? 'transcriptionStartedByYou' : 'transcriptionStarted',
                 autoDismiss: false,
                 onDismiss: () => {
                   setCustomNotifications((prev) =>
@@ -190,7 +189,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
               }
             ])
         );
-        setTranscriptionStartedByYou(false);
+        transcriptionStartedByYou.current = false;
         setDismissedTrancsriptionNotificationTypes([]);
       }
     };
@@ -247,7 +246,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             }
           }
         ]);
-        setTranscriptionStartedByYou(false);
+        transcriptionStartedByYou.current = false;
       }
     };
     eventSourceRef.current?.addEventListener('TranscriptionError', transcriptionErrorHandler);
@@ -257,7 +256,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       eventSourceRef.current?.removeEventListener('TranscriptionStatus', transcriptionStatusHandler);
       eventSourceRef.current?.removeEventListener('TranscriptionError', transcriptionErrorHandler);
     };
-  }, [serverCallId, callConnected, transcriptionStartedByYou]);
+  }, [serverCallId, callConnected]);
 
   const credential = useMemo(() => new AzureCommunicationTokenCredential(token), [token]);
 
@@ -363,7 +362,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         if (serverCallId && !transcriptionStarted) {
           console.log('Starting transcription');
           setShowTranscriptionModal(true);
-          setTranscriptionStartedByYou(true);
+          transcriptionStartedByYou.current = true;
         } else if (serverCallId && transcriptionStarted) {
           console.log('Stopping transcription');
           setTranscriptionStarted(await !stopTranscription(serverCallId));

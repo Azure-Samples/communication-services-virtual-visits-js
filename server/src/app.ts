@@ -144,7 +144,37 @@ app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
 // Function to send events to all connected clients
 export const sendEventToClients = (event: string, data: Record<string, unknown>): void => {
   const message = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
-  clients.forEach((client) => client.write(message));
+  console.log(`Sending ${event} event to ${clients.length} clients`);
+  // Copy array to avoid issues if array is modified during iteration
+  const clientsCopy = [...clients];
+  // Track successful sends for logging
+  let successCount = 0;
+  clientsCopy.forEach((client, index) => {
+    try {
+      // Check if client connection is still valid before writing
+      if (!client.writableEnded && !client.closed) {
+        // First flush any pending data to ensure event ordering
+        client.flushHeaders();
+        // Then write the new event
+        client.write(message);
+        successCount++;
+      } else {
+        console.log(`Client ${index} connection ended, removing from clients list`);
+        const clientIndex = clients.indexOf(client);
+        if (clientIndex !== -1) {
+          clients.splice(clientIndex, 1);
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to send event to client ${index}:`, error);
+      // Remove failed client from the original array
+      const clientIndex = clients.indexOf(client);
+      if (clientIndex !== -1) {
+        clients.splice(clientIndex, 1);
+      }
+    }
+  });
+  console.log(`Successfully sent ${event} event to ${successCount}/${clientsCopy.length} clients`);
 };
 
 app.use((req, res, next) => {
