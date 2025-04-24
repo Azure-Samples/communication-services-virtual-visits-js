@@ -6,6 +6,7 @@ import { JoinRoomResponse, RoomParticipantRole } from '../../models/RoomModel';
 import * as FetchRoomsResponse from '../../utils/FetchRoomsResponse';
 import {
   createMockCallAdapter,
+  createMockCallAgent,
   createMockCallComposite,
   createMockStatefulCallClient,
   runFakeTimers
@@ -18,7 +19,13 @@ jest.mock('@azure/communication-react', () => {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
     useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
-    createStatefulCallClient: () => createMockStatefulCallClient(),
+    createStatefulCallClient: () => ({
+      ...createMockStatefulCallClient(),
+      createCallAgent: () =>
+        Promise.resolve(createMockCallAgent()).then((callAgent) => {
+          return callAgent;
+        })
+    }),
     CallComposite: () => createMockCallComposite()
   };
 });
@@ -27,6 +34,9 @@ jest.mock('@azure/communication-common', () => {
   return {
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
+    },
+    createIdentifierFromRawId: (rawId: string) => {
+      return { kind: 'communicationUser', communicationUserId: rawId };
     }
   };
 });

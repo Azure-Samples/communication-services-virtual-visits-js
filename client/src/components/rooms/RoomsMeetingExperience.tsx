@@ -98,7 +98,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   useEffect(() => {
     let eventSource: EventSource | null = null;
 
-    if (serverCallId && transcriptionFeatureEnabled) {
+    if (serverCallId && transcriptionFeatureEnabled.current) {
       // Create EventSource connection when serverCallId is available. The URL provided here is for your server.
       eventSource = new EventSource(`${notificationEventsUrl}/api/notificationEvents`);
       eventSourceRef.current = eventSource; // Store reference for cleanup
@@ -465,7 +465,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
   if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled) {
     return (
-      <Stack>
+      <Stack data-testid="rooms-composite">
         <PresenterEndCallScreen
           reJoinCall={() => {
             callAdapter.joinCall({});

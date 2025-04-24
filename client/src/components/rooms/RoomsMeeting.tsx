@@ -46,7 +46,6 @@ export const RoomsMeeting = (props: RoomsMeetingProps): JSX.Element => {
     };
     fetchData();
   }, []);
-
   if (!roomsToken || !userRole) {
     // token or userRole not ready yet - show spinning/loading animation
     return <Spinner data-testid="spinner" styles={fullSizeStyles} />;
