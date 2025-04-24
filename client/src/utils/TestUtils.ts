@@ -114,7 +114,6 @@ export const createMockStatefulCallClient = (): StatefulCallClient => {
 };
 
 export const createMockCallAgent = (): DeclarativeCallAgent => {
-  console.log('Mock Call Agent created');
   return ({
     dispose: jest.fn(),
     calls: [],
