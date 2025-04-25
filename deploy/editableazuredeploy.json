@@ -143,9 +143,14 @@
       },
       "kind": "CognitiveServices",
       "properties": {
-        "apiProperties": {
-          "statisticsEnabled": false
-        }
+        "apiProperties": {},
+        "customSubDomainName": "[parameters('cognitiveServiceName')]",
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "virtualNetworkRules": [],
+          "ipRules": []
+        },
+        "publicNetworkAccess": "Enabled"
       }
     },
     {
