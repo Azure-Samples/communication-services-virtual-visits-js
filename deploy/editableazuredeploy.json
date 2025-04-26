@@ -135,7 +135,7 @@
   "resources": [
     {
       "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2023-05-01",
+      "apiVersion": "2024-10-01",
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
       "sku": {
