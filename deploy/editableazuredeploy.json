@@ -203,7 +203,10 @@
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
-        "httpsOnly": "true"
+        "httpsOnly": true,
+        "siteConfig": {
+          "webSocketsEnabled": true
+        }
       },
       "resources": [
         {
