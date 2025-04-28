@@ -244,7 +244,7 @@
             "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
             "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
             "VV_USE_SUMMARIZATION": "[parameters('summarizationEnabled')]",
-            "VV_USE_TRANSCRIPTION": "[parameters('transcriptionBehavior')]"
+            "VV_TRANSCRIPTION_BEHAVIOR": "[parameters('transcriptionBehavior')]"
           }
         },
         {
