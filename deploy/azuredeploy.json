@@ -77,17 +77,25 @@
   "resources": [
     {
       "type": "Microsoft.CognitiveServices/accounts",
-      "apiVersion": "2023-05-01",
+      "apiVersion": "2024-10-01",
       "name": "[variables('cognitiveServiceName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "S0"
       },
+      "identity": {
+        "type": "None"
+      },
       "kind": "CognitiveServices",
       "properties": {
-        "apiProperties": {
-          "statisticsEnabled": false
-        }
+        "apiProperties": {},
+        "customSubDomainName": "[parameters('cognitiveServiceName')]",
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "virtualNetworkRules": [],
+          "ipRules": []
+        },
+        "publicNetworkAccess": "Enabled"
       }
     },
     {
@@ -136,7 +144,10 @@
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
-        "httpsOnly": "true"
+        "httpsOnly": true,
+        "siteConfig": {
+          "webSocketsEnabled": true
+        }
       },
       "resources": [
         {
