@@ -72,7 +72,9 @@
     "cosmosDbName": "[concat('cosmos-db-', uniqueString(parameters('appServiceName')))]",
     "cognitiveServiceName": "[parameters('cognitiveServiceName')]",
     "cognitiveServiceId": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('cognitiveServiceName'))]",
-    "cognitiveServicesUserRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')]"
+    "cognitiveServicesUserRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a97b65f3-24c7-4388-baec-2e87135dc908')]",
+    "transcriptionOption": "manual",
+    "useSummarization": "true"
   },
   "resources": [
     {
@@ -184,8 +186,8 @@
             "VV_COGNITIONAPI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').key1]",
             "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
             "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
-            "VV_USE_SUMMARIZATION": "true",
-            "VV_TRANSCRIPTION_BEHAVIOR": "manual"
+            "VV_USE_SUMMARIZATION": "[variables('useSummarization')]",
+            "VV_TRANSCRIPTION_BEHAVIOR": "[variables('transcriptionOption')]"
           }
         },
         {
