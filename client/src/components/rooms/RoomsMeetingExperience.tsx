@@ -466,7 +466,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     );
   }
 
-  if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled) {
+  if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled.current) {
     return (
       <Stack data-testid="rooms-composite">
         <PresenterEndCallScreen
