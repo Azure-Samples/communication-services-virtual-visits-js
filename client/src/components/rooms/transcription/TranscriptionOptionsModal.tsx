@@ -20,10 +20,11 @@ export interface TranscriptionModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   startTranscription: (locale: LocaleCode) => Promise<void>;
+  transcriptionStartedByYou: React.MutableRefObject<boolean>;
 }
 
 export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.Element => {
-  const { isOpen, setIsOpen, startTranscription } = props;
+  const { isOpen, setIsOpen, startTranscription, transcriptionStartedByYou } = props;
   const [currentLanguage, setCurrentLanguage] = useState<LocaleCode>('en-US');
 
   const theme = useTheme();
@@ -74,9 +75,15 @@ export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.E
               startTranscription(currentLanguage)
                 .then(() => {
                   setIsOpen(false);
+                  transcriptionStartedByYou.current = true;
                 })
                 .catch((error) => {
+                  if (error.message === 'Transcription already started') {
+                    setIsOpen(false);
+                    return;
+                  }
                   console.error('Error starting transcription:', error);
+                  setIsOpen(false);
                 });
             }}
           >
