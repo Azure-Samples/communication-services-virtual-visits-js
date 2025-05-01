@@ -306,7 +306,11 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
           }
         }
 
-        if (!callAutomationStarted.current && state.call?.state === 'Connected' && transcriptionFeatureEnabled) {
+        if (
+          !callAutomationStarted.current &&
+          state.call?.state === 'Connected' &&
+          transcriptionFeatureEnabled.current
+        ) {
           callAutomationStarted.current = true;
           try {
             console.log('Connecting to call automation...');
@@ -375,7 +379,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const callCompositeOptions = useMemo((): CallCompositeOptions => {
     return {
       callControls: {
-        onFetchCustomButtonProps: transcriptionFeatureEnabled ? customButtonOptions : undefined,
+        onFetchCustomButtonProps: transcriptionFeatureEnabled.current ? customButtonOptions : undefined,
         endCallButton: {
           hangUpForEveryone: userRole === RoomParticipantRole.presenter ? 'endCallOptions' : undefined
         }

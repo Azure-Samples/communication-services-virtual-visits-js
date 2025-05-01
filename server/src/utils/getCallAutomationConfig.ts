@@ -20,14 +20,20 @@ export const getCallAutomationConfig = (defaultConfig: ServerConfigModel): CallA
   const serverWebSocketUrl =
     process.env[VV_SERVER_WEBSOCKET_URL] ?? (defaultConfig.callAutomation?.ServerWebSocketUrl as string);
   const useSummarization =
-    process.env[VV_USE_SUMMARIZATION] ?? defaultConfig.callAutomation?.clientOptions?.summarization ?? false;
+    typeof process.env[VV_USE_SUMMARIZATION] === 'string'
+      ? process.env[VV_USE_SUMMARIZATION] === 'true'
+        ? true
+        : false
+      : defaultConfig.callAutomation?.clientOptions?.summarization ?? false;
+
   const autoStartTranscription =
     process.env[VV_TRANSCRIPTION_BEHAVIOR] ?? defaultConfig.callAutomation?.clientOptions?.transcription;
 
   const clientOptions = {
     transcription: autoStartTranscription as TranscriptionBehavior,
-    summarization: Boolean(useSummarization)
+    summarization: useSummarization
   };
+
   if (!cognitionAPIEndpoint || !cognitionAPIKey || !serverHttpUrl || !serverWebSocketUrl) {
     return undefined;
   }
