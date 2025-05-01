@@ -21,10 +21,15 @@ router.post('/', async function (req, res, next) {
     await startTranscriptionForCall(serverCallId, options);
   } catch (e) {
     console.error('Error starting transcription:', e);
-    res.status(500).send('Error starting transcription');
-    sendEventToClients('TranscriptionError', {
-      serverCallId
-    });
+    if (res.statusCode === 400) {
+      // 400 is the error code for when the transcription is already started
+      return;
+    } else {
+      res.status(500).send('Error starting transcription');
+      sendEventToClients('TranscriptionError', {
+        serverCallId
+      });
+    }
     return;
   }
 

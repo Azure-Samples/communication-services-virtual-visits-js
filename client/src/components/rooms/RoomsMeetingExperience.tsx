@@ -235,7 +235,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
       if (parsedData.serverCallId.includes(serverCallId)) {
         console.log('Transcription error', event.data);
         setTranscriptionStarted(false);
-        stopTranscription(parsedData.serverCallId);
         setCustomNotifications([
           {
             type: 'transcriptionError',
