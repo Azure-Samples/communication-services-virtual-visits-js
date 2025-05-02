@@ -20,10 +20,11 @@ export interface TranscriptionModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   startTranscription: (locale: LocaleCode) => Promise<void>;
+  transcriptionStartedByYou: React.MutableRefObject<boolean>;
 }
 
 export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.Element => {
-  const { isOpen, setIsOpen, startTranscription } = props;
+  const { isOpen, setIsOpen, startTranscription, transcriptionStartedByYou } = props;
   const [currentLanguage, setCurrentLanguage] = useState<LocaleCode>('en-US');
 
   const theme = useTheme();
@@ -41,10 +42,10 @@ export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.E
       styles={{ main: { maxWidth: '27.5rem', height: '16.75rem' } }}
     >
       <Stack tokens={{ childrenGap: '1.5rem' }} styles={{ root: { margin: '1.5rem' } }}>
-        <Stack horizontal verticalAlign="center" style={{ position: 'relative' }}>
-          <Text style={{ fontWeight: 600, fontSize: '1.25rem' }}>What Language is being spoken?</Text>
+        <Stack horizontal verticalAlign="center" style={{ position: 'relative' }} tokens={{ childrenGap: '0.5rem' }}>
+          <Text style={{ fontWeight: 600, fontSize: '1.25rem' }}>What language is being spoken?</Text>
           <IconButton
-            style={{ position: 'absolute', right: 0 }}
+            style={{ right: 0 }}
             onRenderIcon={() => <Dismiss20Regular style={{ color: theme.palette.neutralPrimary }} />}
             onClick={() => {
               setIsOpen(false);
@@ -65,7 +66,7 @@ export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.E
             selectedKey={currentLanguage}
           ></Dropdown>
           <Text style={{ fontSize: '0.75rem', color: theme.palette.neutralSecondary }}>
-            language that everyone on this call is speaking.
+            Language that everyone on this call is speaking.
           </Text>
         </Stack>
         <Stack horizontal tokens={{ childrenGap: '0.5rem' }} horizontalAlign="end" style={{ paddingTop: '1.5rem' }}>
@@ -74,9 +75,15 @@ export const TranscriptionOptionsModal = (props: TranscriptionModalProps): JSX.E
               startTranscription(currentLanguage)
                 .then(() => {
                   setIsOpen(false);
+                  transcriptionStartedByYou.current = true;
                 })
                 .catch((error) => {
+                  if (error.message === 'Transcription already started') {
+                    setIsOpen(false);
+                    return;
+                  }
                   console.error('Error starting transcription:', error);
+                  setIsOpen(false);
                 });
             }}
           >

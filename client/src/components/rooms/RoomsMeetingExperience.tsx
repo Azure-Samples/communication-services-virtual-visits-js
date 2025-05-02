@@ -72,7 +72,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
   const [callAgent, setCallAgent] = useState<DeclarativeCallAgent>();
   const [callConnected, setCallConnected] = useState(false);
   const [transcriptionNotifications, setCustomNotifications] = useState<ActiveNotification[]>([]);
-  const [dismissedTranscriptionNotificationTypes, setDismissedTrancsriptionNotificationTypes] = useState<string[]>([]);
   const [serverCallId, setServerCallId] = useState<string | undefined>(undefined);
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [statefulClient, setStatefulClient] = useState<StatefulCallClient>();
@@ -83,6 +82,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
   const transcriptionFeatureEnabled = useRef(transcriptionClientOptions?.transcription !== 'none');
   const summarizationFeatureEnabled = useRef(transcriptionClientOptions?.summarization);
+  const hasRecievedTranscriptionSyncEvent = useRef(false);
   const theme = useTheme();
   const transcriptionStartedByYou = useRef(false);
   const callAutomationStarted = useRef(false);
@@ -137,13 +137,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     }
     const transcriptionStartedhandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
-      if (
-        parsedData.serverCallId.includes(serverCallId) &&
-        !(
-          dismissedTranscriptionNotificationTypes.includes('transcriptionStarted') ||
-          dismissedTranscriptionNotificationTypes.includes('transcriptionStartedByYou')
-        )
-      ) {
+      if (parsedData.serverCallId.includes(serverCallId)) {
         setTranscriptionStarted(true);
         setCustomNotifications((prev) =>
           prev
@@ -159,7 +153,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
                       .filter((notification) => notification.type !== 'transcriptionStarted')
                       .filter((notification) => notification.type !== 'transcriptionStartedByYou')
                   );
-                  setDismissedTrancsriptionNotificationTypes(['transcriptionStarted', 'transcriptionStartedByYou']);
                 }
               }
             ])
@@ -190,15 +183,15 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
             ])
         );
         transcriptionStartedByYou.current = false;
-        setDismissedTrancsriptionNotificationTypes([]);
       }
     };
     eventSourceRef.current?.addEventListener('TranscriptionStopped', transcriptionStoppedHandler);
 
     const transcriptionStatusHandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId.includes(serverCallId)) {
+      if (parsedData.serverCallId.includes(serverCallId) && !hasRecievedTranscriptionSyncEvent.current) {
         const transcriptionStarted = parsedData.transcriptStarted;
+        hasRecievedTranscriptionSyncEvent.current = true;
         console.log('TranscriptionStatus:', transcriptionStarted);
         if (transcriptionStarted) {
           setTranscriptionStarted(true);
@@ -232,7 +225,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
 
     const transcriptionErrorHandler = (event: MessageEvent): void => {
       const parsedData = JSON.parse(event.data);
-      if (parsedData.serverCallId === serverCallId) {
+      if (parsedData.serverCallId.includes(serverCallId)) {
         console.log('Transcription error', event.data);
         setTranscriptionStarted(false);
         setCustomNotifications([
@@ -366,7 +359,6 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
         if (serverCallId && !transcriptionStarted) {
           console.log('Starting transcription');
           setShowTranscriptionModal(true);
-          transcriptionStartedByYou.current = true;
         } else if (serverCallId && transcriptionStarted) {
           console.log('Stopping transcription');
           setTranscriptionStarted(await !stopTranscription(serverCallId));
@@ -466,7 +458,7 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
     );
   }
 
-  if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled) {
+  if (userRole === RoomParticipantRole.presenter && renderEndCallScreen && transcriptionFeatureEnabled.current) {
     return (
       <Stack data-testid="rooms-composite">
         <PresenterEndCallScreen
@@ -505,11 +497,11 @@ const RoomsMeetingExperience = (props: RoomsMeetingExperienceProps): JSX.Element
               <TranscriptionOptionsModal
                 isOpen={showTranscriptionModal}
                 setIsOpen={setShowTranscriptionModal}
+                transcriptionStartedByYou={transcriptionStartedByYou}
                 startTranscription={async (locale: LocaleCode) => {
                   if (serverCallId) {
                     setSummarizationLanguage(locale);
-                    const transcriptionResponse = await startTranscription(serverCallId, { locale });
-                    setTranscriptionStarted(transcriptionResponse);
+                    await startTranscription(serverCallId, { locale });
                   }
                 }}
               ></TranscriptionOptionsModal>
