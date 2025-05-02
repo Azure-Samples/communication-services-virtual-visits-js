@@ -5,6 +5,7 @@ import * as express from 'express';
 import { startTranscriptionForCall } from '../utils/callAutomationUtils';
 import { TranscriptionOptions } from '@azure/communication-call-automation';
 import { sendEventToClients } from '../app';
+import { RestError } from '@azure/core-http';
 
 const router = express.Router();
 interface StartTranscriptionRequest {
@@ -20,11 +21,16 @@ router.post('/', async function (req, res, next) {
   try {
     await startTranscriptionForCall(serverCallId, options);
   } catch (e) {
-    console.error('Error starting transcription:', e);
-    res.status(500).send('Error starting transcription');
-    sendEventToClients('TranscriptionError', {
-      serverCallId
-    });
+    console.error(e);
+    if ((e as RestError).code === '8500') {
+      res.status(400).send('Transcription already started');
+      return;
+    } else {
+      res.status(500).send('Error starting transcription');
+      sendEventToClients('TranscriptionError', {
+        serverCallId
+      });
+    }
     return;
   }
 

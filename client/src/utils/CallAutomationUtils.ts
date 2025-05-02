@@ -172,7 +172,6 @@ export const getCallSummaryFromServer = async (
     });
 
     if (!response.ok) {
-      alert('Summarization request failed');
       console.error('Response Failed: ', response.statusText);
       throw new Error('Summarization request failed');
     }
