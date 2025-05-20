@@ -15,6 +15,7 @@ Azure Communication Services Virtual Appointments is a web app you can host to p
 - **Industry.** A virtual appointment template with pre-selected theme color schemes.
 - **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md).
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
+- **Transcription & Meeting summary (Public Preview)** The app also includes functionality to provide your users with complete transcription and meeting summarization using the Azure Communication Services [Call Automation SDK](https://learn.microsoft.com/azure/communication-services/concepts/call-automation/call-automation). Meeting summarization is powered by [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization) text summarization in this sample.
 
 ## Getting Started
 
