@@ -1,12 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { CallAgentKind, DeviceManager } from '@azure/communication-calling';
 import {
   AdapterError,
   CallAdapter,
   CallAdapterState,
   CallWithChatAdapter,
-  CallWithChatAdapterState
+  CallWithChatAdapterState,
+  DeclarativeCallAgent,
+  StatefulCallClient
 } from '@azure/communication-react';
 import { act } from '@testing-library/react';
 
@@ -34,6 +37,7 @@ export const createMockCallWithChatAdapter = (): CallWithChatAdapter => {
       isLocalPreviewMicrophoneEnabled: false,
       userId: { kind: 'communicationUser', communicationUserId: 'test' },
       displayName: 'test',
+      latestCallNotifications: {},
       devices: {
         isSpeakerSelectionAvailable: false,
         cameras: [],
@@ -68,6 +72,7 @@ export const createMockCallAdapter = (): CallAdapter => {
       isLocalPreviewMicrophoneEnabled: false,
       userId: { kind: 'communicationUser', communicationUserId: 'test' },
       displayName: 'test',
+      latestNotifications: {},
       call: undefined,
       devices: {
         isSpeakerSelectionAvailable: false,
@@ -85,8 +90,41 @@ export const createMockCallAdapter = (): CallAdapter => {
   return callAdapter;
 };
 
-export const createMockStatefulCallClient = () => {
-  return { createCallAgent: () => '' };
+export const createMockStatefulCallClient = (): StatefulCallClient => {
+  const statefulClient = {} as StatefulCallClient;
+
+  statefulClient.createCallAgent = jest.fn().mockImplementation(() => Promise.resolve(createMockCallAgent()));
+  statefulClient.getState = jest.fn().mockReturnValue({});
+  statefulClient.getDeviceManager = jest.fn().mockResolvedValue(({
+    askDevicePermission: jest.fn(),
+    getCameras: jest.fn(),
+    getMicrophones: jest.fn(),
+    getSpeakers: jest.fn(),
+    getSelectedCamera: jest.fn(),
+    getSelectedMicrophone: jest.fn()
+  } as unknown) as DeviceManager);
+  statefulClient.createTeamsCallAgent = jest.fn();
+  statefulClient.feature = jest.fn();
+  statefulClient.onStateChange = jest.fn();
+  statefulClient.offStateChange = jest.fn();
+  statefulClient.createView = jest.fn();
+  statefulClient.disposeView = jest.fn();
+
+  return statefulClient;
+};
+
+export const createMockCallAgent = (): DeclarativeCallAgent => {
+  return ({
+    dispose: jest.fn(),
+    calls: [],
+    incomingCalls: [],
+    startCall: jest.fn(),
+    join: jest.fn(),
+    on: jest.fn(),
+    off: jest.fn(),
+    kind: CallAgentKind.CallAgent,
+    connectionState: 'Connected'
+  } as unknown) as DeclarativeCallAgent;
 };
 
 export const createMockStatefulChatClient = () => {

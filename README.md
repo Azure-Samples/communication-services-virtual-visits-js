@@ -15,6 +15,7 @@ Azure Communication Services Virtual Appointments is a web app you can host to p
 - **Industry.** A virtual appointment template with pre-selected theme color schemes.
 - **Post Call Surveys**. Customizable surveys to collect valuable feedback like quality of services or net promoter score after call ends. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md).
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
+- **Transcription & Meeting summary (Public Preview)** The app also includes functionality to provide your users with complete transcription and meeting summarization using the Azure Communication Services [Call Automation SDK](https://learn.microsoft.com/azure/communication-services/concepts/call-automation/call-automation). Meeting summarization is powered by [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization) text summarization in this sample.
 
 ## Getting Started
 
@@ -125,6 +126,7 @@ Where do I set this?
 
 - In addition to setting these values as system environment variables, you can set them in the defaultConfig.json file in the `/server/src` folder. In this case the environment value will take precedence.
 - The environment variables currently used in the defaultConfig.json are:
+
   - `communicationServicesConnectionString`. [Learn more about how to access your Azure Communication Services connection string.](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource?tabs=windows&pivots=platform-azp#access-your-connection-strings-and-service-endpoints) Example value: "endpoint=https://test.westus.communications.azure.com/;accesskey=SAMPLEKEY1234"
   - `microsoftBookingsUrl`. Example value: "https://microsoftbookings.azurewebsites.net/?organization=financialservices&UICulture=en-US". [Learn more about how to configure Microsoft Bookings](./docs/microsoft-bookings.md).
   - `chatEnabled`. Example value: "true".
@@ -136,6 +138,27 @@ Where do I set this?
   - `logoUrl`. Example value: "https://your_cdn/logo.png".
   - `postCall`. [Learn more about how to configure post-call surveys](./docs/post-call-survey.md)
   - `cosmosDb`. [Learn more about how to access Cosmos DB](./docs/post-call-survey.md#databaseConfiguration)
+
+  ### CallAutomation Environment variables
+
+  These values are used to have the server connect to [Call Automation](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/call-automation) to bring [transcription](https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/real-time-transcription-tutorial?pivots=programming-language-javascript) and meeting summarization to your Rooms calling experiences.
+  **Note**: The following items are for meeting transcription and summary and are in public preview.
+
+  - `VV_AUTO_START_TRANSCRIPTION` - Whether to start transcription automatically or not
+  - `VV_SERVER_WEBSOCKET_URL` - WebSocket server url this is needed for the server to send events from the websocket. this port needs to be open.
+  - `VV_SERVER_WEBSOCKET_PORT` - WebSocket port for the transcription events to stream to. Learn how to secure this with a webhook [here](https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript)
+  - `VV_SERVER_HTTP_URL` - Callback Url for the callAutomation events to be sent to
+  - `VV_COGNITIONAPI_KEY` - This is the Azure Cognitive Services API key that is needed for meeting summarization with the [language service](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-to-text?tabs=macos%2Cterminal&pivots=programming-language-javascript)
+  - `VV_COGNITIONAPI_ENDPOINT` - Endpoint for the Azure Cognitive Service.
+
+  Like the other environment variables these are also present in the defaultConfig as follows:
+
+  - `CognitionAPIEndpoint`
+  - `LanguageAPIKey`
+  - `ServerHttpUrl`
+  - `ServerWebSocketPort`
+  - `ServerWebSocketUrl`
+  - `AutoStartTranscription`
 
 ### End to End tests
 

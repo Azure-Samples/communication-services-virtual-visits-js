@@ -4,7 +4,7 @@ import { ChatThreadClient, ChatThreadItem, CreateChatThreadResult } from '@azure
 import { CommunicationIdentifier, CommunicationIdentifierKind, getIdentifierKind } from '@azure/communication-common';
 import { ChatClientState, ChatErrors, StatefulChatClient } from '@azure/communication-react';
 import { PagedAsyncIterableIterator } from '@azure/core-paging';
-import { StubChtThreadClient } from './ChatThreadClient';
+import { StubChatThreadClient } from './ChatThreadClient';
 import { IChatClient, IChatThreadClient } from './types';
 import { pagedAsyncIterator } from './chatUtils';
 
@@ -36,7 +36,7 @@ export class StubChatClient implements IChatClient {
   //
   getChatThreadClient(): ChatThreadClient {
     // FakeChatThreadClient only implements the public interface of ChatThreadClient.
-    return (new StubChtThreadClient(this.threadId) as IChatThreadClient) as ChatThreadClient;
+    return (new StubChatThreadClient(this.threadId) as IChatThreadClient) as ChatThreadClient;
   }
   listChatThreads(): PagedAsyncIterableIterator<ChatThreadItem> {
     return pagedAsyncIterator([{ id: this.threadId, topic: '' }]);

@@ -27,6 +27,11 @@ export interface PostCallConfig {
     options: MSFormsSurveyOptions | CustomSurveyOptions | OneQuestionPollOptions;
   };
 }
+
+export interface TranscriptionClientOptions {
+  transcription: 'auto' | 'manual' | 'none';
+  summarization: boolean;
+}
 export interface AppConfigModel {
   communicationEndpoint: string;
   microsoftBookingsUrl: string;
@@ -38,4 +43,6 @@ export interface AppConfigModel {
   waitingSubtitle: string;
   logoUrl: string;
   postCall?: PostCallConfig;
+  transcriptionClientOptions?: TranscriptionClientOptions;
+  notificationEventsUrl?: string;
 }

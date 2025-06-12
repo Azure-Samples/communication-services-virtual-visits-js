@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import app from '../src/app';
-import http from 'http';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const debug = require('debug')('calling-sample-server:server');
@@ -12,20 +11,13 @@ const debug = require('debug')('calling-sample-server:server');
  */
 
 const port = normalizePort(process.env.PORT || '8080');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+app.listen(port);
+app.on('error', onError);
+app.on('listening', onListening);
 
 console.debug(`Express server started (http://localhost:${port}).`);
 
@@ -83,7 +75,7 @@ function onError(error: { syscall: string; code: any }) {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function onListening() {
-  const addr = server.address();
+  const addr = app.address();
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port;
   debug('Listening on ' + bind);
 }
