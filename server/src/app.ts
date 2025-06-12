@@ -6,6 +6,7 @@ import path from 'path';
 import cors from 'cors';
 import WebSocket from 'ws';
 import http from 'http';
+import rateLimit from 'express-rate-limit';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
@@ -30,6 +31,16 @@ import { handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
 export const clients: express.Response[] = []; // Store connected clients
+
+/**
+ * Add rate limiter since we are accessing the file system to serve static files.
+ * This will help prevent abuse and ensure the server remains responsive.
+ */
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // Limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 app.use(express.static('public'));
 app.disable('x-powered-by');
