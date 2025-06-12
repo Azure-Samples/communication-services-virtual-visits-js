@@ -36,7 +36,8 @@
     "postCallSurveyOneQuestionPollAnswerPlaceholder": "",
     "postCallSurveyOneQuestionPollSaveButtonText": "Continue",
     "cosmosDbAccountName": "[concat('db-account-', uniqueString(parameters('appServiceName')))]",
-    "cosmosDbName": "[concat('cosmos-db-', uniqueString(parameters('appServiceName')))]"
+    "cosmosDbName": "[concat('cosmos-db-', uniqueString(parameters('appServiceName')))]",
+    "cognitiveServiceName": "[concat('azure-ai-',parameters('appServiceName'))]"
   },
   "resources": [
     {
@@ -52,7 +53,7 @@
     {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2022-05-15",
-      "name": "[variables('cosmosDbAccountName')]",
+      "name": "[parameters('appServiceName')]",
       "location": "[resourceGroup().location]",
       "kind": "GlobalDocumentDB",
       "properties": {
@@ -71,7 +72,10 @@
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
-        "httpsOnly": "true"
+        "httpsOnly": true,
+        "siteConfig": {
+          "webSocketsEnabled": true
+        }
       },
       "resources": [
         {
@@ -86,7 +90,7 @@
           },
           "properties": {
             "VV_COMMUNICATION_SERVICES_CONNECTION_STRING": "[listkeys(variables('resourceId'), '2020-08-20').primaryConnectionString]",
-            "WEBSITE_NODE_DEFAULT_VERSION": "21.14.0",
+            "WEBSITE_NODE_DEFAULT_VERSION": "22.14.0",
             "VV_MICROSOFT_BOOKINGS_URL": "[variables('microsoftBookingsUrl')]",
             "VV_CHAT_ENABLED": "[variables('chatEnabled')]",
             "VV_SCREENSHARE_ENABLED": "[variables('screenShareEnabled')]",
@@ -103,7 +107,13 @@
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_ANSWER_PLACEHOLDER": "[variables('postCallSurveyOneQuestionPollAnswerPlaceholder')]",
             "VV_POSTCALL_SURVEY_ONEQUESTIONPOLL_SAVE_BUTTON_TEXT": "[variables('postCallSurveyOneQuestionPollSaveButtonText')]",
             "VV_COSMOS_DB_CONNECTION_STRING": "[if(equals(variables('postCallSurveyType'),'onequestionpoll'), listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')), '2019-12-12').connectionStrings[0].connectionString, '')]",
-            "VV_COSMOS_DB_NAME": "[variables('cosmosDbName')]"
+            "VV_COSMOS_DB_NAME": "[variables('cosmosDbName')]",
+            "VV_COGNITIONAPI_ENDPOINT": "[reference(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').endpoint]",
+            "VV_COGNITIONAPI_KEY": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServiceName')), '2023-05-01').key1]",
+            "VV_SERVER_HTTP_URL": "[concat('https://', parameters('appServiceName'), '.azurewebsites.net')]",
+            "VV_SERVER_WEBSOCKET_URL": "[concat('wss://', parameters('appServiceName'), '.azurewebsites.net')]",
+            "VV_USE_SUMMARIZATION": "true",
+            "VV_TRANSCRIPTION_BEHAVIOR": "manual"
           }
         },
         {

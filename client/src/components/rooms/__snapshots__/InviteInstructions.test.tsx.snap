@@ -24,7 +24,7 @@ exports[`InviteInstructions matches snapshot 1`] = `
       <div
         aria-live="polite"
         className="ms-MessageBar-text text-114"
-        id="MessageBar0"
+        id="MessageBar1"
         role="status"
       >
         <span

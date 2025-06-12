@@ -11,6 +11,7 @@ import { generateTheme } from './utils/ThemeGenerator';
 import * as FetchToken from './utils/FetchToken';
 import {
   createMockCallAdapter,
+  createMockCallAgent,
   createMockCallComposite,
   createMockCallWithChatAdapter,
   createMockCallWithChatComposite,
@@ -28,7 +29,14 @@ jest.mock('@azure/communication-react', () => {
     createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
     useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
     useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
-    createStatefulCallClient: () => createMockStatefulCallClient(),
+    createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
+    createStatefulCallClient: () => ({
+      ...createMockStatefulCallClient(),
+      createCallAgent: () =>
+        Promise.resolve(createMockCallAgent()).then((callAgent) => {
+          return callAgent;
+        })
+    }),
     createStatefulChatClient: () => createMockStatefulChatClient(),
     CallWithChatComposite: () => createMockCallWithChatComposite(),
     CallComposite: () => createMockCallComposite()
@@ -40,6 +48,9 @@ jest.mock('@azure/communication-common', () => {
     ...jest.requireActual('@azure/communication-common'),
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
+    },
+    createIdentifierFromRawId: (rawId: string) => {
+      return { kind: 'communicationUser', communicationUserId: rawId };
     }
   };
 });

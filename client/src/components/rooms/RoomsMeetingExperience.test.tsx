@@ -3,6 +3,7 @@
 
 import {
   createMockCallAdapter,
+  createMockCallAgent,
   createMockCallComposite,
   createMockStatefulCallClient,
   runFakeTimers
@@ -21,7 +22,13 @@ jest.mock('@azure/communication-react', () => {
     ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallAdapterFromClient: jest.fn(),
     useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
-    createStatefulCallClient: () => createMockStatefulCallClient(),
+    createStatefulCallClient: () => ({
+      ...createMockStatefulCallClient(),
+      createCallAgent: () =>
+        Promise.resolve(createMockCallAgent()).then((callAgent) => {
+          return callAgent;
+        })
+    }),
     CallComposite: () => createMockCallComposite()
   };
 });
@@ -31,6 +38,9 @@ jest.mock('@azure/communication-common', () => {
     ...jest.requireActual('@azure/communication-common'),
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
+    },
+    createIdentifierFromRawId: (rawId: string) => {
+      return { kind: 'communicationUser', communicationUserId: rawId };
     }
   };
 });

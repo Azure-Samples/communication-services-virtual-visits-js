@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "scripts": {
     "test": "node scripts/test.js --config ./jest.config.js",
@@ -18,12 +18,13 @@
     "watchtest": "jest --config ./jest.config.js --watch"
   },
   "dependencies": {
-    "@azure/communication-calling": "^1.30.2",
+    "@azure/communication-calling": "^1.34.1",
     "@azure/communication-calling-effects": "^1.1.2",
     "@azure/communication-chat": "^1.5.4",
     "@azure/communication-identity": "^1.0.0",
-    "@azure/communication-react": "^1.23.0",
+    "@azure/communication-react": "1.26.0",
     "@fluentui/theme": "^2.6.6",
+    "@fluentui/react-icons": "2.0.294",
     "bfj": "^7.0.2",
     "camelcase": "^6.2.1",
     "http-errors": "1.8.1",

@@ -3,6 +3,10 @@
 
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
+import WebSocket from 'ws';
+import http from 'http';
+import rateLimit from 'express-rate-limit';
 import { CommunicationIdentityClient } from '@azure/communication-identity';
 import { RoomsClient } from '@azure/communication-rooms';
 import { getServerConfig } from './utils/getConfig';
@@ -13,8 +17,30 @@ import { tokenController } from './controllers/tokenController';
 import { storeSurveyResult } from './controllers/surveyController';
 import { createSurveyDBHandler } from './databaseHandlers/surveyDBHandler';
 import { ERROR_PAYLOAD_500 } from './constants';
+import connectRoomsCall from './routes/connectToRoomsCall';
+import startTranscription from './routes/startTranscription';
+import stopTranscriptionForCall from './routes/stopTranscription';
+import fetchTranscript from './routes/fetchTranscript';
+import callAutomationEvent from './routes/callAutomationEvent';
+import summarizeTranscript from './routes/summarizeTranscript';
+import notificationEvents from './routes/notificationEvents';
+import fetchTranscriptState from './routes/fetchTranscriptState';
+import fetchParticipants from './routes/fetchParticipants';
+import updateParicipants from './routes/updateParticipants';
+import { handleTranscriptionEvent } from './utils/callAutomationUtils';
 
 const app = express();
+export const clients: express.Response[] = []; // Store connected clients
+
+/**
+ * Add rate limiter since we are accessing the file system to serve static files.
+ * This will help prevent abuse and ensure the server remains responsive.
+ */
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // Limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 app.use(express.static('public'));
 app.disable('x-powered-by');
@@ -43,6 +69,66 @@ app.get('/visit', (_, res) => {
   res.sendFile(path.join(__dirname, 'public/visit.html'));
 });
 
+/**
+ * route: /api/connectToRoom
+ * purpose: Calling: connect to an existing room
+ */
+app.use('/api/connectRoomsCall', cors(), connectRoomsCall);
+/**
+ * route: /api/startTranscription
+ * purpose: Start transcription for an established call
+ */
+app.use('/api/startTranscription', cors(), startTranscription);
+
+/**
+ * route: /api/stopTranscription
+ * purpose: Stop transcription for an established call
+ */
+app.use('/api/stopTranscription', cors(), stopTranscriptionForCall);
+
+/**
+ * route: /api/fetchTranscript
+ * purpose: Fetch an existing transcription
+ */
+app.use('/api/fetchTranscript', cors(), fetchTranscript);
+
+/**
+ * route: /api/callAutomationEvent
+ * purpose: Call Automation: receive call automation events
+ */
+app.use('/api/callAutomationEvent', cors(), callAutomationEvent);
+
+/**
+ * route: /summarizeTranscript
+ * purpose: Sends transcript to AI summarization service
+ */
+app.use('/api/summarizeTranscript', cors(), summarizeTranscript);
+
+/**
+ * route: /api/notificationEvents
+ * purpose: endpoint to hit to open a server sent events (SSE) connection to
+ * recieve events from the server
+ */
+app.use('/api/notificationEvents', cors(), notificationEvents);
+
+/**
+ * route:/api/fetchTranscriptionState
+ * purpose: Fetch the transcription state for a call
+ */
+app.use('/api/fetchTranscriptionState', cors(), fetchTranscriptState);
+
+/**
+ * route:/api/fetchParticipants
+ * purpose: Fetch the participants in a call
+ */
+app.use('/api/fetchParticipants', cors(), fetchParticipants);
+
+/**
+ * route:/api/updateParticipants
+ * purpose: Update the participants in a call
+ */
+app.use('/api/updateParticipants', cors(), updateParicipants);
+
 const config = getServerConfig();
 
 const surveyDBHandler = createSurveyDBHandler(config);
@@ -66,6 +152,42 @@ app.get('/api/config', configController(config));
 app.get('/api/token', tokenController(identityClient, config));
 app.use('/api/rooms', roomsRouter(identityClient, roomsClient));
 
+// Function to send events to all connected clients
+export const sendEventToClients = (event: string, data: Record<string, unknown>): void => {
+  const message = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+  console.log(`Sending ${event} event to ${clients.length} clients`);
+  // Copy array to avoid issues if array is modified during iteration
+  const clientsCopy = [...clients];
+  // Track successful sends for logging
+  let successCount = 0;
+  clientsCopy.forEach((client, index) => {
+    try {
+      // Check if client connection is still valid before writing
+      if (!client.writableEnded && !client.closed) {
+        // First flush any pending data to ensure event ordering
+        client.flushHeaders();
+        // Then write the new event
+        client.write(message);
+        successCount++;
+      } else {
+        console.log(`Client ${index} connection ended, removing from clients list`);
+        const clientIndex = clients.indexOf(client);
+        if (clientIndex !== -1) {
+          clients.splice(clientIndex, 1);
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to send event to client ${index}:`, error);
+      // Remove failed client from the original array
+      const clientIndex = clients.indexOf(client);
+      if (clientIndex !== -1) {
+        clients.splice(clientIndex, 1);
+      }
+    }
+  });
+  console.log(`Successfully sent ${event} event to ${successCount}/${clientsCopy.length} clients`);
+};
+
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'public/pageNotFound.html'));
 });
@@ -78,4 +200,46 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err?.message ?? ERROR_PAYLOAD_500 });
 });
 
-export default app;
+const port = parseInt(process.env.PORT ?? '8080');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * route: wss://<host>/
+ * purpose: WebSocket endpoint to receive transcription events
+ *
+ * Don't forget to secure this endpoint in production
+ * https://learn.microsoft.com/en-us/azure/communication-services/how-tos/call-automation/secure-webhook-endpoint?pivots=programming-language-javascript
+ */
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  let transcriptionCorrelationId: string | undefined;
+
+  ws.on('open', () => {
+    console.log('WebSocket opened');
+  });
+
+  ws.on('message', (message: WebSocket.RawData) => {
+    const decoder = new TextDecoder();
+    const messageData = JSON.parse(decoder.decode(message as ArrayBuffer));
+    if (
+      ('kind' in messageData && messageData.kind === 'TranscriptionMetadata') ||
+      ('kind' in messageData && messageData.kind === 'TranscriptionData')
+    ) {
+      transcriptionCorrelationId = handleTranscriptionEvent(message, transcriptionCorrelationId);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket closed');
+  });
+});
+
+export default server;
