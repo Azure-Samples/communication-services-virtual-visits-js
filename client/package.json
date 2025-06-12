@@ -108,7 +108,7 @@
     "ts-pnp": "^1.2.0",
     "typescript": "^5.8.2",
     "url-loader": "^4.1.1",
-    "webpack": "^5.76.0",
+    "webpack": "^5.99.9",
     "webpack-dev-server": "^4.7.3",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.5.3"
