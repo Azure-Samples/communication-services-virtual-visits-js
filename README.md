@@ -17,6 +17,10 @@ Azure Communication Services Virtual Appointments is a web app you can host to p
 - **Open source** and customizable meeting UI controls. The app is built using [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/) which has many options for customizing layouts, rendering, and behaviors.
 - **Transcription & Meeting summary (Public Preview)** The app also includes functionality to provide your users with complete transcription and meeting summarization using the Azure Communication Services [Call Automation SDK](https://learn.microsoft.com/azure/communication-services/concepts/call-automation/call-automation). Meeting summarization is powered by [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/how-to/conversation-summarization) text summarization in this sample.
 
+## ❤️ Feedback
+
+We appreciate your feedback and energy helping us improve our services. [If you've tried the service, please give us feedback through this survey](https://microsoft.qualtrics.com/jfe/form/SV_9WTOR2ItSo0oFee). 
+
 ## Getting Started
 
 There are two ways to start using this app:
