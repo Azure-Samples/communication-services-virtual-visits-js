@@ -58,6 +58,9 @@ export class StubChatThreadClient implements IChatThreadClient {
   updateTopic(): Promise<void> {
     throw new Error('Stub: unimplemented');
   }
+  updateProperties(): Promise<void> {
+    throw new Error('Stub: unimplemented');
+  }
   getMessage(): Promise<ChatMessage> {
     throw new Error('Stub: unimplemented');
   }
