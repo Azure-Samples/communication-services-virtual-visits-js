@@ -8,7 +8,7 @@ export async function fetchToken(): Promise<CommunicationUserToken | undefined> 
   const response = await fetch('/api/token', { method: 'GET' });
 
   if (response.status !== 200) {
-    throw new createError(
+    throw createError(
       response.status,
       `Unable to retrieve config. Status: ${response.status}. Message: ${response.statusText}.`
     );

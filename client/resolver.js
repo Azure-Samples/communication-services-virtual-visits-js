@@ -6,6 +6,11 @@ module.exports = (path, options) => {
                 pkg.name === '@azure/core-util' ||
                 pkg.name === '@azure/core-http' ||
                 pkg.name === '@azure/communication-react' ||
+                pkg.name === '@azure/communication-calling' ||
+                pkg.name === '@azure/communication-calling-effects' ||
+                pkg.name === '@azure/communication-chat' ||
+                pkg.name === '@azure/communication-identity' ||
+                pkg.name === '@azure/communication-common' ||
                 pkg.name === '@azure/abort-controller'||
                 pkg.name === '@azure/core-rest-pipeline' ||
                 pkg.name === '@azure/core-client' ||
@@ -14,7 +19,8 @@ module.exports = (path, options) => {
                 pkg.name === '@azure/core-tracing'||
                 pkg.name === 'uuid' ||
                 pkg.name === 'nanoid' ||
-                pkg.name === '@fluentui/react'
+                pkg.name === '@fluentui/react' ||
+                pkg.name.startsWith('@typespec/')
             ) {
                 delete pkg['exports'],
                 delete pkg['module']

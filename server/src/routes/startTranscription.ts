@@ -5,7 +5,7 @@ import * as express from 'express';
 import { startTranscriptionForCall } from '../utils/callAutomationUtils';
 import { TranscriptionOptions } from '@azure/communication-call-automation';
 import { sendEventToClients } from '../app';
-import { RestError } from '@azure/core-http';
+import { RestError } from '@azure/core-rest-pipeline';
 
 const router = express.Router();
 interface StartTranscriptionRequest {

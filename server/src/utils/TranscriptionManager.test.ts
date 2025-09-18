@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { TranscriptionManager } from './TranscriptionManager';
-import { TextFormat, TranscriptionData, TranscriptionMetadata } from '@azure/communication-call-automation';
+import { TranscriptionData, TranscriptionMetadata } from '@azure/communication-call-automation';
 
 describe('TranscriptionManager', () => {
   let transcriptionManager: TranscriptionManager;
@@ -29,7 +29,7 @@ describe('TranscriptionManager', () => {
     durationInTicks: 1000,
     offsetInTicks: 500,
     resultState: 'final',
-    format: TextFormat.Display,
+    format: 'display' as any,
     participant: {
       communicationUserId: mockParticipant.communicationUserId
     },

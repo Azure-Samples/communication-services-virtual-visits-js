@@ -17,7 +17,7 @@ export const fetchRoomsResponse = async (roomId: string, userId: string): Promis
   });
 
   if (response.status !== 200) {
-    throw new createError(
+    throw createError(
       response.status,
       `Unable to retrieve user token. Status: ${response.status}. Message: ${response.statusText}.`
     );
@@ -36,7 +36,7 @@ export const createRoom = async (): Promise<CreateRoomResponse> => {
     }
   });
   if (response.status !== 201) {
-    throw new createError(
+    throw createError(
       response.status,
       `Unable to create room. Status: ${response.status}. Message: ${response.statusText}.`
     );
