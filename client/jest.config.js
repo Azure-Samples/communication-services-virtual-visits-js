@@ -32,6 +32,8 @@ module.exports = {
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ['text', 'lcov'],
 
+  transformIgnorePatterns: ['/node_modules/'],
+
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
 
@@ -72,7 +74,10 @@ module.exports = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/mocks/FileMock.ts',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/mocks/FileMock.ts'
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/mocks/FileMock.ts',
+    '^@typespec/ts-http-runtime/internal/(.*)$':
+      '<rootDir>/node_modules/@typespec/ts-http-runtime/dist/browser/logger/internal.js'
   },
 
   resolver: './resolver.js',
