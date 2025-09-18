@@ -14,7 +14,7 @@ if (!callAutomationConfig) {
  */
 const API_URL = `${callAutomationConfig?.CognitionAPIEndpoint}/language/analyze-conversations/jobs?api-version=2024-11-15-preview`;
 
-const apiHeaders = (): HeadersInit => ({
+const apiHeaders = (): Record<string, string> => ({
   'Content-Type': 'application/json',
   'Ocp-Apim-Subscription-Key': callAutomationConfig?.CognitionAPIKey ?? ''
 });
@@ -222,7 +222,7 @@ const fetchJobResult = async (jobUrl: string): Promise<JobRestResponse> => {
     headers: apiHeaders()
   });
 
-  const responseBody = await response.json();
+  const responseBody = await response.json() as any;
   console.log('Response body:', responseBody);
 
   if (responseBody.status === 'running' || responseBody.status === 'notStarted' || responseBody.status === 'queued') {

@@ -8,7 +8,7 @@ import createError from 'http-errors';
 export async function fetchConfig(): Promise<AppConfigModel | undefined> {
   const response = await fetch('/api/config', { method: 'GET' });
   if (response.status !== 200) {
-    throw new createError(
+    throw createError(
       response.status,
       `Unable to retrieve config. Status: ${response.status}. Message: ${response.statusText}.`
     );
