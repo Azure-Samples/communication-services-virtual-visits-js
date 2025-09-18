@@ -222,7 +222,7 @@ const fetchJobResult = async (jobUrl: string): Promise<JobRestResponse> => {
     headers: apiHeaders()
   });
 
-  const responseBody = await response.json() as any;
+  const responseBody = (await response.json()) as any;
   console.log('Response body:', responseBody);
 
   if (responseBody.status === 'running' || responseBody.status === 'notStarted' || responseBody.status === 'queued') {
