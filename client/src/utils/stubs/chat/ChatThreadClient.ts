@@ -7,8 +7,7 @@ import {
   ChatMessageReadReceipt,
   ChatParticipant,
   ChatThreadProperties,
-  SendChatMessageResult,
-  UpdateChatThreadPropertiesOptions
+  SendChatMessageResult
 } from '@azure/communication-chat';
 import { PagedAsyncIterableIterator } from '@azure/core-paging';
 import { IChatThreadClient } from './types';
@@ -51,9 +50,6 @@ export class StubChatThreadClient implements IChatThreadClient {
   }
   listReadReceipts(): PagedAsyncIterableIterator<ChatMessageReadReceipt> {
     return pagedAsyncIterator([]);
-  }
-  updateProperties(options?: UpdateChatThreadPropertiesOptions): Promise<void> {
-    return Promise.resolve();
   }
 
   //
