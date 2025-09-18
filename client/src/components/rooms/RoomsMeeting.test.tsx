@@ -16,7 +16,6 @@ import { RoomsMeeting } from './RoomsMeeting';
 
 jest.mock('@azure/communication-react', () => {
   return {
-    ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallAdapterFromClient: () => createMockCallAdapter(),
     useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
     createStatefulCallClient: () => ({
@@ -26,7 +25,9 @@ jest.mock('@azure/communication-react', () => {
           return callAgent;
         })
     }),
-    CallComposite: () => createMockCallComposite()
+    CallComposite: () => createMockCallComposite(),
+    FluentThemeProvider: ({ children }: any) => children,
+    useTheme: () => generateTheme('#0078d4')
   };
 });
 

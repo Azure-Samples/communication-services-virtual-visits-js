@@ -25,7 +25,6 @@ import { render } from '@testing-library/react';
 
 jest.mock('@azure/communication-react', () => {
   return {
-    ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallWithChatAdapterFromClients: () => createMockCallWithChatAdapter(),
     useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
     useAzureCommunicationCallAdapter: () => createMockCallAdapter(),
@@ -39,13 +38,14 @@ jest.mock('@azure/communication-react', () => {
     }),
     createStatefulChatClient: () => createMockStatefulChatClient(),
     CallWithChatComposite: () => createMockCallWithChatComposite(),
-    CallComposite: () => createMockCallComposite()
+    CallComposite: () => createMockCallComposite(),
+    FluentThemeProvider: ({ children }: any) => children,
+    useTheme: () => generateTheme('#0078d4')
   };
 });
 
 jest.mock('@azure/communication-common', () => {
   return {
-    ...jest.requireActual('@azure/communication-common'),
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
     },

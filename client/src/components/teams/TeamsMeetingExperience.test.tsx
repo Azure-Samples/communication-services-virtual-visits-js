@@ -17,18 +17,18 @@ import { TeamsMeetingExperience } from './TeamsMeetingExperience';
 
 jest.mock('@azure/communication-react', () => {
   return {
-    ...jest.requireActual('@azure/communication-react'),
     createAzureCommunicationCallWithChatAdapterFromClients: jest.fn(), //mocking state object callWithChatAdapter
     useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
-    CallWithChatComposite: () => createMockCallWithChatComposite()
+    CallWithChatComposite: () => createMockCallWithChatComposite(),
+    FluentThemeProvider: ({ children }: any) => children,
+    useTheme: () => generateTheme('#0078d4')
   };
 });
 
 jest.mock('@azure/communication-common', () => {
   return {
-    ...jest.requireActual('@azure/communication-common'),
     AzureCommunicationTokenCredential: function () {
       return { token: '', getToken: () => '' };
     }

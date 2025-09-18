@@ -18,11 +18,12 @@ import { render } from '@testing-library/react';
 
 jest.mock('@azure/communication-react', () => {
   return {
-    ...jest.requireActual('@azure/communication-react'),
     useAzureCommunicationCallWithChatAdapter: () => createMockCallWithChatAdapter(),
     createStatefulCallClient: () => createMockStatefulCallClient(),
     createStatefulChatClient: () => createMockStatefulChatClient(),
-    CallWithChatComposite: () => createMockCallWithChatComposite()
+    CallWithChatComposite: () => createMockCallWithChatComposite(),
+    FluentThemeProvider: ({ children }: any) => children,
+    useTheme: () => generateTheme('#0078d4')
   };
 });
 
