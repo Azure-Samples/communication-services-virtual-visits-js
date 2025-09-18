@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "scripts": {
     "test": "node scripts/test.js --config ./jest.config.js",
