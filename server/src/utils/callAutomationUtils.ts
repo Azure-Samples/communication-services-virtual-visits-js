@@ -72,7 +72,7 @@ export const getTranscriptionManager = (): TranscriptionManager =>
  * @returns void
  */
 export const connectRoomsCallWithTranscription = async (roomId: string): Promise<void> => {
-  const transcriptionOptions = {
+  const transcriptionOptions: TranscriptionOptions = {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
     locale: 'en-US',
@@ -109,7 +109,7 @@ export const connectRoomsCallWithTranscription = async (roomId: string): Promise
  * Call info object.
  */
 export const connectRoomsCall = async (serverCallId: string): Promise<void> => {
-  const transcriptionOptions = {
+  const transcriptionOptions: TranscriptionOptions = {
     transportUrl: callAutomationConfig?.ServerWebSocketUrl ?? '',
     transportType: 'websocket',
     locale: 'en-US',
