@@ -71,7 +71,7 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5",
     "word-wrap": ">=1.2.4",
-    "webpack": "5.76.0",
+    "webpack": "5.99.9",
     "webpack-cli": "4.8.0",
     "webpack-node-externals": "3.0.0"
   },
