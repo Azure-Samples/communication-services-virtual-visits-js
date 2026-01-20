@@ -1,0 +1,34 @@
+{
+    "name": "Azure Communication Services Virtual Visits",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.vscode-typescript-next",
+                "esbenp.prettier-vscode",
+                "ms-vscode.vscode-eslint",
+                "ms-vscode.vscode-json"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "forwardPorts": [3000, 8080],
+    "portsAttributes": {
+        "3000": {
+            "label": "Client (React)",
+            "protocol": "http"
+        },
+        "8080": {
+            "label": "Server (Express)",
+            "protocol": "http"
+        }
+    },
+    "postCreateCommand": "npm install --prefix ./client && npm install --prefix ./server && echo '\\n📦 Dependencies installed successfully!\\n🚀 To start development mode, run: cd client && npm run start:project\\n💡 Configure environment variables as needed (see README.md)\\n'",
+    "containerEnv": {
+        "NODE_ENV": "development",
+        "HOST": "0.0.0.0"
+    },
+    "remoteUser": "node"
+}
